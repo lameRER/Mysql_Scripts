@@ -12,7 +12,7 @@ set @return3 = (SELECT GROUP_CONCAT(es.id) FROM rbEpicrisisSections es WHERE
 SET @ep_ai_s:=@ep_ai_e:= (SELECT `AUTO_INCREMENT` FROM  INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'pes' AND TABLE_NAME = 'rbEpicrisisProperty');
 INSERT LOW_PRIORITY rbEpicrisisProperty(id, name, description, type, defaultValue)
 SELECT * FROM (
-SELECT @ep_ai_e:=@ep_ai_e+1, '' name, (SELECT et.name FROM rbEpicrisisTemplates et WHERE et.id = @return) description, 7 type, '' defaultValue
+SELECT @ep_ai_e:=@ep_ai_e+1, '' name, (SELECT et.name FROM rbEpicrisisTemplates et WHERE et.id = @return) description, 7 type, 'SELECT ''''' defaultValue
 ) tmp
 WHERE NOT EXISTS(SELECT * FROM rbEpicrisisProperty ep WHERE ep.name = tmp.name AND ep.description = tmp.description AND ep.type = tmp.type); 
 set @return2 = NULL;
