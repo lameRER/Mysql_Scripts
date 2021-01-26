@@ -4,6 +4,11 @@ select apt.customSelect ,apt.* from ActionPropertyType apt where EXISTS(select *
 
 
 
+select * from ActionPropertyType apt where EXISTS (select * from ActionType at2 where class = 4 and deleted = 0 and apt.actionType_id=id) ;
+
+
+
+
 update ActionPropertyType 
 set customSelect = 'SQL="""SELECT aps.value FROM ActionProperty_String aps 
 JOIN ActionProperty ap ON aps.id = ap.id 
