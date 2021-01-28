@@ -1,11 +1,15 @@
 -- start transaction
 
-select GROUP_CONCAT(CONCAT_WS(' ',ret.code, ret.name,'retres.idx:',retres.idx,'resper.idx:',resrep.idx) separator '\n'), res.name, res.description, rep.* from rbEpicrisisTemplates ret
+select count(rep.id) num,
+GROUP_CONCAT(CONCAT_WS(' ',ret.code, ret.name,'retres.idx:',retres.idx,'resper.idx:',resrep.idx) separator '\n') ret, 
+GROUP_CONCAT(CONCAT_WS(' ', retres.id, resrep.id, res.id, res.name, res.description)separator '\n') res, 
+rep.* from rbEpicrisisTemplates ret
 join rbEpicrisisTemplates_rbEpicrisisSections retres on retres.id_rbEpicrisisTemplates = ret.id 
 join rbEpicrisisSections res on retres.id_rbEpicrisisSections = res.id 
 join rbEpicrisisSections_rbEpicrisisProperty resrep on resrep.id_rbEpicrisisSections = res.id 
 join rbEpicrisisProperty rep on resrep.id_rbEpicrisisProperty = rep.id 
-group by rep.id
+-- where rep.name REGEXP 'диагноз'
+group by res.id, rep.id
 order by ret.id, retres.idx, resrep.idx;
 
 
