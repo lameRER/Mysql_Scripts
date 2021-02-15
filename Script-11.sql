@@ -1,1 +1,0 @@
-select * from rbEpicrisisProperty rep where name  REGEXP 'адрес';

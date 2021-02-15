@@ -1,1 +1,0 @@
-select * from rbEpicrisisProperty rep order by id DESC ;

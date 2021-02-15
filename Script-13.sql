@@ -1,1 +1,0 @@
-select * from rbEpicrisisSections_rbEpicrisisProperty resrep where EXISTS (select * from rbEpicrisisProperty rep where rep.name REGEXP '^Консультаци|^операци' and resrep.id_rbEpicrisisProperty = rep.id)
