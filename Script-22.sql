@@ -1,0 +1,1 @@
+select * from rbEpicrisisProperty rep where rep.name REGEXP 'заключение'
