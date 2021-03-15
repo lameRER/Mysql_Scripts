@@ -146,3 +146,7 @@ select * from rbSpecialVariablesPreferences rsvp where name = 'SpecialVar_Temp_L
 -- e.deleted = 0 and e.setDate BETWEEN :Date1 and :Date2 and e.execPerson_id = :PersonId and 
 -- e2.deleted = 0 and e2.setDate BETWEEN :Date1 and :Date2 and e2.execPerson_id = :PersonId and 
 -- e3.deleted = 0 and e3.setDate BETWEEN :Date1 and :Date2 and e3.execPerson_id = :PersonId
+
+
+
+select * from rbPrintTemplate rpt where templateText REGEXP 'cell';
