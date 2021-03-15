@@ -2,11 +2,10 @@ SELECT
 CONCAT_WS(' ', p2.lastName, p2.firstName, p2.patrName) `ФИО`, 
 min(Date(e.setDate)),
 max(Date(e.setDate)),
-if(at2.name regexp '^МРТ', Count(DISTINCT a.id), NULL) `МРТ (всего)`,
-e.id,
-COUNT(DISTINCT a.id),
+Count(if(at2.name regexp
+'^МРТ', a.id, NULL)) `МРТ (всего)`,
 COUNT(DISTINCT e.client_id) `Всего пациентов`,
-'' `Всего с КУ`,
+count(if(at2.name regexp 'контраст', a.id, NULL)) `Всего с КУ`,
 count(if(at2.name = 'МРТ головного мозга и его оболочек', a.id, NULL)) `головной мозг`,
 count(if(at2.name = 'МРТ головного мозга с внутривенным контрастным усилением', a.id, NULL)) `головной мозг с в/в контр.`,
 count(if(at2.name = 'МРТ сосудов головного мозга (МР-ангиография)', a.id, NULL)) `МР-ангиография`,
@@ -47,11 +46,45 @@ count(if(at2.name = 'МРТ костей таза c контрастированием', a.id, NULL)) `Кости т
 FROM Event e 
 join Event e2 on e.id = e2.id
 join Person p2 on p2.id = e.execPerson_id and p2.deleted = 0
-join Action a on a.event_id = e2.id and a.deleted = 0 
+join Action a on a.event_id = e2.id and a.deleted = 0 and a.status = 2
 left join ActionType at2 on at2.id = a.actionType_id and at2.deleted = 0 and at2.group_id  = 6987 and 
 at2.name REGEXP "^МРТ головного мозга и его оболочек$|^МРТ головного мозга с внутривенным контрастным усилением$|^МРТ сосудов головного мозга \\(МР-ангиография\\)$|^МРТ орбит$|^МРТ орбит с внутривенным контрастированием$|^МРТ мягких тканей шеи$|^МРТ мягких тканей A05\.01\.002$|^МРТ мягких тканей контрастированием|^МРТ средостения$$|^МРТ средостения с внутривенным контрастным усилением$|^МРТ брюшной полости$|^МРТ брюшной полости с внутривенным контрастированием$|^МРТ органов малого таза$|^МРТ органов малого таза с внутривенным контрастированием$|позвоночника$|позвоночника с контрастированием|^МРТ спинного мозга и его оболочек$|^МРТ спинного мозга и его оболочек с внутривенным контрастным усилением$|^МРТ плечевого сустава$|^МРТ плечевого сустава с внутривенным контрастным усилением$|^МРТ коленного сустава$|^МРТ тазобедренных суставов$|^МРТ тазобедренных суставов с внутривенным контрастным усилением$|^МРТ тазобедренных суставов\\+бедренных костей \\(Протокол обследования при болезни Гоше\\)$|^МРТ забрюшинного пространства$|^МРТ костей таза$|^МРТ костей таза c контрастированием$"
-where e.deleted = 0 and e.setDate BETWEEN :Date1 and :Date2 and e.execPerson_id = :PersonId ;
+where e.deleted = 0 and e.setDate BETWEEN :Date1 and :Date2 and e.execPerson_id = :Person_id limit 1;
 
+
+-- Пластинина	Любовь	Васильевна
+select * from Person p where id = 1407;
+
+
+select * from rbSpecialVariablesPreferences rsvp where rsvp.name = 'SpecialVar_OtchetRentgenologam';
+
+select * from rbPrintTemplateMeta rptm  order by id desc;
+
+
+select * from rbPrintTemplate rpt where id = 34372;
+
+
+
+select * from rbSpecialVariablesPreferences rsvp where arguments REGEXP 'person' order by id desc;
+
+select * from rbPrintTemplate rpt where templateText REGEXP 'SpecialVar_039u02Vra';
+
+select * from rbSpecialVariablesPreferences rsvp where name = 'SpecialVar_ListNablyudeniyDoc';
+
+
+select * from rbPrintTemplate rpt where id = 29354;
+
+
+select * from rbPrintTemplateMeta rptm where template_id = 29354;
+
+
+
+select * from rbPrintTemplate rpt where id = 34370;
+
+
+select * from rbPrintTemplateMeta rptm where template_id = 34370 order by id desc;
+
+select * from rbSpecialVariablesPreferences rsvp where name = 'SpecialVar_Temp_List';
 
 -- SELECT 
 -- CONCAT_WS(' ', p2.lastName, p2.firstName, p2.patrName) `ФИО`, 
