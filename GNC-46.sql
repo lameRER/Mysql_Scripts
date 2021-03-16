@@ -22,7 +22,7 @@ select * from OrgStructure os where os.name REGEXP 'Консультативное гематологиче
 
 
 
-select 
+select
 Date(e.setDate) `Дата`,
 CONCAT_WS('\n'count(if(os.id = 17, os.id, NULL)), COUNT(if(e.isPrimary = 1 and os.id = 17 and et.name NOT REGEXP 'Дневной стационар', e.id, null)), count(if(e.isPrimary != 1 and os.id = 17 and et.name REGEXP 'Дневной стационар', e.id, null)) `3.03.1`,
 count(if(e.isPrimary = 1 and os.id = 17 and et.name NOT REGEXP 'Дневной стационар', e.id, null)),
@@ -32,39 +32,39 @@ CONCAT_WS(' ', count(if(os.id= 22, os.id, NULL))) `3.03.2`,
 CONCAT_WS(' ', count(if(os.id= 24, os.id, NULL))) `3.03.3`,
 CONCAT_WS(' ', count(if(os.id= 26, os.id, NULL))) `3.03.4`,
 '' `Всего`
-from Event e 
+from Event e
 join EventType et on et.id = e.eventType_id and et.deleted = 0
 join OrgStructure os on os.id = e.orgStructure_id and os.deleted = 0 and os.id in (17,22,24,26)
 where e.deleted = 0-- and date(e.setDate) = :Date1
 
 
-SELECT 
+SELECT
 (SELECT :Date1) `Дата`,
 CONCAT_WS('\n', `3.03.1`.all, CONCAT(`3.03.1`.`Primary`, ' певичных'), CONCAT('ДС-',`3.03.1`.DC)) `3.03.1`,
 CONCAT_WS('\n', `3.03.2`.all, CONCAT(`3.03.2`.`Primary`, ' певичных'), CONCAT('ДС-',`3.03.2`.DC)) `3.03.2`
 from(
-SELECT 
-count(if((e.isPrimary = 1 and et.name NOT REGEXP 'Дневной стационар') or (e.isPrimary != 1 and et.name REGEXP 'Дневной стационар'), e.id, null)) `all`, 
-COUNT(if(e.isPrimary = 1 and et.name NOT REGEXP 'Дневной стационар', e.id, null)) `Primary`, 
+SELECT
+count(if((e.isPrimary = 1 and et.name NOT REGEXP 'Дневной стационар') or (e.isPrimary != 1 and et.name REGEXP 'Дневной стационар'), e.id, null)) `all`,
+COUNT(if(e.isPrimary = 1 and et.name NOT REGEXP 'Дневной стационар', e.id, null)) `Primary`,
 count(if(e.isPrimary != 1 and et.name REGEXP 'Дневной стационар', e.id, null)) DC
-from Event e 
+from Event e
 join EventType et on et.id = e.eventType_id and et.deleted = 0
 join OrgStructure os on os.id = e.orgStructure_id and os.deleted = 0 and os.id in (17)
 where e.deleted = 0 and date(e.setDate) = :Date1
-) as `3.03.1`, 
-(SELECT 
-count(os.id) `all`, 
-COUNT(if(e.isPrimary = 1 and et.name NOT REGEXP 'Дневной стационар', e.id, null)) `Primary`, 
+) as `3.03.1`,
+(SELECT
+count(os.id) `all`,
+COUNT(if(e.isPrimary = 1 and et.name NOT REGEXP 'Дневной стационар', e.id, null)) `Primary`,
 count(if(e.isPrimary != 1 and et.name REGEXP 'Дневной стационар', e.id, null)) DC
-from Event e 
+from Event e
 join EventType et on et.id = e.eventType_id and et.deleted = 0
 join OrgStructure os on os.id = e.orgStructure_id and os.deleted = 0 and os.id in (22)
 where e.deleted = 0 and date(e.setDate) = :Date1
 ) as `3.03.2`
 
 
-select et.name, e.* from Event e 
-join EventType et on et.id = e.eventType_id 
+select et.name, e.* from Event e
+join EventType et on et.id = e.eventType_id
 
 
 
