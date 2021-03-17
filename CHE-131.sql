@@ -75,7 +75,7 @@ select * from Probe p ;
 
 
 
-
+select * from TakenTissueJournal ttj ;
 
 
 
