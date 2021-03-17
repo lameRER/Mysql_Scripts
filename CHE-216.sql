@@ -3,6 +3,10 @@
 
 
 
+
+
+
+
 -- @Param V018 ÂÌÏ
 -- @Param V019 Ìåòîä ÂÌÏ
 -- @Param V020 Ìîäåëü ïðè ÂÌÏ
@@ -15,6 +19,8 @@ select * from V019 v;
 select * from V022 v;
 
 
+select * from hi;
+
 
 CREATE table temp_rbpat
 (select v.IDMPAC, v.MPACNAME, v.DATEBEG, v.DATEEND, v2.IDHM, v2.HMNAME, v2.DIAG, v2.HVID, v2.HGR, v2.HMODP, v2.IDMODP, v2.DATEBEG DATEBEG2, v2.DATEEND DATEEND2, v3.IDHVID, v3.HVIDNAME, v3.DATEBEG DATEBEG3, v3.DATEEND DATEEND3 from V022 v
@@ -23,6 +29,7 @@ join V018 v3 on v3.IDHVID = v2.HVID)
 
 
 
+select * from rbHighTechCureKind rhtck ;
 
 UPDATE rbPatientModel
 set isObsolete = 1
@@ -117,12 +124,51 @@ join rbCureMethod rcm
 GROUP by v.MPACNAME, v3.DIAG
 
 
+select * from rbHighTechCureMethod rhtcm ;
+select * from rbHighTechCureKind rhtck ;
+
+UPDATE rbHighTechCureMethod 
+set deleted = 1
+WHERE deleted = 0
+
+
+insert into rbHighTechCureMethod (code, name, regionalCode, federalCode, deleted, cureKind_id)
+select
+v.HVID code, v.HMNAME name, '' regionalCode, '' federalCode, 0 deleted, rhtck.id cureKind_id
+from V019 v
+join V022 v2 on v.IDMODP = v2.IDMPAC 
+join rbHighTechCureKind rhtck on v2.IDMPAC = rhtck.code 
+
+
+select * from V022 v ;
+
+insert into rbHighTechCureKind (code, name, regionalCode, federalCode, deleted, begDate, endDate)
+select
+v.IDMPAC code, v.MPACNAME name, '' regionalCode, '' federalCode, 0 deleted, STR_TO_DATE(v.DATEBEG, '%d.%m.%Y') begDate, STR_TO_DATE(v.DATEEND, '%d.%m.%Y') endDate from V022 v
+where v.MPACNAME is not null
+-- join V019 v2 on v.IDMPAC = v2.IDMODP and if((STR_TO_DATE(v2.DATEEND, '%d.%m.%Y') > CURDATE() or v2.DATEEND is null), '0', '1') = 0
+-- join V018 v3 on v3.IDHVID = v2.HVID and if((STR_TO_DATE(v3.DATEEND, '%d.%m.%Y') > CURDATE() or v3.DATEEND is null), '0', '1') = 0
+-- join rbCureType rct on rct.name = v3.HVIDNAME and rct.isObsolete = 0
+-- where if((STR_TO_DATE(v.DATEEND, '%d.%m.%Y') > CURDATE() or v.DATEEND is null), '0', '1')  = 0
+-- group by v.MPACNAME, v2.DIAG, rct.id
+
+
+
+
+
+
+
+
+
 INSERT INTO rbCureMethod (createDatetime, createPerson_id, modifyDatetime, modifyPerson_id, code, name, regionalCode, isObsolete)
 select
 NOW() createDatetime, NULL createPerson_id, NOW() modifyDatetime, NULL modifyPerson_id, '' code, v.HMNAME name, '' regionalCode, if((STR_TO_DATE(v.DATEEND, '%d.%m.%Y') > CURDATE() or v.DATEEND is null), '0', '1') isObsolete
 from V019 v
 where if((STR_TO_DATE(v.DATEEND, '%d.%m.%Y') > CURDATE() or v.DATEEND is null), '0', '1') = 0
 group by v.HMNAME
+
+
+
 
 
 INSERT into rbCureType (createDatetime, createPerson_id, modifyDatetime, modifyPerson_id, code, name, regionalCode, isObsolete)
