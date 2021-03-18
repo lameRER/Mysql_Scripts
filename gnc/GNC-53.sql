@@ -1,1 +1,1 @@
-select * from rbPrintTemplate where name REGEXP ''
+select * from rbPrintTemplate where name REGEXP 'по транс'
