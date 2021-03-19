@@ -133,16 +133,16 @@ LEFT JOIN OrgStructure os1
     AND e.deleted = 0
     AND a.deleted = 0
     AND ap.deleted = 0
-    AND c.id <> 18    
+    AND c.id <> 18
   GROUP BY
     e.id
   ) AS qwe
 WHERE
-  qwe.Type <> 'введение лимфоцитов донора'
--- GROUP BY
---   qwe.finance
+  qwe.Type <> 'введение лимфоцитов донора' and (oxl_kol = 1 or tkm_kol = 1 or hg_kol = 1 or gem_kol =1 or oivhpg_kol =1)
+GROUP BY
+  qwe.finance
 --  , qwe.OrgStr
---   , qwe.Type
+  , qwe.Type
 ORDER BY
   qwe.OrgStr
 , qwe.Type
