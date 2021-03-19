@@ -103,7 +103,6 @@ ORDER BY
   a.begDate DESC
 LIMIT
   1)
-
 LEFT JOIN ActionProperty ap_org
 ON ap_org.action_id = a_org.id AND ap_org.type_id = 1608
 LEFT JOIN ActionProperty_OrgStructure apos_org

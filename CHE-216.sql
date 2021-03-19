@@ -2,8 +2,15 @@
 --TODO: Загрузить справочники в Челябинск
 
 
+DELETE from rbHighTechCureMethod;
+DELETE from rbHighTechCureKind;
+DELETE from rbHighTechPatientModel;
+DELETE from rbHighTechCureMethodDiag;
 
-
+select * from rbHighTechCureMethod;
+select * from rbHighTechCureKind;
+select * from rbHighTechPatientModel;
+select * from rbHighTechCureMethodDiag;
 
 
 
@@ -127,7 +134,7 @@ GROUP by v.MPACNAME, v3.DIAG
 select * from rbHighTechCureMethod rhtcm ;
 select * from rbHighTechCureKind rhtck ;
 
-UPDATE rbHighTechCureMethod 
+UPDATE rbHighTechCureMethod
 set deleted = 1
 WHERE deleted = 0
 
@@ -136,8 +143,8 @@ insert into rbHighTechCureMethod (code, name, regionalCode, federalCode, deleted
 select
 v.HVID code, v.HMNAME name, '' regionalCode, '' federalCode, 0 deleted, rhtck.id cureKind_id
 from V019 v
-join V022 v2 on v.IDMODP = v2.IDMPAC 
-join rbHighTechCureKind rhtck on v2.IDMPAC = rhtck.code 
+join V022 v2 on v.IDMODP = v2.IDMPAC
+join rbHighTechCureKind rhtck on v2.IDMPAC = rhtck.code
 
 
 select * from V022 v ;
