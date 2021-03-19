@@ -1,6 +1,4 @@
-select * from rbPrintTemplate where name REGEXP 'по транс'
-
-
+select * from rbPrintTemplate where name REGEXP 'РїРѕ С‚СЂР°РЅСЃ'
 
 select * from rbSpecialVariablesPreferences where name = 'SpecialVar_report_transf';
 
@@ -14,36 +12,40 @@ SELECT qwe.finance
      , sum(qwe.gem_kol) AS gem_sum
      , sum(qwe.hg_kol) AS hg_sum
      , sum(qwe.action_kol) AS sum_itog
-     , if(qwe.Type = 'аутологичная ТКМ', sum(qwe.tkm_kol), NULL) AS auto_tkm
-     , if(qwe.Type <> 'аутологичная ТКМ', sum(qwe.tkm_kol), NULL) AS allo_tkm
-     , if(qwe.Type = 'аутологичная ТКМ', sum(qwe.gem_kol), NULL) AS auto_gem
-     , if(qwe.Type <> 'аутологичная ТКМ', sum(qwe.gem_kol), NULL) AS allo_gem
+     , if(qwe.Type = 'Р°СѓС‚РѕР»РѕРіРёС‡РЅР°СЏ РўРљРњ', sum(qwe.tkm_kol), NULL) AS auto_tkm
+     , if(qwe.Type <> 'Р°СѓС‚РѕР»РѕРіРёС‡РЅР°СЏ РўРљРњ', sum(qwe.tkm_kol), NULL) AS allo_tkm
+     , if(qwe.Type = 'Р°СѓС‚РѕР»РѕРіРёС‡РЅР°СЏ РўРљРњ', sum(qwe.gem_kol), NULL) AS auto_gem
+     , if(qwe.Type <> 'Р°СѓС‚РѕР»РѕРіРёС‡РЅР°СЏ РўРљРњ', sum(qwe.gem_kol), NULL) AS allo_gem
      , sum(qwe.oivhpg_kol) AS oivhpg_sum
-     , if(qwe.Type = 'аутологичная ТКМ', sum(qwe.oivhpg_kol), NULL) AS auto_oivhpg
-     , if(qwe.Type <> 'аутологичная ТКМ', sum(qwe.oivhpg_kol), NULL) AS allo_oivhpg,
+     , if(qwe.Type = 'Р°СѓС‚РѕР»РѕРіРёС‡РЅР°СЏ РўРљРњ', sum(qwe.oivhpg_kol), NULL) AS auto_oivhpg
+     , if(qwe.Type <> 'Р°СѓС‚РѕР»РѕРіРёС‡РЅР°СЏ РўРљРњ', sum(qwe.oivhpg_kol), NULL) AS allo_oivhpg,     
       SUM(qwe.Allo) AS AlloTKM,
-      SUM(qwe.Auto) AS AutoTkm
+      SUM(qwe.Auto) AS AutoTkm      
+     , if(qwe.Type = 'Р°СѓС‚РѕР»РѕРіРёС‡РЅР°СЏ РўРљРњ', sum(qwe.hg_kol), NULL) AS auto_hg
+     , if(qwe.Type <> 'Р°СѓС‚РѕР»РѕРіРёС‡РЅР°СЏ РўРљРњ', sum(qwe.hg_kol), NULL) AS allo_hg
+     , if(qwe.Type = 'Р°СѓС‚РѕР»РѕРіРёС‡РЅР°СЏ РўРљРњ', sum(qwe.oxl_kol), NULL) AS auto_oxl
+     , if(qwe.Type <> 'Р°СѓС‚РѕР»РѕРіРёС‡РЅР°СЏ РўРљРњ', sum(qwe.oxl_kol), NULL) AS allo_oxl
 FROM
   (
-  SELECT if(f.name = 'ВМП', concat_ws(' ', 'ВМП', qt.code), f.name) AS Finance
+  SELECT if(f.name = 'Р’РњРџ', concat_ws(' ', 'Р’РњРџ', qt.code), f.name) AS Finance
        , CASE
-         WHEN os.shortName = 'НКО ВХПГ' THEN
-           'НКО ТКМ'
+         WHEN os.shortName = 'РќРљРћ Р’РҐРџР“' THEN
+           'РќРљРћ РўРљРњ'
          ELSE
            os.shortName
          END OrgStr
        --    , date(a.plannedEndDate) 'Date'
-         , if(os.shortName = 'НКО ВХПГ' OR os.shortName = 'НКО ТКМ', 'НКО ТКМ', NULL) AS tkm
-       , if(os.shortName = 'Гематология', 'Гематология', NULL) AS gem
-       , if(os.shortName = 'НКО ХГ' OR os.shortName = 'ХГ(ДС)', 'НКО ХГ', NULL) AS giit
-       , if(os.shortName = 'НКО ОХЛ', 'НКО ОХЛ', NULL) AS oxl
-       , if(os.shortName = 'НКО ОХЛ' OR (os.shortName='Изолятор' AND os1.shortName='НКО ОХЛ'), 1, NULL) AS oxl_kol
-       , if(os.shortName = 'НКО ВХПГ' OR os.shortName = 'НКО ТКМ' OR (os.shortName='Изолятор' AND os1.shortName='НКО ТКМ'), 1, NULL) AS tkm_kol
-       , if(os.shortName = 'НКО ХГ' OR (os.shortName='Изолятор' AND os1.shortName IN ('НКО ХГ','ХГ (ДС)')), 1, NULL) AS hg_kol
-       , if(os.shortName = 'Гематология' OR (os.shortName='Изолятор' AND os1.shortName='Гематология'), 1, NULL) AS gem_kol
-       , if(os.shortName = 'ОИВХПГ' OR (os.shortName='Изолятор' AND (os1.shortName='ОИВХПГ' OR p.id =3419)), 1, NULL) AS oivhpg_kol
+         , if(os.shortName = 'РќРљРћ Р’РҐРџР“' OR os.shortName = 'РќРљРћ РўРљРњ', 'РќРљРћ РўРљРњ', NULL) AS tkm
+       , if(os.shortName = 'Р“РµРјР°С‚РѕР»РѕРіРёСЏ', 'Р“РµРјР°С‚РѕР»РѕРіРёСЏ', NULL) AS gem
+       , if(os.shortName = 'РќРљРћ РҐР“' OR os.shortName = 'РҐР“(Р”РЎ)', 'РќРљРћ РҐР“', NULL) AS giit
+       , if(os.shortName = 'РќРљРћ РћРҐР›', 'РќРљРћ РћРҐР›', NULL) AS oxl
+       , if(os.shortName = 'РќРљРћ РћРҐР›' OR (os.shortName='РР·РѕР»СЏС‚РѕСЂ' AND os1.shortName='РќРљРћ РћРҐР›'), 1, NULL) AS oxl_kol
+       , if(os.shortName = 'РќРљРћ Р’РҐРџР“' OR os.shortName = 'РќРљРћ РўРљРњ' OR (os.shortName='РР·РѕР»СЏС‚РѕСЂ' AND os1.shortName='РќРљРћ РўРљРњ'), 1, NULL) AS tkm_kol
+       , if(os.shortName = 'РќРљРћ РҐР“' OR (os.shortName='РР·РѕР»СЏС‚РѕСЂ' AND os1.shortName IN ('РќРљРћ РҐР“','РҐР“ (Р”РЎ)')), 1, NULL) AS hg_kol
+       , if(os.shortName = 'Р“РµРјР°С‚РѕР»РѕРіРёСЏ' OR (os.shortName='РР·РѕР»СЏС‚РѕСЂ' AND os1.shortName='Р“РµРјР°С‚РѕР»РѕРіРёСЏ'), 1, NULL) AS gem_kol
+       , if(os.shortName = 'РћРР’РҐРџР“' OR (os.shortName='РР·РѕР»СЏС‚РѕСЂ' AND (os1.shortName='РћРР’РҐРџР“' OR p.id =3419)), 1, NULL) AS oivhpg_kol
        , (
-         SELECT if(aps.value = 'аллогенная неродственная ТКМ' OR aps.value = 'аллогенная родственная ТКМ' OR aps.value = 'гаплоидентичная ТКМ', 'аллогенная ТКМ', aps.value)
+         SELECT if(aps.value = 'Р°Р»Р»РѕРіРµРЅРЅР°СЏ РЅРµСЂРѕРґСЃС‚РІРµРЅРЅР°СЏ РўРљРњ' OR aps.value = 'Р°Р»Р»РѕРіРµРЅРЅР°СЏ СЂРѕРґСЃС‚РІРµРЅРЅР°СЏ РўРљРњ' OR aps.value = 'РіР°РїР»РѕРёРґРµРЅС‚РёС‡РЅР°СЏ РўРљРњ', 'Р°Р»Р»РѕРіРµРЅРЅР°СЏ РўРљРњ', aps.value)
          FROM
            ActionProperty ap
          INNER JOIN ActionProperty_String aps
@@ -53,9 +55,9 @@ FROM
            AND ap.type_id IN (3962966)) Type
        , 1 AS action_kol
        , a.id AS action_id,
-   CASE WHEN p.id =3419 then 'ОИВХПГ' else os1.shortName END,
+   CASE WHEN p.id =3419 then 'РћРР’РҐРџР“' else os1.shortName END,
      (
-         SELECT CASE WHEN aps.value = 'аллогенная неродственная ТКМ' OR aps.value = 'аллогенная родственная ТКМ' OR aps.value = 'гаплоидентичная ТКМ' THEN 1 ELSE 0 end
+         SELECT CASE WHEN aps.value = 'Р°Р»Р»РѕРіРµРЅРЅР°СЏ РЅРµСЂРѕРґСЃС‚РІРµРЅРЅР°СЏ РўРљРњ' OR aps.value = 'Р°Р»Р»РѕРіРµРЅРЅР°СЏ СЂРѕРґСЃС‚РІРµРЅРЅР°СЏ РўРљРњ' OR aps.value = 'РіР°РїР»РѕРёРґРµРЅС‚РёС‡РЅР°СЏ РўРљРњ' THEN 1 ELSE 0 end
          FROM
            ActionProperty ap
          INNER JOIN ActionProperty_String aps
@@ -64,7 +66,7 @@ FROM
            ap.action_id = a.id
            AND ap.type_id IN (3962966)) Allo,
      (
-         SELECT CASE WHEN aps.value = 'аутологичная ТКМ' THEN 1 ELSE 0 end
+         SELECT CASE WHEN aps.value = 'Р°СѓС‚РѕР»РѕРіРёС‡РЅР°СЏ РўРљРњ' THEN 1 ELSE 0 end
          FROM
            ActionProperty ap
          INNER JOIN ActionProperty_String aps
@@ -131,16 +133,16 @@ LEFT JOIN OrgStructure os1
     AND e.deleted = 0
     AND a.deleted = 0
     AND ap.deleted = 0
-    AND c.id <> 18
+    AND c.id <> 18    
   GROUP BY
     e.id
   ) AS qwe
 WHERE
-  qwe.Type <> 'введение лимфоцитов донора'
-GROUP BY
-  qwe.finance
+  qwe.Type <> 'РІРІРµРґРµРЅРёРµ Р»РёРјС„РѕС†РёС‚РѕРІ РґРѕРЅРѕСЂР°'
+-- GROUP BY
+--   qwe.finance
 --  , qwe.OrgStr
-  , qwe.Type
+--   , qwe.Type
 ORDER BY
   qwe.OrgStr
 , qwe.Type
