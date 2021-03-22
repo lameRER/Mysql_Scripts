@@ -17,5 +17,5 @@ select p.id, p.login, p.userProfile_id, p.password from person p where p.passwor
 
 
 update person p, person_userprofile pup
-set p.userProfile_id = 1, pup.userProfile_id = 1
+set p.userProfile_id = 7, pup.userProfile_id = 7
 where p.id = 303 and p.id = pup.person_id 
