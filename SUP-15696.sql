@@ -119,3 +119,100 @@ select 'Инструментальные методы:' name, 'Результа�
 
 
 select * from rbEpicrisisProperty rep order by rep.id desc;
+
+
+
+select at2.name, a.* from Action a
+join ActionType at2 on at2.id = a.actionType_id and at2.deleted = 0
+where a.deleted = 0 and a.event_id = 33721812
+order by a.createDatetime desc 
+
+
+
+
+select * from ActionType at2
+where at2.group_id = (select at3.id from ActionType at3 where at3.code = 'analyses_new' and at3.deleted= 0)
+
+
+select at3.* from ActionType at3 where at3.code = 'analyses_new' and at3.deleted= 0
+
+
+
+
+
+
+
+select 
+jt.*,
+a.signature,
+at2.code, 
+a.status ,
+at2.name
+-- GROUP_CONCAT(CONCAT(apt.name,": ", case when apt.typeName = 'String' THEN aps.value 
+-- when apt.typeName = 'Reference' THEN apr.value 
+-- when apt.typeName = 'Date' THEN apd.value end) separator '\n')
+from ActionProperty ap 
+left join ActionProperty_String aps using(id) 
+left join ActionProperty_Reference apr using(id)
+left join ActionProperty_Date apd using(id)
+left join ActionProperty_Job_Ticket apjt using(id)
+join Action a on a.id = ap.action_id and a.deleted = 0 and a.event_id = 33796707 
+join (select at2.* from ActionType at2 where at2.deleted =0 and at2.group_id = 42943 union select at3.* from ActionType at2 join ActionType at3 on at2.id = at3.group_id where at2.group_id = 42943) at2 on at2.id = a.actionType_id and at2.deleted = 0
+join ActionPropertyType apt on apt.id = ap.type_id and apt.actionType_id = at2.id-- and apt.typeName != 'JobTicket'
+join Job_Ticket jt on jt.id = apjt.value 
+where ap.deleted = 0
+GROUP by a.id ORDER by a.createDatetime, at2.name, apt.idx
+
+
+select * from Job_Ticket jt ;
+
+select * from rbJobType 
+
+select * from ActionType at2 where at2.id in (select apt.actionType_id from ActionPropertyType apt where apt.valueDomain = '999') and at2.deleted = 0;
+
+
+select jt.* from rbJobType rjt
+join Job j on j.jobType_id = rjt.id
+join Job_Ticket jt on jt.master_id = j.id
+where rjt.code = '999'
+
+
+
+
+
+
+select 
+ttj.datetimeTaken ,
+at3.name ,
+a.id,
+a.takenTissueJournal_id ,
+case when ttj.datetimeTaken 
+-- at2.name ,
+-- a.begDate,
+GROUP_CONCAT(CONCAT(apt.name,": ", case when apt.typeName = 'String' THEN aps.value 
+when apt.typeName = 'Reference' THEN apr.value 
+when apt.typeName = 'Date' THEN apd.value end) separator '\n')
+from ActionProperty ap 
+left join ActionProperty_String aps using(id) 
+left join ActionProperty_Reference apr using(id)
+left join ActionProperty_Date apd using(id)
+join Action a on a.id = ap.action_id and a.deleted = 0 and a.event_id = 33824866 
+join Event e2 on e2.id = a.event_id and e2.deleted = 0
+join ActionType at2 on at2.id = a.actionType_id and at2.deleted = 0
+join ActionType at3 on at3.id = at2.group_id and at3.deleted = 0 
+join ActionPropertyType apt on apt.id = ap.type_id and apt.actionType_id = at2.id and at2.id in (select DISTINCT apt.actionType_id from ActionPropertyType apt where apt.valueDomain REGEXP '999|9767|2-9')--  and apt.name != 'Номерок'
+join TakenTissueJournal ttj on ttj.id = a.takenTissueJournal_id and ttj.client_id = e2.client_id 
+where ap.deleted = 0
+GROUP by a.takenTissueJournal_id, at3.id -- limit 10 
+-- GROUP by a.id ORDER by a.createDatetime, at2.name, apt.idx
+
+select lastName , [1193] FROM Person PIVOT(count(lastName) for id in ([1193])) as pivottable
+
+
+select * from TakenTissueJournal ttj where ttj.id = 65370;
+
+select * from Action where id = 99838563;
+
+
+select * from rbJobType_ActionType rjtat ;
+
