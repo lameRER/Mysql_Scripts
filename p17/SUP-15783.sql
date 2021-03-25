@@ -27,9 +27,7 @@ select CONCAT_WS('/', IFNULL(c.lastName,''), ifnull(c.firstName,''), ifnull(c.pa
     when apt.typeName = 'Date' then apd.value
     when apt.typeName = 'Integer' then api.value
     when apt.typeName = 'Temperature' then apt2.value
-	when apt.typeName = 'Reference' and apt.valueDomain != 'SpravYesNo' then apr.value
-	when apt.typeName = 'Reference' and apt.valueDomain = 'SpravYesNo' then syn.code end, '')
-    separator '/'), ''),
+	when apt.typeName = 'Reference' then if(apt.valueDomain !='SpravYesNo', apr.value, (SELECT syn.code FROM SpravYesNo syn where syn.id = apr.value)) end, '') separator '/'), ''),
     ifnull(rdt.code,''),ifnull(DATE_FORMAT(cd.`date`, '%d.%m.%Y'),''),ifnull(rpk.code,''),ifnull(ns.SMOCOD,''),
     ifnull(p2.lastName ,''),ifnull(p2.firstName ,''),ifnull(p2.patrName ,''),ifnull(p2.SNILS ,'')) as `client`
 from Client c
@@ -47,15 +45,14 @@ left join ActionProperty_Integer api on api.id = ap.id
 left join ActionProperty_Date apd on apd.id = ap.id
 left join ActionProperty_Temperature apt2 on apt2.id = ap.id
 left join ActionProperty_Reference apr on apr.id = ap.id
-left join ActionProperty_Reference apr1 on apr1.id = ap.id
-left join SpravYesNo syn on syn.id = apr1.value 
 join rbDocumentType rdt on rdt.id = cd.documentType_id 
 join rbPolicyKind rpk on rpk.id = cp.policyKind_id 
 join Organisation o2 on o2.id = cp.insurer_id and o2.deleted = 0
 left join netricaSMO ns on ns.OGRN = o2.OGRN 
 join Person p2 on p2.id = e.execPerson_id and p2.deleted = 0
 where c.deleted = 0 and c.id = 1570868
-    
+ORDER by apt.idx   
+
 select * from netricaSMO;
 select * from Organisation o where o.id = 3741;
 select * from rbPolicyKind rpk ;
@@ -74,7 +71,7 @@ join netricaSMO ns on ns.OGRN = o.OGRN
     ActionType at2
     join ActionPropertyType apt on apt.actionType_id = at2.id
 --     set apt.valueDomain = 'SpravYesNo', apt.typeName = 'Reference'
-    where at2.code = 'QR'
+    where at2.code = 'QR' and apt.deleted = 0
     
     
     select * from rbPrintTemplate where id = 390;
@@ -86,6 +83,8 @@ join netricaSMO ns on ns.OGRN = o.OGRN
   
   select DISTINCT apt.typeName from ActionPropertyType apt ;
   
+ 
+ select * from netricaVaccinationType nvt ;
   
   select * from SpravYesNo;
   
