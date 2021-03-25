@@ -180,16 +180,29 @@ where rjt.code = '999'
 
 
 
-select 
-case when date(an.datetimeTaken) = '2021.03.17' then an.datetimeTaken end,
-case when date(an.datetimeTaken) = '2021.03.19' then an.datetimeTaken end,
-date(an.datetimeTaken)
-from  
-(
+
 select
-ttj.datetimeTaken,
-at3.name ,
-a.id,
+at3.name,
+SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT CONCAT(date(ttj.datetimeTaken), ';') separator ''), ";", 1) as name,
+SUBSTRING_INDEX(SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT CONCAT(date(ttj.datetimeTaken), ';') separator ''), ";", 2), ';', -1) as `1`,
+SUBSTRING_INDEX(SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT CONCAT(date(ttj.datetimeTaken), ';') separator ''), ";", 3), ';', -1) as `2`,
+SUBSTRING_INDEX(SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT CONCAT(date(ttj.datetimeTaken), ';') separator ''), ";", 4), ';', -1) as `3`,
+SUBSTRING_INDEX(SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT CONCAT(date(ttj.datetimeTaken), ';') separator ''), ";", 5), ';', -1) as `4`
+from ActionProperty ap
+left join ActionProperty_String aps using(id)
+left join ActionProperty_Reference apr using(id)
+left join ActionProperty_Date apd using(id)
+join Action a on a.id = ap.action_id and a.deleted = 0 and a.event_id = 33824866
+join Event e2 on e2.id = a.event_id and e2.deleted = 0
+join ActionType at2 on at2.id = a.actionType_id and at2.deleted = 0
+join ActionType at3 on at3.id = at2.group_id and at3.deleted = 0 and at3.name = 'Биохимические исследования'
+join ActionPropertyType apt on apt.id = ap.type_id and apt.actionType_id = at2.id and at2.id in (select DISTINCT apt.actionType_id from ActionPropertyType apt where apt.valueDomain REGEXP '999|9767|2-9')--  and apt.name != 'Номерок'
+join TakenTissueJournal ttj on ttj.id = a.takenTissueJournal_id and ttj.client_id = e2.client_id
+where ap.deleted = 0
+UNION 
+select
+apt.name ,
+case 
 a.takenTissueJournal_id ,
 -- case when ttj.datetimeTaken
 -- at2.name ,
@@ -208,9 +221,7 @@ join ActionType at3 on at3.id = at2.group_id and at3.deleted = 0 and at3.name = 
 join ActionPropertyType apt on apt.id = ap.type_id and apt.actionType_id = at2.id and at2.id in (select DISTINCT apt.actionType_id from ActionPropertyType apt where apt.valueDomain REGEXP '999|9767|2-9')--  and apt.name != 'Номерок'
 join TakenTissueJournal ttj on ttj.id = a.takenTissueJournal_id and ttj.client_id = e2.client_id
 where ap.deleted = 0
-GROUP by a.takenTissueJournal_id, at3.id -- limit 10
-) an
--- GROUP by a.id ORDER by a.createDatetime, at2.name, apt.idx
+-- GROUP by a.takenTissueJournal_id, at3.id -- limit 10
 
 
 
@@ -218,7 +229,12 @@ GROUP by a.takenTissueJournal_id, at3.id -- limit 10
 
 
 
+SELECT name AS Item,
+COLUMN_JSON("test,test1") AS 'Attribute Names'
+FROM ActionType;
 
+
+select * from ActionType at2 ;
 
 
 set @sql = null;
@@ -230,17 +246,16 @@ GROUP_CONCAT(DISTINCT
     CONCAT(
       'MAX(IF(`createDatetime` = ', `createDatetime`, ',data,NULL)) AS data', `createDatetime`)
   ) INTO @sql
-  from ActionType
-  
-  select @sql;
+  from ActionType;
 
  
  SET @sql = CONCAT('SELECT  ID, ', @sql, ' 
                   FROM	ActionType
                   GROUP BY id');
                  
-                 prepare stmt from @sql;
-                execute stml
+PREPARE stmt FROM @sql;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;
 
 
 
