@@ -27,7 +27,8 @@ select CONCAT_WS('/', IFNULL(c.lastName,''), ifnull(c.firstName,''), ifnull(c.pa
     when apt.typeName = 'Date' then apd.value
     when apt.typeName = 'Integer' then api.value
     when apt.typeName = 'Temperature' then apt2.value
-	when apt.typeName = 'Reference' then apr.value end, '')
+	when apt.typeName = 'Reference' and apt.valueDomain != 'SpravYesNo' then apr.value
+	when apt.typeName = 'Reference' and apt.valueDomain = 'SpravYesNo' then syn.code end, '')
     separator '/'), ''),
     ifnull(rdt.code,''),ifnull(DATE_FORMAT(cd.`date`, '%d.%m.%Y'),''),ifnull(rpk.code,''),ifnull(ns.SMOCOD,''),
     ifnull(p2.lastName ,''),ifnull(p2.firstName ,''),ifnull(p2.patrName ,''),ifnull(p2.SNILS ,'')) as `client`
@@ -46,6 +47,8 @@ left join ActionProperty_Integer api on api.id = ap.id
 left join ActionProperty_Date apd on apd.id = ap.id
 left join ActionProperty_Temperature apt2 on apt2.id = ap.id
 left join ActionProperty_Reference apr on apr.id = ap.id
+left join ActionProperty_Reference apr1 on apr1.id = ap.id
+left join SpravYesNo syn on syn.id = apr1.value 
 join rbDocumentType rdt on rdt.id = cd.documentType_id 
 join rbPolicyKind rpk on rpk.id = cp.policyKind_id 
 join Organisation o2 on o2.id = cp.insurer_id and o2.deleted = 0
@@ -62,12 +65,15 @@ select * from rbDocumentType rdt ;
 select ns.SMOCOD  from Organisation o 
 join netricaSMO ns on ns.OGRN = o.OGRN 
 
+-- UPDATE 
     select 
-    at2.*
---     apt.*
+--     at2.*
+    apt.*
 --     apt.id, apt.idx, apt.deleted, apt.name, apt.typeName, apt.valueDomain, apt.penalty
-    from ActionType at2
+    from 
+    ActionType at2
     join ActionPropertyType apt on apt.actionType_id = at2.id
+--     set apt.valueDomain = 'SpravYesNo', apt.typeName = 'Reference'
     where at2.code = 'QR'
     
     
@@ -78,10 +84,14 @@ join netricaSMO ns on ns.OGRN = o.OGRN
    
    select * from ActionPropertyType where valueDomain != '';
   
+  select DISTINCT apt.typeName from ActionPropertyType apt ;
   
-  select * from  netricaRiskGroup ;
   
+  select * from SpravYesNo;
   
+--  CREATE table SpravYesNo
+  (select * FROM netricaYesN
+  o nyn )
 select * from ActionPropertyType apt where typeName  = 'Reference';
     
     
