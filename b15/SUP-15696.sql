@@ -3,14 +3,35 @@ select count(rep.id) num,
 -- GROUP_CONCAT(CONCAT_WS(' ', retres.id, resrep.id, res.id, res.name, res.description)separator '\n') res,
 -- retres.*
 resrep.*
+-- rep.*
 from rbEpicrisisTemplates ret
 left join rbEpicrisisTemplates_rbEpicrisisSections retres on retres.id_rbEpicrisisTemplates = ret.id
 left join rbEpicrisisSections res on retres.id_rbEpicrisisSections = res.id
 left join rbEpicrisisSections_rbEpicrisisProperty resrep on resrep.id_rbEpicrisisSections = res.id
 left join rbEpicrisisProperty rep on resrep.id_rbEpicrisisProperty = rep.id
-where ret.code = 'код 2'
+where ret.code = 'код 2' and resrep.id_rbEpicrisisSections = 12
 group by res.id, rep.id
 order by  retres.idx, resrep.idx;
+
+
+
+INSERT into rbEpicrisisProperty (name, description, `type`, defaultValue, valueDomain, printAsTable, isCopy)
+select 'Коагулологические исследования:' name, rep.description, rep.`type`, rep.defaultValue, rep.valueDomain, rep.printAsTable, rep.isCopy from rbEpicrisisProperty rep where rep.name REGEXP 'Анализы стационара'
+union
+select 'Иммунологические исследования:' name, rep.description, rep.`type`, rep.defaultValue, rep.valueDomain, rep.printAsTable, rep.isCopy from rbEpicrisisProperty rep where rep.name REGEXP 'Анализы стационара'
+union
+select 'Covid-19:' name, rep.description, rep.`type`, rep.defaultValue, rep.valueDomain, rep.printAsTable, rep.isCopy from rbEpicrisisProperty rep where rep.name REGEXP 'Анализы стационара'
+
+
+-- Set @return = 0
+-- INSERT into rbEpicrisisSections_rbEpicrisisProperty (id_rbEpicrisisSections, id_rbEpicrisisProperty, idx)
+-- select 12 id_rbEpicrisisSections, rep.id id_rbEpicrisisProperty, @return:=@return+(max(idx)+1)+1 from rbEpicrisisProperty rep, rbEpicrisisSections_rbEpicrisisProperty resrep where resrep.id_rbEpicrisisSections = 12 group by rep.id order by rep.id desc limit 3 ;
+
+select * from rbEpicrisisSections_rbEpicrisisProperty resrep where resrep.id_rbEpicrisisSections = 12;
+
+
+select * from rbEpicrisisProperty rep where rep.id in(79,78,77);
+
 
 
 set @ret = 1;
@@ -282,14 +303,12 @@ select CONCAT('SELECT DISTINCT ', 'test');
 
 
 
-
 select
-at3.name,
-ttj.datetimeTaken,
 apt.name,
+GROUP_CONCAT(
 case when apt.typeName = 'String' THEN aps.value
 when apt.typeName = 'Reference' THEN apr.value
-when apt.typeName = 'Date' THEN apd.value end
+when apt.typeName = 'Date' THEN apd.value end separator "\n") as `Результаты`
 from ActionProperty ap
 left join ActionProperty_String aps using(id)
 left join ActionProperty_Reference apr using(id)
@@ -301,8 +320,11 @@ join ActionType at3 on at3.id = at2.group_id and at3.deleted = 0 and at3.name = 
 join ActionPropertyType apt on apt.id = ap.type_id and apt.actionType_id = at2.id and at2.id in (select DISTINCT apt.actionType_id from ActionPropertyType apt where apt.valueDomain REGEXP '999|9767|2-9') and apt.name != 'Номерок'
 join TakenTissueJournal ttj on ttj.id = a.takenTissueJournal_id and ttj.client_id = e2.client_id
 where ap.deleted = 0
--- GROUP by a.takenTissueJournal_id, at3.id
+GROUP by at3.id, apt.id;
 
+
+
+select * from Event e where e.id = 33824866
 
 
 
@@ -455,7 +477,7 @@ select id, createDatetime from ActionType;
 
 
 
-SET @subq = 'select at3.name, ttj.datetimeTaken AS val, apt.name as `apt_name`, apt.typeName, aps.value aps, apd.value apd, apr.value apr from ActionProperty ap left join ActionProperty_String aps using(id) left join ActionProperty_Reference apr using(id) left join ActionProperty_Date apd using(id) join Action a on a.id = ap.action_id and a.deleted = 0 and a.event_id = 33824866 join Event e2 on e2.id = a.event_id and e2.deleted = 0 join ActionType at2 on at2.id = a.actionType_id and at2.deleted = 0 join ActionType at3 on at3.id = at2.group_id and at3.deleted = 0 and at3.name = ''Биохимические исследования'' join ActionPropertyType apt on apt.id = ap.type_id and apt.actionType_id = at2.id and at2.id in (select DISTINCT apt.actionType_id from ActionPropertyType apt where apt.valueDomain REGEXP ''999|9767|2-9'') and apt.name != ''Номерок'' join TakenTissueJournal ttj on ttj.id = a.takenTissueJournal_id and ttj.client_id = e2.client_id where ap.deleted = 0';
+SET @subq = 'select DATE_FORMAT(ttj.datetimeTaken, "%d.%m.%y\n%H:%i") valas, ttj.datetimeTaken val, case when apt.typeName = ''String'' THEN aps.value when apt.typeName = ''Reference'' THEN apr.value when apt.typeName = ''Date'' THEN apd.value end from ActionProperty ap left join ActionProperty_String aps using(id) left join ActionProperty_Reference apr using(id) left join ActionProperty_Date apd using(id) join Action a on a.id = ap.action_id and a.deleted = 0 and a.event_id = 33824866 join Event e2 on e2.id = a.event_id and e2.deleted = 0 join ActionType at2 on at2.id = a.actionType_id and at2.deleted = 0 join ActionType at3 on at3.id = at2.group_id and at3.deleted = 0 and at3.name = ''Биохимические исследования'' join ActionPropertyType apt on apt.id = ap.type_id and apt.actionType_id = at2.id and at2.id in (select DISTINCT apt.actionType_id from ActionPropertyType apt where apt.valueDomain REGEXP ''999|9767|2-9'') and apt.name != ''Номерок'' join TakenTissueJournal ttj on ttj.id = a.takenTissueJournal_id and ttj.client_id = e2.client_id where ap.deleted = 0 GROUP by ttj.datetimeTaken';
 
 SELECT @subq;
 
@@ -463,96 +485,204 @@ SELECT @subq;
 
 -- SET @subq = CONCAT('SELECT DISTINCT ', 'Date(createDatetime)', ' AS val ',
 --                     ' FROM ', 'ActionType', ' ', '', ' ORDER BY 1 limit 10');
-SET @cc1 = "CONCAT('SUM(IF(&p = ', &v, ', &t, 0)) AS ', &v)";
+SET @cc1 = "CONCAT('IF(&p = ', &v, ', &t, NULL) AS ', &vas)";
 select @cc1;
-SET @cc2 = REPLACE(@cc1, '&p', 'tmp.val');
+SET @cc2 = REPLACE(@cc1, '&p', 'ttj.datetimeTaken');
 select @cc2;
-SET @cc3 = REPLACE(@cc2, '&t', 'case when tmp.typeName = \'String\' THEN tmp.aps when tmp.typeName = \'Reference\' THEN tmp.apr when tmp.typeName = \'Date\' THEN tmp.apd end');
+SET @cc3 = REPLACE(@cc2, '&t', 'case when apt.typeName = ''String'' THEN aps.value when apt.typeName = ''Reference'' THEN apr.value when apt.typeName = ''Date'' THEN apd.value end');
 select @cc3;
 set @qval = CONCAT("'\"', val, '\"'");
+set @qvalas = CONCAT("'\"', valas, '\"'");
 select @qval;
 SET @cc4 = REPLACE(@cc3, '&v', @qval);
+SET @cc4 = REPLACE(@cc3, '&vas', @qvalas);
 select @cc4;
+
+
 SET SESSION group_concat_max_len = 10000;   -- just in case
     SET @stmt = CONCAT(
-            'SELECT  GROUP_CONCAT(', @cc4, ' SEPARATOR ",\n")  INTO @sums',
+            'SELECT  GROUP_CONCAT(', REGEXP_REPLACE(@cc4, '(\'String\')(.*)(\'Reference\')(.*)(\'Date\')', '\'\\1\'\\2\'\\3\'\\4\'\\5\''), ' SEPARATOR ",\n")  INTO @sums',
             ' FROM ( ', @subq, ' ) AS top');
-SELECT @stmt
+SELECT @stmt;
 
-SELECT  GROUP_CONCAT(CONCAT('SUM(IF(tmp.val = ', '"', val, '"', ', case when tmp.typeName = ''String'' THEN tmp.aps when tmp.typeName = ''Reference'' THEN tmp.apr when tmp.typeName = ''Date'' THEN tmp.apd end, 0)) AS ', '"', val, '"') SEPARATOR ",")  INTO @sums FROM ( select at3.name, ttj.datetimeTaken AS val, apt.name as `apt_name`, apt.typeName, aps.value aps, apd.value apd, apr.value apr from ActionProperty ap left join ActionProperty_String aps using(id) left join ActionProperty_Reference apr using(id) left join ActionProperty_Date apd using(id) join Action a on a.id = ap.action_id and a.deleted = 0 and a.event_id = 33824866 join Event e2 on e2.id = a.event_id and e2.deleted = 0 join ActionType at2 on at2.id = a.actionType_id and at2.deleted = 0 join ActionType at3 on at3.id = at2.group_id and at3.deleted = 0 and at3.name = 'Биохимические исследования' join ActionPropertyType apt on apt.id = ap.type_id and apt.actionType_id = at2.id and at2.id in (select DISTINCT apt.actionType_id from ActionPropertyType apt where apt.valueDomain REGEXP '999|9767|2-9') and apt.name != 'Номерок' join TakenTissueJournal ttj on ttj.id = a.takenTissueJournal_id and ttj.client_id = e2.client_id where ap.deleted = 0 ) AS top
+SELECT  GROUP_CONCAT(CONCAT('IF(ttj.datetimeTaken = ', &v, ', case when apt.typeName = ''String'' THEN aps.value when apt.typeName = ''Reference'' THEN apr.value when apt.typeName = ''Date'' THEN apd.value end, NULL) AS ', '"', valas, '"') SEPARATOR ",
+")  INTO @sums FROM ( select DATE_FORMAT(ttj.datetimeTaken, "%d.%m.%y
+%H:%i") valas, ttj.datetimeTaken val case when apt.typeName = 'String' THEN aps.value when apt.typeName = 'Reference' THEN apr.value when apt.typeName = 'Date' THEN apd.value end from ActionProperty ap left join ActionProperty_String aps using(id) left join ActionProperty_Reference apr using(id) left join ActionProperty_Date apd using(id) join Action a on a.id = ap.action_id and a.deleted = 0 and a.event_id = 33824866 join Event e2 on e2.id = a.event_id and e2.deleted = 0 join ActionType at2 on at2.id = a.actionType_id and at2.deleted = 0 join ActionType at3 on at3.id = at2.group_id and at3.deleted = 0 and at3.name = 'Биохимические исследования' join ActionPropertyType apt on apt.id = ap.type_id and apt.actionType_id = at2.id and at2.id in (select DISTINCT apt.actionType_id from ActionPropertyType apt where apt.valueDomain REGEXP '999|9767|2-9') and apt.name != 'Номерок' join TakenTissueJournal ttj on ttj.id = a.takenTissueJournal_id and ttj.client_id = e2.client_id where ap.deleted = 0 GROUP by ttj.datetimeTaken ) AS top
 
-SELECT @sums
+
+SELECT @sums;
 SET @stmt2 = CONCAT(
             'SELECT ',
-                'name', ',\n',
-                @sums,
-                ',\n ', 'id', ' AS Total'
-            '\n FROM ', ('select at3.name, ttj.datetimeTaken AS val, apt.name as `name1`, case when apt.typeName = ''String'' THEN aps.value when apt.typeName = ''Reference'' THEN apr.value when apt.typeName = ''Date'' THEN apd.value end from ActionProperty ap left join ActionProperty_String aps using(id) left join ActionProperty_Reference apr using(id) left join ActionProperty_Date apd using(id) join Action a on a.id = ap.action_id and a.deleted = 0 and a.event_id = 33824866 join Event e2 on e2.id = a.event_id and e2.deleted = 0 join ActionType at2 on at2.id = a.actionType_id and at2.deleted = 0 join ActionType at3 on at3.id = at2.group_id and at3.deleted = 0 and at3.name = ''Биохимические исследования'' join ActionPropertyType apt on apt.id = ap.type_id and apt.actionType_id = at2.id and at2.id in (select DISTINCT apt.actionType_id from ActionPropertyType apt where apt.valueDomain REGEXP ''999|9767|2-9'') and apt.name != ''Номерок'' join TakenTissueJournal ttj on ttj.id = a.takenTissueJournal_id and ttj.client_id = e2.client_id where ap.deleted = 0'), ' ',
+                'apt.Name', ',\n',
+                @sums,                 
+            '\n FROM ActionProperty ap left join ActionProperty_String aps using(id) left join ActionProperty_Reference apr using(id) left join ActionProperty_Date apd using(id) join Action a on a.id = ap.action_id and a.deleted = 0 and a.event_id = 33824866 join Event e2 on e2.id = a.event_id and e2.deleted = 0 join ActionType at2 on at2.id = a.actionType_id and at2.deleted = 0 join ActionType at3 on at3.id = at2.group_id and at3.deleted = 0 and at3.name = ''Биохимические исследования'' join ActionPropertyType apt on apt.id = ap.type_id and apt.actionType_id = at2.id and at2.id in (select DISTINCT apt.actionType_id from ActionPropertyType apt where apt.valueDomain REGEXP ''999|9767|2-9'') and apt.name != ''Номерок'' join TakenTissueJournal ttj on ttj.id = a.takenTissueJournal_id and ttj.client_id = e2.client_id where ap.deleted = 0 GROUP by at3.id, apt.id', ' ',
             '',
-            ' GROUP BY ', 'name',
-            '\n WITH ROLLUP',
-            '\n', ''
-        );
+            '\n', '');
 SELECT @stmt2
 
+SELECT apt.Name,
+IF(ttj.datetimeTaken = "2021-03-17 09:17:00", case when apt.typeName = 'String' THEN aps.value when apt.typeName = 'Reference' THEN apr.value when apt.typeName = 'Date' THEN apd.value end, 0) AS "2021-03-17 09:17:00",IF(ttj.datetimeTaken = "2021-03-19 09:16:14", case when apt.typeName = 'String' THEN aps.value when apt.typeName = 'Reference' THEN apr.value when apt.typeName = 'Date' THEN apd.value end, 0) AS "2021-03-19 09:16:14"
+ FROM ActionProperty ap left join ActionProperty_String aps using(id) left join ActionProperty_Reference apr using(id) left join ActionProperty_Date apd using(id) join Action a on a.id = ap.action_id and a.deleted = 0 and a.event_id = 33824866 join Event e2 on e2.id = a.event_id and e2.deleted = 0 join ActionType at2 on at2.id = a.actionType_id and at2.deleted = 0 join ActionType at3 on at3.id = at2.group_id and at3.deleted = 0 and at3.name = 'Биохимические исследования' join ActionPropertyType apt on apt.id = ap.type_id and apt.actionType_id = at2.id and at2.id in (select DISTINCT apt.actionType_id from ActionPropertyType apt where apt.valueDomain REGEXP '999|9767|2-9') and apt.name != 'Номерок' join TakenTissueJournal ttj on ttj.id = a.takenTissueJournal_id and ttj.client_id = e2.client_id where ap.deleted = 0 GROUP by at3.id, apt.id 
+ 
+
+
+call procEpicrisisAnalyzes()
+	 
+
+SELECT apt.Name,
+GROUP_CONCAT(IF(ttj.datetimeTaken = "2021-03-17 09:17:00", case when apt.typeName = 'String' THEN aps.value when apt.typeName = 'Reference' THEN apr.value when apt.typeName = 'Date' THEN apd.value end, NULL)) AS "2021-03-17 09:17:00",
+GROUP_CONCAT(IF(ttj.datetimeTaken = "2021-03-19 09:16:14", case when apt.typeName = 'String' THEN aps.value when apt.typeName = 'Reference' THEN apr.value when apt.typeName = 'Date' THEN apd.value end, NULL)) AS "2021-03-19 09:16:14"
+ FROM ActionProperty ap left join ActionProperty_String aps using(id) left join ActionProperty_Reference apr using(id) left join ActionProperty_Date apd using(id) join Action a on a.id = ap.action_id and a.deleted = 0 and a.event_id = 33824866 join Event e2 on e2.id = a.event_id and e2.deleted = 0 join ActionType at2 on at2.id = a.actionType_id and at2.deleted = 0 join ActionType at3 on at3.id = at2.group_id and at3.deleted = 0 and at3.name = 'Биохимические исследования' join ActionPropertyType apt on apt.id = ap.type_id and apt.actionType_id = at2.id and at2.id in (select DISTINCT apt.actionType_id from ActionPropertyType apt where apt.valueDomain REGEXP '999|9767|2-9') and apt.name != 'Номерок' join TakenTissueJournal ttj on ttj.id = a.takenTissueJournal_id and ttj.client_id = e2.client_id where ap.deleted = 0 GROUP by at3.id, apt.id 
 
 
 
-SELECT tmp.name1,
-SUM(IF(tmp.val = "2021-03-17 09:17:00", case when tmp.typeName = 'String' THEN tmp.aps when tmp.typeName = 'Reference' THEN tmp.apr when tmp.typeName = 'Date' THEN tmp.apd end, 0)) AS "2021-03-17 09:17:00",
-SUM(IF(tmp.val = "2021-03-17 09:17:00", case when tmp.typeName = 'String' THEN tmp.aps when tmp.typeName = 'Reference' THEN tmp.apr when tmp.typeName = 'Date' THEN tmp.apd end, 0)) AS "2021-03-17 09:17:00",
-SUM(IF(tmp.val = "2021-03-17 09:17:00", case when tmp.typeName = 'String' THEN tmp.aps when tmp.typeName = 'Reference' THEN tmp.apr when tmp.typeName = 'Date' THEN tmp.apd end, 0)) AS "2021-03-17 09:17:00",
-SUM(IF(tmp.val = "2021-03-17 09:17:00", case when tmp.typeName = 'String' THEN tmp.aps when tmp.typeName = 'Reference' THEN tmp.apr when tmp.typeName = 'Date' THEN tmp.apd end, 0)) AS "2021-03-17 09:17:00",
-SUM(IF(tmp.val = "2021-03-17 09:17:00", case when tmp.typeName = 'String' THEN tmp.aps when tmp.typeName = 'Reference' THEN tmp.apr when tmp.typeName = 'Date' THEN tmp.apd end, 0)) AS "2021-03-17 09:17:00",
-SUM(IF(tmp.val = "2021-03-17 09:17:00", case when tmp.typeName = 'String' THEN tmp.aps when tmp.typeName = 'Reference' THEN tmp.apr when tmp.typeName = 'Date' THEN tmp.apd end, 0)) AS "2021-03-17 09:17:00",
-SUM(IF(tmp.val = "2021-03-17 09:17:00", case when tmp.typeName = 'String' THEN tmp.aps when tmp.typeName = 'Reference' THEN tmp.apr when tmp.typeName = 'Date' THEN tmp.apd end, 0)) AS "2021-03-17 09:17:00",
-SUM(IF(tmp.val = "2021-03-17 09:17:00", case when tmp.typeName = 'String' THEN tmp.aps when tmp.typeName = 'Reference' THEN tmp.apr when tmp.typeName = 'Date' THEN tmp.apd end, 0)) AS "2021-03-17 09:17:00",
-SUM(IF(tmp.val = "2021-03-17 09:17:00", case when tmp.typeName = 'String' THEN tmp.aps when tmp.typeName = 'Reference' THEN tmp.apr when tmp.typeName = 'Date' THEN tmp.apd end, 0)) AS "2021-03-17 09:17:00",
-SUM(IF(tmp.val = "2021-03-17 09:17:00", case when tmp.typeName = 'String' THEN tmp.aps when tmp.typeName = 'Reference' THEN tmp.apr when tmp.typeName = 'Date' THEN tmp.apd end, 0)) AS "2021-03-17 09:17:00",
-SUM(IF(tmp.val = "2021-03-17 09:17:00", case when tmp.typeName = 'String' THEN tmp.aps when tmp.typeName = 'Reference' THEN tmp.apr when tmp.typeName = 'Date' THEN tmp.apd end, 0)) AS "2021-03-17 09:17:00",
-SUM(IF(tmp.val = "2021-03-17 09:17:00", case when tmp.typeName = 'String' THEN tmp.aps when tmp.typeName = 'Reference' THEN tmp.apr when tmp.typeName = 'Date' THEN tmp.apd end, 0)) AS "2021-03-17 09:17:00",
-SUM(IF(tmp.val = "2021-03-17 09:17:00", case when tmp.typeName = 'String' THEN tmp.aps when tmp.typeName = 'Reference' THEN tmp.apr when tmp.typeName = 'Date' THEN tmp.apd end, 0)) AS "2021-03-17 09:17:00",
-SUM(IF(tmp.val = "2021-03-17 09:17:00", case when tmp.typeName = 'String' THEN tmp.aps when tmp.typeName = 'Reference' THEN tmp.apr when tmp.typeName = 'Date' THEN tmp.apd end, 0)) AS "2021-03-17 09:17:00",
-SUM(IF(tmp.val = "2021-03-19 09:16:14", case when tmp.typeName = 'String' THEN tmp.aps when tmp.typeName = 'Reference' THEN tmp.apr when tmp.typeName = 'Date' THEN tmp.apd end, 0)) AS "2021-03-19 09:16:14",
-SUM(IF(tmp.val = "2021-03-19 09:16:14", case when tmp.typeName = 'String' THEN tmp.aps when tmp.typeName = 'Reference' THEN tmp.apr when tmp.typeName = 'Date' THEN tmp.apd end, 0)) AS "2021-03-19 09:16:14",
-SUM(IF(tmp.val = "2021-03-19 09:16:14", case when tmp.typeName = 'String' THEN tmp.aps when tmp.typeName = 'Reference' THEN tmp.apr when tmp.typeName = 'Date' THEN tmp.apd end, 0)) AS "2021-03-19 09:16:14",
-SUM(IF(tmp.val = "2021-03-19 09:16:14", case when tmp.typeName = 'String' THEN tmp.aps when tmp.typeName = 'Reference' THEN tmp.apr when tmp.typeName = 'Date' THEN tmp.apd end, 0)) AS "2021-03-19 09:16:14",
-SUM(IF(tmp.val = "2021-03-19 09:16:14", case when tmp.typeName = 'String' THEN tmp.aps when tmp.typeName = 'Reference' THEN tmp.apr when tmp.typeName = 'Date' THEN tmp.apd end, 0)) AS "2021-03-19 09:16:14",
-SUM(IF(tmp.val = "2021-03-19 09:16:14", case when tmp.typeName = 'String' THEN tmp.aps when tmp.typeName = 'Reference' THEN tmp.apr when tmp.typeName = 'Date' THEN tmp.apd end, 0)) AS "2021-03-19 09:16:14",
-SUM(IF(tmp.val = "2021-03-19 09:16:14", case when tmp.typeName = 'String' THEN tmp.aps when tmp.typeName = 'Reference' THEN tmp.apr when tmp.typeName = 'Date' THEN tmp.apd end, 0)) AS "2021-03-19 09:16:14",
-SUM(IF(tmp.val = "2021-03-19 09:16:14", case when tmp.typeName = 'String' THEN tmp.aps when tmp.typeName = 'Reference' THEN tmp.apr when tmp.typeName = 'Date' THEN tmp.apd end, 0)) AS "2021-03-19 09:16:14",
-SUM(IF(tmp.val = "2021-03-19 09:16:14", case when tmp.typeName = 'String' THEN tmp.aps when tmp.typeName = 'Reference' THEN tmp.apr when tmp.typeName = 'Date' THEN tmp.apd end, 0)) AS "2021-03-19 09:16:14",
-SUM(IF(tmp.val = "2021-03-19 09:16:14", case when tmp.typeName = 'String' THEN tmp.aps when tmp.typeName = 'Reference' THEN tmp.apr when tmp.typeName = 'Date' THEN tmp.apd end, 0)) AS "2021-03-19 09:16:14",
-SUM(IF(tmp.val = "2021-03-19 09:16:14", case when tmp.typeName = 'String' THEN tmp.aps when tmp.typeName = 'Reference' THEN tmp.apr when tmp.typeName = 'Date' THEN tmp.apd end, 0)) AS "2021-03-19 09:16:14",
-SUM(IF(tmp.val = "2021-03-19 09:16:14", case when tmp.typeName = 'String' THEN tmp.aps when tmp.typeName = 'Reference' THEN tmp.apr when tmp.typeName = 'Date' THEN tmp.apd end, 0)) AS "2021-03-19 09:16:14",
-SUM(IF(tmp.val = "2021-03-19 09:16:14", case when tmp.typeName = 'String' THEN tmp.aps when tmp.typeName = 'Reference' THEN tmp.apr when tmp.typeName = 'Date' THEN tmp.apd end, 0)) AS "2021-03-19 09:16:14",
-SUM(IF(tmp.val = "2021-03-19 09:16:14", case when tmp.typeName = 'String' THEN tmp.aps when tmp.typeName = 'Reference' THEN tmp.apr when tmp.typeName = 'Date' THEN tmp.apd end, 0)) AS "2021-03-19 09:16:14",
-SUM(IF(tmp.val = "2021-03-19 09:16:14", case when tmp.typeName = 'String' THEN tmp.aps when tmp.typeName = 'Reference' THEN tmp.apr when tmp.typeName = 'Date' THEN tmp.apd end, 0)) AS "2021-03-19 09:16:14",
-SUM(IF(tmp.val = "2021-03-19 09:16:14", case when tmp.typeName = 'String' THEN tmp.aps when tmp.typeName = 'Reference' THEN tmp.apr when tmp.typeName = 'Date' THEN tmp.apd end, 0)) AS "2021-03-19 09:16:14"
- FROM (select at3.name, ttj.datetimeTaken AS val, apt.name as `name1`, apt.typeName, aps.value aps, apd.value apd, apr.value apr from ActionProperty ap left join ActionProperty_String aps using(id) left join ActionProperty_Reference apr using(id) left join ActionProperty_Date apd using(id) join Action a on a.id = ap.action_id and a.deleted = 0 and a.event_id = 33824866 join Event e2 on e2.id = a.event_id and e2.deleted = 0 join ActionType at2 on at2.id = a.actionType_id and at2.deleted = 0 join ActionType at3 on at3.id = at2.group_id and at3.deleted = 0 and at3.name = 'Биохимические исследования' join ActionPropertyType apt on apt.id = ap.type_id and apt.actionType_id = at2.id and at2.id in (select DISTINCT apt.actionType_id from ActionPropertyType apt where apt.valueDomain REGEXP '999|9767|2-9') and apt.name != 'Номерок' join TakenTissueJournal ttj on ttj.id = a.takenTissueJournal_id and ttj.client_id = e2.client_id where ap.deleted = 0) as tmp
+ set @temp = "procEpicrisisAnalyzes()"
 
-
-
-
-
-
-
-SELECT tmp.name,
-SUM(IF(tmp.val = "2021-03-17 09:17:00", case when tmp.typeName = 'String' THEN tmp.aps when tmp.typeName = 'Reference' THEN tmp.apr when tmp.typeName = 'Date' THEN tmp.apd end, 0)) AS "2021-03-17 09:17:00"
- FROM (select at3.name, ttj.datetimeTaken AS val, apt.name as `name1`, apt.typeName, aps.value aps, apd.value apd, apr.value apr from ActionProperty ap left join ActionProperty_String aps using(id) left join ActionProperty_Reference apr using(id) left join ActionProperty_Date apd using(id) join Action a on a.id = ap.action_id and a.deleted = 0 and a.event_id = 33824866 join Event e2 on e2.id = a.event_id and e2.deleted = 0 join ActionType at2 on at2.id = a.actionType_id and at2.deleted = 0 join ActionType at3 on at3.id = at2.group_id and at3.deleted = 0 and at3.name = 'Биохимические исследования' join ActionPropertyType apt on apt.id = ap.type_id and apt.actionType_id = at2.id and at2.id in (select DISTINCT apt.actionType_id from ActionPropertyType apt where apt.valueDomain REGEXP '999|9767|2-9') and apt.name != 'Номерок' join TakenTissueJournal ttj on ttj.id = a.takenTissueJournal_id and ttj.client_id = e2.client_id where ap.deleted = 0) as tmp
-
-
-
-
-
-
-
-
-
-
-
-
-PREPARE stmt1 FROM @stmt2; 
+PREPARE stmt1 FROM @stmt2;
 EXECUTE stmt1; 
 
+
+
+
+
+select
+ttj.datetimeTaken val,
+case when apt.typeName = 'String' THEN aps.value
+when apt.typeName = 'Reference' THEN apr.value
+when apt.typeName = 'Date' THEN apd.value end 
+from ActionProperty ap
+left join ActionProperty_String aps using(id)
+left join ActionProperty_Reference apr using(id)
+left join ActionProperty_Date apd using(id)
+join Action a on a.id = ap.action_id and a.deleted = 0 and a.event_id = 33824866
+join Event e2 on e2.id = a.event_id and e2.deleted = 0
+join ActionType at2 on at2.id = a.actionType_id and at2.deleted = 0
+join ActionType at3 on at3.id = at2.group_id and at3.deleted = 0-- and at3.name = 'Биохимические исследования'
+join ActionPropertyType apt on apt.id = ap.type_id and apt.actionType_id = at2.id and at2.id in (select DISTINCT apt.actionType_id from ActionPropertyType apt where apt.valueDomain REGEXP '999|9767|2-9') and apt.name != 'Номерок'
+join TakenTissueJournal ttj on ttj.id = a.takenTissueJournal_id and ttj.client_id = e2.client_id
+where ap.deleted = 0
+
+
+
+
+select
+apt.id,
+at3.name ,
+apt.name,
+ttj.datetimeTaken ,
+-- GROUP_CONCAT(case when Date(ttj.datetimeTaken) = '2021-03-17' then
+-- case when apt.typeName = 'String' THEN aps.value
+-- when apt.typeName = 'Reference' THEN apr.value
+-- when apt.typeName = 'Date' THEN apd.value end end separator '') as `Результаты`,
+-- GROUP_CONCAT(case when Date(ttj.datetimeTaken) = '2021-03-19' then
+-- case when apt.typeName = 'String' THEN aps.value
+-- when apt.typeName = 'Reference' THEN apr.value
+-- when apt.typeName = 'Date' THEN apd.value end end separator '') as `Результаты`
+case when apt.typeName = 'String' THEN aps.value
+when apt.typeName = 'Reference' THEN apr.value
+when apt.typeName = 'Date' THEN apd.value end as `Результаты`,
+case when apt.typeName = 'String' THEN aps.value
+when apt.typeName = 'Reference' THEN apr.value
+when apt.typeName = 'Date' THEN apd.value end  as `Результаты`
+from ActionProperty ap
+left join ActionProperty_String aps using(id)
+left join ActionProperty_Reference apr using(id)
+left join ActionProperty_Date apd using(id)
+join Action a on a.id = ap.action_id and a.deleted = 0 and a.event_id = 33827444
+join Event e2 on e2.id = a.event_id and e2.deleted = 0
+join ActionType at2 on at2.id = a.actionType_id and at2.deleted = 0
+join ActionType at3 on at3.id = at2.group_id and at3.deleted = 0 -- and at3.name = 'Биохимические исследования'
+join ActionPropertyType apt on apt.id = ap.type_id and apt.actionType_id = at2.id and at2.id in (select DISTINCT apt.actionType_id from ActionPropertyType apt where apt.valueDomain REGEXP '999|9767|2-9') and apt.name != 'Номерок'
+join TakenTissueJournal ttj on ttj.id = a.takenTissueJournal_id and ttj.client_id = e2.client_id
+where ap.deleted = 0 
+-- GROUP by at3.id ;
+
+
+
+CALL  procEpicrisisAnalyzes(33827444, "'Биохимические исследования'")
+
+
+
+SELECT apt.Name,
+GROUP_CONCAT(IF(ttj.datetimeTaken = "2021-03-17 09:17:00", case when apt.typeName = 'String' THEN aps.value when apt.typeName = 'Reference' THEN apr.value when apt.typeName = 'Date' THEN apd.value end, NULL)) AS "17.03.21
+09:17",
+GROUP_CONCAT(IF(ttj.datetimeTaken = "2021-03-19 09:16:14", case when apt.typeName = 'String' THEN aps.value when apt.typeName = 'Reference' THEN apr.value when apt.typeName = 'Date' THEN apd.value end, NULL)) AS "19.03.21
+09:16",
+GROUP_CONCAT(IF(ttj.datetimeTaken = "2021-03-29 09:10:20", case when apt.typeName = 'String' THEN aps.value when apt.typeName = 'Reference' THEN apr.value when apt.typeName = 'Date' THEN apd.value end, NULL)) AS "29.03.21
+09:10"
+ FROM ActionProperty ap left join ActionProperty_String aps using(id) left join ActionProperty_Reference apr using(id) left join ActionProperty_Date apd using(id) join Action a on a.id = ap.action_id and a.deleted = 0 and a.event_id = 33827444 join Event e2 on e2.id = a.event_id and e2.deleted = 0 join ActionType at2 on at2.id = a.actionType_id and at2.deleted = 0 join ActionType at3 on at3.id = at2.group_id and at3.deleted = 0 and at3.name = 'Биохимические исследования' join ActionPropertyType apt on apt.id = ap.type_id and apt.actionType_id = at2.id and at2.id in (select DISTINCT apt.actionType_id from ActionPropertyType apt where apt.valueDomain REGEXP '999|9767|2-9') and apt.name != 'Номерок' join TakenTissueJournal ttj on ttj.id = a.takenTissueJournal_id and ttj.client_id = e2.client_id where ap.deleted = 0 GROUP by at3.id, apt.id 
+
+
+
+SELECT apt.Name,
+IF(ttj.datetimeTaken = "2021-03-17 09:17:00", case when apt.typeName = 'String' THEN aps.value when apt.typeName = 'Reference' THEN apr.value when apt.typeName = 'Date' THEN apd.value end, NULL) AS "2021-03-17 09:17:00",
+IF(ttj.datetimeTaken = "2021-03-19 09:16:14", case when apt.typeName = 'String' THEN aps.value when apt.typeName = 'Reference' THEN apr.value when apt.typeName = 'Date' THEN apd.value end, NULL) AS "2021-03-19 09:16:14"
+ FROM ActionProperty ap left join ActionProperty_String aps using(id) left join ActionProperty_Reference apr using(id) left join ActionProperty_Date apd using(id) join Action a on a.id = ap.action_id and a.deleted = 0 and a.event_id = 33824866 join Event e2 on e2.id = a.event_id and e2.deleted = 0 join ActionType at2 on at2.id = a.actionType_id and at2.deleted = 0 join ActionType at3 on at3.id = at2.group_id and at3.deleted = 0 and at3.name = 'Биохимические исследования' join ActionPropertyType apt on apt.id = ap.type_id and apt.actionType_id = at2.id and at2.id in (select DISTINCT apt.actionType_id from ActionPropertyType apt where apt.valueDomain REGEXP '999|9767|2-9') and apt.name != 'Номерок' join TakenTissueJournal ttj on ttj.id = a.takenTissueJournal_id and ttj.client_id = e2.client_id where ap.deleted = 0 GROUP by at3.id, apt.id 
+
  
+SELECT @subq
+
+
+select ttj.datetimeTaken val, case when apt.typeName = 'String' THEN aps.value when apt.typeName = 'Reference' THEN apr.value when apt.typeName = 'Date' THEN apd.value end from ActionProperty ap left join ActionProperty_String aps using(id) left join ActionProperty_Reference apr using(id) left join ActionProperty_Date apd using(id) join Action a on a.id = ap.action_id and a.deleted = 0 and a.event_id = 33824866join Event e2 on e2.id = a.event_id and e2.deleted = 0 join ActionType at2 on at2.id = a.actionType_id and at2.deleted = 0 join ActionType at3 on at3.id = at2.group_id and at3.deleted = 0 and at3.name = Биохимические исследованияjoin ActionPropertyType apt on apt.id = ap.type_id and apt.actionType_id = at2.id and at2.id in (select DISTINCT apt.actionType_id from ActionPropertyType apt where apt.valueDomain REGEXP '999|9767|2-9') and apt.name != 'Номерок' join TakenTissueJournal ttj on ttj.id = a.takenTissueJournal_id and ttj.client_id = e2.client_id where ap.deleted = 0 GROUP by ttj.datetimeTaken
+
+
+
+
+
+select * from ActionType at2 where at2.group_id = 42943 GROUP by at3.;
+
+SELECT apt.Name,
+IF(ttj.datetimeTaken = "2021-03-17 09:17:00", case when apt.typeName = 'String' THEN aps.value when apt.typeName = 'Reference' THEN apr.value when apt.typeName = 'Date' THEN apd.value end, NULL) AS "17.03.21
+09:17",
+IF(ttj.datetimeTaken = "2021-03-19 09:16:14", case when apt.typeName = 'String' THEN aps.value when apt.typeName = 'Reference' THEN apr.value when apt.typeName = 'Date' THEN apd.value end, NULL) AS "19.03.21
+09:16",
+IF(ttj.datetimeTaken = "2021-03-29 09:10:20", case when apt.typeName = 'String' THEN aps.value when apt.typeName = 'Reference' THEN apr.value when apt.typeName = 'Date' THEN apd.value end, NULL) AS "29.03.21
+09:10"
+ FROM ActionProperty ap left join ActionProperty_String aps using(id) left join ActionProperty_Reference apr using(id) left join ActionProperty_Date apd using(id) join Action a on a.id = ap.action_id and a.deleted = 0 and a.event_id = 33824866 join Event e2 on e2.id = a.event_id and e2.deleted = 0 join ActionType at2 on at2.id = a.actionType_id and at2.deleted = 0 join ActionType at3 on at3.id = at2.group_id and at3.deleted = 0 and at3.name = 'Биохимические исследования' join ActionPropertyType apt on apt.id = ap.type_id and apt.actionType_id = at2.id and at2.id in (select DISTINCT apt.actionType_id from ActionPropertyType apt where apt.valueDomain REGEXP '999|9767|2-9') and apt.name != 'Номерок' join TakenTissueJournal ttj on ttj.id = a.takenTissueJournal_id and ttj.client_id = e2.client_id where ap.deleted = 0 GROUP by at3.id, apt.id 
+
+
+
+
+
+
+sET @subq = 'select DATE_FORMAT(ttj.datetimeTaken, "%d.%m.%y\n%H:%i") valas, ttj.datetimeTaken val, case when apt.typeName = ''String'' THEN aps.value when apt.typeName = ''Reference'' THEN apr.value when apt.typeName = ''Date'' THEN apd.value end from ActionProperty ap left join ActionProperty_String aps using(id) left join ActionProperty_Reference apr using(id) left join ActionProperty_Date apd using(id) join Action a on a.id = ap.action_id and a.deleted = 0 and a.event_id = 33824866 join Event e2 on e2.id = a.event_id and e2.deleted = 0 join ActionType at2 on at2.id = a.actionType_id and at2.deleted = 0 join ActionType at3 on at3.id = at2.group_id and at3.deleted = 0 and at3.name = ''Биохимические исследования'' join ActionPropertyType apt on apt.id = ap.type_id and apt.actionType_id = at2.id and at2.id in (select DISTINCT apt.actionType_id from ActionPropertyType apt where apt.valueDomain REGEXP ''999|9767|2-9'') and apt.name != ''Номерок'' join TakenTissueJournal ttj on ttj.id = a.takenTissueJournal_id and ttj.client_id = e2.client_id where ap.deleted = 0 GROUP by ttj.datetimeTaken';
+    
+
+SET @cc1 = "CONCAT('IF(&p = ', &v, ', &t, NULL) AS ', &as)";
+select @cc1;
+SET @cc2 = REPLACE(@cc1, '&p', 'ttj.datetimeTaken');
+select @cc2;
+SET @cc3 = REPLACE(@cc2, '&t', 'case when apt.typeName = ''String'' THEN aps.value when apt.typeName = ''Reference'' THEN apr.value when apt.typeName = ''Date'' THEN apd.value end');
+select @cc3;
+set @qval = CONCAT("'\"', val, '\"'");
+set @qvalas = CONCAT("'\"', valas, '\"'");
+-- select @qval;
+SET @cc4 = REPLACE(@cc3, '&v', @qval);
+SET @cc4 = REPLACE(@cc4, '&as', @qvalas);
+select @cc4;
+    
+
+SET SESSION group_concat_max_len = 10000;   -- just in case
+    SET @stmt = CONCAT(
+            'SELECT  GROUP_CONCAT(', REGEXP_REPLACE(@cc4, '(\'String\')(.*)(\'Reference\')(.*)(\'Date\')', '\'\\1\'\\2\'\\3\'\\4\'\\5\''), ' SEPARATOR ",\n")  INTO @sums',
+            ' FROM ( ', @subq, ' ) AS top');
+     select @stmt;
+    PREPARE _sql FROM @stmt;
+    EXECUTE _sql;                      
+    DEALLOCATE PREPARE _sql;
+SET @stmt2 = CONCAT(
+            'SELECT ',
+                'apt.Name', ',\n',
+                @sums,                 
+            	'\n FROM ActionProperty ap left join ActionProperty_String aps using(id) left join ActionProperty_Reference apr using(id) left join ActionProperty_Date apd using(id) join Action a on a.id = ap.action_id and a.deleted = 0 and a.event_id = ',
+            	EventID, 
+            	' join Event e2 on e2.id = a.event_id and e2.deleted = 0 join ActionType at2 on at2.id = a.actionType_id and at2.deleted = 0 join ActionType at3 on at3.id = at2.group_id and at3.deleted = 0 and at3.name = ',
+            	AnalyzesType, 
+            	' join ActionPropertyType apt on apt.id = ap.type_id and apt.actionType_id = at2.id and at2.id in (select DISTINCT apt.actionType_id from ActionPropertyType apt where apt.valueDomain REGEXP ''999|9767|2-9'') and apt.name != ''Номерок'' join TakenTissueJournal ttj on ttj.id = a.takenTissueJournal_id and ttj.client_id = e2.client_id where ap.deleted = 0 GROUP by at3.id, apt.id', ' ',
+            	'',
+            	'\n', '');
+--     select @stmt2;                    
+    PREPARE _sql FROM @stmt2;
+    EXECUTE _sql;                     
+
+select * from Event e where externalId = '11594';
