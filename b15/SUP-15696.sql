@@ -2,17 +2,131 @@ select count(rep.id) num,
 -- GROUP_CONCAT(CONCAT_WS(' ', ret.id_orgStructure , ret.code, ret.name,'retres.idx:',retres.idx,'resper.idx:',resrep.idx) separator '\n') ret,
 -- GROUP_CONCAT(CONCAT_WS(' ', retres.id, resrep.id, res.id, res.name, res.description)separator '\n') res,
 -- retres.*
-resrep.*
--- rep.*
+-- resrep.*
+-- res.*
+rep.*
 from rbEpicrisisTemplates ret
 left join rbEpicrisisTemplates_rbEpicrisisSections retres on retres.id_rbEpicrisisTemplates = ret.id
 left join rbEpicrisisSections res on retres.id_rbEpicrisisSections = res.id
 left join rbEpicrisisSections_rbEpicrisisProperty resrep on resrep.id_rbEpicrisisSections = res.id
 left join rbEpicrisisProperty rep on resrep.id_rbEpicrisisProperty = rep.id
-where ret.code = 'код 2' and resrep.id_rbEpicrisisSections = 12
+where ret.code = 'код 2' -- and resrep.id_rbEpicrisisSections = 14
 group by res.id, rep.id
 order by  retres.idx, resrep.idx;
 
+
+call procEpicrisisConsult(33796707,"'Рекомендовано.?'")
+
+
+select at2.name, a.endDate val, DATE_FORMAT(a.endDate, "%d.%m.%y\n%H:%i") valas from ActionProperty ap 
+join Action a on a.id = ap.action_id and a.deleted = 0 and a.status = 2 and a.endDate is not null and a.event_id = 33796707
+join ActionType at2 on at2.id = a.actionType_id and at2.deleted = 0 and at2.group_id = 40713
+join ActionPropertyType apt on apt.id = ap.type_id and apt.actionType_id = at2.id and apt.deleted = 0 and apt.name REGEXP 'Рекомендовано.?'
+GROUP by a.endDate 
+
+
+select * from ActionType at2 where at2.name REGEXP '^консультац';
+
+call procEpicrisisDiagnostic(33827444, "'Заключение'")
+
+
+
+
+
+select at3.id, at3.name, at2.group_id, at2.code, at2.name from ActionType at2
+join ActionType at3 on at3.id = at2.group_id 
+where at2.name REGEXP 'ЭКГ' and at2.deleted = 0 and at2.class = 1 and at2.serviceType !=4 order by at3.name, at2.name ;
+
+  
+            
+select apt.name, DATE_FORMAT(a.endDate, "%d.%m.%y\n%H:%i") valas, a.endDate val from ActionProperty ap
+left join ActionProperty_String aps using(id)
+join Action a on ap.action_id = a.id and a.deleted = 0 and a.status = 2 and a.event_id = 33722943
+join (select at3.* from ActionType at2 
+join ActionType at3 on at3.group_id = at2.id and at3.deleted = 0 and at3.class = 1 and at3.serviceType !=4
+left join ActionType at4 on at4.group_id = at3.id and at4.deleted = 0 and at4.class = 1 and at4.serviceType !=4
+where at2.id = 22228 and at2.deleted = 0
+union
+select at4.* from ActionType at2 
+join ActionType at3 on at3.group_id = at2.id and at3.deleted = 0 and at3.class = 1 and at3.serviceType !=4
+left join ActionType at4 on at4.group_id = at3.id and at4.deleted = 0 and at4.class = 1 and at4.serviceType !=4
+where at2.id = 22228 and at2.deleted = 0) at2 on at2.id = a.actionType_id 
+join ActionPropertyType apt on apt.id = ap.type_id and apt.actionType_id = at2.id and apt.name = 'Заключение'
+GROUP by a.endDate 
+
+            
+            
+
+select a.event_id, ap.id, apt.name, aps.value, apd.value, apr.value from ActionProperty ap 
+left join ActionProperty_String aps using(id)
+left join ActionProperty_Date apd using(id)
+left join ActionProperty_Reference apr using(id)
+join Action a on ap.action_id = a.id and a.deleted = 0 and a.status = 2 -- and a.event_id = 33723771
+join ActionType at2 on at2.id = a.actionType_id and at2.class = 1 and at2.deleted = 0 and at2.serviceType != 4
+join ActionPropertyType apt on apt.actionType_id = at2.id and apt.deleted = 0 and apt.id = ap.type_id and apt.typeName != 'JobTicket'
+where ap.deleted = 0 GROUP by at2.id, apt.id
+
+
+select * from ActionType at2 where at2.name = 'ЭКГ';
+
+
+
+
+INSERT into rbEpicrisisSections (name, description)
+select 'Консультации специалистов:' name, description from rbEpicrisisSections where id = 12;
+
+
+insert into rbEpicrisisTemplates_rbEpicrisisSections (id_rbEpicrisisTemplates, id_rbEpicrisisSections, idx)
+select retres.id_rbEpicrisisTemplates, (select id from rbEpicrisisSections order by id desc limit 1) id_rbEpicrisisSections, max(retres.idx)+1 from rbEpicrisisTemplates_rbEpicrisisSections retres where retres.id_rbEpicrisisTemplates = 4 ;
+
+
+INSERT into rbEpicrisisProperty (name, description, `type`)
+select '' name, 'Консультации специалистов' description, `type` from rbEpicrisisProperty limit 1;
+
+insert into rbEpicrisisSections_rbEpicrisisProperty (id_rbEpicrisisSections, id_rbEpicrisisProperty, idx)
+select 14 id_rbEpicrisisSections, (select id from rbEpicrisisProperty order by id DESC limit 1) id_rbEpicrisisProperty, 0 idx from rbEpicrisisSections_rbEpicrisisProperty limit 1;
+
+
+
+select * from rbEpicrisisTemplates_rbEpicrisisSections retres order by id desc;
+
+
+
+insert into rbEpicrisisProperty (name, description, `type`)
+(SELECT 'ЭКГ', 'Результаты исследований', 8
+union
+SELECT 'Рентгенограмма органов грудной клетки', 'Результаты исследований', 8
+union
+SELECT 'Рентгенограмма грудного, поясничного, шейного', 'Результаты исследований', 8
+union
+SELECT 'УЗИ брюшной полости + почки', 'Результаты исследований', 8
+union
+SELECT 'УЗИ почек', 'Результаты исследований', 8
+union
+SELECT 'УЗИ плевральных полостей', 'Результаты исследований', 8
+union
+SELECT 'ЭХОКГ', 'Результаты исследований', 8
+union
+SELECT 'УЗДС БЦА ', 'Результаты исследований', 8
+union
+SELECT 'УЗАС нижних конечностей', 'Результаты исследований', 8
+union
+SELECT 'УЗАС верхних конечностей', 'Результаты исследований', 8
+union
+SELECT 'УЗИ щитовидной железы', 'Результаты исследований', 8
+union
+SELECT 'КТ головного мозга', 'Результаты исследований', 8
+union
+SELECT 'КТ органов грудной клетки', 'Результаты исследований', 8
+union
+SELECT 'КТ брюшной полости', 'Результаты исследований', 8
+union
+SELECT 'МРТ', 'Результаты исследований', 8)
+
+
+set @return = 0;
+insert into rbEpicrisisSections_rbEpicrisisProperty (id_rbEpicrisisSections, id_rbEpicrisisProperty, idx)
+select 13 id_rbEpicrisisSections, id id_rbEpicrisisProperty, @return:=@return+1 idx from rbEpicrisisProperty order by id desc limit 15;
 
 
 INSERT into rbEpicrisisProperty (name, description, `type`, defaultValue, valueDomain, printAsTable, isCopy)
@@ -686,3 +800,104 @@ SET @stmt2 = CONCAT(
     EXECUTE _sql;                     
 
 select * from Event e where externalId = '11594';
+
+
+
+
+
+
+select * from ActionType at2 where at2.group_id  =22228;
+
+select a.endDate val from ActionProperty ap 
+join Action a on ap.action_id = a.id and a.deleted = 0 and a.status = 2 and a.event_id = 33796707
+join ActionType at2 on at2.id = a.actionType_id and at2.name  regexp 'брюшной полости' and at2.class = 1 and at2.deleted = 0 and at2.serviceType != 4
+where ap.deleted = 0
+
+
+
+
+
+set @EventID = 33796707;
+set @DiagnosticType = "'брюшной полости'";
+
+
+SET @subq = CONCAT('select DATE_FORMAT(a.endDate, "%d.%m.%y\n%H:%i") valas, a.endDate val from ActionProperty ap ', 
+'join Action a on ap.action_id = a.id and a.deleted = 0 and a.status = 2 and a.event_id = ',
+@EventID,
+' join ActionType at2 on at2.id = a.actionType_id and at2.name  regexp ', 
+@DiagnosticType, 
+' and at2.class = 1 and at2.deleted = 0 and at2.serviceType != 4 join ActionPropertyType apt on apt.actionType_id = at2.id and apt.deleted = 0 and apt.typeName != ''JobTicket'' ',
+'where ap.deleted = 0 GROUP by a.endDate');
+    
+
+    SET @cc1 = "CONCAT('GROUP_CONCAT(IF(&p = ', &v, ', &t, NULL)) AS ', &as)";
+-- select @cc1;
+SET @cc2 = REPLACE(@cc1, '&p', 'a.endDate');
+-- select @cc2;
+SET @cc3 = REPLACE(@cc2, '&t', 'case when apt.typeName = ''String'' THEN aps.value when apt.typeName = ''Reference'' THEN apr.value when apt.typeName = ''Date'' THEN apd.value end');
+-- select @cc3;
+set @qval = CONCAT("'\"', val, '\"'");
+set @qvalas = CONCAT("'\"', valas, '\"'");
+-- select @qval;
+SET @cc4 = REPLACE(@cc3, '&v', @qval);
+SET @cc4 = REPLACE(@cc4, '&as', @qvalas);
+-- select @cc4;
+    
+
+SET SESSION group_concat_max_len = 10000;   -- just in case
+    SET @stmt = CONCAT(
+            'SELECT  GROUP_CONCAT(', REGEXP_REPLACE(@cc4, '(\'String\')(.*)(\'Reference\')(.*)(\'Date\')', '\'\\1\'\\2\'\\3\'\\4\'\\5\''), ' SEPARATOR ",\n")  INTO @sums',
+            ' FROM ( ', @subq, ' ) AS top');
+     select @stmt;
+    
+    SELECT  GROUP_CONCAT(CONCAT('GROUP_CONCAT(IF(a.endDate = ', '"', val, '"', ', case when apt.typeName = ''String'' THEN aps.value when apt.typeName = ''Reference'' THEN apr.value when apt.typeName = ''Date'' THEN apd.value end, NULL)) AS ', '"', valas, '"') SEPARATOR ",")  INTO @sums FROM ( select DATE_FORMAT(a.endDate, "%d.%m.%y
+%H:%i") valas, a.endDate val from ActionProperty ap join Action a on ap.action_id = a.id and a.deleted = 0 and a.status = 2 and a.event_id = 33796707 join ActionType at2 on at2.id = a.actionType_id and at2.name  regexp 'брюшной полости' and at2.class = 1 and at2.deleted = 0 and at2.serviceType != 4 join ActionPropertyType apt on apt.actionType_id = at2.id and apt.deleted = 0 and apt.typeName != 'JobTicket' where ap.deleted = 0 GROUP by a.endDate ) AS top
+    
+    PREPARE _sql FROM @stmt;
+    EXECUTE _sql;                      
+    DEALLOCATE PREPARE _sql;
+SET @stmt2 = CONCAT(
+            'SELECT ',
+                'apt.Name', ',\n',
+                @sums,                 
+            	'\n from ActionProperty ap left join ActionProperty_String aps using(id) left join ActionProperty_Date apd using(id) left join ActionProperty_Reference apr using(id) join Action a on ap.action_id = a.id and a.deleted = 0 and a.status = 2 and a.event_id = ',
+            	@EventID, 
+            	' join ActionType at2 on at2.id = a.actionType_id and at2.name  regexp ',
+            	@DiagnosticType, 
+            	' and at2.class = 1 and at2.deleted = 0 and at2.serviceType != 4 join ActionPropertyType apt on apt.actionType_id = at2.id and apt.deleted = 0 and apt.typeName != ''JobTicket'' where ap.deleted = 0', ' ',
+            	'',
+            	'\n', '');
+    select @stmt2;     
+    
+
+
+   SELECT apt.Name,
+GROUP_CONCAT(IF(a.endDate = "2021-03-25 13:41:18", case when apt.typeName = 'String' THEN aps.value when apt.typeName = 'Reference' THEN apr.value when apt.typeName = 'Date' THEN apd.value end, NULL)) AS "25.03.21
+13:41"
+ from ActionProperty ap 
+ left join ActionProperty_String aps using(id) 
+ left join ActionProperty_Date apd using(id) 
+ left join ActionProperty_Reference apr using(id) 
+ join Action a on ap.action_id = a.id and a.deleted = 0 and a.status = 2 and a.event_id = 33796707 
+ join ActionType at2 on at2.id = a.actionType_id and at2.name  regexp 'брюшной полости' and at2.class = 1 and at2.deleted = 0 and at2.serviceType != 4 
+ join ActionPropertyType apt on apt.actionType_id = at2.id and apt.deleted = 0 and apt.typeName != 'JobTicket' where ap.deleted = 0 group by at2.id, apt.id order by apt.idx
+
+   
+   
+
+select a.event_id, apt.name, aps.value, apd.value, apr.value from ActionProperty ap 
+left join ActionProperty_String aps using(id)
+left join ActionProperty_Date apd using(id)
+left join ActionProperty_Reference apr using(id)
+join Action a on ap.action_id = a.id and a.deleted = 0 and a.status = 2 -- and a.event_id = 33796707
+join ActionType at2 on at2.id = a.actionType_id and at2.name = 'ЭКГ' and at2.class = 1 and at2.deleted = 0 and at2.serviceType != 4
+join ActionPropertyType apt on apt.actionType_id = at2.id and apt.deleted = 0 and apt.typeName != 'JobTicket'
+where ap.deleted = 0
+
+
+
+select * from Event e where e.externalId = '1539';
+
+select * from ActionType where id = 2108 ;
+
+
