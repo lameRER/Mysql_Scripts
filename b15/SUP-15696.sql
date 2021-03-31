@@ -20,16 +20,16 @@ select * from ClientAddress ca
 
 
 SELECT 
-  CONCAT(k.NAME,', улица ',s.NAME,', д.', ah.number,IF(ah.corpus LIKE '','',CONCAT(', корпус ',ah.corpus)),IF(a.flat LIKE '','',CONCAT(', кв ',a.flat)))
+  CONCAT(k.NAME,', Район ', rd.name, ', улица ',s.NAME,', д.', ah.number,IF(ah.corpus LIKE '','',CONCAT(', корпус ',ah.corpus)),IF(a.flat LIKE '','',CONCAT(', кв ',a.flat)))
   FROM ClientAddress ca
   INNER JOIN Address a ON ca.address_id=a.id
   INNER JOIN AddressHouse ah ON a.house_id=ah.id
   INNER JOIN kladr.STREET s ON s.CODE=ah.KLADRStreetCode
   INNER JOIN kladr.KLADR k ON k.CODE=ah.KLADRCode
   INNER JOIN Event e ON ca.client_id=e.client_id
+  left join rbDistrict rd on rd.id = ca.district_id 
 WHERE
-  (
-  ca.id = getClientRegAddressId(ca.client_id) OR
+  (  
   ca.id = getClientLocAddressId(ca.client_id)
   )
   AND 
