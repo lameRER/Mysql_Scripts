@@ -1,8 +1,9 @@
 select count(rep.id) num,
 -- GROUP_CONCAT(CONCAT_WS(' ', ret.id_orgStructure , ret.code, ret.name,'retres.idx:',retres.idx,'resper.idx:',resrep.idx) separator '\n') ret,
 -- GROUP_CONCAT(CONCAT_WS(' ', retres.id, resrep.id, res.id, res.name, res.description)separator '\n') res,
+-- ret.*
 -- retres.*
--- resrep.*
+-- resrep.*,
 -- res.*
 rep.*
 from rbEpicrisisTemplates ret
@@ -15,76 +16,74 @@ group by res.id, rep.id
 order by  retres.idx, resrep.idx;
 
 
-call procEpicrisisConsult(33796707,"'Рекомендовано.?'")
+select * from ClientAddress ca 
 
 
-select at2.name, a.endDate val, DATE_FORMAT(a.endDate, "%d.%m.%y\n%H:%i") valas from ActionProperty ap 
-join Action a on a.id = ap.action_id and a.deleted = 0 and a.status = 2 and a.endDate is not null and a.event_id = 33796707
-join ActionType at2 on at2.id = a.actionType_id and at2.deleted = 0 and at2.group_id = 40713
-join ActionPropertyType apt on apt.id = ap.type_id and apt.actionType_id = at2.id and apt.deleted = 0 and apt.name REGEXP 'Рекомендовано.?'
-GROUP by a.endDate 
+SELECT 
+  CONCAT(k.NAME,', улица ',s.NAME,', д.', ah.number,IF(ah.corpus LIKE '','',CONCAT(', корпус ',ah.corpus)),IF(a.flat LIKE '','',CONCAT(', кв ',a.flat)))
+  FROM ClientAddress ca
+  INNER JOIN Address a ON ca.address_id=a.id
+  INNER JOIN AddressHouse ah ON a.house_id=ah.id
+  INNER JOIN kladr.STREET s ON s.CODE=ah.KLADRStreetCode
+  INNER JOIN kladr.KLADR k ON k.CODE=ah.KLADRCode
+  INNER JOIN Event e ON ca.client_id=e.client_id
+WHERE
+  (
+  ca.id = getClientRegAddressId(ca.client_id) OR
+  ca.id = getClientLocAddressId(ca.client_id)
+  )
+  AND 
+  e.id= %s  
+  ORDER BY ca.type ASC
+  LIMIT 1
 
 
-select * from ActionType at2 where at2.name REGEXP '^консультац';
+SELECT 
+  CONCAT(k.NAME,', Район ', rd.name, ', улица ',s.NAME,', д.', ah.number,IF(ah.corpus LIKE '','',CONCAT(', корпус ',ah.corpus)),IF(a.flat LIKE '','',CONCAT(', кв ',a.flat)))
+  FROM ClientAddress ca
+  INNER JOIN Address a ON ca.address_id=a.id
+  INNER JOIN AddressHouse ah ON a.house_id=ah.id
+  INNER JOIN kladr.STREET s ON s.CODE=ah.KLADRStreetCode
+  INNER JOIN kladr.KLADR k ON k.CODE=ah.KLADRCode
+  INNER JOIN Event e ON ca.client_id=e.client_id
+  left join rbDistrict rd on rd.id = ca.district_id 
+WHERE
+  (
+  ca.id = getClientRegAddressId(ca.client_id)
+  )
+  AND 
+  e.id= %s  
+  ORDER BY ca.type ASC
+  LIMIT 1
 
-call procEpicrisisDiagnostic(33827444, "'Заключение'")
 
-
-
-
-
-select at3.id, at3.name, at2.group_id, at2.code, at2.name from ActionType at2
-join ActionType at3 on at3.id = at2.group_id 
-where at2.name REGEXP 'ЭКГ' and at2.deleted = 0 and at2.class = 1 and at2.serviceType !=4 order by at3.name, at2.name ;
-
-  
-            
-select apt.name, DATE_FORMAT(a.endDate, "%d.%m.%y\n%H:%i") valas, a.endDate val from ActionProperty ap
+select aps.value from ActionProperty ap 
 left join ActionProperty_String aps using(id)
-join Action a on ap.action_id = a.id and a.deleted = 0 and a.status = 2 and a.event_id = 33722943
-join (select at3.* from ActionType at2 
-join ActionType at3 on at3.group_id = at2.id and at3.deleted = 0 and at3.class = 1 and at3.serviceType !=4
-left join ActionType at4 on at4.group_id = at3.id and at4.deleted = 0 and at4.class = 1 and at4.serviceType !=4
-where at2.id = 22228 and at2.deleted = 0
-union
-select at4.* from ActionType at2 
-join ActionType at3 on at3.group_id = at2.id and at3.deleted = 0 and at3.class = 1 and at3.serviceType !=4
-left join ActionType at4 on at4.group_id = at3.id and at4.deleted = 0 and at4.class = 1 and at4.serviceType !=4
-where at2.id = 22228 and at2.deleted = 0) at2 on at2.id = a.actionType_id 
-join ActionPropertyType apt on apt.id = ap.type_id and apt.actionType_id = at2.id and apt.name = 'Заключение'
-GROUP by a.endDate 
-
-            
-            
-
-select a.event_id, ap.id, apt.name, aps.value, apd.value, apr.value from ActionProperty ap 
-left join ActionProperty_String aps using(id)
-left join ActionProperty_Date apd using(id)
-left join ActionProperty_Reference apr using(id)
-join Action a on ap.action_id = a.id and a.deleted = 0 and a.status = 2 -- and a.event_id = 33723771
-join ActionType at2 on at2.id = a.actionType_id and at2.class = 1 and at2.deleted = 0 and at2.serviceType != 4
-join ActionPropertyType apt on apt.actionType_id = at2.id and apt.deleted = 0 and apt.id = ap.type_id and apt.typeName != 'JobTicket'
-where ap.deleted = 0 GROUP by at2.id, apt.id
-
-
-select * from ActionType at2 where at2.name = 'ЭКГ';
-
-
+join Action a on a.id = ap.action_id and a.deleted = 0 and a.event_id = 
+join ActionType at2 on at2.id = a.actionType_id and at2.code = '145-6480' and flatCode = 'diary'
+join ActionPropertyType apt on apt.actionType_id = at2.id and apt.deleted = 0 and apt.name REGEXP 'Состояние'
+where ap.deleted = 0
+order by a.createDatetime desc limit 1
 
 
 INSERT into rbEpicrisisSections (name, description)
-select 'Консультации специалистов:' name, description from rbEpicrisisSections where id = 12;
+select 'Прочее' name, description from rbEpicrisisSections where id = 12;
 
 
 insert into rbEpicrisisTemplates_rbEpicrisisSections (id_rbEpicrisisTemplates, id_rbEpicrisisSections, idx)
-select retres.id_rbEpicrisisTemplates, (select id from rbEpicrisisSections order by id desc limit 1) id_rbEpicrisisSections, max(retres.idx)+1 from rbEpicrisisTemplates_rbEpicrisisSections retres where retres.id_rbEpicrisisTemplates = 4 ;
+select retres.id_rbEpicrisisTemplates, (select id from rbEpicrisisSections where id = LAST_INSERT_ID()) id_rbEpicrisisSections, max(retres.idx)+1 from rbEpicrisisTemplates_rbEpicrisisSections retres where retres.id_rbEpicrisisTemplates = 4 ;
 
+select * from rbEpicrisisSections res order by id desc;
 
 INSERT into rbEpicrisisProperty (name, description, `type`)
-select '' name, 'Консультации специалистов' description, `type` from rbEpicrisisProperty limit 1;
+select 'Зав. отделением' name, 'Лечение' description, `type` from rbEpicrisisProperty limit 1;
 
 insert into rbEpicrisisSections_rbEpicrisisProperty (id_rbEpicrisisSections, id_rbEpicrisisProperty, idx)
-select 14 id_rbEpicrisisSections, (select id from rbEpicrisisProperty order by id DESC limit 1) id_rbEpicrisisProperty, 0 idx from rbEpicrisisSections_rbEpicrisisProperty limit 1;
+select res.id id_rbEpicrisisSections, (select id from rbEpicrisisProperty where id = LAST_INSERT_ID()) id_rbEpicrisisProperty, IFNULL(max(resrep.idx),0) 
+from rbEpicrisisSections res 
+left join rbEpicrisisSections_rbEpicrisisProperty resrep on resrep.id_rbEpicrisisSections = res.id 
+where res.id = 17
+limit 1;
 
 
 
