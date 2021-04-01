@@ -2,10 +2,10 @@ select count(rep.id) num,
 -- GROUP_CONCAT(CONCAT_WS(' ', ret.id_orgStructure , ret.code, ret.name,'retres.idx:',retres.idx,'resper.idx:',resrep.idx) separator '\n') ret,
 -- GROUP_CONCAT(CONCAT_WS(' ', retres.id, resrep.id, res.id, res.name, res.description)separator '\n') res,
 -- ret.*
-retres.*
+-- retres.*
 -- resrep.*,
 -- res.*
--- rep.*
+rep.*
 from rbEpicrisisTemplates ret
 left join rbEpicrisisTemplates_rbEpicrisisSections retres on retres.id_rbEpicrisisTemplates = ret.id
 left join rbEpicrisisSections res on retres.id_rbEpicrisisSections = res.id
@@ -16,7 +16,32 @@ group by res.id, rep.id
 order by  retres.idx, resrep.idx;
 
 
+select * from rbEpicrisisTemplates ret ;
+
 select * from ClientAddress ca 
+
+
+select os.name from Event e 
+join Person p on p.id = e.execPerson_id and p.deleted = 0
+join OrgStructure os on os.id = p.orgStructure_id and os.deleted = 0
+where e.deleted = 0 and e.id = 33796707
+
+
+
+
+select
+rd.name `Название диеты`,
+min(date(ef.date)) `Дата начала`,
+max(date(ef.date)) `Дата окончания`
+from Event e 
+join Event_Feed ef ON ef.event_id = e.id 
+join rbDiet rd on rd.id = ef.diet_id 
+where e.id = 33796707
+GROUP by ef.diet_id
+order by ef.createDatetime 
+
+
+select * from Event where externalId ='1539'
 
 
 SELECT 
