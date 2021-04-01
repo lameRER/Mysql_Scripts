@@ -11,103 +11,41 @@ left join rbEpicrisisTemplates_rbEpicrisisSections retres on retres.id_rbEpicris
 left join rbEpicrisisSections res on retres.id_rbEpicrisisSections = res.id
 left join rbEpicrisisSections_rbEpicrisisProperty resrep on resrep.id_rbEpicrisisSections = res.id
 left join rbEpicrisisProperty rep on resrep.id_rbEpicrisisProperty = rep.id
-where ret.code = 'код 2' -- and resrep.id_rbEpicrisisSections = 14
+where ret.code REGEXP '^код 2' -- and resrep.id_rbEpicrisisSections = 14
 group by res.id, rep.id
 order by  retres.idx, resrep.idx;
 
 
 select * from rbEpicrisisTemplates ret ;
 
-select * from ClientAddress ca 
-
-
-select os.name from Event e 
-join Person p on p.id = e.execPerson_id and p.deleted = 0
-join OrgStructure os on os.id = p.orgStructure_id and os.deleted = 0
-where e.deleted = 0 and e.id = 33796707
 
 
 
-
-select
-rd.name `Название диеты`,
-min(date(ef.date)) `Дата начала`,
-max(date(ef.date)) `Дата окончания`
-from Event e 
-join Event_Feed ef ON ef.event_id = e.id 
-join rbDiet rd on rd.id = ef.diet_id 
-where e.id = 33796707
-GROUP by ef.diet_id
-order by ef.createDatetime 
-
-
-select * from Event where externalId ='1539'
-
-
-SELECT 
-  CONCAT(k.NAME,', Район ', rd.name, ', улица ',s.NAME,', д.', ah.number,IF(ah.corpus LIKE '','',CONCAT(', корпус ',ah.corpus)),IF(a.flat LIKE '','',CONCAT(', кв ',a.flat)))
-  FROM ClientAddress ca
-  INNER JOIN Address a ON ca.address_id=a.id
-  INNER JOIN AddressHouse ah ON a.house_id=ah.id
-  INNER JOIN kladr.STREET s ON s.CODE=ah.KLADRStreetCode
-  INNER JOIN kladr.KLADR k ON k.CODE=ah.KLADRCode
-  INNER JOIN Event e ON ca.client_id=e.client_id
-  left join rbDistrict rd on rd.id = ca.district_id 
-WHERE
-  (  
-  ca.id = getClientLocAddressId(ca.client_id)
-  )
-  AND 
-  e.id= %s  
-  ORDER BY ca.type ASC
-  LIMIT 1
-
-
-SELECT 
-  CONCAT(k.NAME,', Район ', rd.name, ', улица ',s.NAME,', д.', ah.number,IF(ah.corpus LIKE '','',CONCAT(', корпус ',ah.corpus)),IF(a.flat LIKE '','',CONCAT(', кв ',a.flat)))
-  FROM ClientAddress ca
-  INNER JOIN Address a ON ca.address_id=a.id
-  INNER JOIN AddressHouse ah ON a.house_id=ah.id
-  INNER JOIN kladr.STREET s ON s.CODE=ah.KLADRStreetCode
-  INNER JOIN kladr.KLADR k ON k.CODE=ah.KLADRCode
-  INNER JOIN Event e ON ca.client_id=e.client_id
-  left join rbDistrict rd on rd.id = ca.district_id 
-WHERE
-  (
-  ca.id = getClientRegAddressId(ca.client_id)
-  )
-  AND 
-  e.id= %s  
-  ORDER BY ca.type ASC
-  LIMIT 1
-
-
-select aps.value from ActionProperty ap 
-left join ActionProperty_String aps using(id)
-join Action a on a.id = ap.action_id and a.deleted = 0 and a.event_id = 
-join ActionType at2 on at2.id = a.actionType_id and at2.code = '145-6480' and flatCode = 'diary'
-join ActionPropertyType apt on apt.actionType_id = at2.id and apt.deleted = 0 and apt.name REGEXP 'Состояние'
-where ap.deleted = 0
-order by a.createDatetime desc limit 1
+select * from Event e 
+join Action a on a.event_id = e.id and a.deleted = 0
+join ActionType at2 on at2.id = a.actionType_id and at2.flatCode REGEXP 'oper_protocol'
+-- where e.id = 33796707;
 
 
 INSERT into rbEpicrisisSections (name, description)
-select 'Прочее' name, description from rbEpicrisisSections where id = 12;
+select 'Лист нетрудоспособности' name, description from rbEpicrisisSections where id = 12;
 
 
 insert into rbEpicrisisTemplates_rbEpicrisisSections (id_rbEpicrisisTemplates, id_rbEpicrisisSections, idx)
-select retres.id_rbEpicrisisTemplates, (select id from rbEpicrisisSections where id = LAST_INSERT_ID()) id_rbEpicrisisSections, max(retres.idx)+1 from rbEpicrisisTemplates_rbEpicrisisSections retres where retres.id_rbEpicrisisTemplates = 4 ;
+select retres.id_rbEpicrisisTemplates, (select id from rbEpicrisisSections where id = LAST_INSERT_ID()) id_rbEpicrisisSections, max(retres.idx)+1 from rbEpicrisisTemplates_rbEpicrisisSections retres 
+-- where retres.id_rbEpicrisisTemplates = 4 ;
+group by retres.id_rbEpicrisisTemplates 
 
 select * from rbEpicrisisSections res order by id desc;
 
 INSERT into rbEpicrisisProperty (name, description, `type`)
-select 'Зав. отделением' name, 'Лечение' description, `type` from rbEpicrisisProperty limit 1;
+select 'Операции' name, 'ОперБлок' description, 8 `type` from rbEpicrisisProperty where id = 100 limit 1;
 
 insert into rbEpicrisisSections_rbEpicrisisProperty (id_rbEpicrisisSections, id_rbEpicrisisProperty, idx)
 select res.id id_rbEpicrisisSections, (select id from rbEpicrisisProperty where id = LAST_INSERT_ID()) id_rbEpicrisisProperty, IFNULL(max(resrep.idx),0) 
 from rbEpicrisisSections res 
 left join rbEpicrisisSections_rbEpicrisisProperty resrep on resrep.id_rbEpicrisisSections = res.id 
-where res.id = 17
+where res.id = 15
 limit 1;
 
 
