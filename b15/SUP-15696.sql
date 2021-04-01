@@ -18,13 +18,24 @@ order by  retres.idx, resrep.idx;
 
 select * from rbEpicrisisTemplates ret ;
 
+select * from OrgStructure os ;
 
 
 
-select * from Event e 
+select 
+Date(a1.plannedEndDate) `Дата операции`,
+a1.specifiedName `Название операции`
+from Event e 
 join Action a on a.event_id = e.id and a.deleted = 0
-join ActionType at2 on at2.id = a.actionType_id and at2.flatCode REGEXP 'oper_protocol'
--- where e.id = 33796707;
+join Action a1 on a.parent_id = a1.id 
+where e.deleted = 0 and e.id = %s;
+
+
+
+select * from Action a
+where a.event_id = 33721812 and a.deleted = 0
+
+
 
 
 INSERT into rbEpicrisisSections (name, description)
