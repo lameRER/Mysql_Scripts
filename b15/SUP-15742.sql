@@ -101,8 +101,8 @@ select * from DestinationTree dt where dt.name = 'Осмотры';
 
 
 insert into OrgStructure_ActionType (master_id, idx, actionType_id)
-select 26 master_id, max(osat.idx)+1, at2.id actionType_id from OrgStructure_ActionType osat, ActionType at2 
-where at2.id = 56116 and osat.master_id = 26
+select  master_id, max(osat.idx)+1, at2.id actionType_id from OrgStructure_ActionType osat, ActionType at2 
+where at2.id = 56116 and osat.master_id in (53, 107) GROUP by osat.master_id 
 
 
 select * from OrgStructure_ActionType osat where master_id = 26;
