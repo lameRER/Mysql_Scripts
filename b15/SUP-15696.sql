@@ -3,7 +3,7 @@ select count(rep.id) num,
 -- GROUP_CONCAT(CONCAT_WS(' ', retres.id, resrep.id, res.id, res.name, res.description)separator '\n') res,
 -- ret.*
 -- retres.*
--- resrep.*,
+resrep.*,
 -- res.*
 rep.*
 from rbEpicrisisTemplates ret
@@ -50,13 +50,13 @@ group by retres.id_rbEpicrisisTemplates
 select * from rbEpicrisisSections res order by id desc;
 
 INSERT into rbEpicrisisProperty (name, description, `type`)
-select 'Операции' name, 'ОперБлок' description, 8 `type` from rbEpicrisisProperty where id = 100 limit 1;
+select 'Клинический диагноз' name, '' description, 7 `type` from rbEpicrisisProperty where id = 100 limit 1;
 
 insert into rbEpicrisisSections_rbEpicrisisProperty (id_rbEpicrisisSections, id_rbEpicrisisProperty, idx)
 select res.id id_rbEpicrisisSections, (select id from rbEpicrisisProperty where id = LAST_INSERT_ID()) id_rbEpicrisisProperty, IFNULL(max(resrep.idx),0) 
 from rbEpicrisisSections res 
 left join rbEpicrisisSections_rbEpicrisisProperty resrep on resrep.id_rbEpicrisisSections = res.id 
-where res.id = 15
+where res.id = 4
 limit 1;
 
 
