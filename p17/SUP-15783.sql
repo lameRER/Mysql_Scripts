@@ -103,3 +103,26 @@ select * from ActionPropertyType apt where typeName  = 'Reference';
 --     select apt.deleted, (select id from ActionType where id = LAST_INSERT_ID()) actionType_id, apt.idx, apt.template_id, apt.name, apt.shortName, apt.descr, apt.unit_id, apt.typeName, apt.valueDomain, apt.defaultValue, apt.isVector, apt.norm, apt.sex, apt.age, apt.penalty, apt.penaltyUserProfile, apt.penaltyDiagnosis, apt.visibleInJobTicket, apt.visibleInTableRedactor, apt.isAssignable, apt.test_id, apt.defaultEvaluation, apt.canChangeOnlyOwner, apt.isActionNameSpecifier, apt.laboratoryCalculator, apt.inActionsSelectionTable, apt.redactorSizeFactor, apt.isFrozen, apt.typeEditable, apt.visibleInDR, apt.userProfile_id, apt.userProfileBehaviour, apt.copyModifier, apt.isVitalParam, apt.vitalParamId, apt.isODIIParam, apt.customSelect, apt.autoFieldUserProfile, apt.formulaAlias, apt.parent_id from ActionType at2
 --     join ActionPropertyType apt on apt.actionType_id = at2.id
 --     where at2.code = 'QR'
+
+
+
+select id from ActionType where id = LAST_INSERT_ID() ;
+
+select * from ActionType at2 where name REGEXP 'qr';
+
+select apt.* from ActionPropertyType apt where apt.actionType_id = 11468 and apt.typeName = 'Reference' group by apt.valueDomain ;
+
+
+select * from rbPrintTemplate rpt where rpt.name REGEXP 'qr';
+
+
+
+
+select * from ActionType at2 where id = 11468;
+
+SELECT * FROM netricaAccessVaccination;
+SELECT * FROM netricaContraindication;
+SELECT * FROM netricarbCitizenship;
+SELECT * FROM netricaRiskGroup;
+SELECT * FROM netricaVaccinationType;
+SELECT * FROM SpravYesNo;
