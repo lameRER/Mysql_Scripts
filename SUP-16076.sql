@@ -5,3 +5,5 @@ select * from rbPrintTemplate rpt where rpt.context = (select at2.context from A
 
 
 select * from ActionType at2 where at2.name REGEXP 'ОНМК';
+
+select * from ActionPropertyType apt where apt.actionType_id = 43361;
