@@ -90,9 +90,9 @@ SELECT * from ActionPropertyType apt where apt.actionType_id = 56116 and apt.del
 select * from rbPrintTemplate rpt where rpt.context = 15742;
 
 INSERT into DestinationTree_ActionType (master_id, actionType_id, name, popular)
-select dtat.master_id, 56115 actionType_id, (select name from ActionType where id = 56116) name, dtat.popular from DestinationTree_ActionType dtat where dtat.master_id  = 10029 limit 1;
+select dtat.master_id, 56116 actionType_id, (select name from ActionType where id = 56116) name, dtat.popular from DestinationTree_ActionType dtat where dtat.master_id  = 10029 limit 1;
 
-select * from DestinationTree_ActionType dtat where dtat.actionType_id = 56115;
+select * from DestinationTree_ActionType dtat where dtat.actionType_id = 56116;
 
 
 select * from DestinationTree dt where dt.id = 9748;
