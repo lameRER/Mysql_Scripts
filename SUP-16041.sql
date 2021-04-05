@@ -5,7 +5,7 @@ join rbepicrisistemplates_rbepicrisissections rr on rr.id_rbEpicrisisTemplates =
 join rbepicrisissections r2 on r2.id = rr.id_rbEpicrisisSections
 join rbepicrisissections_rbepicrisisproperty rr2 on rr2.id_rbEpicrisisSections = r2.id
 join rbepicrisisproperty r3 on r3.id = rr2.id_rbEpicrisisProperty
-where r.id = 79 and r2.name = 'За время пребывания в ЦРБ проведены обследования' -- and r3.name regexp '^К'
+where r.id = 79 and r2.name = 'За время пребывания в ЦРБ проведены обследования' and r3.name regexp '^К'
 order by rr.idx, rr2.idx 
 
 
@@ -54,8 +54,8 @@ SELECT
   LEFT JOIN ActionProperty ap_date ON ap_date.action_id=a.id AND ap_date.type_id=apt_date.id AND ap_date.deleted=0
   LEFT JOIN ActionProperty_Job_Ticket  apjt_date ON ap_date.id=apjt_date.id 
   LEFT JOIN Job_Ticket jt ON apjt_date.value=jt.id
---   WHERE
---   e.id=%s
+  WHERE
+  e.id= %s
   ORDER BY a.endDate, 2,1 ASC
 
 
