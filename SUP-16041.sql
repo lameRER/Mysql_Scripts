@@ -5,7 +5,7 @@ join rbepicrisistemplates_rbepicrisissections rr on rr.id_rbEpicrisisTemplates =
 join rbepicrisissections r2 on r2.id = rr.id_rbEpicrisisSections
 join rbepicrisissections_rbepicrisisproperty rr2 on rr2.id_rbEpicrisisSections = r2.id
 join rbepicrisisproperty r3 on r3.id = rr2.id_rbEpicrisisProperty
-where r.id = 79 and r2.name = 'За время пребывания в ЦРБ проведены обследования' and r3.name regexp '^К'
+where r.id = 79 /*and r2.name = 'За время пребывания в ЦРБ проведены обследования'*/ and r3.name regexp 'гор'
 order by rr.idx, rr2.idx 
 
 
@@ -40,13 +40,13 @@ join actionpropertytype a3 on a3.actionType_id = a2.id and a3.id = ap.type_id an
 
 
 SELECT  
-  IFNULL(DATE_FORMAT(a.endDate,'%d.%m.%Y'),'ДАТА НЕ УКАЗАНА') AS 'Дата',
+  IFNULL(DATE_FORMAT(a.endDate,'%d.%m.%Y %h:%i'),'ДАТА НЕ УКАЗАНА') AS 'Дата',
   apt.name 'Фактор',
-  aps.value AS 'Результат',
-  apt.norm 'Норма' 
+  aps.value AS 'Результат'   
   FROM Event e
   INNER JOIN Action a ON a.event_id=e.id AND a.deleted=0
-  INNER JOIN ActionType at ON a.actionType_id=at.id AND at.deleted=0 AND at.class=1 AND at.name regexp 'Коагулограмма'
+  INNER JOIN ActionType at ON a.actionType_id=at.id AND at.deleted=0 AND at.class=1 
+  AND at.title LIKE 'Исследование на гормоны'
   INNER JOIN ActionPropertyType apt ON apt.actionType_id=at.id AND apt.deleted=0 AND apt.typeName NOT LIKE 'JobTicket'
   INNER JOIN ActionProperty ap ON ap.action_id=a.id AND ap.type_id=apt.id
   LEFT JOIN ActionProperty_String aps ON ap.id=aps.id
@@ -55,8 +55,14 @@ SELECT
   LEFT JOIN ActionProperty_Job_Ticket  apjt_date ON ap_date.id=apjt_date.id 
   LEFT JOIN Job_Ticket jt ON apjt_date.value=jt.id
   WHERE
-  e.id= %s
+  e.id=6211485
   ORDER BY a.endDate, 2,1 ASC
+  
+  
+  
+  select a2.code, a2.name, a.* from action a 
+  join actiontype a2 on a2.id = a.actionType_id and a2.deleted = 0 -- and a2.class = 1
+  where a.event_id = 6211485 and a.deleted = 0
 
 
 
