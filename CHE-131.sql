@@ -1,6 +1,6 @@
 select count(rep.id) num,
-GROUP_CONCAT(CONCAT_WS(' ',ret.code, ret.name,'retres.idx:',retres.idx,'resper.idx:',resrep.idx) separator '\n') ret, 
-GROUP_CONCAT(CONCAT_WS(' ', retres.id, resrep.id, res.id, res.name, res.description)separator '\n') res, 
+-- GROUP_CONCAT(CONCAT_WS(' ',ret.code, ret.name,'retres.idx:',retres.idx,'resper.idx:',resrep.idx) separator '\n') ret, 
+-- GROUP_CONCAT(CONCAT_WS(' ', retres.id, resrep.id, res.id, res.name, res.description)separator '\n') res,
 rep.* from rbEpicrisisTemplates ret
 left join rbEpicrisisTemplates_rbEpicrisisSections retres on retres.id_rbEpicrisisTemplates = ret.id 
 left join rbEpicrisisSections res on retres.id_rbEpicrisisSections = res.id 
@@ -15,7 +15,22 @@ order by  retres.idx, resrep.idx;
 select * from rbEpicrisisTemplates ret ;
 
 
+SELECT a.createDatetime AS `Дата выполнения`, at.name as `Название документа`, apt.name `Название поля`, aps.value AS `Значение` FROM Event e
+join Action a ON e.id = a.event_id AND a.deleted=0 AND a.status = 2
+JOIN ActionType at ON a.actionType_id = at.id AND at.class =2 AND at.deleted=0
+JOIN ActionProperty ap ON a.id = ap.action_id
+join ActionPropertyType apt ON ap.type_id = apt.id AND apt.deleted=0 AND apt.name REGEXP 'Название операции|Описание операции|Описание операции ОРХМДЛ'
+JOIN ActionProperty_String aps on aps.id = ap.id
+WHERE e.id=27950;
 
+
+SELECT a.endDate `Дата выполнения`, apt.name `Название`, aps.value `Значение` FROM Event e
+JOIN Action a ON e.id = a.event_id AND a.deleted = 0 and a.status = 2
+join ActionType at ON a.actionType_id = at.id AND at.deleted = 0 AND at.flatCode = 'oper_protocol'
+JOIN ActionPropertyType apt ON at.id = apt.actionType_id AND apt.deleted = 0 AND apt.name REGEXP 'Описание операции|Описание операции ОРХМДЛ|Название операции'
+join ActionProperty ap ON a.id = ap.action_id AND apt.id = ap.type_id
+JOIN ActionProperty_String aps ON aps.id = ap.id
+WHERE e.id = 27950 AND e.deleted = 0 ORDER BY a.createDatetime DESC;
 
 
 select 
@@ -29,7 +44,7 @@ left join ActionProperty_Double apd using(id)
 left join ActionProperty_Reference apr using(id)
 join Action a on ap.action_id = a.id and a.deleted = 0 and a.id = (select a.id from Action a where a.deleted = 0 /*and a.event_id = %s */and a.actionType_id in (select id from ActionType where class = 4 and deleted = 0) order by a.createDatetime desc limit 1)
 JOIN ActionType at2 on at2.id = a.actionType_id and at2.deleted = 0 and at2.class = 4 
-join ActionPropertyType apt on apt.actionType_id = at2.id and apt.id = ap.type_id and apt.deleted = 0 and apt.name != '�������' and apt.typeName != 'TissueType'
+join ActionPropertyType apt on apt.actionType_id = at2.id and apt.id = ap.type_id and apt.deleted = 0 and apt.name != '�������' and apt.typeName != 'TissueType'
 where ap.deleted = 0 order by apt.idx
 
 
