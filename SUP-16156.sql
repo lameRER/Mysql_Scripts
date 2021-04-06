@@ -169,7 +169,7 @@ select * from ActionType at2 order by id desc;
 
 
 
-    select CONCAT_WS('/', IFNULL(c.lastName,''), ifnull(c.firstName,''), ifnull(c.patrName,''),
+   select CONCAT_WS('/', IFNULL(c.lastName,''), ifnull(c.firstName,''), ifnull(c.patrName,''),
     ifnull(DATE_FORMAT(c.birthDate, '%d.%m.%Y'),''), CASE when c.sex = 1 then 'Мужской' when c.sex = 2 then 'Женский' else
     '' end,
     ifnull(c.SNILS,''), ifnull(cd.serial,''),ifnull(cd.`number`,''), ifnull(cp.`number`,''),
@@ -201,7 +201,7 @@ select * from ActionType at2 order by id desc;
     join Organisation o2 on o2.id = cp.insurer_id and o2.deleted = 0
     left join netricaSMO ns on ns.OGRN = o2.OGRN
     join Person p2 on p2.id = e.execPerson_id and p2.deleted = 0
-    where c.deleted = 0 and e.id = (select id from Event order by id desc limit 1)
+    where c.deleted = 0-- and e.id
     
     SELECT * FROM netricaAccessVaccination;
 SELECT * FROM netricaContraindication;
