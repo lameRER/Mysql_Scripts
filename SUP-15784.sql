@@ -300,8 +300,8 @@ select tp5.фамилия, tp5.имя, tp5.отчество, STR_TO_DATE(REGEXP_
 join Event e2 on e2.externalId = REPLACE(tp.externalId, ' ', '') and e2.deleted = 0 and e2.eventType_id = 101
 join Client c2 on c2.lastName = tp.lastName and c2.firstName =  tp.firstName and c2.patrName =  tp.patrName and c2.birthDate = tp.birthDate and c2.id = e2.client_id 
 left join ClientAddress ca on ca.client_id = c2.id and ca.deleted = 0
-WHERE tp.birthDate is not null and ca.id is NULL 
-union
+WHERE tp.birthDate is not null and (ca.`type` != 0 or ca.id is NULL)
+union 
 select
 NOW() createDatetime, NULL createPerson_id, NOW() modifyDatetime, NULL modifyPerson_id,
 0 deleted, c2.id client_id, 1 `type`, NULL address_id, CONCAT_WS(', ', tp.city, tp.street, IFNULL(CONCAT('д. ', tp.house),''), IFNULL(CONCAT('кор. ', tp.corps),''), IFNULL(CONCAT('кв. ', tp.apartment),'')) freeInput, '' freeInput_p, NULL district_id, 0 isVillager 
@@ -318,7 +318,7 @@ select tp5.фамилия, tp5.имя, tp5.отчество, STR_TO_DATE(REGEXP_
 join Event e2 on e2.externalId = REPLACE(tp.externalId, ' ', '') and e2.deleted = 0 and e2.eventType_id = 101
 join Client c2 on c2.lastName = tp.lastName and c2.firstName =  tp.firstName and c2.patrName =  tp.patrName and c2.birthDate = tp.birthDate and c2.id = e2.client_id 
 left join ClientAddress ca on ca.client_id = c2.id and ca.deleted = 0
-WHERE tp.birthDate is not null-- and ca.id is NULL 
+WHERE tp.birthDate is not null and (ca.`type` != 1 or ca.id is NULL)
 GROUP by e2.id, c2.id
 
 
@@ -330,27 +330,14 @@ GROUP by e2.id, c2.id
 
 
 -- INSERT INTO ClientAddress (createDatetime, createPerson_id, modifyDatetime, modifyPerson_id, deleted, client_id, `type`, address_id, freeInput, freeInput_p, district_id, isVillager)
+
+-- select ca.* from 
+update
+ClientAddress ca 
+join (
 select
-c2.createDatetime, NULL createPerson_id, c2.modifyDatetime, NULL modifyPerson_id,
-0 deleted, c2.id client_id, 0 `type`, NULL address_id, CONCAT_WS(', ', tp.city, tp.street, IFNULL(CONCAT('д. ', tp.house),''), IFNULL(CONCAT('кор. ', tp.corps),''), IFNULL(CONCAT('кв. ', tp.apartment),'')) freeInput, '' freeInput_p, NULL district_id, 0 isVillager 
-from (select tp1.фамилия lastName, tp1.имя firstName, tp1.отчество patrName, STR_TO_DATE(REGEXP_REPLACE(if(LENGTH(tp1.`дата рож`)>9, tp1.`дата рож`, NULL), '([0-9]+).([0-9]+).([0-9]+).*', '\\1-\\2-\\3'), '%d-%m-%Y') birthDate, 
-tp1.город city, tp1.улица street, tp1.дом house, tp1.корп corps, tp1.кварт apartment, tp1.`серия полиса` police_serial, tp1.`номер полиса` `police_number`, tp1.`страхов.компания` police_org, tp1.`внешний идентификатор` externalId, NULL doc_serial, NULL doc_number, NULL doc_date from temp_person1 tp1 
-union
-select tp2.фамилия, tp2.имя, tp2.отчество, STR_TO_DATE(REGEXP_REPLACE(if(LENGTH(tp2.`дата рож`)>9, tp2.`дата рож`, NULL), '([0-9]+).([0-9]+).([0-9]+).*', '\\1-\\2-\\3'), '%d-%m-%Y'), tp2.город, tp2.улица, tp2.дом, tp2.корп, tp2.кварт, tp2.`серия полиса`, tp2.`номер полиса`, tp2.`страхов.компания`, '' `внешний идентификатор`, tp2.серия, tp2.`номер пас`, tp2.`дата выд` from temp_person2 tp2 
-union
-select tp3.фамилия, tp3.имя, tp3.отчество, STR_TO_DATE(REGEXP_REPLACE(if(LENGTH(tp3.`дата рож`)>9, tp3.`дата рож`, NULL), '([0-9]+).([0-9]+).([0-9]+).*', '\\1-\\2-\\3'), '%d-%m-%Y'), tp3.город, tp3.улица, tp3.дом, tp3.корп, tp3.кварт, tp3.`серия полиса`, tp3.`номер полиса`, tp3.`страхов.компания`, tp3.`внешний идентификатор`, NULL `серия`, NULL `номер пас`, NULL `дата выд` from temp_person3 tp3 
-union
-select tp4.фамилия, tp4.имя, tp4.отчество, STR_TO_DATE(REGEXP_REPLACE(if(LENGTH(tp4.`дата рож`)>9, tp4.`дата рож`, NULL), '([0-9]+).([0-9]+).([0-9]+).*', '\\1-\\2-\\3'), '%d-%m-%Y'), tp4.город, tp4.улица, tp4.дом, tp4.корп, tp4.кварт, tp4.`серия полиса`, tp4.`номер полиса`, tp4.`страхов.компания`, tp4.`внешний идентификатор`, NULL `серия`, NULL `номер пас`, NULL `дата выд` from temp_person4 tp4 
-union
-select tp5.фамилия, tp5.имя, tp5.отчество, STR_TO_DATE(REGEXP_REPLACE(if(LENGTH(tp5.`дата рож`)>9, tp5.`дата рож`, NULL), '([0-9]+).([0-9]+).([0-9]+).*', '\\1-\\2-\\3'), '%d-%m-%Y'), tp5.город, tp5.улица, tp5.дом, tp5.корп, tp5.кварт, tp5.`серия полиса`, tp5.`номер полиса`, tp5.`страхов.компания`, tp5.`№ карты`, NULL `серия`, NULL `номер пас`, NULL `дата выд` from temp_person5 tp5) as tp
-join Event e2 on e2.externalId = REPLACE(tp.externalId, ' ', '') and e2.deleted = 0 and e2.eventType_id = 101
-join Client c2 on c2.lastName = tp.lastName and c2.firstName =  tp.firstName and c2.patrName =  tp.patrName and c2.birthDate = tp.birthDate and c2.id = e2.client_id 
-left join ClientAddress ca on ca.client_id = c2.id and ca.deleted = 0
-WHERE tp.birthDate is not null and ca.id is NULL 
-union
-select
-c2.createDatetime, NULL createPerson_id, c2.modifyDatetime, NULL modifyPerson_id,
-0 deleted, c2.id client_id, 1 `type`, NULL address_id, CONCAT_WS(', ', tp.city, tp.street, IFNULL(CONCAT('д. ', tp.house),''), IFNULL(CONCAT('кор. ', tp.corps),''), IFNULL(CONCAT('кв. ', tp.apartment),'')) freeInput, '' freeInput_p, NULL district_id, 0 isVillager 
+ca.id, ca.createDatetime, NULL createPerson_id, ca.modifyDatetime, NULL modifyPerson_id,
+0 deleted, c2.id client_id, 0 `type`, NULL address_id, ca.freeInput as `test`, CONCAT_WS(', ', tp.city, tp.street, IFNULL(CONCAT('д. ', tp.house),''), IFNULL(CONCAT('кор. ', tp.corps),''), IFNULL(CONCAT('кв. ', tp.apartment),'')) freeInput, '' freeInput_p, NULL district_id, 0 isVillager 
 from (select tp1.фамилия lastName, tp1.имя firstName, tp1.отчество patrName, STR_TO_DATE(REGEXP_REPLACE(if(LENGTH(tp1.`дата рож`)>9, tp1.`дата рож`, NULL), '([0-9]+).([0-9]+).([0-9]+).*', '\\1-\\2-\\3'), '%d-%m-%Y') birthDate, 
 tp1.город city, tp1.улица street, tp1.дом house, tp1.корп corps, tp1.кварт apartment, tp1.`серия полиса` police_serial, tp1.`номер полиса` `police_number`, tp1.`страхов.компания` police_org, tp1.`внешний идентификатор` externalId, NULL doc_serial, NULL doc_number, NULL doc_date from temp_person1 tp1 
 union
@@ -365,10 +352,30 @@ join Event e2 on e2.externalId = REPLACE(tp.externalId, ' ', '') and e2.deleted 
 join Client c2 on c2.lastName = tp.lastName and c2.firstName =  tp.firstName and c2.patrName =  tp.patrName and c2.birthDate = tp.birthDate and c2.id = e2.client_id 
 left join ClientAddress ca on ca.client_id = c2.id and ca.deleted = 0
 WHERE tp.birthDate is not null-- and ca.id is NULL 
-GROUP by e2.id, c2.id
+union
+select
+ca.id, ca.createDatetime, NULL createPerson_id, ca.modifyDatetime, NULL modifyPerson_id,
+0 deleted, c2.id client_id, 1 `type`, NULL address_id, ca.freeInput as `test`, CONCAT_WS(', ', tp.city, tp.street, IFNULL(CONCAT('д. ', tp.house),''), IFNULL(CONCAT('кор. ', tp.corps),''), IFNULL(CONCAT('кв. ', tp.apartment),'')) freeInput, '' freeInput_p, NULL district_id, 0 isVillager 
+from (select tp1.фамилия lastName, tp1.имя firstName, tp1.отчество patrName, STR_TO_DATE(REGEXP_REPLACE(if(LENGTH(tp1.`дата рож`)>9, tp1.`дата рож`, NULL), '([0-9]+).([0-9]+).([0-9]+).*', '\\1-\\2-\\3'), '%d-%m-%Y') birthDate, 
+tp1.город city, tp1.улица street, tp1.дом house, tp1.корп corps, tp1.кварт apartment, tp1.`серия полиса` police_serial, tp1.`номер полиса` `police_number`, tp1.`страхов.компания` police_org, tp1.`внешний идентификатор` externalId, NULL doc_serial, NULL doc_number, NULL doc_date from temp_person1 tp1 
+union
+select tp2.фамилия, tp2.имя, tp2.отчество, STR_TO_DATE(REGEXP_REPLACE(if(LENGTH(tp2.`дата рож`)>9, tp2.`дата рож`, NULL), '([0-9]+).([0-9]+).([0-9]+).*', '\\1-\\2-\\3'), '%d-%m-%Y'), tp2.город, tp2.улица, tp2.дом, tp2.корп, tp2.кварт, tp2.`серия полиса`, tp2.`номер полиса`, tp2.`страхов.компания`, '' `внешний идентификатор`, tp2.серия, tp2.`номер пас`, tp2.`дата выд` from temp_person2 tp2 
+union
+select tp3.фамилия, tp3.имя, tp3.отчество, STR_TO_DATE(REGEXP_REPLACE(if(LENGTH(tp3.`дата рож`)>9, tp3.`дата рож`, NULL), '([0-9]+).([0-9]+).([0-9]+).*', '\\1-\\2-\\3'), '%d-%m-%Y'), tp3.город, tp3.улица, tp3.дом, tp3.корп, tp3.кварт, tp3.`серия полиса`, tp3.`номер полиса`, tp3.`страхов.компания`, tp3.`внешний идентификатор`, NULL `серия`, NULL `номер пас`, NULL `дата выд` from temp_person3 tp3 
+union
+select tp4.фамилия, tp4.имя, tp4.отчество, STR_TO_DATE(REGEXP_REPLACE(if(LENGTH(tp4.`дата рож`)>9, tp4.`дата рож`, NULL), '([0-9]+).([0-9]+).([0-9]+).*', '\\1-\\2-\\3'), '%d-%m-%Y'), tp4.город, tp4.улица, tp4.дом, tp4.корп, tp4.кварт, tp4.`серия полиса`, tp4.`номер полиса`, tp4.`страхов.компания`, tp4.`внешний идентификатор`, NULL `серия`, NULL `номер пас`, NULL `дата выд` from temp_person4 tp4 
+union
+select tp5.фамилия, tp5.имя, tp5.отчество, STR_TO_DATE(REGEXP_REPLACE(if(LENGTH(tp5.`дата рож`)>9, tp5.`дата рож`, NULL), '([0-9]+).([0-9]+).([0-9]+).*', '\\1-\\2-\\3'), '%d-%m-%Y'), tp5.город, tp5.улица, tp5.дом, tp5.корп, tp5.кварт, tp5.`серия полиса`, tp5.`номер полиса`, tp5.`страхов.компания`, tp5.`№ карты`, NULL `серия`, NULL `номер пас`, NULL `дата выд` from temp_person5 tp5) as tp
+join Event e2 on e2.externalId = REPLACE(tp.externalId, ' ', '') and e2.deleted = 0 and e2.eventType_id = 101
+join Client c2 on c2.lastName = tp.lastName and c2.firstName =  tp.firstName and c2.patrName =  tp.patrName and c2.birthDate = tp.birthDate and c2.id = e2.client_id 
+left join ClientAddress ca on ca.client_id = c2.id and ca.deleted = 0
+WHERE tp.birthDate is not null-- and ca.id is NULL 
+GROUP by e2.id, c2.id, ca.id) as tmp on tmp.client_id = ca.client_id and tmp.type = ca.`type` and ca.id = tmp.id-- and (tmp.freeInput != REGEXP_REPLACE(tmp.test, '\\d+,..,\\s(.*)', '\\1') or tmp.freeInput != tmp.test)
+set ca.freeInput = tmp.freeInput
+where ca.deleted = 0 and ca.address_id is null-- and ca.client_id = 86112
 
 
-
+select * from ClientAddress ca where ca.client_id = 86112;
 
 
 
