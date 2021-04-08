@@ -3,7 +3,7 @@ select * from rbEpicrisisProperty rep where rep.name REGEXP 'Адрес';
 select c.* from Client c where c.SNILS = '15792354803';
 
 select * from Client c where c.id = 59451;
-select * from Event e where e.client_id = 595631;
+select * from Event e where e.client_id = 59451;
 
 SELECT 
   CONCAT_WS(' ', CONCAT_WS(' ', if(k.parent = '', '', CONCAT_WS(' ', k3.NAME, CONCAT(k3.SOCR, ','), k2.NAME, CONCAT(k2.SOCR, ','))), k.NAME, CONCAT(k.SOCR, ',')), if(ca.district_id is null, '', CONCAT(rd.name,', ')),  CONCAT_WS(' ', s.NAME, CONCAT(s.SOCR,',')), if(ah.`number` = '', '', CONCAT('д.', ah.number)),IF(ah.corpus LIKE '','',CONCAT(', корпус ',ah.corpus)),IF(a.flat LIKE '','',CONCAT(', кв ',a.flat)))
@@ -25,6 +25,15 @@ WHERE
   e.id= %s
   ORDER BY ca.type ASC
   LIMIT 1
+  
+  
+  
+  SELECT getClientRegAddress(e.client_id) from Event e where e.id = 237657
+  
+  select * from Event e 
+  where e.id = %s 
+  
+  
   
   
   select * from ClientAddress ca where ca.client_id = 59451 and ca.deleted = 0;
