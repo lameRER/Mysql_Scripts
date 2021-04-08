@@ -377,7 +377,7 @@ where ca.deleted = 0 and ca.address_id is null-- and ca.client_id = 86112
 
 select * from ClientAddress ca where ca.client_id = 86112;
 
-
+select * from Event e where e.client_id = 86112;
 
 
 CREATE temporary TABLE temp_addres
