@@ -28,7 +28,7 @@ select * from DestinationTree dt where id = 1006;
 select * from ActionPropertyType apt where apt.actionType_id = 49954 and apt.deleted = 0 ;
 
 select * from Action where id = 100008605;
-
+ 
 
 select * from OrgStructure os where os.name REGEXP '10';
 
