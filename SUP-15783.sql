@@ -140,6 +140,7 @@ select * from rbPrintTemplate rpt where rpt.name REGEXP 'qr';
 
 
 
+
 select 
 c.id,
 CONCAT_WS('/', IFNULL(c.lastName,''), ifnull(c.firstName,''), ifnull(c.patrName,''),
@@ -174,7 +175,7 @@ CONCAT_WS('/', IFNULL(c.lastName,''), ifnull(c.firstName,''), ifnull(c.patrName,
     left join Organisation o2 on o2.id = cp.insurer_id and o2.deleted = 0
     left join netricaSMO ns on ns.OGRN = o2.OGRN
     join Person p2 on p2.id = e.execPerson_id and p2.deleted = 0
-    where c.deleted = 0 and e.id = 7043096
+    where c.deleted = 0 and e.id =  7043096
     group by c.id 
 
 select * from ClientPolicy cp where cp.client_id = 1548309;
