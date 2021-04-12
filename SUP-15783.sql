@@ -23,7 +23,7 @@ select CONCAT_WS('/', IFNULL(c.lastName,''), ifnull(c.firstName,''), ifnull(c.pa
     ifnull(DATE_FORMAT(c.birthDate, '%d.%m.%Y'),''), CASE when c.sex = 1 then 'Мужской' when c.sex = 2 then 'Женский' else '' end, 
     ifnull(c.SNILS,''), ifnull(cd.serial,''),ifnull(cd.`number`,''), ifnull(cp.`number`,''), 
     ifnull(GROUP_CONCAT(
-    ifnull(case when apt.typeName = 'String' then aps.value
+    ifnull(case when apt.typeName = 'String' then REGEXP_REPLACE(aps.value, '(\\d+\\d+\\d+)//(\\d+\\d+)', '\\1.\\2')
     when apt.typeName = 'Date' then apd.value
     when apt.typeName = 'Integer' then api.value
     when apt.typeName = 'Temperature' then apt2.value
@@ -50,7 +50,9 @@ join rbPolicyKind rpk on rpk.id = cp.policyKind_id
 join Organisation o2 on o2.id = cp.insurer_id and o2.deleted = 0
 left join netricaSMO ns on ns.OGRN = o2.OGRN 
 join Person p2 on p2.id = e.execPerson_id and p2.deleted = 0
-where c.deleted = 0 and c.id = 1570868
+where c.deleted = 0 
+-- and c.id = 1570868
+GROUP by c.id
 ORDER by apt.idx   
 
 select * from netricaSMO;
