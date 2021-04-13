@@ -1,7 +1,7 @@
 select count(rep.id) num,
 -- GROUP_CONCAT(CONCAT_WS(' ', ret.id_orgStructure , ret.code, ret.name,'retres.idx:',retres.idx,'resper.idx:',resrep.idx) separator '\n') ret, 
 -- GROUP_CONCAT(CONCAT_WS(' ', retres.id, resrep.id, res.id, res.name, res.description)separator '\n') res, 
-res.* from rbEpicrisisTemplates ret
+retres.* from rbEpicrisisTemplates ret
 left join rbEpicrisisTemplates_rbEpicrisisSections retres on retres.id_rbEpicrisisTemplates = ret.id 
 left join rbEpicrisisSections res on retres.id_rbEpicrisisSections = res.id 
 left join rbEpicrisisSections_rbEpicrisisProperty resrep on resrep.id_rbEpicrisisSections = res.id and resrep.isOld = 0
@@ -14,44 +14,41 @@ select * from rbEpicrisisTemplates ret where ret.name REGEXP 'Выписной';
 
 
 
-
-select a.event_id, GROUP_CONCAT(CONCAT_WS(': ',apt.name, if(apt.typeName ='string',aps.value, if(apt.typeName = 'date', apd.value, api.value))) separator '\n')from ActionProperty ap 
-left join ActionProperty_String aps using(id)
-left join ActionProperty_Date apd using(id)
-left join ActionProperty_Integer api using(id)
-join Action a on a.id = ap.action_id and a.deleted = 0 -- and a.event_id = %s
-join ActionType at2 on at2.id = a.actionType_id and at2.deleted = 0 and at2.code = 'osm_vrach_kar_1'
-join ActionPropertyType apt on apt.actionType_id = at2.id and ap.type_id = apt.id and apt.deleted = 0 and apt.name REGEXP 'Больничный лист №|Дата начала|Дата окончания|Всего дней нетрудоспособности'
-where ap.deleted = 0
-GROUP by a.event_id 
-
-
-
-
-
-
-select * from ActionType at2 
-where at2.group_id is null and class = 4 and at2.deleted = 0;
-
-select apt.typeName from ActionProperty ap 
-left join ActionProperty_String aps using(id)
-join Action a on a.id = ap.action_id and a.deleted = 0
-join ActionType at2 on at2.id = a.actionType_id and at2.deleted = 0
-join ActionPropertyType apt on apt.id = ap.type_id and apt.actionType_id = at2.id and apt.deleted = 0
-where ap.deleted = 0  
-GROUP by apt.id
-order by apt.idx
-
-
 select * from ActionType at2 where group_id = 20933 and at2.deleted = 0 and at2.class = 4;
 
 
 
 
 
-dw
 
 select * from ActionType at2 where at2.name REGEXP 'Биох';
+
+select * from ActionType at2 where at2.group_id = 20933;
+
+
+
+SELECT  
+  IFNULL(DATE_FORMAT(a.endDate,'%d.%m.%Y %h:%i'),'ДАТА НЕ УКАЗАНА') AS 'Дата',
+  apt.name 'Фактор',
+  aps.value AS 'Результат',
+  ap.norm 'Норма'
+   ,IF(ap.norm LIKE 'Отрицательный', IF(CAST(REPLACE(aps.value,',','.') AS DECIMAL(6,2))>0,'Без отклонений','Замечено отклонение от нормы'),
+     IF(CAST(REPLACE(aps.value,',','.') AS DECIMAL(6,2)) BETWEEN
+               CAST(REPLACE(SUBSTRING_INDEX(ap.norm,' ',1),',','.') AS DECIMAL(6,2)) 
+               AND CAST(REPLACE(SUBSTRING_INDEX(ap.norm,' ',-1),',','.') AS DECIMAL(6,2)),'Без отклонений','Замечено отклонение от нормы')) 'Отклонение от нормы'  
+  FROM Event e
+  INNER JOIN Action a ON a.event_id=e.id AND a.deleted=0
+  INNER JOIN ActionType at ON a.actionType_id=at.id AND at.deleted=0 AND at.class=4 AND at.group_id = 20933
+  INNER JOIN ActionPropertyType apt ON apt.actionType_id=at.id AND apt.deleted=0 AND apt.typeName NOT LIKE 'JobTicket'
+  INNER JOIN ActionProperty ap ON ap.action_id=a.id AND ap.type_id=apt.id
+  LEFT JOIN ActionProperty_String aps ON ap.id=aps.id
+  LEFT JOIN ActionPropertyType apt_date ON apt_date.actionType_id=at.id AND apt_date.deleted=0 AND apt_date.typeName LIKE 'JobTicket'
+  LEFT JOIN ActionProperty ap_date ON ap_date.action_id=a.id AND ap_date.type_id=apt_date.id AND ap_date.deleted=0
+  LEFT JOIN ActionProperty_Job_Ticket  apjt_date ON ap_date.id=apjt_date.id 
+  LEFT JOIN Job_Ticket jt ON apjt_date.value=jt.id
+  WHERE
+  e.id=%s
+  ORDER BY a.endDate, 2,1 ASC 
 
 
 
