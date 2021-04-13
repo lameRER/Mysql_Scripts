@@ -33,7 +33,8 @@ GROUP by a.event_id
 select * from ActionType at2 
 where at2.group_id is null and class = 4 and at2.deleted = 0;
 
-select apt.* from ActionProperty ap 
+select apt.typeName from ActionProperty ap 
+left join ActionProperty_String aps using(id)
 join Action a on a.id = ap.action_id and a.deleted = 0
 join ActionType at2 on at2.id = a.actionType_id and at2.deleted = 0
 join ActionPropertyType apt on apt.id = ap.type_id and apt.actionType_id = at2.id and apt.deleted = 0
@@ -49,7 +50,7 @@ select * from ActionType at2 where group_id = 20933 and at2.deleted = 0 and at2.
 
 
 
-
+d
 
 select * from ActionType at2 where at2.name REGEXP 'Биох';
 
