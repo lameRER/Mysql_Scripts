@@ -6,7 +6,15 @@ select * from EventType et;
 select * from Event e where e.client_id = 962290;
 
 
-select * from TempInvalidELN where `number` = '910062457692';
+select  t.client_id, t.lnDate t.* from TempInvalidELN t where t.`number` REGEXP '641$';
+
+select * from TempInvalid ti where ti.`number` REGEXP '041$';
+select t.closed, t.client_id, t.* from TempInvalidELN t where t.client_id = 730748 and t.deleted = 0
+
+select * from TempInvalidELN tie where tie.`number` = '910063019082';
+
+
+select * from TempInvalidELN tie where tie.prev_id is not null
 
 select * from rbTempInvalidELN_Result
 
@@ -14,6 +22,8 @@ select * from rbTempInvalidELN_Result
 select * from rbEpicrisisProperty rep ;
 
 select * from TempInvalidDuplicate;
+
+select * from rbtemp;
 
 
 

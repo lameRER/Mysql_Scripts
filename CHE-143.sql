@@ -7,12 +7,12 @@ left join rbEpicrisisSections res on retres.id_rbEpicrisisSections = res.id
 left join rbEpicrisisSections_rbEpicrisisProperty resrep on resrep.id_rbEpicrisisSections = res.id and resrep.isOld = 0
 left join rbEpicrisisProperty rep on resrep.id_rbEpicrisisProperty = rep.id
 where ret.name REGEXP 'КХО 4'
-group by ret.id-- , res.id, rep.id
+group by res.id-- , rep.id
 order by  retres.idx, resrep.idx;
 
 select * from rbEpicrisisTemplates ret where ret.name REGEXP 'Выписной';
 
-
+select * from rbEpicrisisTemplates_rbEpicrisisSections retres ;
 
 
 INSERT into rbEpicrisisTemplates_rbEpicrisisSections (id_rbEpicrisisTemplates, id_rbEpicrisisSections, idx)
