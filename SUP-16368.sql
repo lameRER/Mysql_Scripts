@@ -1,4 +1,4 @@
-select * from rbPrintTemplate rpt where rpt.name REGEXP '^карта'
+select * from rbPrintTemplate rpt order by rpt.id DESC 
 
 select * from EventType et;
 
@@ -7,6 +7,9 @@ select * from Event e where e.client_id = 962290;
 
 
 select t.person_id, t.client_id, t.lnDate, t.* from TempInvalidELN t where t.`number` REGEXP '641$';
+
+select * from TempInvalidELN_Period tiep where tiep.master_id = 16;
+
 
 select * from TempInvalid ti where ti.`number` REGEXP '041$';
 select t.closed, t.client_id, t.* from TempInvalidELN t where t.client_id = 730748 and t.deleted = 0
