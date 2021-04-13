@@ -49,7 +49,7 @@ select * from ActionType at2 where group_id = 20933 and at2.deleted = 0 and at2.
 
 
 
-
+dw
 ds
 
 select * from ActionType at2 where at2.name REGEXP 'Биох';
