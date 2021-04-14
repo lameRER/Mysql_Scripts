@@ -1,4 +1,5 @@
--- select * from rbPrintTemplate rpt ;
+select * from rbPrintTemplate rpt order by id DESC ;
+
 
 
 
