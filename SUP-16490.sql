@@ -133,10 +133,19 @@ where at2.group_id = 49895
 
 select * from ActionType at2 where at2.name = 'рентген';
 
-select * from 
+select * from ActionType at2 where at2.group_id  = 49895;
+
+INSERT into ActionPropertyType (deleted, actionType_id, idx, template_id, name, shortName, descr, unit_id, typeName, valueDomain, defaultValue, isVector, norm, sex, age, penalty, penaltyUserProfile, visibleInJobTicket, visibleInTableRedactor, isAssignable, test_id, defaultEvaluation, canChangeOnlyOwner, isActionNameSpecifier, laboratoryCalculator, inActionsSelectionTable, redactorSizeFactor, isFrozen, typeEditable, visibleInDR, userProfile_id, userProfileBehaviour, copyModifier, isVitalParam, vitalParamId, isODIIParam, ticketsNeeded, customSelect, autoFieldUserProfile, formulaAlias)
+(select * from 
 (select apt.deleted, at2.id actionType_id, apt.idx, apt.template_id, apt.name, apt.shortName, apt.descr, apt.unit_id, apt.typeName, apt.valueDomain, apt.defaultValue, apt.isVector, apt.norm, apt.sex, apt.age, apt.penalty, apt.penaltyUserProfile, apt.visibleInJobTicket, apt.visibleInTableRedactor, apt.isAssignable, apt.test_id, apt.defaultEvaluation, apt.canChangeOnlyOwner, apt.isActionNameSpecifier, apt.laboratoryCalculator, apt.inActionsSelectionTable, apt.redactorSizeFactor, apt.isFrozen, apt.typeEditable, apt.visibleInDR, apt.userProfile_id, apt.userProfileBehaviour, apt.copyModifier, apt.isVitalParam, apt.vitalParamId, apt.isODIIParam, apt.ticketsNeeded, apt.customSelect, apt.autoFieldUserProfile, apt.formulaAlias from ActionPropertyType apt, ActionType at2
-where apt.actionType_id = 49896 and at2.group_id = 49895)
-where not EXISTS (select * from ActionPropertyType apt2 where apt2.actionType_id in ();)
+where apt.actionType_id = 49896 and at2.group_id = 49895) as tmp
+where not EXISTS (select * from ActionPropertyType apt2 where apt2.actionType_id = tmp.actionType_id))
+
+insert into DestinationTree_ActionType (master_id, actionType_id, name, popular)
+select * from (
+select dtat.master_id, at2.id actionType_id, at2.name name, dtat.popular from ActionType at2, DestinationTree_ActionType dtat 
+where at2.group_id = 49895 and dtat.id =4602) as tmp
+where not EXISTS (select * from DestinationTree_ActionType dtat2 where dtat2.actionType_id = tmp.actionType_id)
 
 
 
