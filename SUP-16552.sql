@@ -1,6 +1,6 @@
 INSERT INTO s11.rbPrintTemplate
 (createDatetime, createPerson_id, modifyDatetime, modifyPerson_id, code, name, context, fileName, `default`, dpdAgreement, `type`, banUnkeptDate, counter_id, deleted, isPatientAgreed, groupName, documentType_id, isEditableInWeb)
-VALUES(NOW(), NULL, NOW(), NULL, '14376', 'QR-Code Пациент', 'QR', '', '<html>
+VALUES(NOW(), NULL, NOW(), NULL, '16042', 'QR-Code Пациент', 'QR', '', '<html>
 
 <head>
     {setPageSize(''A5'')}
@@ -17,7 +17,7 @@ VALUES(NOW(), NULL, NOW(), NULL, '14376', 'QR-Code Пациент', 'QR', '', '<
     '''' end,
     ifnull(c.SNILS,''''), ifnull(cd.serial,''''),ifnull(cd.`number`,''''), ifnull(cp.`number`,''''),
     ifnull(GROUP_CONCAT(
-    ifnull(case when apt.typeName = ''String'' then REGEXP_REPLACE(aps.value, ''(\\d+\\d+\\d+)//(\\d+\\d+)'', ''\\1.\\2'')
+    ifnull(case when apt.typeName = ''String'' then aps.value
     when apt.typeName = ''Date'' then apd.value
     when apt.typeName = ''Integer'' then api.value
     when apt.typeName = ''Temperature'' then apt2.value
@@ -31,7 +31,7 @@ VALUES(NOW(), NULL, NOW(), NULL, '14376', 'QR-Code Пациент', 'QR', '', '<
     where cp2. client_id= cp.client_id and cp2.deleted = 0 ORDER by cp2.createDatetime desc limit 1)
     join Event e on e.client_id = c.id and e.deleted = 0
     join Action a on a.event_id = e.id and a.deleted = 0
-    join ActionType at2 on at2.id = a.actionType_id and at2.deleted = 0 and at2.id = 14376
+    join ActionType at2 on at2.id = a.actionType_id and at2.deleted = 0 and at2.id = 44297
     JOIN ActionPropertyType apt on apt.actionType_id = at2.id and apt.deleted = 0
     left join ActionProperty ap on ap.action_id = a.id and ap.deleted = 0 and apt.id = ap.type_id
     left join ActionProperty_String aps on aps.id = ap.id
@@ -213,12 +213,3 @@ select * from netricaSMO;
     
     
     select * from ActionType at2 where name ='QR-Code Пациент';
-
-   
-   
-   select * from rbPrintTemplate rpt order by id desc;
-   
-   
-   
-   
-   
