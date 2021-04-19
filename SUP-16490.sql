@@ -135,6 +135,21 @@ select * from ActionType at2 where at2.name = 'рентген';
 
 select * from ActionType at2 where at2.group_id  = 49895;
 
+
+insert into OrgStructure_ActionType (master_id, idx, actionType_id)
+select * from 
+(select osat.master_id, osat.idx, at2.id actionType_id from OrgStructure_ActionType osat, ActionType at2 
+where osat.actionType_id = 49896 and at2.group_id = 49895) as tmp
+where not EXISTS (select * from OrgStructure_ActionType osat2 where osat2.actionType_id = tmp.actionType_id )
+
+
+INSERT into rbJobType_ActionType (createDatetime, createPerson_id, modifyDatetime, modifyPerson_id, master_id, actionType_id, selectionGroup, onDayLimit)
+select * from 
+(select NOW() createDatetime, null createPerson_id, NOW() modifyDatetime, null modifyPerson_id, rjtat.master_id, at2.id actionType_id, rjtat.selectionGroup, rjtat.onDayLimit from rbJobType_ActionType rjtat, ActionType at2 
+where rjtat.actionType_id = 49896 and at2.group_id = 49895) as tmp
+where not EXISTS (select * from rbJobType_ActionType rjtat2 where rjtat2.actionType_id = tmp.actionType_id)
+
+
 INSERT into ActionPropertyType (deleted, actionType_id, idx, template_id, name, shortName, descr, unit_id, typeName, valueDomain, defaultValue, isVector, norm, sex, age, penalty, penaltyUserProfile, visibleInJobTicket, visibleInTableRedactor, isAssignable, test_id, defaultEvaluation, canChangeOnlyOwner, isActionNameSpecifier, laboratoryCalculator, inActionsSelectionTable, redactorSizeFactor, isFrozen, typeEditable, visibleInDR, userProfile_id, userProfileBehaviour, copyModifier, isVitalParam, vitalParamId, isODIIParam, ticketsNeeded, customSelect, autoFieldUserProfile, formulaAlias)
 (select * from 
 (select apt.deleted, at2.id actionType_id, apt.idx, apt.template_id, apt.name, apt.shortName, apt.descr, apt.unit_id, apt.typeName, apt.valueDomain, apt.defaultValue, apt.isVector, apt.norm, apt.sex, apt.age, apt.penalty, apt.penaltyUserProfile, apt.visibleInJobTicket, apt.visibleInTableRedactor, apt.isAssignable, apt.test_id, apt.defaultEvaluation, apt.canChangeOnlyOwner, apt.isActionNameSpecifier, apt.laboratoryCalculator, apt.inActionsSelectionTable, apt.redactorSizeFactor, apt.isFrozen, apt.typeEditable, apt.visibleInDR, apt.userProfile_id, apt.userProfileBehaviour, apt.copyModifier, apt.isVitalParam, apt.vitalParamId, apt.isODIIParam, apt.ticketsNeeded, apt.customSelect, apt.autoFieldUserProfile, apt.formulaAlias from ActionPropertyType apt, ActionType at2
@@ -148,4 +163,8 @@ where at2.group_id = 49895 and dtat.id =4602) as tmp
 where not EXISTS (select * from DestinationTree_ActionType dtat2 where dtat2.actionType_id = tmp.actionType_id)
 
 
+select * from DestinationTree_ActionType dtat order by id desc;
 
+
+
+select * from Person p where p.userProfile_id = 26 and p.Test_Person = 1;
