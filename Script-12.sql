@@ -1,0 +1,1 @@
+SELECT * FROM rbPrintTemplate WHERE name LIKE '%МСЭ%'
