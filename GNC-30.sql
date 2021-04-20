@@ -1,13 +1,29 @@
 select * from rbPrintTemplate rpt where rpt.jasper_template_uri REGEXP 'WSD'
 
 
-select * from Client c where c.lastName;
+select * from Client c where c.lastName = 'Мельникова' and c.firstName = 'Ольга' and c.patrName = 'Александровна';
 
 
+select * from ActionType at2 where at2.code=  'A26.09.020';
+
+
+select * from rbService rs where rs.code = 'A26.09.020';
+
+select a.* from Action a, Event e where a.event_id = e.id and e.client_id = 162372;
+
+
+select * from ActionType_Service ats where ats.master_id = 4792 and ats.service_id = 12569;
+
+
+select * from ActionType at2 where at2.id in (7236,7321, 7235,6990);
+
+
+select * from ActionType at2 where at2.group_id = 7235;
 
 
 SELECT
   a.id ActionId,
+  at.group_id ,
   pli.serviceCodeOW PLCode,
   IF(NOT ISNULL(pli.serviceNameOW), pli.serviceNameOW, at.name) Name,
   CASE WHEN a.plannedEndDate THEN date (a.plannedEndDate) ELSE date (a.begDate) END ActionDate,
@@ -62,14 +78,14 @@ AND a.deleted = 0
 AND e.client_id = $P{client_id}
 AND e.deleted = 0
 -- AND at.group_id NOT IN (111,128,6991)
-AND at.group_id NOT IN (111, /* Стационар */
+AND (at.group_id NOT IN (111, /* Стационар */
 128, /* Осмотры в отделении   */
 7271, /* Направления, извещения, путевки */
 8218, /* Эпикризы, выписки  */
 8219, /* Протоколы ВК  */
 8220, /* Консилиумы*/
 8221 /*Контроль качества (карты)   */
-)
+) or at.group_id is null)
 -- AND f.id NOT IN (2)
 GROUP BY ActionId,
          pli.serviceCodeOW
