@@ -4,7 +4,7 @@ select * from rbPrintTemplate rpt where rpt.id = 184;
 select * from TempInvalidELN tie ;
 
 
-	select tie.id,
+	select tie.id, tie.state 
     case when tie.duplicate = 0 and tie.isImported = 0 then tie.`number` end as `number_issued_to_data_first`, case when
     tie.duplicate = 1 and tie.isImported = 0 then tie.`number` end as `number_issued_to_data_contd`,
     case when tie.duplicate = 0 and tie.isImported = 1 then tie.`number` end as `number_issued_by_others_first`, case
