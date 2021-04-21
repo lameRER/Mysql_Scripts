@@ -247,4 +247,4 @@ select tie.id,
         
         
         
-        select * from TempInvalidELN tie where tie.`number` REGEXP '910058984870';
+        select * from TempInvalid tie where tie.`number` REGEXP '910058984870';
