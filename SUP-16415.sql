@@ -17,7 +17,10 @@ select * from ActionType at2 where at2.group_id = 11021;
 
 
 
-select at2.* 
+select apt.* 
 from ActionPropertyType apt, ActionType at2, rbJobType rjt 
 where at2.id in (11021,11028,11025,11019) and apt.actionType_id = at2.id and apt.deleted = 0 and apt.name = 'Номерок'
 and rjt.code = apt.valueDomain 
+
+
+select * from OrgStructure_ActionType where actionType_id in(11019,11025,11021,11028)
