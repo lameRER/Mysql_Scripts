@@ -67,9 +67,9 @@ order by  retres.idx, resrep.idx;
 select * from rbEpicrisisProperty rep where rep.id = 2196;
 
 
+select * from Event e where e.id= 31398;
 
-
-
+31398
 
 
 select min(dds.takeDatetime) `Начало`, max(dds.takeDatetime) `Окончание`, dds.takeDose `Доза`, rsn.mnn `МНН`
@@ -81,7 +81,9 @@ join ActionProperty ap2 on ap2.action_id = a.id and ap2.type_id in (SELECT apt.i
 join ActionProperty_Integer api on ap.id = api.id  and (api.value = 2 or api.value = 1)
 join ActionProperty_Integer api2 on ap2.id = api2.id and api2.value = dds.nomenclature_id
 WHERE dds.deleted = 0 
-GROUP by a.id, dds.takeDatetime 
+GROUP by time(dds.takeDatetime), dds.takeDose 
 order by dds.takeDatetime 
+
+select * from DrugDestinationSchedule where action_id in (select a.id from Action a where a.deleted= 0 and a.event_id = 31398);
 
 
