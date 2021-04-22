@@ -6,6 +6,13 @@ select * from ActionType at2 where at2.id = 43604;
 select * from ActionPropertyType apt where apt.actionType_id = 49962 and apt.deleted = 0 order by apt.idx;
 
 
+SQL="""select CONCAT_WS(' ', p2.lastName, p2.firstName, p2.patrName) from Action a
+join Action a2 on a2.id = a.parent_id and a2.deleted = 0
+join JsonData jd on jd.json REGEXP a2.id
+left join Person p2 on p2.id = REGEXP_REPLACE(STRINGDECODE(urldecoder(jd.json)), '.*"assist_id":.?"(\\d+)".*', '\\1')
+where a.event_id = context.id and a.deleted = 0 and a.actionType_id = 49940 order by a.createDatetime desc limit 1 ;"""
+
+
 select apt.customSelect, apt.* from ActionPropertyType apt 
 join ActionType at2 on at2.id = apt.actionType_id and at2.id = 49962-- in(49944,49957,49962)
 order by at2.id, apt.idx
