@@ -47,3 +47,41 @@ SET @stmt2 = CONCAT(
     DEALLOCATE PREPARE _sql;
     
 END
+
+
+
+select count(rep.id) num,
+GROUP_CONCAT(CONCAT_WS(' ',ret.code, ret.name,'retres.idx:',retres.idx,'resper.idx:',resrep.idx) separator '\n') ret, 
+GROUP_CONCAT(CONCAT_WS(' ', retres.id, resrep.id, res.id, res.name, res.description)separator '\n') res, 
+rep.* from rbEpicrisisTemplates ret
+left join rbEpicrisisTemplates_rbEpicrisisSections retres on retres.id_rbEpicrisisTemplates = ret.id 
+left join rbEpicrisisSections res on retres.id_rbEpicrisisSections = res.id 
+left join rbEpicrisisSections_rbEpicrisisProperty resrep on resrep.id_rbEpicrisisSections = res.id 
+left join rbEpicrisisProperty rep on resrep.id_rbEpicrisisProperty = rep.id 
+where rep.name REGEXP 'медика'
+group by res.id, rep.id
+order by  retres.idx, resrep.idx;
+
+
+
+select * from rbEpicrisisProperty rep where rep.id = 2196;
+
+
+
+
+
+
+
+select min(dds.takeDatetime) `Начало`, max(dds.takeDatetime) `Окончание`, dds.takeDose `Доза`, rsn.mnn `МНН`
+from DrugDestinationSchedule dds
+join Action a on a.id = dds.action_id and a.deleted = 0 and a.event_id = %s
+join rbStockNomenclature rsn on rsn.id = dds.nomenclature_id and rsn.deleted = 0
+join ActionProperty ap on ap.action_id = a.id and ap.type_id in (SELECT apt.id from ActionPropertyType apt where apt.deleted = 0 and apt.name REGEXP 'Статус' and apt.actionType_id in (select at2.id from ActionType at2 where at2.flatCode REGEXP 'drug_theraphy|drug_theraphy_complex' and at2.deleted = 0))
+join ActionProperty ap2 on ap2.action_id = a.id and ap2.type_id in (SELECT apt.id from ActionPropertyType apt where apt.deleted = 0 and apt.name REGEXP 'код' and apt.actionType_id in (select at2.id from ActionType at2 where at2.flatCode REGEXP 'drug_theraphy|drug_theraphy_complex' and at2.deleted = 0))
+join ActionProperty_Integer api on ap.id = api.id  and (api.value = 2 or api.value = 1)
+join ActionProperty_Integer api2 on ap2.id = api2.id and api2.value = dds.nomenclature_id
+WHERE dds.deleted = 0 
+GROUP by a.id, dds.takeDatetime 
+order by dds.takeDatetime 
+
+
