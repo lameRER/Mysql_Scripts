@@ -1,0 +1,1 @@
+select * from rbPrintTemplate where name REGEXP 'результаты' and context = 'token';
