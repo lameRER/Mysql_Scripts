@@ -55,4 +55,6 @@ INSERT INTO s11.rbUserProfile
 VALUES(35, '0000-00-00 00:00:00', NULL, '0000-00-00 00:00:00', NULL, 'diag_doctor', 'Врач ИД');
 
 
-
+select at2.id
+from ActionType at2
+limit 2
