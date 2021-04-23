@@ -58,3 +58,8 @@ VALUES(35, '0000-00-00 00:00:00', NULL, '0000-00-00 00:00:00', NULL, 'diag_docto
 select at2.id
 from ActionType at2
 limit 2
+
+
+select * from OrgStructure where code = 'Функциональная диагностика'
+
+select * from OrgStructure_Job where jobType_id in(87,88,89,90,91)
