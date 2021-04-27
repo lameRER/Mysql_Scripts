@@ -1,4 +1,5 @@
-select * from rbPrintTemplate rpt where rpt.name REGEXP 'qr';
+use s11;
+select rpt.id, rpt.name, rpt.default from rbPrintTemplate rpt where rpt.name REGEXP 'qr';
 
 select * from ActionType at2 where at2.context = 'QR';
 
