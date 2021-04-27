@@ -63,3 +63,9 @@ limit 2
 select * from OrgStructure where code = 'Функциональная диагностика'
 
 select * from OrgStructure_Job where jobType_id in(87,88,89,90,91)
+
+
+
+
+
+select * from ActionType at2 ;

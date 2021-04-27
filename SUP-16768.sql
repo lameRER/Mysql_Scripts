@@ -10,7 +10,7 @@ select * from rbPrintTemplate rpt where rpt.name REGEXP 'qr';
     '' end,
     ifnull(c.SNILS,''), ifnull(cd.serial,''),ifnull(cd.`number`,''), ifnull(cp.`number`,''),
     ifnull(GROUP_CONCAT(
-    ifnull(case when apt.typeName = 'String' then REGEXP_REPLACE(aps.value, '(\\d+\\d+\\d+)//(\\d+\\d+)', '\\1.\\2')
+    ifnull(case when apt.typeName = 'String' then REGEXP_REPLACE(aps.value, '(\\d+\\d+\\d+)/(\\d+\\d+)', '\\1.\\2')
     when apt.typeName = 'Date' then apd.value
     when apt.typeName = 'Integer' then api.value
     when apt.typeName = 'Temperature' then apt2.value
@@ -37,5 +37,13 @@ select * from rbPrintTemplate rpt where rpt.name REGEXP 'qr';
     left join Organisation o2 on o2.id = cp.insurer_id and o2.deleted = 0
     left join netricaSMO ns on ns.OGRN = o2.OGRN AND o2.KPP = ns.KPP
     join Person p2 on p2.id = e.execPerson_id and p2.deleted = 0
-    where c.deleted = 0-- and e.id = {EventId}
-    GROUP by e.client_id 
+    where c.deleted = 0 and e.id in (select e.id from Event e where e.client_id = 443180)
+    
+    
+    select * from Event e where e.client_id = 443180;
+    
+   select * from Client c where c.id= 443180;
+   
+  
+  
+  select * from ActionTemplate at2 ;
