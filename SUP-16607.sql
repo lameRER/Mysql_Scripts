@@ -56,3 +56,10 @@ select ats.* from ActionType_Service ats, ActionType at2 where at2.group_id = 12
 
 select * from ActionType at2 where group_id in(12453,12455) and at2.deleted = 0;
 
+
+select * from ActionPropertyType apt, ActionType at2 where at2.code = 'А05.10.008' and apt.actionType_id = at2.id;
+
+
+select * from rbReferralExamType;
+
+select * from rbService rs where rs.code = 'А04.16.001';
