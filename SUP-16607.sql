@@ -62,4 +62,4 @@ select * from ActionPropertyType apt, ActionType at2 where at2.code = 'А05.10.0
 
 select * from rbReferralExamType;
 
-select * from rbService rs where rs.code = 'А04.16.001';
+select * from rbService rs where rs.Fed_code REGEXP '04\.28\.001';
