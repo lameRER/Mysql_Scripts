@@ -1,0 +1,1 @@
+select * from ActionType at2 where at2.name = 'test_1';

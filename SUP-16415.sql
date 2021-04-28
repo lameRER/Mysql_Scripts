@@ -69,3 +69,7 @@ select * from OrgStructure_Job where jobType_id in(87,88,89,90,91)
 
 
 select * from ActionType at2 ;
+
+
+
+select * from rbPrintTemplate  where name REGEXP 'направление на экг';
