@@ -1,0 +1,1 @@
+select * from ActionType at2 where at2.group_id in (select at3.id from ActionType at3 where at3.code in('КТ - уКРТбк','КТ- уКРТом'));
