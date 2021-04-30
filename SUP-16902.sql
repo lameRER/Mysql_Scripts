@@ -28,8 +28,7 @@ AND apt.name = 'ЗАКЛЮЧЕНИЕ:'
 AND (aps.value IS NOT NULL OR aps.value != '' OR aps.value != ' ')
 AND CASE 
 WHEN e.eventType_id IN (SELECT eventtype.id FROM eventtype WHERE eventtype.name LIKE '%Дневно%' AND a.event_id = 6287117) 
-THEN (DATE_SUB(e.execDate, INTERVAL 6 MONTH) >= date(a.endDate)) 
-ELSE (date(a.endDate) >= (SELECT date(Action.begDate) FROM Action WHERE actionType_id = 131 AND event_id = 6287117 AND deleted = 0) 
+THEN (date(a.endDate) >= (SELECT date(Action.begDate) FROM Action WHERE actionType_id = 131 AND event_id = 6287117 AND deleted = 0) 
 AND (date(a.endDate) <= (SELECT date(Action.endDate) FROM Action  WHERE actionType_id = 133 AND event_id = 6287117 AND deleted = 0) 
 OR date(a.endDate) IS NULL OR (SELECT date(Action.endDate) FROM Action  WHERE actionType_id = 133 AND event_id = 6287117 AND deleted = 0) IS NULL )) END
 ORDER BY a.endDate, at.id, apt.idx;
