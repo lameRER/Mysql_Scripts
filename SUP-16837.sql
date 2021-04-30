@@ -30,7 +30,7 @@ where at2.group_id in (select at3.id from ActionType at3 where at3.code in('КТ
 
 
 select * from ActionType ;
-select * from ActionPropertyType where deleted = 0 and actionType_id in (select id from ActionType where group_id =42804 ) group by name;
+select * from ActionPropertyType where deleted = 0 and actionType_id in (select id from ActionType where group_id in(42803,42804)) ;
 
 
 select * from ActionType at2 where group_id in(42803,42804);
@@ -47,4 +47,4 @@ where EXISTS (select * from ActionPropertyType apt2 where apt2.actionType_id = t
 select * from rbPrintTemplate rpt where context = 'KT-02';
 
 
-select * from Person where login = 'Lustik_kg';
+select * from Person where login regexp 'врач';
