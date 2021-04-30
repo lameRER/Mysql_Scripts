@@ -46,5 +46,12 @@ where EXISTS (select * from ActionPropertyType apt2 where apt2.actionType_id = t
 
 select * from rbPrintTemplate rpt where context = 'KT-02';
 
+select at2.* from DestinationTree_ActionType dat, ActionType at2 
+where dat.master_id in(10073,10074) and at2.id = dat.actionType_id ;
+
+select * from destinat;
+
+select * from DestinationTree where deleted= 0 and visible = 1;
+
 
 select * from Person where login regexp 'врач';
