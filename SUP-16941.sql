@@ -28,7 +28,7 @@ select * from ActionType at2 order by id DESC ;
 select * from ActionType at2 where at2.id in (12945,12944);
 
 
-select * from ActionPropertyType apt where apt.actionType_id = 12945;
+select * from ActionPropertyType apt where apt.actionType_id in(12945,12944);
 
 select * from ActionPropertyType apt order by id desc;
 
@@ -48,3 +48,6 @@ VALUES (43226, 0, 0, 'line', '', '', null, 'String', '', '', 0, '', 0, '', 0, ''
 
 -- INSERT ActionPropertyType (actionType_id, idx, template_id, name, shortName, descr, unit_id, typeName, valueDomain, defaultValue, isVector, norm, sex, age, penalty, penaltyUserProfile, visibleInJobTicket, visibleInTableRedactor, isAssignable, test_id, defaultEvaluation, canChangeOnlyOwner, isActionNameSpecifier, laboratoryCalculator, inActionsSelectionTable, redactorSizeFactor, isFrozen, typeEditable, visibleInDR, userProfile_id, userProfileBehaviour, copyModifier, isVitalParam, vitalParamId, isODIIParam) 
 VALUES ((SELECT at.id FROM ActionType at WHERE at.name REGEXP '' AND at.code = '16941_1' AND at.deleted = 0) as temp, 0, 0, 'line', '', '', null, 'String', '', '', 0, '', 0, '', 0, '', 0, 0, 0, NULL, 0, 0, 0, '', 0, 0, 0, 1, 1, NULL, 0, 0, 0, NULL, 0);
+
+
+select * from Person p where p.userProfile_id = 1;
