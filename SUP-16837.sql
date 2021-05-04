@@ -32,6 +32,9 @@ where at2.group_id in (select at3.id from ActionType at3 where at3.code in('КТ
 select * from ActionType ;
 select * from ActionPropertyType where deleted = 0 and actionType_id in (select id from ActionType where group_id in(42803,42804)) ;
 
+select * from ActionType where group_id in(42803,42804)
+
+
 select * from ActionType at2 where at2.group_id in (42803,42804);
 
 
