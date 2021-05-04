@@ -28,7 +28,7 @@ select * from ActionType at2 order by id DESC ;
 select * from ActionType at2 where at2.id in (12945,12944);
 
 
-select * from ActionPropertyType apt where apt.actionType_id = 12944;
+select * from ActionPropertyType apt where apt.actionType_id = 12945;
 
 select * from ActionPropertyType apt order by id desc;
 
