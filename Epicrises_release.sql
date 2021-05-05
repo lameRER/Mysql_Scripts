@@ -8,8 +8,8 @@ left join rbEpicrisisTemplates_rbEpicrisisSections retres on retres.id_rbEpicris
 left join rbEpicrisisSections res on retres.id_rbEpicrisisSections = res.id 
 left join rbEpicrisisSections_rbEpicrisisProperty resrep on resrep.id_rbEpicrisisSections = res.id 
 left join rbEpicrisisProperty rep on resrep.id_rbEpicrisisProperty = rep.id 
-where rep.name REGEXP 'проведенное ле' and resrep.id = 39871
-group by res.id, rep.id
+-- where rep.name REGEXP 'проведенное ле' and resrep.id = 39871
+group by rep.id
 order by  retres.idx, resrep.idx;
 -- order by rep.id 
 
