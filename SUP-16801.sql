@@ -1,0 +1,1 @@
+select * from rbprinttemplate r where r.name regexp 'МСЭ'
