@@ -9,3 +9,5 @@ select * from Person p where p.login = 'виста';
 
 
 select * from rbPrintTemplate rpt where rpt.id = 1077;
+
+select * from ActionPropertyType apt where apt.actionType_id  =25740;
