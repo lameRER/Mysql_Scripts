@@ -2,3 +2,6 @@ select lpu_name, lpu_ogrn from TempInvalidELN tie where tie.`number` = '91005897
 
 
 select * from rbPrintTemplate where id = 3353
+
+
+sf

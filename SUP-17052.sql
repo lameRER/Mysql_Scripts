@@ -1,0 +1,1 @@
+select * from rbPrintTemplate rpt where rpt.id=3353;
