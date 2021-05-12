@@ -32,3 +32,6 @@
     join Person p2 on p2.id = e.execPerson_id and p2.deleted = 0
     where c.deleted = 0 
     GROUP by c.id
+    
+    
+    
