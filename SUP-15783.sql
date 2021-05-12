@@ -37,7 +37,7 @@ left join ClientPolicy cp on cp.client_id = c.id and cp.deleted = 0 and cp.id = 
 where cp2. client_id= cp.client_id and cp2.deleted = 0 ORDER by cp2.createDatetime desc limit 1)
 join Event e on e.client_id = c.id and e.deleted = 0
 join Action a on a.event_id = e.id and a.deleted = 0
-join ActionType at2 on at2.id = a.actionType_id and at2.deleted = 0 and at2.id = 11468
+join ActionType at2 on at2.id = a.actionType_id and at2.deleted = 0 and at2.context = "QR"
 JOIN ActionPropertyType apt on apt.actionType_id = at2.id and apt.deleted = 0
 left join ActionProperty ap on ap.action_id = a.id and ap.deleted = 0 and apt.id = ap.type_id 
 left join ActionProperty_String aps on aps.id = ap.id
