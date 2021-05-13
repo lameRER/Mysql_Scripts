@@ -10,7 +10,7 @@ code, CONCAT(name, ' (Выбор)'), context, fileName, `default`, dpdAgreement,
 
 
 
-select id, `default` from rbPrintTemplate where id = 1388;
+select id, name, `default` from rbPrintTemplate where id = 1388;
 
 
 
