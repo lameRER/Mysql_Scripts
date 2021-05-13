@@ -1,1 +1,1 @@
-SELECT * from rbPrintTemplate rpt 
+SELECT * from rbPrintTemplate rpt where rpt.name REGEXP 'Согласия' and rpt.context ='token'
