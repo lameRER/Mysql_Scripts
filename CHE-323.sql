@@ -17,3 +17,7 @@ select id, name, `default` from rbPrintTemplate where id = 1388;
 
 
 
+select apt.customSelect, apt.* from ActionPropertyType apt where apt.customSelect != '';
+
+
+select * from ActionType at2 where at2.code = 'osm_profpatolog';
