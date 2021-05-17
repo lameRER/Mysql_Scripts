@@ -54,4 +54,7 @@ select apt.isVitalParam, apt.vitalParamId, apt.* from ActionPropertyType apt whe
 select * from rbPrintTemplate rpt where rpt.context in (select at2.context from ActionType at2 where at2.group_id =56182);
 
 
-select * from ActionPropertyType apt where apt.isVitalParam = 1 and apt.deleted = 0;
+select apt.vitalParamId, apt.* from ActionPropertyType apt where apt.actionType_id =56184 and apt.deleted = 0;
+
+
+select * from rbVitalParams rvp ;
