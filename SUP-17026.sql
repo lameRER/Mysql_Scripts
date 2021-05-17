@@ -63,7 +63,7 @@ select code, name, `type`, IF(sprav !='', sprav,  NULL) from TempVital
 ) as tmp
 where not EXISTS (select * from rbVitalParams rvp where rvp.code = tmp.code)
 
-
+use s11;
 
 select apt.isVitalParam, apt.vitalParamId, apt.* from ActionPropertyType apt where apt.actionType_id in (select at2.id from ActionType at2 where at2.group_id =56182) and apt.isVitalParam = 0 ORDER by apt.actionType_id, apt.idx ;
 select * from rbVitalParams where code ='608';
