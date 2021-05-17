@@ -21,3 +21,14 @@ select apt.customSelect, apt.* from ActionPropertyType apt where apt.customSelec
 
 
 select * from ActionType at2 where at2.code = 'osm_profpatolog';
+
+
+
+
+
+
+
+
+
+
+call procEpicrisisAnalyzes(31398, "'Исследование материала желудка на наличие геликобактер пилори (Helicobacter pylori)'")
