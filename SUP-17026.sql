@@ -65,8 +65,8 @@ where not EXISTS (select * from rbVitalParams rvp where rvp.code = tmp.code)
 
 
 
-select apt.isVitalParam, apt.vitalParamId, apt.* from ActionPropertyType apt where apt.actionType_id in (select at2.id from ActionType at2 where at2.group_id =56182) ORDER by apt.actionType_id, apt.idx ;
-select * from rbVitalParams where code ='603' ;
+select apt.isVitalParam, apt.vitalParamId, apt.* from ActionPropertyType apt where apt.actionType_id in (select at2.id from ActionType at2 where at2.group_id =56182) and apt.isVitalParam = 0 ORDER by apt.actionType_id, apt.idx ;
+select * from rbVitalParams where code ='613' ;
 
 ;
 
