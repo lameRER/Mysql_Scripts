@@ -48,6 +48,7 @@ select * from ActionType at2 where at2.group_id = 56182;
 SELECT apt.name FROM ActionPropertyType apt JOIN ActionType at ON apt.actionType_id = at.id WHERE at.name REGEXP '' AND at.code = '17026-1' AND apt.deleted = 0 ORDER BY apt.idx
 
 
-select * from ActionPropertyType apt where apt.actionType_id =56183;
+select * from ActionPropertyType apt where apt.actionType_id in (select at2.id from ActionType at2 where at2.group_id =56182)
+;
 
-
+select * from rbPrintTemplate rpt where rpt.context in (select at2.context from ActionType at2 where at2.group_id =56182);
