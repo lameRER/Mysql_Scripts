@@ -48,13 +48,26 @@ select * from ActionType at2 where at2.group_id = 56182;
 SELECT apt.name FROM ActionPropertyType apt JOIN ActionType at ON apt.actionType_id = at.id WHERE at.name REGEXP '' AND at.code = '17026-1' AND apt.deleted = 0 ORDER BY apt.idx
 
 
-select apt.isVitalParam, apt.vitalParamId, apt.* from ActionPropertyType apt where apt.actionType_id in (select at2.id from ActionType at2 where at2.group_id =56182) ORDER by apt.actionType_id, apt.idx 
+
 ;
 
 select * from rbPrintTemplate rpt where rpt.context in (select at2.context from ActionType at2 where at2.group_id =56182);
 
 
-select apt.vitalParamId, apt.* from ActionPropertyType apt where apt.actionType_id =56184 and apt.deleted = 0;
 
 
-select * from rbVitalParams rvp ;
+
+insert into rbVitalParams (code, name, possible_values, dict_OID)
+select * from (
+select code, name, `type`, IF(sprav !='', sprav,  NULL) from TempVital
+) as tmp
+where not EXISTS (select * from rbVitalParams rvp where rvp.code = tmp.code)
+
+
+
+select apt.isVitalParam, apt.vitalParamId, apt.* from ActionPropertyType apt where apt.actionType_id in (select at2.id from ActionType at2 where at2.group_id =56182) ORDER by apt.actionType_id, apt.idx ;
+select * from rbVitalParams where code ='603' ;
+
+;
+
+select * from ActionPropertyType apt where apt.vitalParamId is not null and apt.name ='Гражданство';
