@@ -65,12 +65,14 @@ where not EXISTS (select * from rbVitalParams rvp where rvp.code = tmp.code)
 
 use s11;
 
-select apt.id, apt.name, apt.typeName, apt.valueDomain , rvp.code, rvp.name, rvp.possible_values, rvp.dict_OID from ActionPropertyType apt 
+select apt.id, apt.name, apt.typeName, apt.valueDomain, apt.unit_id, rvp.code, rvp.name, rvp.possible_values, rvp.dict_OID from ActionPropertyType apt 
 join rbVitalParams rvp on rvp.id = apt.vitalParamId and rvp.possible_values != 'Справочник'
-where apt.valueDomain = '' and  apt.actionType_id in 
+where /*apt.valueDomain = '' and*/  apt.actionType_id in 
 (select at2.id from ActionType at2 where at2.group_id =56182) and apt.isVitalParam = 1 ORDER by apt.actionType_id, apt.idx ;
 select * from rbVitalParams where code ='608';
 ;
+
+select * from rbUnit ru ;
 
 select * from ;
 
