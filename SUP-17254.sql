@@ -10,7 +10,9 @@ where e.client_id = 704126 and e.deleted = 0
 
 
 
-   select CONCAT_WS('/', IFNULL(c.lastName,''), ifnull(c.firstName,''), ifnull(c.patrName,''),
+   select
+   p2.SNILS, 
+   CONCAT_WS('/', IFNULL(c.lastName,''), ifnull(c.firstName,''), ifnull(c.patrName,''),
     ifnull(DATE_FORMAT(c.birthDate, '%d.%m.%Y'),''), CASE when c.sex = 1 then 'Мужской' when c.sex = 2 then 'Женский' else
     '' end,
     ifnull(c.SNILS,''), ifnull(cd.serial,''),ifnull(cd.`number`,''), ifnull(cp.`number`,''),
@@ -21,7 +23,7 @@ where e.client_id = 704126 and e.deleted = 0
     when apt.typeName = 'Temperature' then apt2.value
 	when apt.typeName = 'Reference' then if(apt.valueDomain !='SpravYesNo', apr.value, (SELECT syn.code FROM SpravYesNo syn where syn.id = apr.value)) end, '') separator '/'), ''),
     ifnull(rdt.code,''),ifnull(DATE_FORMAT(cd.`date`, '%d.%m.%Y'),''),ifnull(rpk.code,''),ifnull(ns.SMOCOD,''),
-    ifnull(p2.lastName ,''),ifnull(p2.firstName ,''),ifnull(p2.patrName ,''),ifnull(p2.SNILS ,'')) as `client`
+    ifnull(p2.lastName ,''),ifnull(p2.firstName ,''),ifnull(p2.patrName ,''),ifnull(CONCAT(SUBSTR(p2.SNILS, 1, 3), '-', SUBSTR(p2.SNILS, 4, 3), '-', SUBSTR(p2.SNILS, 7, 3), ' ', SUBSTR(p2.SNILS, 10, 2)) ,'')) as `client`
     from Client c
     left join ClientDocument cd on cd.client_id = c.id and cd.deleted = 0 and cd.id = (select cd2.id from ClientDocument
     cd2 where cd.client_id = cd2.client_id and cd2.deleted = 0 order by cd2.createDatetime desc LIMIT 1)
@@ -43,3 +45,11 @@ where e.client_id = 704126 and e.deleted = 0
     left join netricaSMO ns on ns.OGRN = o2.OGRN AND o2.KPP = ns.KPP
     join Person p2 on p2.id = e.execPerson_id and p2.deleted = 0
     where c.deleted = 0 and e.id = 4634648
+    
+    set @test = '08594427916';
+    select CONCAT(SUBSTR(@test, 1, 3), '-', SUBSTR(@test, 4, 3), '-', SUBSTR(@test, 7, 3), ' ', SUBSTR(@test, 10, 2));
+    
+   select * from rbPrintTemplate rpt where rpt.context = 'qr';
+   
+    
+    select * from netricaSMO ns where ns.KPP = '783501001'-- ns.OGRN = '027809172489';

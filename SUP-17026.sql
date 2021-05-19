@@ -93,7 +93,11 @@ select * from netricaLocalProcess nlp ;
 
 select * from ActionPropertyType apt where apt.vitalParamId is not null and apt.name ='Гражданство';\
 
+select * from Event e where e.id = 33845840;
+
+select * from Action a where a.event_id in(select e.event_id from Epicrisis e where e.name ='Выписной эпикриз') and a.actiontype_id =15079 ORDER by a.id desc;
 
 
+select * from Epicrisis e order by e.id DESC ;
 
-select * from Epicrisis e ;
+select * from ActionType at2 where at2.name ='выписка';
