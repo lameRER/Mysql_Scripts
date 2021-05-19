@@ -57,6 +57,8 @@ select * from ActionPropertyType apt where apt.actionType_id =56190;
 
 ;
 
+
+
 select * from rbPrintTemplate rpt where rpt.context in (select at2.context from ActionType at2 where at2.group_id =56182);
 
 
