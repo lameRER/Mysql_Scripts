@@ -57,11 +57,14 @@ select * from ActionPropertyType apt where apt.actionType_id =56190;
 
 ;
 
+UPDATE 
+rbPrintTemplate rpt 
+set `default` = REGEXP_REPLACE(rpt.`default`, '(.*)(<b.*client.*)', '\\1{if: client}\\2{end:}')
+where rpt.context in (select at2.context from ActionType at2 where at2.group_id =56182);
 
+select REGEXP_REPLACE(rpt.`default`, '(.*)(<b.*client.*)', '\\1{if: client}\\2{end:}'), rpt.* from rbPrintTemplate rpt where rpt.context in (select at2.context from ActionType at2 where at2.group_id =56182);
 
-select * from rbPrintTemplate rpt where rpt.context in (select at2.context from ActionType at2 where at2.group_id =56182);
-
-
+select REGEXP_REPLACE(rpt.`default`, '(\{client.fullName\}|\{client.birthDate\}|\{client.age\})', '{if: client}\\1{end:}'), rpt.`default` from rbPrintTemplate rpt where rpt.`default` REGEXP 'client.fullName' and REGEXP_SUBSTR(rpt.`default`, '.*client.fullName.*client.birthDate.*client.age.*') != '';
 
 
 
