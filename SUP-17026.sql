@@ -91,4 +91,9 @@ select * from ;
 
 select * from netricaLocalProcess nlp ;
 
-select * from ActionPropertyType apt where apt.vitalParamId is not null and apt.name ='Гражданство';
+select * from ActionPropertyType apt where apt.vitalParamId is not null and apt.name ='Гражданство';\
+
+
+
+
+select * from Epicrisis e ;
