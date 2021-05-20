@@ -82,7 +82,7 @@ where apt.actionType_id in
 (select at2.id from ActionType at2 where at2.group_id =56182) and apt.isVitalParam = 1 ORDER by apt.actionType_id, apt.idx ;
 
 
-select * from ActionPropertyType apt where apt.vitalParamId = 766;
+select * from ActionPropertyType apt where a	pt.vitalParamId = 766;
 
 
 select * from rbVitalParams where code ='601';

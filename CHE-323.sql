@@ -1,6 +1,6 @@
 SELECT * from rbPrintTemplate rpt where rpt.name REGEXP 'Согласия' and rpt.context ='token'
 
-
+use s11;
 
 INSERT into rbPrintTemplate (createDatetime, createPerson_id, modifyDatetime, modifyPerson_id, code, name, context, fileName, `default`, dpdAgreement, `type`, hideParam, banUnkeptDate, counter_id, deleted, isPatientAgreed, groupName, documentType_id, isEditableInWeb, chkProfiles, chkPersons, pageOrientation, sendMail) 
 select 
