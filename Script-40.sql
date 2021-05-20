@@ -26,6 +26,14 @@ left join Person p3 on p3.id = a.setPerson_id
 left join Person p4 on p4.id = a.person_id
 where a.event_id = 33850725;
 
+
+
+select 	
+a.*
+from Action a
+where a.event_id = 33850725;
+
+
 Статус выполнения: 0-Начато, 1-Ожидание, 2-Закончено, 3-Отменено, 4-Без результата(Отменена анес)
 
 
