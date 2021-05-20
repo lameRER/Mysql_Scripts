@@ -1,0 +1,1 @@
+select * from ActionPropertyType apt where apt.name REGEXP 'имт' and apt.formulaAlias != '';
