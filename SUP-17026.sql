@@ -80,8 +80,16 @@ select apt.id, apt.penalty, apt.name, apt.typeName, apt.valueDomain, apt.unit_id
 join rbVitalParams rvp on rvp.id = apt.vitalParamId -- and rvp.possible_values != 'Справочник'
 where apt.actionType_id in 
 (select at2.id from ActionType at2 where at2.group_id =56182) and apt.isVitalParam = 1 ORDER by apt.actionType_id, apt.idx ;
--- select * from rbVitalParams where code ='608';
+
+
+select * from ActionPropertyType apt where apt.vitalParamId = 766;
+
+
+select * from rbVitalParams where code ='601';
 ;
+
+
+
 
 select * from netricaYesNo nyn ;
 

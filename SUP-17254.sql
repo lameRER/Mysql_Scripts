@@ -10,14 +10,12 @@ where e.client_id = 704126 and e.deleted = 0
 
 
 
-   select
-   p2.SNILS, 
-   CONCAT_WS('/', IFNULL(c.lastName,''), ifnull(c.firstName,''), ifnull(c.patrName,''),
+   select CONCAT_WS('/', IFNULL(c.lastName,''), ifnull(c.firstName,''), ifnull(c.patrName,''),
     ifnull(DATE_FORMAT(c.birthDate, '%d.%m.%Y'),''), CASE when c.sex = 1 then 'Мужской' when c.sex = 2 then 'Женский' else
     '' end,
     ifnull(c.SNILS,''), ifnull(cd.serial,''),ifnull(cd.`number`,''), ifnull(cp.`number`,''),
     ifnull(GROUP_CONCAT(
-    ifnull(case when apt.typeName = 'String' then REGEXP_REPLACE(aps.value, '(\\d+\\d+\\d+)/(\\d+\\d+)', '\\1.\\2')
+    ifnull(case when apt.typeName = 'String' then REPLACE(aps.value, '/', '.')
     when apt.typeName = 'Date' then apd.value
     when apt.typeName = 'Integer' then api.value
     when apt.typeName = 'Temperature' then apt2.value
@@ -44,7 +42,7 @@ where e.client_id = 704126 and e.deleted = 0
     left join Organisation o2 on o2.id = cp.insurer_id and o2.deleted = 0
     left join netricaSMO ns on ns.OGRN = o2.OGRN AND o2.KPP = ns.KPP
     join Person p2 on p2.id = e.execPerson_id and p2.deleted = 0
-    where c.deleted = 0 and e.id = 4634648
+    where c.deleted = 0 and e.id = 4632269
     
     set @test = '08594427916';
     select CONCAT(SUBSTR(@test, 1, 3), '-', SUBSTR(@test, 4, 3), '-', SUBSTR(@test, 7, 3), ' ', SUBSTR(@test, 10, 2));
