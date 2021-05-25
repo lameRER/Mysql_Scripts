@@ -102,17 +102,22 @@ select * from 15_EIS_POL;
 
 
 select 
-e.id, 
+date(a.plannedEndDate) as dates,
 CONCAT_WS(' ', c.lastName, c.firstName, c.patrName) as FIO,
 d3.MKB as Diagnosis,
-a.specifiedName as Operation
+a.specifiedName as Operation,
+os.name as OperatingRoom
 from Event e 
 join Client c on c.id = e.client_id and c.deleted = 0
-left join Diagnostic d2 on d2.event_id = e.id and d2.deleted = 0
+left join Diagnostic d2 on d2.event_id = e.id and d2.deleted = 0 and d2.id = (select max(d.id) from Diagnostic d where d.event_id = e.id)
 left join Diagnosis d3 on d3.id = d2.diagnosis_id and d3.deleted = 0
-left join rbDiagnosisType rdt on d2.diagnosisType_id = rdt.id
-left join `Action` a on a.event_id = e.id and a.deleted = 0
-WHERE e.eventType_id = 94 and e.deleted = 0	and a.specifiedName != ''
+join rbDiagnosisType rdt on d2.diagnosisType_id = rdt.id
+join `Action` a on a.event_id = e.id and a.deleted = 0 and Date(a.plannedEndDate) = '2021-05-26' and a.status != 3 and a.specifiedName != ''
+left join JsonData jd on jd.id REGEXP a.id 
+left join OrgStructure os on os.id = REGEXP_REPLACE(STRINGDECODE(urldecoder(jd.json)), '.*"table":.?"(\\d+)".*', '\\1')
+WHERE e.eventType_id = 94 and e.deleted = 0	
+ORDER by os.name, a.plannedEndDate 
+-- GROUP by a.id
 
 
 
@@ -132,8 +137,8 @@ select * from Event e where e.client_id = 730748 ORDER by id DESC ;
 select * from `Action` a where a.event_id = 33847661;
 
 
-select REGEXP_REPLACE(STRINGDECODE(urldecoder(jd.json)), '.*"table":.?"(\\d+)".*', '\\1') as oper from JsonData jd 
-join OrgStructure os on os.id = 
+select os.name, REGEXP_REPLACE(STRINGDECODE(urldecoder(jd.json)), '.*"table":.?"(\\d+)".*', '\\1') from JsonData jd 
+join OrgStructure os on os.id = REGEXP_REPLACE(STRINGDECODE(urldecoder(jd.json)), '.*"table":.?"(\\d+)".*', '\\1')
 where jd.id REGEXP '100417756'
 
 
