@@ -156,9 +156,3 @@ select * from JsonData jd where jd.id REGEXP 'action';
 
 
 select * from OrgStructure os where os.id = 134;
-
-
-
-
-
-
