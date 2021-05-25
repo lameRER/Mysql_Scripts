@@ -112,7 +112,7 @@ join Client c on c.id = e.client_id and c.deleted = 0
 left join Diagnostic d2 on d2.event_id = e.id and d2.deleted = 0 and d2.id = (select max(d.id) from Diagnostic d where d.event_id = e.id)
 left join Diagnosis d3 on d3.id = d2.diagnosis_id and d3.deleted = 0
 join rbDiagnosisType rdt on d2.diagnosisType_id = rdt.id
-join `Action` a on a.event_id = e.id and a.deleted = 0 and Date(a.plannedEndDate) = '2021-05-26' and a.status != 3 and a.specifiedName != ''
+join `Action` a on a.event_id = e.id and a.deleted = 0 and a.status != 3 and a.specifiedName != ''
 left join JsonData jd on jd.id REGEXP a.id 
 left join OrgStructure os on os.id = REGEXP_REPLACE(STRINGDECODE(urldecoder(jd.json)), '.*"table":.?"(\\d+)".*', '\\1')
 WHERE e.eventType_id = 94 and e.deleted = 0	
