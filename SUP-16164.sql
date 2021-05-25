@@ -106,7 +106,10 @@ date(a.plannedEndDate) as dates,
 CONCAT_WS(' ', c.lastName, c.firstName, c.patrName) as FIO,
 d3.MKB as Diagnosis,
 a.specifiedName as Operation,
-os.name as OperatingRoom
+os.name as OperatingRoom,
+'' as Anestes,
+'' as OperBrig,
+'' as GrBlood
 from Event e 
 join Client c on c.id = e.client_id and c.deleted = 0
 left join Diagnostic d2 on d2.event_id = e.id and d2.deleted = 0 and d2.id = (select max(d.id) from Diagnostic d where d.event_id = e.id)
@@ -116,8 +119,7 @@ join `Action` a on a.event_id = e.id and a.deleted = 0 and a.status != 3 and a.s
 left join JsonData jd on jd.id REGEXP a.id 
 left join OrgStructure os on os.id = REGEXP_REPLACE(STRINGDECODE(urldecoder(jd.json)), '.*"table":.?"(\\d+)".*', '\\1')
 WHERE e.eventType_id = 94 and e.deleted = 0	
-ORDER by os.name, a.plannedEndDate 
--- GROUP by a.id
+ORDER by os.name, a.plannedEndDate
 
 
 
