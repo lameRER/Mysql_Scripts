@@ -82,11 +82,30 @@ where apt.actionType_id in
 (select at2.id from ActionType at2 where at2.group_id =56182) and apt.isVitalParam = 1 ORDER by apt.actionType_id, apt.idx ;
 
 
-select * from ActionPropertyType apt where a	pt.vitalParamId = 766;
+select * from ActionPropertyType apt where apt.vitalParamId = 766;
 
 
 select * from rbVitalParams where code ='601';
-;
+
+
+
+select * from OrgStructure os where os.`type` = 5;
+
+
+select * from ActionType at2 where at2.group_id = 56182;
+
+-- INSERT into OrgStructure_ActionType (master_id, idx, actionType_id)
+select osat.master_id, osat.idx+1, 56183 actionType_id from OrgStructure_ActionType osat where master_id in (28,29,39,96) and id = (select max(osat2.id) from OrgStructure_ActionType osat2 where osat2.master_id= osat.master_id);
+
+insert into DestinationTree_ActionType (master_id, actionType_id, name, popular)
+select master_id, 56183 actionType_id, name, popular from DestinationTree_ActionType where master_id = 10029 LIMIT 1;
+
+select * from DestinationTree dt where id = 10029;
+
+select * from OrgStructure where name REGEXP 'Приемно'
+
+
+
 
 
 
@@ -109,3 +128,14 @@ select * from Action a where a.event_id in(select e.event_id from Epicrisis e wh
 select * from Epicrisis e order by e.id DESC ;
 
 select * from ActionType at2 where at2.name ='выписка';
+
+
+select * from  OrgStructure os ;
+
+
+select * from OrgStructure where name REGEXP 'РХМДиЛ';
+
+
+
+
+
