@@ -89,6 +89,17 @@ select * from rbVitalParams where code ='601';
 
 
 
+select osat.master_id, osat.idx, osat.actionType_id from OrgStructure_ActionType osat where master_id = 26 and id = (select max(osat2.id) from OrgStructure_ActionType osat2 where osat2.master_id= osat.master_id);
+
+select master_id, actionType_id, name, popular from DestinationTree_ActionType where master_id = 10029 LIMIT 1;
+
+select * from DestinationTree dt where id = 10029;
+
+select * from OrgStructure where name REGEXP 'Приемно'
+
+
+
+
 
 
 
@@ -115,7 +126,7 @@ select * from ActionType at2 where at2.name ='выписка';
 select * from  OrgStructure os ;
 
 
-
+select * from OrgStructure where name REGEXP 'РХМДиЛ';
 
 
 
