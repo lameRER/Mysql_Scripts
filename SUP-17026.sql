@@ -89,15 +89,16 @@ select * from rbVitalParams where code ='601';
 
 
 
-
+select * from OrgStructure os where os.`type` = 5;
 
 
 select * from ActionType at2 where at2.group_id = 56182;
 
+-- INSERT into OrgStructure_ActionType (master_id, idx, actionType_id)
+select osat.master_id, osat.idx+1, 56183 actionType_id from OrgStructure_ActionType osat where master_id in (28,29,39,96) and id = (select max(osat2.id) from OrgStructure_ActionType osat2 where osat2.master_id= osat.master_id);
 
-select osat.master_id, osat.idx, osat.actionType_id from OrgStructure_ActionType osat where master_id = 26 and id = (select max(osat2.id) from OrgStructure_ActionType osat2 where osat2.master_id= osat.master_id);
-
-select master_id, actionType_id, name, popular from DestinationTree_ActionType where master_id = 10029 LIMIT 1;
+insert into DestinationTree_ActionType (master_id, actionType_id, name, popular)
+select master_id, 56183 actionType_id, name, popular from DestinationTree_ActionType where master_id = 10029 LIMIT 1;
 
 select * from DestinationTree dt where id = 10029;
 
