@@ -86,7 +86,8 @@ select * from ActionPropertyType apt where apt.vitalParamId = 766;
 
 
 select * from rbVitalParams where code ='601';
-;
+
+
 
 
 
@@ -109,3 +110,14 @@ select * from Action a where a.event_id in(select e.event_id from Epicrisis e wh
 select * from Epicrisis e order by e.id DESC ;
 
 select * from ActionType at2 where at2.name ='выписка';
+
+
+select * from  OrgStructure os ;
+
+
+
+
+
+
+
+
