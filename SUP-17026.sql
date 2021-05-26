@@ -94,18 +94,18 @@ select * from OrgStructure os ;
 
 select * from ActionType at2 where at2.group_id = 56182 and at2.id not in(56183,56186,56187,56188,56190,56185);
 
-set @act = ;
+set @act = 56184;
 
 -- INSERT into OrgStructure_ActionType (master_id, idx, actionType_id)
 select osat.master_id, osat.idx+1, @act actionType_id from OrgStructure_ActionType osat where master_id in (72) and id = (select max(osat2.id) from OrgStructure_ActionType osat2 where osat2.master_id= osat.master_id);
 
 -- INSERT into rbJobType_ActionType (createDatetime, createPerson_id, modifyDatetime, modifyPerson_id, master_id, actionType_id, selectionGroup, onDayLimit)
-select NOW() createDatetime, null createPerson_id, NOW() modifyDatetime, null modifyPerson_id, rjtat.master_id, @act actionType_id, rjtat.selectionGroup, rjtat.onDayLimit from rbJobType_ActionType rjtat where rjtat.master_id = 107 and id = (select max(rjtat2.id) from rbJobType_ActionType rjtat2 where rjtat2.master_id = rjtat.master_id);
+select NOW() createDatetime, null createPerson_id, NOW() modifyDatetime, null modifyPerson_id, rjtat.master_id, @act actionType_id, rjtat.selectionGroup, rjtat.onDayLimit from rbJobType_ActionType rjtat where rjtat.master_id = 22 and id = (select max(rjtat2.id) from rbJobType_ActionType rjtat2 where rjtat2.master_id = rjtat.master_id);
 
 -- insert into DestinationTree_ActionType (master_id, actionType_id, name, popular)
 select master_id, @act actionType_id, (select at2.name from ActionType at2 where at2.id = @act) name, popular from DestinationTree_ActionType where master_id = 10029 LIMIT 1;
 
-select * from rbJobType rjt ;
+select * from rbJobType rjt where rjt.code = '3-3-7';
 
 select * from DestinationTree dt where deleted = 0 and id = 10029;
 
