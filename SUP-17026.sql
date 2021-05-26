@@ -98,9 +98,9 @@ select * from 15_EIS_POL;
 select * from OrgStructure os where os.parent_id = 99;
 
 
-select * from ActionType at2 where at2.group_id = 56182 and at2.id not in(56183,56186,56187,56188,56190,56185,56184);
+select * from ActionType at2 where at2.group_id = 56182 and at2.id not in(56183,56186,56187,56188,56190,56185);
 
-set @act = 56189;
+set @act = 56184;
 
 INSERT into OrgStructure_ActionType (master_id, idx, actionType_id)
 select osat.master_id, osat.idx+1, @act actionType_id from OrgStructure_ActionType osat where master_id in (139) and id = (select max(osat2.id) from OrgStructure_ActionType osat2 where osat2.master_id= osat.master_id);
@@ -124,7 +124,7 @@ select * from DestinationTree_ActionType dtat ORDER by id DESC ;
 select * from ActionType at2 where at2.name = 'уКРТом - Компьютерная томография верхней конечности';
 
 insert into ActionPropertyType (deleted, actionType_id, idx, template_id, name, shortName, descr, unit_id, typeName, valueDomain, defaultValue, isVector, norm, sex, age, penalty, penaltyUserProfile, visibleInJobTicket, visibleInTableRedactor, isAssignable, test_id, defaultEvaluation, canChangeOnlyOwner, isActionNameSpecifier, laboratoryCalculator, inActionsSelectionTable, redactorSizeFactor, isFrozen, typeEditable, visibleInDR, userProfile_id, userProfileBehaviour, copyModifier, isVitalParam, vitalParamId, isODIIParam, ticketsNeeded, customSelect, autoFieldUserProfile, formulaAlias)
-select apt.deleted, @act actionType_id, (select max(apt2.idx)+1 from ActionPropertyType apt2 where apt2.actionType_id  = @act) idx, apt.template_id, apt.name, apt.shortName, apt.descr, apt.unit_id, apt.typeName, apt.valueDomain, apt.defaultValue, apt.isVector, apt.norm, apt.sex, apt.age, apt.penalty, apt.penaltyUserProfile, apt.visibleInJobTicket, apt.visibleInTableRedactor, apt.isAssignable, apt.test_id, apt.defaultEvaluation, apt.canChangeOnlyOwner, apt.isActionNameSpecifier, apt.laboratoryCalculator, apt.inActionsSelectionTable, apt.redactorSizeFactor, apt.isFrozen, apt.typeEditable, apt.visibleInDR, apt.userProfile_id, apt.userProfileBehaviour, apt.copyModifier, apt.isVitalParam, apt.vitalParamId, apt.isODIIParam, apt.ticketsNeeded, apt.customSelect, apt.autoFieldUserProfile, apt.formulaAlias from ActionPropertyType apt where apt.actionType_id =45743 and apt.deleted = 0 and apt.id  =52515;
+select apt.deleted, @act actionType_id, (select max(apt2.idx)+1 from ActionPropertyType apt2 where apt2.actionType_id  = @act) idx, apt.template_id, apt.name, apt.shortName, apt.descr, apt.unit_id, apt.typeName, apt.valueDomain, apt.defaultValue, apt.isVector, apt.norm, apt.sex, apt.age, apt.penalty, apt.penaltyUserProfile, apt.visibleInJobTicket, apt.visibleInTableRedactor, apt.isAssignable, apt.test_id, apt.defaultEvaluation, apt.canChangeOnlyOwner, apt.isActionNameSpecifier, apt.laboratoryCalculator, apt.inActionsSelectionTable, apt.redactorSizeFactor, apt.isFrozen, apt.typeEditable, apt.visibleInDR, apt.userProfile_id, apt.userProfileBehaviour, apt.copyModifier, apt.isVitalParam, apt.vitalParamId, apt.isODIIParam, apt.ticketsNeeded, apt.customSelect, apt.autoFieldUserProfile, apt.formulaAlias from ActionPropertyType apt where apt.actionType_id =42840 and apt.deleted = 0 and apt.name = 'Номерок';
 			
 
 
@@ -156,6 +156,10 @@ select * from  OrgStructure os ;
 
 select * from OrgStructure where name REGEXP 'РХМДиЛ';
 
+
+
+
+select * from ActionPropertyType apt where apt.actionType_id in(56184,56185,56189);
 
 
 
