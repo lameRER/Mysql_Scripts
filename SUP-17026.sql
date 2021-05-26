@@ -89,7 +89,7 @@ select * from rbVitalParams where code ='601';
 
 
 
-select * from OrgStructure os ;
+select * from OrgStructure os where os.parent_id = 99;
 
 
 select * from ActionType at2 where at2.group_id = 56182 and at2.id not in(56183,56186,56187,56188,56190,56185);
@@ -97,7 +97,7 @@ select * from ActionType at2 where at2.group_id = 56182 and at2.id not in(56183,
 set @act = 56184;
 
 -- INSERT into OrgStructure_ActionType (master_id, idx, actionType_id)
-select osat.master_id, osat.idx+1, @act actionType_id from OrgStructure_ActionType osat where master_id in (72) and id = (select max(osat2.id) from OrgStructure_ActionType osat2 where osat2.master_id= osat.master_id);
+select osat.master_id, osat.idx+1, @act actionType_id from OrgStructure_ActionType osat where master_id in (139) and id = (select max(osat2.id) from OrgStructure_ActionType osat2 where osat2.master_id= osat.master_id);
 
 -- INSERT into rbJobType_ActionType (createDatetime, createPerson_id, modifyDatetime, modifyPerson_id, master_id, actionType_id, selectionGroup, onDayLimit)
 select NOW() createDatetime, null createPerson_id, NOW() modifyDatetime, null modifyPerson_id, rjtat.master_id, @act actionType_id, rjtat.selectionGroup, rjtat.onDayLimit from rbJobType_ActionType rjtat where rjtat.master_id = 22 and id = (select max(rjtat2.id) from rbJobType_ActionType rjtat2 where rjtat2.master_id = rjtat.master_id);
@@ -112,7 +112,7 @@ select * from DestinationTree dt where deleted = 0 and id = 10029;
 select * from OrgStructure os where os.id = 72
 
 
-select * from DestinationTree_ActionType dtat where master_id = 10029 ORDER by id DESC ;
+select * from DestinationTree_ActionType dtat ORDER by id DESC ;
 
 
 select * from ActionType at2 where at2.name = 'Ультразвуковое исследование почек v2';
