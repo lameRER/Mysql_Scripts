@@ -46,7 +46,7 @@ from OrgStructure where parent_id = 159 limit 1;
 
 
 select *
-from OrgStructure order by id desc;
+from OrgStructure where id = 159;
 # 212
 
 insert into OrgStructure_Job (master_id, idx, jobType_id, begTime, endTime, quantity, lastAccessibleDate, isVisibleInDR, person_id)
@@ -65,3 +65,6 @@ from OrgStructure_Job where master_id in (select id from OrgStructure where pare
 
 select *
 from OrgStructure_Job order by id desc ;
+
+
+see
