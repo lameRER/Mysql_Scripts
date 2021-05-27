@@ -6,7 +6,7 @@ select
        NULL modifyPerson_id,
        deleted,
        organisation_id,
-       code,
+       'Рентген-урология 2-этаж' code,
        'Рентген-урология 2-этаж' name,
        parent_id,
        type,
@@ -41,4 +41,22 @@ select
        netrica_Code_UO,
        netrica_Code_IEMK,
        attachOperOrgStructure_id
-from OrgStructure where parent_id = 159 limit 1
+from OrgStructure where parent_id = 159 limit 1;
+
+
+
+select *
+from OrgStructure order by id desc;
+# 212
+
+select
+       master_id,
+       idx,
+       jobType_id,
+       begTime,
+       endTime,
+       quantity,
+       lastAccessibleDate,
+       isVisibleInDR,
+       person_id
+from OrgStructure_Job where master_id in (select id from OrgStructure where parent_id = 159)limit 1
