@@ -1,2 +1,2 @@
 select *
-from rbSocStatusType;
+from rbSocStatusType where code = '100';
