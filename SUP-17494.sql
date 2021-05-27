@@ -7,14 +7,29 @@ select *
 from ActionPropertyType apt where apt.isVitalParam = 1;
 
 select *
-from ActionType where name regexp 'cov'
+from DestinationTree_ActionType where actionType_id in (
+select id
+from ActionType where name regexp 'cov')
 ;
 
 
-select *
-from ActionPropertyType where actionType_id= 49887 and deleted= 0;
 
 select *
-from rbPrintTemplate where context = '1193-26179_1';
+from ActionType where id in(49882,49883,49886,49887,49885);
+
+
+select *
+from rbPrintTemplate where context= 'SARS';
+
+
+
+select context
+from ActionType WHERE ID = 49901;
+
+select *
+from ActionPropertyType where actionType_id= 49901 and deleted= 0;
+
+select *
+from rbPrintTemplate where context = '145-9957';
 
 
