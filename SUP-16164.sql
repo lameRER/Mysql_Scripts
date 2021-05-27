@@ -122,7 +122,6 @@ WHERE e.eventType_id = 94 and e.deleted = 0
 ORDER by os.name, a.plannedEndDate;
 
 
-
 select * from `Action` a where a.actionType_id = 49937;
 
 
