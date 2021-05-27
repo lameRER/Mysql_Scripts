@@ -163,4 +163,10 @@ select * from ActionPropertyType apt where apt.actionType_id in(56184,56185,5618
 
 
 
+select * from DestinationTree_ActionType dtat order by id DESC ;
+
+
+select * from ActionPropertyType apt where apt.actionType_id in (select osat.actionType_id from OrgStructure_ActionType osat where osat.master_id = 139) and apt.deleted = 0;
+
+
 
