@@ -158,3 +158,6 @@ select * from OrgStructure os where os.id = 134;
 
 
 select * from rbPrintTemplate where name = '*Опер блок план'
+
+
+select * from rbPrintTemplate order by id desc
