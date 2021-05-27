@@ -13,6 +13,9 @@ from ActionType where name regexp 'cov')
 ;
 
 
+select *
+from DestinationTree where id =10070;
+
 
 select *
 from ActionType where id in(49882,49883,49886,49887,49885);
