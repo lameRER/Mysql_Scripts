@@ -49,14 +49,19 @@ select *
 from OrgStructure order by id desc;
 # 212
 
+insert into OrgStructure_Job (master_id, idx, jobType_id, begTime, endTime, quantity, lastAccessibleDate, isVisibleInDR, person_id)
 select
-       master_id,
+       212 master_id,
        idx,
        jobType_id,
-       begTime,
-       endTime,
-       quantity,
+       '00:00:00' begTime,
+       '23:59:00' endTime,
+       150 quantity,
        lastAccessibleDate,
        isVisibleInDR,
        person_id
-from OrgStructure_Job where master_id in (select id from OrgStructure where parent_id = 159)limit 1
+from OrgStructure_Job where master_id in (select id from OrgStructure where parent_id = 159) limit 1
+
+
+select *
+from OrgStructure_Job order by id desc ;
