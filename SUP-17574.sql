@@ -67,4 +67,5 @@ select *
 from OrgStructure_Job order by id desc ;
 
 
-see
+select *
+from Person where lastName = 'Шикавко';
