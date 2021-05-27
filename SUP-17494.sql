@@ -7,7 +7,7 @@ select *
 from ActionPropertyType apt where apt.isVitalParam = 1;
 
 select *
-from ActionType where id = 49887
+from ActionType where name regexp 'cov'
 ;
 
 
