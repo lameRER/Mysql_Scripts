@@ -155,3 +155,6 @@ select * from JsonData jd where jd.id REGEXP 'action';
 
 
 select * from OrgStructure os where os.id = 134;
+
+
+select * from rbPrintTemplate where name = '*Опер блок план'

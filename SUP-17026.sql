@@ -174,3 +174,10 @@ select * from ActionPropertyType apt where apt.actionType_id in (select osat.act
 select * from information_schema.PROCESSLIST p where COMMAND != 'Sleep';
 
 
+
+select * from rbPrintTemplate where name = '*Опер блок план'
+
+
+
+
+
