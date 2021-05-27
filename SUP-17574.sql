@@ -67,5 +67,9 @@ select *
 from OrgStructure_Job order by id desc ;
 
 
+select Person.orgStructure_id, Person.*
+from Person where lastName = 'Черныш';
+
+
 select *
-from Person where lastName = 'Шикавко';
+from OrgStructure where parent_id = 159 ;
