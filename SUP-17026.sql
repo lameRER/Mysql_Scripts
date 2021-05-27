@@ -154,9 +154,8 @@ select * from ActionType at2 where at2.name ='выписка';
 select * from  OrgStructure os ;
 
 
+
 select * from OrgStructure where name REGEXP 'РХМДиЛ';
-
-
 
 
 select * from ActionPropertyType apt where apt.actionType_id in(56184,56185,56189);
