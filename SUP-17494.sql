@@ -19,6 +19,9 @@ select *
 from netricaObsled;
 
 
+SELECT * FROM netricaObsled WHERE name = 'Пневмония'
+
+
 SELECT * FROM netricaObsled WHERE name = 'Больные, с установленным диагнозом COVID-19'
 
 select *
