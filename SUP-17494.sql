@@ -15,6 +15,8 @@ where actionType_id in (
     from ActionType
     where name regexp 'cov')
 
+select *
+from netricaObsled;
 
 select *
 from ActionPropertyType where actionType_id=56191 ;
