@@ -16,6 +16,12 @@ where actionType_id in (
     where name regexp 'cov')
 
 select *
+    from ActionType
+    where name regexp 'cov'
+
+
+
+select *
 from netricaObsled;
 
 
