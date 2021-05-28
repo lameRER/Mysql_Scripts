@@ -46,28 +46,9 @@ from ActionType where context = 'SARS2';
 select *
 from ActionPropertyType where actionType_id=49885 and deleted= 0
 
-set @num = 1;
-select now() createDatetime,
-       NULL createPerson_id,
-       NOW() modifyDatetime,
-       NULL modifyPerson_id,
-       concat('17494', @num) code,
-       name,
-       'SARS2' context,
-       fileName,
-       `default`,
-       dpdAgreement,
-       type,
-       hideParam,
-       banUnkeptDate,
-       counter_id,
-       deleted,
-       isPatientAgreed,
-       groupName,
-       documentType_id,
-       isEditableInWeb,
-       pageOrientation
-from rbPrintTemplate where context = 'SARS';
+
+select *
+from rbPrintTemplate where context = 'SARS2';
 
 
 select *
