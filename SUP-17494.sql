@@ -20,6 +20,8 @@ select *
 from ActionPropertyType where actionType_id=56191 ;
 ;
 
+select *
+from ActionType where id =56191;
 
 select *
 from DestinationTree
