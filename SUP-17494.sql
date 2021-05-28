@@ -8,6 +8,22 @@ select *
 from ActionPropertyType apt
 where apt.isVitalParam = 1;
 
+# new
+# 56191
+# old
+# 49885
+set @act = 49885;
+update DestinationTree_ActionType
+set actionType_id = @act
+where id = 4667;
+update rbJobType_ActionType
+set actionType_id = @act
+where id = 768;
+update OrgStructure_ActionType
+set actionType_id = @act
+where id = 1074;
+
+
 select *
 from DestinationTree_ActionType
 where actionType_id in (
@@ -16,10 +32,10 @@ where actionType_id in (
     where name regexp 'cov')
 
 select *
-from rbJobType_ActionType where actionType_id = 56191;
+from rbJobType_ActionType where actionType_id = 49885;
 
 select *
-from OrgStructure_ActionType where actionType_id = 56191;
+from OrgStructure_ActionType where actionType_id = 49885;
 
 
 # 49885 old
