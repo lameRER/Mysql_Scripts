@@ -2,8 +2,7 @@ select *
 from rbPrintTemplate
 where name regexp '';
 
-select *
-from netricaObsled;
+
 
 select *
 from ActionPropertyType apt
@@ -16,12 +15,9 @@ where actionType_id in (
     from ActionType
     where name regexp 'cov')
 
-select *
-    from ActionType
-    where name regexp 'cov'
 
 select *
-from ActionPropertyType where actionType_id=43233;
+from ActionPropertyType where actionType_id=56191 ;
 ;
 
 
