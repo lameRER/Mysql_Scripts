@@ -18,6 +18,9 @@ where actionType_id in (
 select *
 from netricaObsled;
 
+
+SELECT * FROM netricaObsled WHERE name = 'Больные, с установленным диагнозом COVID-19'
+
 select *
 from ActionPropertyType where actionType_id=56191 ;
 ;
