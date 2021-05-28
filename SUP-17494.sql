@@ -16,6 +16,15 @@ where actionType_id in (
     where name regexp 'cov')
 
 select *
+from rbJobType_ActionType where actionType_id = 56191;
+
+select *
+from OrgStructure_ActionType where actionType_id = 56191;
+
+
+# 49885 old
+# 56191 new
+select *
     from ActionType
     where name regexp 'cov'
 
