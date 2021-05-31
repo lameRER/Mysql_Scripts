@@ -1,5 +1,7 @@
-select * from rbPrintTemplate where id = 3364;
+select id, `default` from rbPrintTemplate where context = 'oper_plan';
 
+select *
+from Person where login = 'test';
 
 
 SELECT
@@ -97,7 +99,7 @@ left join Person p2 on p2.id = REGEXP_REPLACE(STRINGDECODE(urldecoder(jd.json)),
 where a.event_id = context.id and a.deleted = 0 and a.actionType_id = 49940 order by a.createDatetime desc limit 1 ;"""
 
 
-select * from 15_EIS_POL;
+
 
 
 
