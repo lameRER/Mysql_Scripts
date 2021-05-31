@@ -1,4 +1,4 @@
-select * from rbPrintTemplate order by id desc;
+select * from rbPrintTemplate where id = 3364;
 
 
 
