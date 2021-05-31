@@ -23,7 +23,8 @@ join `Action` a on a.event_id = e.id and a.deleted = 0 and a.status != 3 and a.s
 left join JsonData jd on jd.id REGEXP a.id
 left join OrgStructure os on os.id = REGEXP_REPLACE(STRINGDECODE(urldecoder(jd.json)), '.*\"table\":.?\"(\\\d+)\".*', '\\1')
 left join ActionProperty ap on ap.action_id = (select a1.id from Action a1 where a1.parent_id = a.id and a1.deleted= 0 and a1.actionType_id = 49944) and ap.deleted=0
-left join ActionPropertyType apt on apt.actionType_id = ap.action_id and apt.deleted= 0 and apt.name = 'Анестезия'
+    and ap.Type = (select a1.id from Action a1 where a1.parent_id = a.id and a1.deleted= 0 and a1.actionType_id = 49944)
+left join ActionPropertyType apt on apt.name = 'Анестезия' and apt.deleted = 0 and apt.actionType_id
 left join ActionProperty_String aps on aps.id = ap.id
 WHERE e.eventType_id = 94 and e.deleted = 0 AND a.id in (99319401) and os.name is not null ORDER by os.name, a.plannedEndDate;
 
@@ -31,7 +32,7 @@ select *
 from ActionProperty where id = 232561748;
 
 select *
-from ActionProperty where action_id = 99255955;
+from ActionProperty where action_id = 99319403;
 
 
 select *
@@ -54,8 +55,7 @@ from ActionPropertyType where actionType_id = 49944 and deleted =0
 ;
 
 select *
-from ActionType where id in(49940,49944
-)
+from ActionPropertyType where id in(56750,56752,56753,56745,56749)
 
 
 
@@ -236,3 +236,34 @@ select * from rbPrintTemplate where name = '*Опер блок план'
 
 
 select * from rbPrintTemplate order by id desc
+
+
+select *
+from ActionType where name regexp '';
+
+
+
+select *
+from OrgStructure
+;
+
+
+select *
+from OrgStructure_ActionType where master_id = 107;
+
+select *
+from ActionType where id =22165;
+
+
+select *
+from DestinationTree where deleted = 0
+;
+
+
+10029
+select *
+from DestinationTree_ActionType where actionType_id = 22165;
+
+
+select *
+from DestinationTree where id = 9748;
