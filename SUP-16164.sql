@@ -3,8 +3,6 @@ select id, `default` from rbPrintTemplate where context = 'oper_plan';
 
 
 select
-       ap.*,
-       apt.name,
 CONCAT_WS(' ', c.lastName, c.firstName, c.patrName) as FIO,
 concat(m.ClassID, '-', m.BlockName) as Diagnosis,
 a.specifiedName as Operation,
@@ -21,10 +19,9 @@ left join MKB m on m.DiagID = d3.MKB
 join rbDiagnosisType rdt on d2.diagnosisType_id = rdt.id
 join `Action` a on a.event_id = e.id and a.deleted = 0 and a.status != 3 and a.specifiedName != ''
 left join JsonData jd on jd.id REGEXP a.id
-left join OrgStructure os on os.id = REGEXP_REPLACE(STRINGDECODE(urldecoder(jd.json)), '.*\"table\":.?\"(\\\d+)\".*', '\\1')
+left join OrgStructure os on os.id = REGEXP_REPLACE(STRINGDECODE(urldecoder(jd.json)), '.*\"table\":.?\"(\\d+)\".*', '\\1')
 left join ActionProperty ap on ap.action_id = (select a1.id from Action a1 where a1.parent_id = a.id and a1.deleted= 0 and a1.actionType_id = 49944) and ap.deleted=0
-    and ap.Type = (select a1.id from Action a1 where a1.parent_id = a.id and a1.deleted= 0 and a1.actionType_id = 49944)
-left join ActionPropertyType apt on apt.name = 'Анестезия' and apt.deleted = 0 and apt.actionType_id
+    and ap.type_id = (select apt.id from ActionPropertyType apt where apt.actionType_id = 49944 and apt.deleted = 0 and apt.name = 'Анестезия')
 left join ActionProperty_String aps on aps.id = ap.id
 WHERE e.eventType_id = 94 and e.deleted = 0 AND a.id in (99319401) and os.name is not null ORDER by os.name, a.plannedEndDate;
 
