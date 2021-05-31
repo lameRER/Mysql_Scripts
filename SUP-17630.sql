@@ -1,7 +1,11 @@
+select apt.*
+from ActionType at2
+join ActionPropertyType apt on apt.actionType_id = at2.id and apt.deleted= 0
+join DestinationTree_ActionType dat on dat.actionType_id = at2.id
+where at2.name regexp 'Рентгенография всего таза' and at2.deleted= 0;
+
 select *
-from ;
-
-
+from rbPrintTemplate where context = 'RENT';
 
 
 
