@@ -3,12 +3,11 @@ select id, `default` from rbPrintTemplate where context = 'oper_plan';
 
 
 select
-date(a.plannedEndDate) as dates,
 CONCAT_WS(' ', c.lastName, c.firstName, c.patrName) as FIO,
 concat(m.ClassID, '-', m.BlockName) as Diagnosis,
 a.specifiedName as Operation,
 os.name as OperatingRoom,
-'' as Anestes,
+a1.id as Anestes,
 '' as OperBrig,
 '' as GrBlood
 from Event e
@@ -21,16 +20,20 @@ join rbDiagnosisType rdt on d2.diagnosisType_id = rdt.id
 join `Action` a on a.event_id = e.id and a.deleted = 0 and a.status != 3 and a.specifiedName != ''
 left join JsonData jd on jd.id REGEXP a.id
 left join OrgStructure os on os.id = REGEXP_REPLACE(STRINGDECODE(urldecoder(jd.json)), '.*\"table\":.?\"(\\\d+)\".*', '\\1')
-left join Action a1 on a1.event_id = e.id and a1.deleted =0
+left join Action a1 on a1.parent_id = a.id and a1.deleted =0
 WHERE e.eventType_id = 94 and e.deleted = 0 AND a.id in (99292780) and os.name is not null ORDER by os.name, a.plannedEndDate;
 
+
+
+select *
+from Action where event_id= 33721812-- id = 99292780;
 
 select *
 from ActionPropertyType where actionType_id = 49957 and deleted =0
 ;
 
 select *
-from ActionType where flatCode = 'oper_protocol'
+from ActionType where id = 49940
 
 
 
