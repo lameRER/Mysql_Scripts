@@ -1,5 +1,34 @@
 select id, `default` from rbPrintTemplate where context = 'oper_plan';
 
+
+
+
+select
+date(a.plannedEndDate) as dates,
+CONCAT_WS(' ', c.lastName, c.firstName, c.patrName) as FIO,
+d3.MKB as Diagnosis,
+a.specifiedName as Operation,
+os.name as OperatingRoom,
+'' as Anestes,
+'' as OperBrig,
+'' as GrBlood
+from Event e
+join Client c on c.id = e.client_id and c.deleted = 0
+left join Diagnostic d2 on d2.event_id = e.id and d2.deleted = 0 and d2.id = (select max(d.id) from Diagnostic d where
+d.event_id = e.id)
+left join Diagnosis d3 on d3.id = d2.diagnosis_id and d3.deleted = 0
+join rbDiagnosisType rdt on d2.diagnosisType_id = rdt.id
+join `Action` a on a.event_id = e.id and a.deleted = 0 and a.status != 3 and a.specifiedName != ''
+left join JsonData jd on jd.id REGEXP a.id
+left join OrgStructure os on os.id = REGEXP_REPLACE(STRINGDECODE(urldecoder(jd.json)), '.*\"table\":.?\"(\\d+)\".*', '\\1')
+WHERE e.eventType_id = 94 and e.deleted = 0 AND a.id in (99292780) ORDER by os.name,
+a.plannedEndDate
+
+
+
+
+
+
 select *
 from Person where login = 'test';
 
