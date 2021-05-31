@@ -21,6 +21,7 @@ join rbDiagnosisType rdt on d2.diagnosisType_id = rdt.id
 join `Action` a on a.event_id = e.id and a.deleted = 0 and a.status != 3 and a.specifiedName != ''
 left join JsonData jd on jd.id REGEXP a.id
 left join OrgStructure os on os.id = REGEXP_REPLACE(STRINGDECODE(urldecoder(jd.json)), '.*\"table\":.?\"(\\\d+)\".*', '\\1')
+left join Action a1
 WHERE e.eventType_id = 94 and e.deleted = 0 AND a.id in (99292780) and os.name is not null ORDER by os.name, a.plannedEndDate;
 
 
@@ -39,7 +40,7 @@ from MKB;
 
 
 
-delete 
+
 
 
 
