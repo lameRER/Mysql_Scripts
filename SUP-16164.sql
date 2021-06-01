@@ -9,9 +9,9 @@ concat(m.DiagID, '-', m.BlockName) as Diagnosis,
 a.specifiedName as Operation,
 os.name as OperatingRoom,
 aps.value as Anestes,
-group_concat(
-    case when p.lastName is not null then CONCAT('Ответственный за переливание крови: ', concat_ws(' ', p.lastName, p.firstName, p.patrName)) end
-    separator '\n') as OperBrig,
+CONCAT_WS('\n',
+    if(p.lastName is not null, concat('Ответственный за переливание крови: ', concat_ws(' ', p.lastName, p.firstName, p.patrName)), NULL)
+    ) as OperBrig,
 '' as GrBlood
 from Event e
 join Client c on c.id = e.client_id and c.deleted = 0
@@ -27,7 +27,7 @@ left join ActionProperty ap on ap.action_id = (select a1.id from Action a1 where
     and ap.type_id = (select apt.id from ActionPropertyType apt where apt.actionType_id = 49944 and apt.deleted = 0 and apt.name = 'Анестезия')
 left join ActionProperty_String aps on aps.id = ap.id
 left join Person p on p.id = REGEXP_REPLACE(STRINGDECODE(urldecoder(jd.json)), '.*\"hemo_id\":.?\"(\\d+)\".*', '\\1')
-WHERE e.eventType_id = 94 and e.deleted = 0 /*AND a.id in (99319397)*/ and date(a.plannedEndDate) = '2021-05-31' and os.name is not null group by a.id ORDER by os.name, a.plannedEndDate;
+WHERE e.eventType_id = 94 and e.deleted = 0 /*AND a.id in (99319397)*/ and date(a.plannedEndDate) = '2021-05-31' and os.name is not null ORDER by os.name, a.plannedEndDate;
 
 select *
 from ActionProperty where id = 232561748;
