@@ -179,5 +179,5 @@ select * from rbPrintTemplate where name = '*Опер блок план'
 
 
 
-
-
+select *
+from ActionPropertyType where actionType_id = 56190;
