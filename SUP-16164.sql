@@ -3,6 +3,7 @@ select id, `default` from rbPrintTemplate where context = 'oper_plan';
 
 
 select
+       jd.json,
 CONCAT_WS(' ', c.lastName, c.firstName, c.patrName) as FIO,
 concat(m.DiagID, '-', m.BlockName) as Diagnosis,
 a.specifiedName as Operation,
