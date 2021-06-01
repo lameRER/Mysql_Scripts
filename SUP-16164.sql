@@ -10,7 +10,9 @@ a.specifiedName as Operation,
 os.name as OperatingRoom,
 aps.value as Anestes,
 CONCAT_WS('\n',
-    if(p.lastName is not null, concat('Ответственный за переливание крови: ', concat_ws(' ', p.lastName, p.firstName, p.patrName)), NULL)
+    if(p.lastName is not null, concat('Ответственный за переливание крови: ', concat_ws(' ', p.lastName, p.firstName, p.patrName)), NULL),
+    if(p1.lastName is not null, concat('Дежурный по оперблоку: ', concat_ws(' ', p1.lastName, p1.firstName, p1.patrName)), NULL),
+    if(p2.lastName is not null, concat('Ассистенты: ', concat_ws(' ', p2.lastName, p2.firstName, p2.patrName)), NULL)
     ) as OperBrig,
 '' as GrBlood
 from Event e
@@ -27,6 +29,8 @@ left join ActionProperty ap on ap.action_id = (select a1.id from Action a1 where
     and ap.type_id = (select apt.id from ActionPropertyType apt where apt.actionType_id = 49944 and apt.deleted = 0 and apt.name = 'Анестезия')
 left join ActionProperty_String aps on aps.id = ap.id
 left join Person p on p.id = REGEXP_REPLACE(STRINGDECODE(urldecoder(jd.json)), '.*\"hemo_id\":.?\"(\\d+)\".*', '\\1')
+left join Person p1 on p1.id = REGEXP_REPLACE(STRINGDECODE(urldecoder(jd.json)), '.*\"dejur_id\":.?\"(\\d+)\".*', '\\1')
+left join Person p2 on p2.id = REGEXP_REPLACE(STRINGDECODE(urldecoder(jd.json)), '.*\"assist_id\":.?\"(\\d+)\".*', '\\1')
 WHERE e.eventType_id = 94 and e.deleted = 0 /*AND a.id in (99319397)*/ and date(a.plannedEndDate) = '2021-05-31' and os.name is not null ORDER by os.name, a.plannedEndDate;
 
 select *
