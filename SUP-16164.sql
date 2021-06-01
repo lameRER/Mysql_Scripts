@@ -16,7 +16,7 @@ left join Diagnostic d2 on d2.event_id = e.id and d2.deleted = 0 and d2.id = (se
 d.event_id = e.id)
 left join Diagnosis d3 on d3.id = d2.diagnosis_id and d3.deleted = 0
 left join MKB m on m.DiagID = d3.MKB
-join rbDiagnosisType rdt on d2.diagnosisType_id = rdt.id
+left join rbDiagnosisType rdt on d2.diagnosisType_id = rdt.id
 join `Action` a on a.event_id = e.id and a.deleted = 0 and a.status != 3 and a.specifiedName != ''
 left join JsonData jd on jd.id REGEXP a.id
 left join OrgStructure os on os.id = REGEXP_REPLACE(STRINGDECODE(urldecoder(jd.json)), '.*\"table\":.?\"(\\d+)\".*', '\\1')
@@ -56,6 +56,9 @@ from ActionPropertyType where actionType_id = 49944 and deleted =0
 select *
 from ActionPropertyType where id in(56750,56752,56753,56745,56749)
 
+
+select *
+from Action a, ActionType at2 where a.actionType_id = at2.id and a.deleted= 0 and at2.deleted= 0 and a.id = 99319397;
 
 
 select *
