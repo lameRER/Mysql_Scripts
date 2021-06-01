@@ -1,5 +1,4 @@
-select id, `default` from rbPrintTemplate where context = 'oper_plan';
-
+select id, name, `default` from rbPrintTemplate where context = 'oper_plan';
 
 
 
