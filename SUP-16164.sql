@@ -4,7 +4,7 @@ select id, `default` from rbPrintTemplate where context = 'oper_plan';
 
 select
 CONCAT_WS(' ', c.lastName, c.firstName, c.patrName) as FIO,
-concat(m.ClassID, '-', m.BlockName) as Diagnosis,
+concat(m.DiagID, '-', m.BlockName) as Diagnosis,
 a.specifiedName as Operation,
 os.name as OperatingRoom,
 aps.value as Anestes,
@@ -23,13 +23,13 @@ left join OrgStructure os on os.id = REGEXP_REPLACE(STRINGDECODE(urldecoder(jd.j
 left join ActionProperty ap on ap.action_id = (select a1.id from Action a1 where a1.parent_id = a.id and a1.deleted= 0 and a1.actionType_id = 49944) and ap.deleted=0
     and ap.type_id = (select apt.id from ActionPropertyType apt where apt.actionType_id = 49944 and apt.deleted = 0 and apt.name = 'Анестезия')
 left join ActionProperty_String aps on aps.id = ap.id
-WHERE e.eventType_id = 94 and e.deleted = 0 AND a.id in (99319401) and os.name is not null ORDER by os.name, a.plannedEndDate;
+WHERE e.eventType_id = 94 and e.deleted = 0 AND a.id in (99319397) and os.name is not null ORDER by os.name, a.plannedEndDate;
 
 select *
 from ActionProperty where id = 232561748;
 
 select *
-from ActionProperty where action_id = 99319403;
+from ActionProperty where action_id = 99319397;
 
 
 select *
@@ -38,8 +38,10 @@ from ActionPropertyType apt where apt.id =58809;
 select *
 from Action where event_id= 99319401-- id = 99292780;
 
-select *
-from Action where parent_id =99319401;
+select at2.name, a.*
+from Action a, ActionType at2 where a.parent_id =99319397 and at2.id = a.actionType_id and a.deleted = 0 and at2.deleted= 0
+
+;
 
 select client_id
 from Event where id = 33721812;
