@@ -34,6 +34,12 @@ left join Person p1 on p1.id = REGEXP_REPLACE(STRINGDECODE(urldecoder(jd.json)),
 left join Person p2 on p2.id = REGEXP_REPLACE(STRINGDECODE(urldecoder(jd.json)), '.*\"assist_id\":.?\"(\\d+)\".*', '\\1')
 WHERE e.eventType_id = 94 and e.deleted = 0 /*AND a.id in (99319397)*/ and date(a.plannedEndDate) = '2021-05-31' and os.name is not null ORDER by os.name, a.plannedEndDate;
 
+
+
+select *
+from Client;
+
+
 select *
 from ActionProperty where id = 232561748;
 
