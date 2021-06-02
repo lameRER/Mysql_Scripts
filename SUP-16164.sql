@@ -11,9 +11,9 @@ a.specifiedName as Operation,
 os.name as OperatingRoom,
 aps.value as Anestes,
 CONCAT_WS('\n',
-    if(p.lastName is not null, concat('Ответственный за переливание крови: ', concat_ws(' ', p.lastName, p.firstName, p.patrName)), NULL),
-    if(p1.lastName is not null, concat('Дежурный по оперблоку: ', concat_ws(' ', p1.lastName, p1.firstName, p1.patrName)), NULL),
-    if(p2.lastName is not null, concat('Ассистенты: ', concat_ws(' ', p2.lastName, concat(left(p2.firstName, 1), '.'), concat(left(p2.patrName, 1),'.'))), NULL)
+    if(p.lastName is not null, concat('Ответственный за переливание крови: ', concat_ws(' ', p.lastName, concat(left(p.firstName, 1), '.', left(p.patrName, 1), '.'))), NULL),
+    if(p1.lastName is not null, concat('Дежурный по оперблоку: ', concat_ws(' ', p1.lastName, concat(left(p1.firstName, 1), '.', left(p1.patrName, 1), '.'))), NULL),
+    if(p2.lastName is not null, concat('Ассистенты: ', concat_ws(' ', p2.lastName, concat(left(p2.firstName, 1), '.', left(p2.patrName, 1), '.'))), NULL)
     ) as OperBrig,
 '' as GrBlood
 from Event e
