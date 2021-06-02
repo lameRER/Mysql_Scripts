@@ -12,4 +12,6 @@ select * from ActionType where id in(49885,49955,56191)
 select *
 from ActionPropertyType where actionType_id = 56191;
 select *
-from TakenTissueJournal;
+from TakenTissueJournal where externalId = 33855946;
+select *
+from TakenTissueJournal_log;
