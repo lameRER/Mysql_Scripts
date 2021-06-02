@@ -19,3 +19,6 @@ from Organisation where id = 3188
 
 select *
 from rbPrintTemplate where createDatetime is null or modifyDatetime is null;
+
+
+test
