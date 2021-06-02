@@ -1,7 +1,8 @@
-select id, name, `default` from rbPrintTemplate where context = 'oper_plan';
+select id, name, context,
+       `default` from rbPrintTemplate where context = 'oper_plan';
 
 
-
+# oper_plan
 
 select
        jd.json,
@@ -15,7 +16,7 @@ CONCAT_WS('\n',
     if(p1.lastName is not null, concat('Дежурный по оперблоку: ', concat_ws(' ', p1.lastName, concat(left(p1.firstName, 1), '.', left(p1.patrName, 1), '.'))), NULL),
     if(p2.lastName is not null, concat('Ассистенты: ', concat_ws(' ', p2.lastName, concat(left(p2.firstName, 1), '.', left(p2.patrName, 1), '.'))), NULL)
     ) as OperBrig,
-'' as GrBlood
+rbt.name as GrBlood
 from Event e
 join Client c on c.id = e.client_id and c.deleted = 0
 left join Diagnostic d2 on d2.event_id = e.id and d2.deleted = 0 and d2.id = (select max(d.id) from Diagnostic d where
@@ -32,12 +33,18 @@ left join ActionProperty_String aps on aps.id = ap.id
 left join Person p on p.id = REGEXP_REPLACE(STRINGDECODE(urldecoder(jd.json)), '.*\"hemo_id\":.?\"(\\d+)\".*', '\\1')
 left join Person p1 on p1.id = REGEXP_REPLACE(STRINGDECODE(urldecoder(jd.json)), '.*\"dejur_id\":.?\"(\\d+)\".*', '\\1')
 left join Person p2 on p2.id = REGEXP_REPLACE(STRINGDECODE(urldecoder(jd.json)), '.*\"assist_id\":.?\"(\\d+)\".*', '\\1')
+left join rbBloodType rbt on rbt.id = c.bloodType_id
 WHERE e.eventType_id = 94 and e.deleted = 0 /*AND a.id in (99319397)*/ and date(a.plannedEndDate) = '2021-05-31' and os.name is not null ORDER by os.name, a.plannedEndDate;
 
 
 
 select *
-from Client;
+from Client where bloodType_id is not null;
+
+
+
+select *
+from rbBloodType;
 
 
 select *
