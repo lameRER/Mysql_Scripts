@@ -1,16 +1,50 @@
-select count(rep.id) num,
-GROUP_CONCAT(CONCAT_WS(' ',ret.code, ret.name,'retres.idx:',retres.idx,'resper.idx:',resrep.idx) separator '\n') ret, 
-GROUP_CONCAT(CONCAT_WS(' ', retres.id, resrep.id, res.id, res.name, res.description)separator '\n') res, 
-resrep.* from rbEpicrisisTemplates ret
+select
+#        count(rep.id) num,
+# GROUP_CONCAT(CONCAT_WS(' ',ret.code, ret.name,'retres.idx:',retres.idx,'resper.idx:',resrep.idx) separator '\n') ret,
+# GROUP_CONCAT(CONCAT_WS(' ', retres.id, resrep.id, res.id, res.name, res.description)separator '\n') res,
+ret.name, res.name, rep.* from rbEpicrisisTemplates ret
 left join rbEpicrisisTemplates_rbEpicrisisSections retres on retres.id_rbEpicrisisTemplates = ret.id 
 left join rbEpicrisisSections res on retres.id_rbEpicrisisSections = res.id 
 left join rbEpicrisisSections_rbEpicrisisProperty resrep on resrep.id_rbEpicrisisSections = res.id 
 left join rbEpicrisisProperty rep on resrep.id_rbEpicrisisProperty = rep.id 
-where rep.name REGEXP 'RW'
-group by res.id, rep.id
+where res.name regexp 'анам' or rep.name regexp 'анам'
+group by rep.id
 order by  retres.idx, resrep.idx;
 -- order by rep.id 
 
+
+SELECT aps.value FROM Event e
+JOIN Action a ON e.id = a.event_id AND a.deleted=0 AND a.status = 2
+JOIN ActionType at ON a.actionType_id = at.id AND at.code = '145-124-1_1' AND at.deleted=0
+JOIN ActionProperty ap ON a.id = ap.action_id
+JOIN ActionPropertyType apt ON ap.type_id = apt.id AND apt.name = 'Анамнез заболевания' AND apt.deleted=0
+JOIN ActionProperty_String aps ON ap.id = aps.id
+ORDER BY a.createDatetime limit 10;
+
+
+select apt.*
+from Action a,
+     ActionType at2, ActionPropertyType apt
+where a.actionType_id = at2.id
+  and at2.code = '145-124-1_1' and apt.actionType_id = at2.id group by apt.name;
+
+
+
+
+SELECT CONCAT_WS(' ',c.lastName, c.firstName, CONCAT(c.patrName, ','), CONCAT(LEFT(c.birthDate,4),' г.р. ',
+    CONCAT('(',(YEAR(CURRENT_DATE())-year(c.birthDate))-(RIGHT(CURRENT_DATE(),5)<RIGHT(c.birthDate,5)), ' лет', ')')),
+    CONCAT('№ ',e.externalId)) FROM Client c, Event e
+WHERE e.client_id = c.id AND e.id = 32751
+
+
+
+
+
+
+
+
+select *
+from rbEpicrisisTemplates where name = 'Этапный эпикриз';
 
 select * from rbEpicrisisSections_rbEpicrisisProperty resrep 
 
