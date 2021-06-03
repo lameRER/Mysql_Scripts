@@ -178,6 +178,8 @@ select * from information_schema.PROCESSLIST p where COMMAND != 'Sleep';
 select * from rbPrintTemplate where name = '*Опер блок план'
 
 
+select * from ActionPropertyType apt where apt.valueDomain REGEXP '\'';
+
 
 select *
 from ActionPropertyType where actionType_id = 56190;

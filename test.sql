@@ -23,3 +23,6 @@ from rbPrintTemplate where createDatetime is null or modifyDatetime is null;
 test
 test
 test vista
+
+
+select * from ActionPropertyType apt where apt.valueDomain REGEXP '\'';
