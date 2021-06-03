@@ -25,4 +25,7 @@ test
 test vista
 
 
-select * from ActionPropertyType apt where apt.valueDomain REGEXP '\'';
+# select apt.valueDomain, regexp_replace(apt.valueDomain, '\'', '\"') from
+update ActionPropertyType
+set valueDomain = regexp_replace(valueDomain, '\'', '\"')
+where valueDomain REGEXP '\'';
