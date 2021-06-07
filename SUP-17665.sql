@@ -17,3 +17,7 @@ where ap.deleted= 0;
 
 select *
 from ActionProperty_String_copy_07_06_21;
+
+
+select *
+from ;
