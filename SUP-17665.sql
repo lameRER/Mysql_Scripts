@@ -27,13 +27,42 @@ join Action a on ap.action_id = a.id and a.deleted = 0
 join ActionType at2 on at2.id = a.actionType_id and at2.deleted = 0 and at2.flatCode = 'received'
 join ActionPropertyType apt on apt.actionType_id = at2.id and apt.deleted =0 and ap.type_id = apt.id and apt.name = 'Доставлен'
 where ap.deleted= 0 and aps.id is not null; -- group by aps.value;
+
+
+update
+# select ap.*
+# from
+    ActionProperty ap
+left Join ActionProperty_String aps using(id)
+# left Join ActionProperty_Reference apr using(id)
+join Action a on ap.action_id = a.id and a.deleted = 0
+join ActionType at2 on at2.id = a.actionType_id and at2.deleted = 0 and at2.flatCode = 'received'
+join ActionPropertyType apt on apt.actionType_id = at2.id and apt.deleted =0 and ap.type_id = apt.id and apt.name = 'Доставлен' and ap.type_id = 35423
+set ap.type_id =38920
+where ap.deleted= 0 and aps.id is not null; -- group by aps.value;
+
 select *
 from ActionPropertyType where actionType_id = 15084;
 
 
 
 select *
-from ActionProperty_String where id = 222718137;
+from ActionProperty_String where id = 250003765;
+
+
+select action_id
+from ActionProperty where id =250003765;
+
+select *
+from Action where id = 98151098;
+
+
+select a.event_id
+from ActionProperty ap
+join Action a on a.id = ap.action_id
+where ap.deleted = 0 and a.event_id is not null
+
+
 
 select *
 from ActionProperty_String_copy_07_06_21;
