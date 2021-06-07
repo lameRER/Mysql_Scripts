@@ -51,7 +51,7 @@ from ActionProperty_String where id = 250003765;
 
 
 select action_id
-from ActionProperty where id =250003765;
+from ActionProperty where id =;
 
 select *
 from Action where id = 98151098;
