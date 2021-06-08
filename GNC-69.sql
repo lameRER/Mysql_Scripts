@@ -19,25 +19,31 @@ from Contract_Tariff where service_id = 14016;
 select *
 from EventType where deleted = 0 order by name;
 
-insert into gnc.ActionType (id, createDatetime, createPerson_id, modifyDatetime, modifyPerson_id, deleted, hidden, class, group_id, code, name, title, flatCode, sex, age, age_bu, age_bc, age_eu, age_ec, office, showInForm, genTimetable, service_id, quotaType_id, context, amount, amountEvaluation, defaultStatus, defaultDirectionDate, defaultPlannedEndDate, defaultEndDate, defaultExecPerson_id, defaultPersonInEvent, defaultPersonInEditor, maxOccursInEvent, showTime, isMES, nomenclativeService_id, isPreferable, prescribedType_id, shedule_id, isRequiredCoordination, isRequiredTissue, testTubeType_id, jobType_id, mnem, layout, hasPrescriptions, autoclose_on_event_close, noteMandatory, canHaveAttaches, loadPrintTemplate_id, dynamicNumberType_id, counter_id, ttjExternalCounter_id, ttjExternalCounter_id_cached)
-values  (8728, '2020-01-17 18:41:08', 1991, '2021-05-12 12:25:42', 1991, 0, 0, 0, 8216, '0030', 'Осмотр (консультация) врачом-анестезиологом-реаниматологом первичный (Олейников С.В.)', 'Осмотр (консультация) врачом-анестезиологом-реаниматологом первичный', '', 0, '', 0, 000, 0, 000, '', 0, 0, null, null, 'osmotr_gematolog', 1, 0, 0, 0, 0, 0, null, 4, 4, 0, 0, 0, null, 1, null, null, 0, 0, null, null, 'JOUR', null, 1, true, 0, 0, null, null, null, null, null);
+insert into gnc.ActionType (createDatetime, createPerson_id, modifyDatetime, modifyPerson_id, deleted, hidden, class, group_id, code, name, title, flatCode, sex, age, age_bu, age_bc, age_eu, age_ec, office, showInForm, genTimetable, service_id, quotaType_id, context, amount, amountEvaluation, defaultStatus, defaultDirectionDate, defaultPlannedEndDate, defaultEndDate, defaultExecPerson_id, defaultPersonInEvent, defaultPersonInEditor, maxOccursInEvent, showTime, isMES, nomenclativeService_id, isPreferable, prescribedType_id, shedule_id, isRequiredCoordination, isRequiredTissue, testTubeType_id, jobType_id, mnem, layout, hasPrescriptions, autoclose_on_event_close, noteMandatory, canHaveAttaches, loadPrintTemplate_id, dynamicNumberType_id, counter_id, ttjExternalCounter_id, ttjExternalCounter_id_cached)
+values  ('2020-01-17 18:41:08', 1991, '2021-05-12 12:25:42', 1991, 0, 0, 0, 8216, '0030', 'Осмотр (консультация) врачом-анестезиологом-реаниматологом первичный (Олейников С.В.)', 'Осмотр (консультация) врачом-анестезиологом-реаниматологом первичный', '', 0, '', 0, 000, 0, 000, '', 0, 0, null, null, 'osmotr_gematolog', 1, 0, 0, 0, 0, 0, null, 4, 4, 0, 0, 0, null, 1, null, null, 0, 0, null, null, 'JOUR', null, 1, true, 0, 0, null, null, null, null, null);
+
+
+
+
+select *
+from ActionType where group_id = 9148;
 
 select id, name
-from ActionType where group_id = 9147;
+from ActionType where group_id = 9148;
 
-select A.id,
-       createDatetime,
-       createPerson_id,
-       modifyDatetime,
-       modifyPerson_id,
-       deleted,
-       hidden,
-       0 class,
-        group_id,
-       TRIM(pgt.code) code,
-       TRIM(pgt.name) name,
-       title,
-       flatCode,
+select
+       A.now() createDatetime,
+       A.null createPerson_id,
+       A.now() modifyDatetime,
+       A.null modifyPerson_id,
+       A.deleted,
+       A.hidden,
+       A.class,
+       9148 A.group_id,
+       '' A.code,
+       TRIM(pgt.two) A.name,
+       TRIM(pgt.two) A.title,
+       '' A.flatCode,
        sex,
        age,
        age_bu,
@@ -84,13 +90,12 @@ select A.id,
 from price_gnc_temp pgt
 left join rbService r on pgt.code = r.code and right(pgt.code, length(pgt.code)-1) = right(r.code, length(r.code)-1)
 left join ActionType_Service ATS on r.id = ATS.service_id
-left join ActionType A on ATS.master_id = A.id
+left join ActionType A on ATS.master_id = A.id or A.id = 7953
+join ActionType at2 on trim(at2.name) = trim(pgt.two) and at2.group_id = 9148
 where r.code is null and pgt.one = '1. АМБУЛАТОРНО-ПОЛИКЛИНИЧЕСКАЯ ПОМОЩЬ ' group by pgt.two
 
 
 
-select *
-from ActionType where group_id = 9147;
 
 select
        now() createDatetime,
