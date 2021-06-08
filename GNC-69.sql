@@ -4,4 +4,8 @@ from rbService where name = 'Осмотр (консультация) врачо�
 
 
 select *
-from Account;
+from EventType
+
+
+select *
+from Contract_Tariff where service_id = 14016;
