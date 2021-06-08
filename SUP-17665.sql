@@ -44,6 +44,8 @@ where ap.deleted= 0 and aps.id is not null; -- group by aps.value;
 select *
 from ActionPropertyType where actionType_id = 15084;
 
+select *
+from Person;
 
 
 select *
