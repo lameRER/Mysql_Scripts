@@ -38,4 +38,4 @@ join rbService r on r.id = ats.service_id
 
 
 select *
-from ActionType where group_id is null order by code;
+from ActionType where group_id is null and deleted = 0 order by code;
