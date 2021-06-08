@@ -15,5 +15,10 @@ select *
 from EventType where deleted = 0 order by name;
 
 
+select price_gnc_temp.code, A.code
+from price_gnc_temp
+left join ActionType A on right(price_gnc_temp.code, length(price_gnc_temp.code)-1) = right(A.code, length(A.code)-1);
+
+
 select *
-from price_gnc_temp;
+from rbService where code = '01.005.001';
