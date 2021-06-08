@@ -20,69 +20,30 @@ select *
 from EventType where deleted = 0 order by name;
 
 
+
+
+
 select
 #        pgt.code, r.code
-A.id,
-createDatetime,
-createPerson_id,
-modifyDatetime,
-modifyPerson_id,
+NOW() createDatetime,
+NULL createPerson_id,
+NOW() modifyDatetime,
+NULL modifyPerson_id,
 deleted,
 hidden,
-class,
-group_id,
-A.code,
-A.name,
-title,
-flatCode,
-sex,
-age,
-age_bu,
-age_bc,
-age_eu,
-age_ec,
-office,
-showInForm,
-genTimetable,
-A.service_id,
-quotaType_id,
-context,
-amount,
-amountEvaluation,
-defaultStatus,
-defaultDirectionDate,
-defaultPlannedEndDate,
-defaultEndDate,
-defaultExecPerson_id,
-defaultPersonInEvent,
-defaultPersonInEditor,
-maxOccursInEvent,
-showTime,
-isMES,
-nomenclativeService_id,
-isPreferable,
-prescribedType_id,
-shedule_id,
-isRequiredCoordination,
-isRequiredTissue,
-testTubeType_id,
-jobType_id,
-mnem,
-layout,
-hasPrescriptions,
-autoclose_on_event_close,
-noteMandatory,
-canHaveAttaches,
-loadPrintTemplate_id,
-dynamicNumberType_id,
-counter_id,
-ttjExternalCounter_id,
-ttjExternalCounter_id_cached
+0 class,
+0 group_id,
+'' code,
+trim(pgt.two) name,
+trim(pgt.two) title,
+'' flatCode,
+0 sex
 from price_gnc_temp pgt
 left join rbService r on pgt.code = r.code and right(pgt.code, length(pgt.code)-1) = right(r.code, length(r.code)-1)
 left join ActionType_Service ATS on r.id = ATS.service_id
 left join ActionType A on ATS.master_id = A.id
-where r.code is null
+where r.code is null and pgt.one = '1. АМБУЛАТОРНО-ПОЛИКЛИНИЧЕСКАЯ ПОМОЩЬ ' group by pgt.two
+
 
 
 select *
