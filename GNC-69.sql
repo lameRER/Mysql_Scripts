@@ -20,11 +20,17 @@ select *
 from EventType where deleted = 0 order by name;
 
 
-select pgt.code, r.code
+select
+#        pgt.code, r.code
+r.code,A.*
 from price_gnc_temp pgt
 left join rbService r on pgt.code = r.code and right(pgt.code, length(pgt.code)-1) = right(r.code, length(r.code)-1)
+left join ActionType_Service ATS on r.id = ATS.service_id
+left join ActionType A on ATS.master_id = A.id
+where r.code is not null
 
-
+select *
+from ActionType where id =7322
 
 select *
 from rbService where code regexp '001.013';
