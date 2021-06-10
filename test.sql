@@ -140,3 +140,16 @@ select *
 from OrgStructure where id = 70;
 select *
 from rbPrintTemplate where id = 1286;
+
+
+
+
+select ap.deleted, os.code FROM OrgStructure os
+                                 JOIN ActionProperty_OrgStructure apos on apos.value = os.id
+                                 JOIN ActionProperty ap on ap.id = apos.id and ap.deleted = 0
+                                 JOIN ActionPropertyType apt on apt.id = ap.type_id and apt.name = 'Операционная'
+                                 where ap.action_id = 83569;
+
+select * from ActionProperty
+join ActionPropertyType APT on ActionProperty.type_id = APT.id
+where ActionProperty.action_id = 83569
