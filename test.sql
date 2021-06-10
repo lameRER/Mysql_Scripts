@@ -40,3 +40,8 @@ select login, password, userProfile_id
 from Person where lastName regexp  'клищ';
 select *
 from rbUserProfile where id = 10;
+
+
+
+select *
+from rbPrintTemplate where id= 1272;
