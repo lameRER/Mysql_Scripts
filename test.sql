@@ -152,4 +152,12 @@ select ap.deleted, os.code FROM OrgStructure os
 
 select * from ActionProperty
 join ActionPropertyType APT on ActionProperty.type_id = APT.id
-where ActionProperty.action_id = 83569
+where ActionProperty.action_id = 83569;
+
+select * from ActionProperty_OrgStructure where id = 407544
+
+
+
+select *
+from ActionType where id = (select actionType_id
+from Action where id =83815);

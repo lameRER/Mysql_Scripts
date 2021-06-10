@@ -82,7 +82,7 @@ SELECT
     LEFT JOIN Person p4 ON apr5.value = p4.id AND p4.deleted = 0
     LEFT JOIN OrgStructure_HospitalBed oshb ON aphb.value = oshb.id
     LEFT JOIN OrgStructure os1 ON apos.value = os1.id
-    WHERE e.eventType_id = 84 and a.id in (83569) GROUP by a.id ORDER BY nomeroperacionn, smena;
+    WHERE e.eventType_id = 84 and a.id in (83569) ORDER BY nomeroperacionn, smena;
 
 select * from Action where id = 83816
 
