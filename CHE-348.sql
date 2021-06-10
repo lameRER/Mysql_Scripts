@@ -13,7 +13,7 @@ SELECT
     CONCAT(p3.lastName, ' ', CONCAT(LEFT(p3.firstName, 1),'.'), CONCAT(LEFT(p3.patrName,1), '.')) AS `anessist`,
     CONCAT(p4.lastName, ' ', CONCAT(LEFT(p4.firstName, 1),'.'), CONCAT(LEFT(p4.patrName,1), '.')) AS `surgsist`,
     CONCAT(plv.lastName, ' ', CONCAT(LEFT(plv.firstName, 1),'.'), CONCAT(LEFT(plv.patrName,1), '.')) AS `dr`,
-    os1.name AS otdelenie,
+    os1.code AS otdelenie,
     oshb.name AS nomerkojki,
     tie.number AS nomerbol,
     os.name AS nomeroperacionn,
@@ -78,10 +78,13 @@ SELECT
     LEFT JOIN Person p4 ON apr5.value = p4.id AND p4.deleted = 0
     LEFT JOIN OrgStructure_HospitalBed oshb ON aphb.value = oshb.id
     LEFT JOIN OrgStructure os1 ON apos.value = os1.id
-    WHERE e.eventType_id = 84 and a.id in (83569) ORDER BY nomeroperacionn, smena;
+    WHERE e.eventType_id = 84 and a.id in (83815) ORDER BY nomeroperacionn, smena;
 
 select * from Action where id = 83816
 
+
+select *
+from OrgStructure;
 
 select *
 from ActionType where id = 24025;
