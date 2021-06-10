@@ -29,3 +29,8 @@ test vista
 update ActionPropertyType
 set valueDomain = regexp_replace(valueDomain, '\'', '\"')
 where valueDomain REGEXP '\'';
+
+select md5('1');
+
+
+select p.login, p.userProfile_id, pu.name from Person p, rbUserProfile pu where p.password = 'c4ca4238a0b923820dcc509a6f75849b' and p.deleted = 0 and p.userProfile_id = pu.id group by pu.id
