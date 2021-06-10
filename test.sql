@@ -108,7 +108,7 @@ SELECT
     LEFT JOIN ActionProperty ap8 ON a1.id = ap8.action_id AND apt8.id = ap8.type_id AND ap8.deleted = 0
     LEFT JOIN ActionProperty ap9 ON a.id = ap9.action_id AND apt9.id = ap9.type_id AND ap9.deleted = 0
     LEFT JOIN ActionProperty ap10 ON a.id = ap10.action_id AND apt10.id = ap10.type_id AND ap10.deleted = 0
-    LEFT JOIN ActionProperty_Reference apr ON ap.id = apr.id
+    LEFT JOIN ActionProperty_OrgStructure apr ON ap.id = apr.id
     LEFT JOIN ActionProperty_Integer api ON ap3.id = api.id
     LEFT JOIN ActionProperty_Reference apr1 ON apr1.id = ap1.id
     LEFT JOIN ActionProperty_Reference apr2 ON apr2.id = ap2.id
@@ -134,3 +134,9 @@ select *
 from ActionProperty_Reference where id = 408101;
 select *
 from ActionPropertyType where id =185363;
+select *
+from ActionProperty_OrgStructure where id = 408101;
+select *
+from OrgStructure where id = 70;
+select *
+from rbPrintTemplate where id = 1286;
