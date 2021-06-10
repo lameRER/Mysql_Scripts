@@ -126,3 +126,5 @@ SELECT
     LEFT JOIN OrgStructure_HospitalBed oshb ON aphb.value = oshb.id
     LEFT JOIN OrgStructure os1 ON apos.value = os1.id
     WHERE e.eventType_id = 84 and a.id in (83815) GROUP by a.id ORDER BY nomeroperacionn, smena;
+select *
+from ActionPropertyType where name = 'Операционная';
