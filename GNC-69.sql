@@ -35,15 +35,16 @@ from ActionType where group_id = 9148;
 
 
 select *
-from ActionType where group_id = 9148;
+from ActionType where group_id = 9153;
 
 
 select *
-from ActionType where id = 9152
+from ActionType where id = 9173
 ;
 
 
 select
+       pgt.three,
        now() createDatetime,
        null createPerson_id,
        now() modifyDatetime,
@@ -53,8 +54,8 @@ select
        A.class,
        at2.id group_id,
        pgt.code code,
-       TRIM(pgt.three) name,
-       TRIM(pgt.three) title,
+       TRIM(pgt.name) name,
+       TRIM(pgt.name) title,
        '' flatCode,
        A.sex,
        A.age,
@@ -104,7 +105,7 @@ left join rbService r on pgt.code = r.code and right(pgt.code, length(pgt.code)-
 left join ActionType_Service ATS on r.id = ATS.service_id
 left join ActionType A on ATS.master_id = A.id or A.id = 7953
 join ActionType at2 on trim(at2.name) = trim(pgt.two) and at2.group_id = 9148
-where r.code is null and pgt.one = '1. АМБУЛАТОРНО-ПОЛИКЛИНИЧЕСКАЯ ПОМОЩЬ ' and pgt.three is not null group by pgt.three
+where r.code is null and pgt.one = '1. АМБУЛАТОРНО-ПОЛИКЛИНИЧЕСКАЯ ПОМОЩЬ '
 
 
 
