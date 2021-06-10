@@ -27,7 +27,7 @@ from Person;
 
 
 select *
-from ActionType where group_id = 9148;
+from ActionType where group_id = 9153;
 
 select *
 from ActionType where group_id = 9148;
@@ -39,7 +39,7 @@ from ActionType where group_id = 9153;
 
 
 select *
-from ActionType where id = 9173
+from ActionType where id = 9704
 ;
 
 
@@ -104,7 +104,7 @@ from price_gnc_temp pgt
 left join rbService r on pgt.code = r.code and right(pgt.code, length(pgt.code)-1) = right(r.code, length(r.code)-1)
 left join ActionType_Service ATS on r.id = ATS.service_id
 left join ActionType A on ATS.master_id = A.id or A.id = 7953
-join ActionType at2 on trim(at2.name) = trim(pgt.two) and at2.group_id = 9148
+join ActionType at2 on trim(at2.name) = trim(pgt.three) -- and at2.group_id = 9148
 where r.code is null and pgt.one = '1. АМБУЛАТОРНО-ПОЛИКЛИНИЧЕСКАЯ ПОМОЩЬ '
 
 
