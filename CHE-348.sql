@@ -26,7 +26,7 @@ SELECT
     FROM Event e
     JOIN Client c ON e.client_id = c.id AND c.deleted = 0
     left join ClientAnthropometric ca on ca.client_id = c.id and ca.id = (select max(ca1.id) from ClientAnthropometric ca1 where ca1.client_id = c.id order by ca.id desc limit 1)
-    left join Diagnostic d2 on d2.event_id = e.id and d2.deleted = 0
+    left join Diagnostic d2 on d2.event_id = e.id and d2.deleted = 0 and d2.id = (select max(dc.id) from Diagnostic dc where dc.id = d2.event_id)
     left join Diagnosis d3 on d3.id = d2.diagnosis_id and d3.deleted = 0
     left join rbDiagnosisType rdt on d2.diagnosisType_id = rdt.id
     JOIN Action a ON e.id = a.event_id AND a.deleted=0
@@ -78,7 +78,7 @@ SELECT
     LEFT JOIN Person p4 ON apr5.value = p4.id AND p4.deleted = 0
     LEFT JOIN OrgStructure_HospitalBed oshb ON aphb.value = oshb.id
     LEFT JOIN OrgStructure os1 ON apos.value = os1.id
-    WHERE e.eventType_id = 84 and a.id in (83815) ORDER BY nomeroperacionn, smena;
+    WHERE e.eventType_id = 84 and a.id in (83815) GROUP by a.id ORDER BY nomeroperacionn, smena;
 
 select * from Action where id = 83816
 
