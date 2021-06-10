@@ -41,9 +41,9 @@ select
        A.hidden,
        A.class,
        at2.id group_id,
-       pgt.code code,
-       TRIM(pgt.name) name,
-       TRIM(pgt.name) title,
+       '' code,
+       TRIM(pgt.two) name,
+       TRIM(pgt.two) title,
        '' flatCode,
        A.sex,
        A.age,
@@ -93,9 +93,13 @@ left join rbService r on pgt.code = r.code and right(pgt.code, length(pgt.code)-
 left join ActionType_Service ATS on r.id = ATS.service_id
 left join ActionType A on ATS.master_id = A.id or A.id = 7953
 join ActionType at2 on trim(at2.name) = trim(pgt.two) and at2.group_id = 9148
-where r.code is null and pgt.one = '1. АМБУЛАТОРНО-ПОЛИКЛИНИЧЕСКАЯ ПОМОЩЬ '
+where r.code is null and pgt.one = '1. АМБУЛАТОРНО-ПОЛИКЛИНИЧЕСКАЯ ПОМОЩЬ ' group by pgt.two
 
 
+
+select *
+from ActionType where group_id in (select id
+from ActionType where group_id = 9148)
 
 
 select
