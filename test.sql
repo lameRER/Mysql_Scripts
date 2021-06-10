@@ -49,6 +49,8 @@ from rbPrintTemplate where id= 1272;
 
 
 SELECT
+    ap.*,
+    apr.*,
 	aps1.value as `note`,
 	GROUP_CONCAT(DISTINCT CONCAT(rdt.name,': ', d3.MKB) SEPARATOR '\n') as `diag`,
     CONCAT_WS(' ',api.value, 'смена') AS smena,
@@ -128,3 +130,7 @@ SELECT
     WHERE e.eventType_id = 84 and a.id in (83815) GROUP by a.id ORDER BY nomeroperacionn, smena;
 select *
 from ActionPropertyType where name = 'Операционная';
+select *
+from ActionProperty_Reference where id = 408101;
+select *
+from ActionPropertyType where id =185363;
