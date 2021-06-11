@@ -38,9 +38,12 @@ select *
 from ActionType where group_id = 9156;
 
 
-select *
-from ActionType where id = 9150
-;
+select ActionType.name, at2.code,at2.name, at2.group_id
+from ActionType
+join ActionType at2 on at2.group_id = ActionType.id
+where ActionType.group_id in(select id
+from ActionType where group_id = (select id
+from ActionType where id = 9147))
 
 
 
@@ -55,7 +58,7 @@ select
        A.class,
        at2.id group_id,
        pgt.code code,
-       TRIM(pgt.name) name,3
+       TRIM(pgt.name) name,
        TRIM(pgt.name) title,
        '' flatCode,
        A.sex,
