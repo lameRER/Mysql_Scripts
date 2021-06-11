@@ -85,7 +85,6 @@ select
 #        pgt.code as newCode, pli.serviceCodeOW, pgt.name as newName, pli.serviceNameOW, concat(pgt.price,'.00') newPrice, pli.price, pli.deleted
 from price_gnc_temp pgt
 left join PriceListItem pli on pli.serviceCodeOW = pgt.code and pli.priceList_id = 124 and (pgt.name != pli.serviceNameOW or concat(pgt.price,'.00') != pli.price)
-where pli.serviceCodeOW is not null
 group by pgt.code
 
 
