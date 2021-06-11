@@ -74,7 +74,7 @@ select
        serviceNameOW,
        begDate,
        endDate,
-       pgt.price newPrice,
+       concat(pgt.price,'.00') newPrice,
        pli.price,
        isAccumulativePrice,
        limitPerDay,
