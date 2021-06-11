@@ -35,7 +35,7 @@ from ActionType where group_id = 9148;
 
 
 select *
-from ActionType where id = 7953;
+from ActionType where id = 9149;
 
 
 select ActionType.name, at2.code,at2.name, at2.group_id
