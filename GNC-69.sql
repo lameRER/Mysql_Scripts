@@ -58,16 +58,33 @@ from ActionType where id = 8433;
 
 
 
-SELECT pgt.code, pli.serviceCodeOW, pgt.name, pli.serviceNameOW, pgt.price, pli.price, pli.deleted FROM PriceListItem pli
-right join price_gnc_temp pgt on pgt.code = pli.serviceCodeOW and (pgt.name != pli.serviceNameOW or pgt.price != pli.price)
-WHERE pli.priceList_id=124 group by pgt.code, pgt.name
+
 
 select *
 from PriceListItem;
 
-select pgt.code, pli.serviceCodeOW, pgt.name, pli.serviceNameOW, pgt.price, pli.price, pli.deleted
+select
+       id,
+       priceList_id,
+       deleted,
+       service_id,
+       pgt.code as newCode,
+       serviceCodeOW,
+       pgt.name as newName,
+       serviceNameOW,
+       begDate,
+       endDate,
+       pgt.price newPrice,
+       pli.price,
+       isAccumulativePrice,
+       limitPerDay,
+       limitPerMonth,
+       limitPerPriceList,
+       LCE,
+       LCE_test
+#        pgt.code as newCode, pli.serviceCodeOW, pgt.name as newName, pli.serviceNameOW, concat(pgt.price,'.00') newPrice, pli.price, pli.deleted
 from price_gnc_temp pgt
-left join PriceListItem pli on pli.serviceCodeOW = pgt.code and pli.priceList_id = 124 and (pgt.name != pli.serviceNameOW or pgt.price != pli.price)
+left join PriceListItem pli on pli.serviceCodeOW = pgt.code and pli.priceList_id = 124 and (pgt.name != pli.serviceNameOW or concat(pgt.price,'.00') != pli.price)
 where pli.serviceCodeOW is not null
 group by pgt.code
 
