@@ -58,8 +58,8 @@ from ActionType where id = 8433;
 
 
 
-SELECT pgt.code, pgt.name FROM PriceListItem pli
-right join price_gnc_temp pgt on pgt.code = pli.serviceCodeOW
+SELECT pgt.code, pli.serviceCodeOW, pgt.name, pli.serviceNameOW, pgt.price, pli.price, pli.deleted FROM PriceListItem pli
+right join price_gnc_temp pgt on pgt.code = pli.serviceCodeOW and (pgt.name != pli.serviceNameOW or pgt.price != pli.price)
 WHERE pli.priceList_id=124 group by pgt.code, pgt.name
 
 
