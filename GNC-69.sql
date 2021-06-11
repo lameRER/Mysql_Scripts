@@ -35,7 +35,7 @@ from ActionType where group_id = 9148;
 
 
 select *
-from ActionType where group_id = 9156;
+from ActionType where id = 7953;
 
 
 select ActionType.name, at2.code,at2.name, at2.group_id
@@ -46,6 +46,70 @@ from ActionType where group_id = (select id
 from ActionType where id = 9147))
 
 
+
+select
+       pgt.two,
+       now() createDatetime,
+       null createPerson_id,
+       now() modifyDatetime,
+       null modifyPerson_id,
+       A.deleted,
+       A.hidden,
+       A.class,
+       at2.id group_id,
+       '' code,
+       TRIM(pgt.two) name,
+       TRIM(pgt.two) title,
+       '' flatCode,
+       A.sex,
+       A.age,
+       A.age_bu,
+       A.age_bc,
+       A.age_eu,
+       A.age_ec,
+       A.office,
+       A.showInForm,
+       A.genTimetable,
+       A.service_id,
+       A.quotaType_id,
+       A.context,
+       A.amount,
+       A.amountEvaluation,
+       A.defaultStatus,
+       A.defaultDirectionDate,
+       A.defaultPlannedEndDate,
+       A.defaultEndDate,
+       A.defaultExecPerson_id,
+       A.defaultPersonInEvent,
+       A.defaultPersonInEditor,
+       A.maxOccursInEvent,
+       A.showTime,
+       A.isMES,
+       A.nomenclativeService_id,
+       A.isPreferable,
+       A.prescribedType_id,
+       A.shedule_id,
+       A.isRequiredCoordination,
+       A.isRequiredTissue,
+       A.testTubeType_id,
+       A.jobType_id,
+       A.mnem,
+       A.layout,
+       A.hasPrescriptions,
+       A.autoclose_on_event_close,
+       A.noteMandatory,
+       A.canHaveAttaches,
+       A.loadPrintTemplate_id,
+       A.dynamicNumberType_id,
+       A.counter_id,
+       A.ttjExternalCounter_id,
+       A.ttjExternalCounter_id_cached
+from price_gnc_temp pgt
+left join rbService r on pgt.code = r.code and right(pgt.code, length(pgt.code)-1) = right(r.code, length(r.code)-1)
+left join ActionType_Service ATS on r.id = ATS.service_id
+left join ActionType A on ATS.master_id = A.id or A.id = 7953
+join ActionType at2 on trim(at2.name) = trim(pgt.one) -- and at2.group_id = 9148
+-- where r.code is null and pgt.three is null -- and pgt.code is not null
 
 
 select
@@ -111,7 +175,8 @@ left join ActionType A on ATS.master_id = A.id or A.id = 7953
 join ActionType at2 on trim(at2.name) = trim(pgt.two) -- and at2.group_id = 9148
 where r.code is null and pgt.one = '1. АМБУЛАТОРНО-ПОЛИКЛИНИЧЕСКАЯ ПОМОЩЬ ' and pgt.three is null and pgt.code is not null
 
-
+select *
+from price_gnc_temp where one = '2. СТАЦИОНАРНАЯ ПОМОЩЬ, ОПЕРАТИВНЫЕ ВМЕШАТЕЛЬСТВА '
 
 select *
 from ActionType where group_id in (select id
