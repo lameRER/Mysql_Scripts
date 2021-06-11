@@ -14,7 +14,7 @@ from netricaTypeFromDiseaseStart;
 # позднее 24-х часов
 
 
-insert into ActionProperty_Reference(id, `index`, value)
+# insert into ActionProperty_Reference(id, `index`, value)
 select aps.id, 0,
        case
            when aps.value regexp '^в первые 6часов|^1 час|^2 часа|^3 часа|^4|^4 часа|^5 часов|^6 часов|^< font style="vertical-align: inherit;">< font style="vertical-align: inherit;">1 час< /font>< /font>|^< font style="vertical-align: inherit;">< font style="vertical-align: inherit;">4 часа< /font>< /font>' then 4
@@ -41,9 +41,15 @@ join ActionPropertyType apt on apt.actionType_id = at2.id and apt.deleted =0 and
 set ap.type_id =38920
 where ap.deleted= 0 and aps.id is not null; -- group by aps.value;
 
+
+select *
+from ActionProperty where type_id = 35423;
+
 select *
 from ActionPropertyType where actionType_id = 15084;
 
+select *
+from Person;
 
 
 select *
