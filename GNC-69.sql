@@ -63,6 +63,13 @@ right join price_gnc_temp pgt on pgt.code = pli.serviceCodeOW and (pgt.name != p
 WHERE pli.priceList_id=124 group by pgt.code, pgt.name
 
 
+select pgt.code, pli.serviceCodeOW, pgt.name, pli.serviceNameOW, pgt.price, pli.price, pli.deleted
+from price_gnc_temp pgt
+left join PriceListItem pli on pli.serviceCodeOW = pgt.code and pli.priceList_id = 124
+where pli.serviceCodeOW is not null
+group by pgt.code
+
+
 
 
 
