@@ -55,7 +55,7 @@ select
        A.class,
        at2.id group_id,
        pgt.code code,
-       TRIM(pgt.name) name,
+       TRIM(pgt.name) name,3
        TRIM(pgt.name) title,
        '' flatCode,
        A.sex,
