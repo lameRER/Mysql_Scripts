@@ -35,7 +35,7 @@ from ActionType where group_id = 9148;
 
 
 select *
-from ActionType where id = 9149;
+from ActionType where id = 11935;
 
 
 select ActionType.name, at2.code,at2.name, at2.group_id
@@ -47,8 +47,12 @@ from ActionType where id = 9147))
 
 
 
+
+
+
+
 select
-       pgt.two,
+#        pgt.two,
        now() createDatetime,
        null createPerson_id,
        now() modifyDatetime,
@@ -57,9 +61,9 @@ select
        A.hidden,
        A.class,
        at2.id group_id,
-       '' code,
-       TRIM(pgt.two) name,
-       TRIM(pgt.two) title,
+       pgt.code code,
+       TRIM(pgt.name) name,
+       TRIM(pgt.code) title,
        '' flatCode,
        A.sex,
        A.age,
@@ -108,8 +112,8 @@ from price_gnc_temp pgt
 left join rbService r on pgt.code = r.code and right(pgt.code, length(pgt.code)-1) = right(r.code, length(r.code)-1)
 left join ActionType_Service ATS on r.id = ATS.service_id
 left join ActionType A on ATS.master_id = A.id or A.id = 7953
-join ActionType at2 on trim(at2.name) = trim(pgt.one) -- and at2.group_id = 9148
--- where r.code is null and pgt.three is null -- and pgt.code is not null
+join ActionType at2 on trim(at2.name) = trim(pgt.two) -- and at2.group_id = 9148
+where r.code is null and pgt.one = '2. СТАЦИОНАРНАЯ ПОМОЩЬ, ОПЕРАТИВНЫЕ ВМЕШАТЕЛЬСТВА ' and pgt.three is null group by pgt.name
 
 
 select
