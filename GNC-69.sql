@@ -46,6 +46,28 @@ from ActionType where group_id = (select id
 from ActionType where id = 9147))
 
 
+SELECT * FROM PriceListItem pli WHERE pli.priceList_id=124
+
+
+select *
+from rbService where id = 13851;
+select *
+from ActionType_Service where service_id = 13851;
+select *
+from ActionType where id = 8433;
+
+
+
+SELECT pgt.code, pgt.name FROM PriceListItem pli
+right join price_gnc_temp pgt on pgt.code = pli.serviceCodeOW
+WHERE pli.priceList_id=124 group by pgt.code, pgt.name
+
+
+
+
+
+select *
+from PriceList where id = 124;
 
 
 
