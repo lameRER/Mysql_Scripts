@@ -4,10 +4,21 @@ BasicDiagnoses
 postypivshie
 
 select *
-from rbPrintTemplate order by id desc;
+from rbPrintTemplate order by id desc limit 5;
+
+
+
+INSERT INTO gnc.rbPrintTemplate (code, name, context, fileName, `default`, dpdAgreement, render, templateText, deleted,
+                                 jasper_template_uri, formats, default_format, active)
+VALUES ('1193-73', 'Основные диагнозы', 'free', '', '', 0, 2, '', 0,
+        '/reports/Hippocrates/TMIS/AnaReports/BasicDiagnoses', 'xlsx', 'xlsx', 1);
+
+
+
 
 select *
 from rbSpecialVariablesPreferences where name = 'SpecialVar_ClientDiagnosis';
+Diagnosis
 SELECT
   a.createDatetime,
   e.client_id ClientId,
