@@ -1,6 +1,9 @@
 select *
 from rbPrintTemplate where name regexp 'Основные диагнозы';
 select *
+from rbPrintTemplate order by id desc;
+
+select *
 from rbSpecialVariablesPreferences where name = 'SpecialVar_ClientDiagnosis';
 SELECT
        e.id,
