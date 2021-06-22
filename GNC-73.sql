@@ -7,11 +7,19 @@ select *
 from rbPrintTemplate order by id desc limit 5;
 
 
+select *
+from rbPrintTemplateMeta where template_id = 6594 or template_id = 34408;
 
-INSERT INTO gnc.rbPrintTemplate (code, name, context, fileName, `default`, dpdAgreement, render, templateText, deleted,
-                                 jasper_template_uri, formats, default_format, active)
-VALUES ('1193-73', 'Основные диагнозы', 'free', '', '', 0, 2, '', 0,
-        '/reports/Hippocrates/TMIS/AnaReports/BasicDiagnoses', 'xlsx', 'xlsx', 1);
+INSERT INTO gnc.rbPrintTemplateMeta (template_id, type, name, title, description, arguments, defaultValue, query)
+VALUES (34408, 'Date', 'Date1', 'Введите дату начала периода', '', null, null, null);
+
+INSERT INTO gnc.rbPrintTemplateMeta (template_id, type, name, title, description, arguments, defaultValue, query)
+VALUES (34408, 'Date', 'Date2', 'Введите дату окончания периода', '', null, null, null);
+
+
+
+
+
 
 
 
