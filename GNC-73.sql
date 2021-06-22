@@ -3,6 +3,7 @@ from rbPrintTemplate where name regexp 'Основные диагнозы';
 select *
 from rbSpecialVariablesPreferences where name = 'SpecialVar_ClientDiagnosis';
 SELECT
+       e.id,
   a.createDatetime,
   e.client_id ClientId,
   CONCAT_WS(' ', c.lastName, c.firstName, c.patrName) ClientFio,
@@ -41,6 +42,7 @@ FROM Event e
     ON m.DiagID = d.MKB
     AND m.deleted = 0
 WHERE a.begDate BETWEEN :Date1 AND :Date2 + INTERVAL 1 DAY - INTERVAL 1 SECOND
+    -- AND e.id>20000000
     AND e.deleted = 0
     AND e.client_id != 18
     AND at.class=0
@@ -51,4 +53,4 @@ select *
 from Event where id < 20000000 order by id desc;
 
 select *
-from MKB where DiagID regexp 'A00';
+from MKB where DiagID regexp 'z00';
