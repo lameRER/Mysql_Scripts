@@ -1,6 +1,7 @@
 select *
 from rbPrintTemplate where name regexp 'Основные диагнозы';
 BasicDiagnoses
+postypivshie
 
 select *
 from rbPrintTemplate order by id desc;
