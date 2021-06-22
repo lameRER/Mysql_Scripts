@@ -9,7 +9,6 @@ from rbPrintTemplate order by id desc;
 select *
 from rbSpecialVariablesPreferences where name = 'SpecialVar_ClientDiagnosis';
 SELECT
-       e.id,
   a.createDatetime,
   e.client_id ClientId,
   CONCAT_WS(' ', c.lastName, c.firstName, c.patrName) ClientFio,
@@ -55,6 +54,8 @@ WHERE a.begDate BETWEEN :Date1 AND :Date2 + INTERVAL 1 DAY - INTERVAL 1 SECOND
     AND m.id = :Diagnosis
 GROUP BY c.id, p.id
 ORDER BY a.createDatetime
+
+$P{Date1}
 select *
 from Event where id < 20000000 order by id desc;
 
