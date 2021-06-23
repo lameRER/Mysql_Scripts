@@ -5,6 +5,14 @@ set @ActionPropertyType = 'Доставлен';
 set @ActionPropertyTypeOld = (select id from ActionPropertyType where name = @ActionPropertyType and actionType_id = @ActionType and deleted = 0 and typeName = 'String');
 set @ActionPropertyTypeNew = (select id from ActionPropertyType where name = @ActionPropertyType and actionType_id = @ActionType and deleted = 0 and typeName = 'Reference');
 
+insert into ActionProperty_String_id_to_delete(id, idx, value)
+select aps.*
+from ActionProperty ap
+left Join ActionProperty_String aps using(id)
+join Action a on ap.action_id = a.id and a.deleted = 0
+join ActionType at2 on at2.id = a.actionType_id and at2.deleted = 0 and at2.flatCode = @flatCode
+join ActionPropertyType apt on apt.actionType_id = at2.id and apt.deleted =0 and ap.type_id = apt.id and apt.id = @ActionPropertyTypeOld
+where ap.deleted= 0 and aps.id is not null;
 
 insert into ActionProperty_Reference(id, `index`, value)
 select aps.id, 0,
@@ -35,6 +43,13 @@ UPDATE ActionPropertyType SET idx = 20, penalty = 0, penaltyUserProfile = '7;19'
 
 
 
+
+
+
+set @ActionPropertyTypeOld = (select id from ActionPropertyType where name = 'Кем доставлен' and actionType_id = @ActionType and deleted = 0 and typeName = 'String');
+set @ActionPropertyTypeNew = (select id from ActionPropertyType where name = 'Канал доставки' and actionType_id = @ActionType and deleted = 0 and typeName = 'Reference');
+
+insert into ActionProperty_String_id_to_delete(id, idx, value)
 select aps.*
 from ActionProperty ap
 left Join ActionProperty_String aps using(id)
@@ -42,13 +57,6 @@ join Action a on ap.action_id = a.id and a.deleted = 0
 join ActionType at2 on at2.id = a.actionType_id and at2.deleted = 0 and at2.flatCode = @flatCode
 join ActionPropertyType apt on apt.actionType_id = at2.id and apt.deleted =0 and ap.type_id = apt.id and apt.id = @ActionPropertyTypeOld
 where ap.deleted= 0 and aps.id is not null;
-
-
-
-
-
-set @ActionPropertyTypeOld = (select id from ActionPropertyType where name = 'Кем доставлен' and actionType_id = @ActionType and deleted = 0 and typeName = 'String');
-set @ActionPropertyTypeNew = (select id from ActionPropertyType where name = 'Канал доставки' and actionType_id = @ActionType and deleted = 0 and typeName = 'Reference');
 
 insert into ActionProperty_Reference(id, `index`, value)
 select aps.id, 0,
@@ -66,6 +74,7 @@ where ap.deleted= 0 and aps.id is not null;
 
 UPDATE ActionPropertyType SET idx = 2, visibleInDR = 1, userProfile_id = null, userProfileBehaviour = 0 WHERE id = 38922;
 UPDATE ActionPropertyType SET idx = 21, visibleInDR = 0, userProfile_id = 1, userProfileBehaviour = 1 WHERE id = 35418;
+
 
 
 
