@@ -13,7 +13,7 @@ from ActionType where id = 11021;
 
 
 select *
-from ActionType where group_id = 11018;
+from ActionType where id = 11018;
 
 select *
 from Job where jobType_id = 64 and date = '2021-06-24';
@@ -21,6 +21,10 @@ from Job where jobType_id = 64 and date = '2021-06-24';
 
 select *
 from rbUserRight where name regexp 'очеред';
+
+
+select e.id, et.*
+from Action a, Event e, EventType et where e.id = a.event_id and a.actionType_id = 11021 and a.deleted = 0 and e.deleted = 0 group by et.id, e.id;
 
 
 select *
