@@ -1,17 +1,14 @@
-select *
-from ActionType where flatCode = 'received';
+
+set @flatCode = 'received';
+set @ActionType = (select id from ActionType where flatCode = @flatCode);
+
+select @ActionType;
 
 
 select *
-from ActionPropertyType where actionType_id = 15084 and deleted = 0 order by idx;
+from ActionPropertyType where actionType_id = @ActionType and deleted = 0 order by idx;
 
 
-select *
-from netricaTypeFromDiseaseStart;
-
-# в первые 6 часов
-# в течение 7-24 часов
-# позднее 24-х часов
 
 
 # insert into ActionProperty_Reference(id, `index`, value)
@@ -22,9 +19,8 @@ select aps.id, 0,
            when aps.value regexp '^менее 2 суток|^более 24-х часов|^более 7 суток|^менее 3 суток|^менее 4 суток|^менее 5 суток|^менее 6 суток|^менее 7 суток|^позднее 24-х часов' then 6 end
 from ActionProperty ap
 left Join ActionProperty_String aps using(id)
-# left Join ActionProperty_Reference apr using(id)
 join Action a on ap.action_id = a.id and a.deleted = 0
-join ActionType at2 on at2.id = a.actionType_id and at2.deleted = 0 and at2.flatCode = 'received'
+join ActionType at2 on at2.id = a.actionType_id and at2.deleted = 0 and at2.flatCode = @flatCode
 join ActionPropertyType apt on apt.actionType_id = at2.id and apt.deleted =0 and ap.type_id = apt.id and apt.name = 'Доставлен'
 where ap.deleted= 0 and aps.id is not null; -- group by aps.value;
 
