@@ -88,7 +88,7 @@ select * from
 # update
               ActionPropertyType
 # set penalty = 100
-where valueDomain in ('netricaTypeFromDiseaseStart', 'netricaTransportIntern', 'netricaHospChannel', 'netricaPatientConditionOnAdmission', 'netricaIntoxicationType', 'rbTransf') and actionType_id = 15084-- and penalty != 100;
+where valueDomain in ('netricaTypeFromDiseaseStart', 'netricaTransportIntern', 'netricaHospChannel', 'netricaPatientConditionOnAdmission', 'netricaIntoxicationType', 'rbTransf') and actionType_id = 15084 and penalty != 100;
 
 
 
