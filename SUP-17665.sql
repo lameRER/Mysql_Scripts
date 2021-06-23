@@ -34,6 +34,29 @@ where ap.deleted= 0 and aps.id is not null;
 
 
 select *
+from ActionPropertyType where actionType_id = @ActionType;
+
+
+select *
+from netricaTransportIntern;
+
+select *
+from netricaHospChannel;
+
+select *
+from netricaPatientConditionOnAdmission;
+
+select *
+from netricaIntoxicationType;
+
+select *
+from rbTransf;
+
+
+
+
+
+select *
 from ActionProperty where type_id = 35423;
 
 select *
