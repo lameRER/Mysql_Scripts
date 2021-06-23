@@ -32,33 +32,37 @@ join ActionPropertyType apt on apt.actionType_id = at2.id and apt.deleted =0 and
 where ap.deleted= 0 and aps.id is not null;
 
 
-set @ActionPropertyType = 'Транспортировка';
-set @ActionPropertyTypeOld = (select id from ActionPropertyType where name = @ActionPropertyType and actionType_id = @ActionType and deleted = 0 and typeName = 'String');
-set @ActionPropertyTypeNew = (select id from ActionPropertyType where name = @ActionPropertyType and actionType_id = @ActionType and deleted = 0 and typeName = 'Reference');
+set @ActionPropertyTypeOld = (select id from ActionPropertyType where name = 'Кем доставлен' and actionType_id = @ActionType and deleted = 0 and typeName = 'String');
+set @ActionPropertyTypeNew = (select id from ActionPropertyType where name = 'Канал доставки' and actionType_id = @ActionType and deleted = 0 and typeName = 'Reference');
 
+
+select @ActionPropertyTypeNew;
 
 set @test = (select group_concat((select id from ActionPropertyType where actionType_id = @ActionType and (id = @ActionPropertyTypeNew or id = @ActionPropertyTypeOld) and deleted = 0 order by idx) separator ','));
 
-select @test;
+select group_concat((select id from ActionPropertyType where actionType_id = @ActionType and (id = @ActionPropertyTypeNew or id = @ActionPropertyTypeOld) and deleted = 0 order by idx) separator ',')
 
 
 select *
 from ActionPropertyType where actionType_id = @ActionType;
 
 select *
-from ActionPropertyType where actionType_id = @ActionType;
+from ActionPropertyType where actionType_id = @ActionType
 
 select *
 from netricaHospChannel;
 
-select *
-from netricaPatientConditionOnAdmission;
+СМП
+Самотек
+Перевод из ЛПУ прикрепленного района
+Перевод из ЛПУ неприкрепленного района
+Перевод из первичного сосудистого отделения в региональный сосуд
+Перевод из другого отделения ЛПУ в связи с уточнением диагноза
+Перевод из другого отделения ЛПУ в связи с возникновением внутри
+Перевод из ЛПУ неприкрепленного района
 
-select *
-from netricaIntoxicationType;
 
-select *
-from rbTransf;
+
 
 
 
