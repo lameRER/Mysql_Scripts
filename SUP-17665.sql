@@ -1,15 +1,12 @@
 
 set @flatCode = 'received';
-set @ActionType = (select id from ActionType where flatCode = @flatCode);
-
-select @ActionType;
-
+set @ActionType = (select id from ActionType where flatCode = @flatCode and deleted = 0);
+set @ActionPropertyType = 'Доставлен';
+set @ActionPropertyTypeOld = (select id from ActionPropertyType where name = @ActionPropertyType and actionType_id = @ActionType and deleted = 0 and typeName = 'String');
+set @ActionPropertyTypeNew = (select id from ActionPropertyType where name = @ActionPropertyType and actionType_id = @ActionType and deleted = 0 and typeName = 'Reference');
 
 select *
-from ActionPropertyType where actionType_id = @ActionType and deleted = 0 order by idx;
-
-
-
+from ActionPropertyType where actionType_id = @ActionType and (id = @ActionPropertyTypeNew or id = @ActionPropertyTypeOld) and deleted = 0 order by idx;
 
 # insert into ActionProperty_Reference(id, `index`, value)
 select aps.id, 0,
@@ -21,20 +18,18 @@ from ActionProperty ap
 left Join ActionProperty_String aps using(id)
 join Action a on ap.action_id = a.id and a.deleted = 0
 join ActionType at2 on at2.id = a.actionType_id and at2.deleted = 0 and at2.flatCode = @flatCode
-join ActionPropertyType apt on apt.actionType_id = at2.id and apt.deleted =0 and ap.type_id = apt.id and apt.name = 'Доставлен'
-where ap.deleted= 0 and aps.id is not null; -- group by aps.value;
+join ActionPropertyType apt on apt.actionType_id = at2.id and apt.deleted =0 and ap.type_id = apt.id and apt.id = @ActionPropertyTypeOld
+where ap.deleted= 0 and aps.id is not null;
 
 
-update
-# select ap.*
-# from
+# update
+select ap.* from
     ActionProperty ap
 left Join ActionProperty_String aps using(id)
-# left Join ActionProperty_Reference apr using(id)
 join Action a on ap.action_id = a.id and a.deleted = 0
-join ActionType at2 on at2.id = a.actionType_id and at2.deleted = 0 and at2.flatCode = 'received'
-join ActionPropertyType apt on apt.actionType_id = at2.id and apt.deleted =0 and ap.type_id = apt.id and apt.name = 'Доставлен' and ap.type_id = 35423
-set ap.type_id =38920
+join ActionType at2 on at2.id = a.actionType_id and at2.deleted = 0 and at2.flatCode = @flatCode
+join ActionPropertyType apt on apt.actionType_id = at2.id and apt.deleted =0 and ap.type_id = apt.id and apt.name = @ActionPropertyType and apt.typeName = 'String'
+# set ap.type_id =38920
 where ap.deleted= 0 and aps.id is not null; -- group by aps.value;
 
 
