@@ -35,19 +35,24 @@ where ap.deleted= 0 and aps.id is not null;
 set @ActionPropertyTypeOld = (select id from ActionPropertyType where name = 'Кем доставлен' and actionType_id = @ActionType and deleted = 0 and typeName = 'String');
 set @ActionPropertyTypeNew = (select id from ActionPropertyType where name = 'Канал доставки' and actionType_id = @ActionType and deleted = 0 and typeName = 'Reference');
 
-
-select @ActionPropertyTypeNew;
-
-set @test = (select group_concat((select id from ActionPropertyType where actionType_id = @ActionType and (id = @ActionPropertyTypeNew or id = @ActionPropertyTypeOld) and deleted = 0 order by idx) separator ','));
-
-select group_concat((select id from ActionPropertyType where actionType_id = @ActionType and (id = @ActionPropertyTypeNew or id = @ActionPropertyTypeOld) and deleted = 0 order by idx) separator ',')
-
+# insert into ActionProperty_Reference(id, `index`, value)
+select aps.id, 0,
+       case
+           when aps.value = 'Самостоятельно' then 2
+           when  aps.value = 'СМП' then 1
+           when aps.value = 'Неотложная помощь' then 6
+           when aps.value = 'Сан. транспорт' then 6 end
+from ActionProperty ap
+left Join ActionProperty_String aps using(id)
+join Action a on ap.action_id = a.id and a.deleted = 0
+join ActionType at2 on at2.id = a.actionType_id and at2.deleted = 0 and at2.flatCode = @flatCode
+join ActionPropertyType apt on apt.actionType_id = at2.id and apt.deleted =0 and ap.type_id = apt.id and apt.id = @ActionPropertyTypeOld
+where ap.deleted= 0 and aps.id is not null;
 
 select *
-from ActionPropertyType where actionType_id = @ActionType;
+from ActionPropertyType where id = @ActionPropertyTypeOld;
 
-select *
-from ActionPropertyType where actionType_id = @ActionType
+
 
 select *
 from netricaHospChannel;
@@ -60,7 +65,6 @@ from netricaHospChannel;
 Перевод из другого отделения ЛПУ в связи с уточнением диагноза
 Перевод из другого отделения ЛПУ в связи с возникновением внутри
 Перевод из ЛПУ неприкрепленного района
-
 
 
 
