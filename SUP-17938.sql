@@ -20,3 +20,7 @@ from rbUserProfile where id in(10,22,24,25,1);
 
 select *
 from rbUserProfile;
+
+
+select *
+from Person where lastName regexp 'Юрьевна';
