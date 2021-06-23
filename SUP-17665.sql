@@ -5,8 +5,7 @@ set @ActionPropertyType = 'Доставлен';
 set @ActionPropertyTypeOld = (select id from ActionPropertyType where name = @ActionPropertyType and actionType_id = @ActionType and deleted = 0 and typeName = 'String');
 set @ActionPropertyTypeNew = (select id from ActionPropertyType where name = @ActionPropertyType and actionType_id = @ActionType and deleted = 0 and typeName = 'Reference');
 
-select *
-from ActionPropertyType where actionType_id = @ActionType and (id = @ActionPropertyTypeNew or id = @ActionPropertyTypeOld) and deleted = 0 order by idx;
+
 
 
 # insert into ActionProperty_Reference(id, `index`, value)
@@ -33,12 +32,21 @@ join ActionPropertyType apt on apt.actionType_id = at2.id and apt.deleted =0 and
 where ap.deleted= 0 and aps.id is not null;
 
 
+set @ActionPropertyType = 'Транспортировка';
+set @ActionPropertyTypeOld = (select id from ActionPropertyType where name = @ActionPropertyType and actionType_id = @ActionType and deleted = 0 and typeName = 'String');
+set @ActionPropertyTypeNew = (select id from ActionPropertyType where name = @ActionPropertyType and actionType_id = @ActionType and deleted = 0 and typeName = 'Reference');
+
+
+set @test = (select group_concat((select id from ActionPropertyType where actionType_id = @ActionType and (id = @ActionPropertyTypeNew or id = @ActionPropertyTypeOld) and deleted = 0 order by idx) separator ','));
+
+select @test;
+
+
 select *
 from ActionPropertyType where actionType_id = @ActionType;
 
-
 select *
-from netricaTransportIntern;
+from ActionPropertyType where actionType_id = @ActionType;
 
 select *
 from netricaHospChannel;
