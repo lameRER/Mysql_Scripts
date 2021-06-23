@@ -32,6 +32,9 @@ join ActionPropertyType apt on apt.actionType_id = at2.id and apt.deleted =0 and
 where ap.deleted= 0 and aps.id is not null;
 
 
+select * from ActionPropertyType where id in(@ActionPropertyTypeNew, @ActionPropertyTypeOld)
+
+
 set @ActionPropertyTypeOld = (select id from ActionPropertyType where name = 'Кем доставлен' and actionType_id = @ActionType and deleted = 0 and typeName = 'String');
 set @ActionPropertyTypeNew = (select id from ActionPropertyType where name = 'Канал доставки' and actionType_id = @ActionType and deleted = 0 and typeName = 'Reference');
 
@@ -40,8 +43,8 @@ select aps.id, 0,
        case
            when aps.value = 'Самостоятельно' then 2
            when  aps.value = 'СМП' then 1
-           when aps.value = 'Неотложная помощь' then 6
-           when aps.value = 'Сан. транспорт' then 6 end
+           when aps.value = 'Неотложная помощь' then 1
+           when aps.value = 'Сан. транспорт' then 1 end
 from ActionProperty ap
 left Join ActionProperty_String aps using(id)
 join Action a on ap.action_id = a.id and a.deleted = 0
@@ -49,60 +52,21 @@ join ActionType at2 on at2.id = a.actionType_id and at2.deleted = 0 and at2.flat
 join ActionPropertyType apt on apt.actionType_id = at2.id and apt.deleted =0 and ap.type_id = apt.id and apt.id = @ActionPropertyTypeOld
 where ap.deleted= 0 and aps.id is not null;
 
-select *
-from ActionPropertyType where id = @ActionPropertyTypeOld;
 
-
-
-select *
-from netricaHospChannel;
-
-СМП
-Самотек
-Перевод из ЛПУ прикрепленного района
-Перевод из ЛПУ неприкрепленного района
-Перевод из первичного сосудистого отделения в региональный сосуд
-Перевод из другого отделения ЛПУ в связи с уточнением диагноза
-Перевод из другого отделения ЛПУ в связи с возникновением внутри
-Перевод из ЛПУ неприкрепленного района
-
-
-
-
-
-
-
-select *
-from ActionProperty where type_id = 35423;
-
-select *
-from ActionPropertyType where actionType_id = 15084;
-
-select *
-from Person;
-
-
-select *
-from ActionProperty_String where id = 250003765;
-
-
-select action_id
-from ActionProperty where id =;
-
-select *
-from Action where id = 98151098;
-
-
-select a.event_id
-from ActionProperty ap
-join Action a on a.id = ap.action_id
-where ap.deleted = 0 and a.event_id is not null
+# update
+select ap.*, (select @ActionPropertyTypeNew), (select @ActionPropertyTypeOld) from
+    ActionProperty ap
+left Join ActionProperty_String aps using(id)
+join Action a on ap.action_id = a.id and a.deleted = 0
+join ActionType at2 on at2.id = a.actionType_id and at2.deleted = 0 and at2.flatCode = @flatCode
+join ActionPropertyType apt on apt.actionType_id = at2.id and apt.deleted =0 and ap.type_id = apt.id and apt.id = @ActionPropertyTypeOld
+# set ap.type_id = @ActionPropertyTypeNew
+where ap.deleted= 0 and aps.id is not null;
 
 
 
 select *
 from ActionProperty_String_copy_07_06_21;
 
-select *
-from ActionProperty_Reference;
+
 
