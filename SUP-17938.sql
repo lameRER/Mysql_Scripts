@@ -41,4 +41,8 @@ from rbUserProfile;
 select *
 from Person where lastName regexp 'Юрьева';
 
+
+select *
+from rbSpeciality;
+
 select md5('')
