@@ -36,6 +36,10 @@ values  (1905, '2018-12-13 17:55:25', 614, '2021-01-27 16:09:58', 614, 1, 318);
 select *
 from rbUserProfile where id in(10,22,24,25,1);
 
+
+select up.name, r.name
+from rbUserProfile_Right upr, rbUserProfile up, rbUserRight r where upr.userRight_id = 318 and up.id = upr.master_id and r.id = upr.userRight_id;
+
 select *
 from rbUserProfile;
 
