@@ -69,7 +69,7 @@ WHERE a.begDate BETWEEN :Date1 AND :Date2 + INTERVAL 1 DAY - INTERVAL 1 SECOND
     AND at.class=0
     AND m.id = :Diagnoses
 GROUP BY c.id, p.id
-ORDER BY a.createDatetime) as tp
+ORDER BY a.createDatetime) as tp;
 
 
 
@@ -83,7 +83,7 @@ from rbPrintTemplate where name = 'Отчет по химиотерапиям п
 
 select *
 from rbSpecialVariablesPreferences where name = 'SpecialVar_ClientDiagnosis';
-Diagnosis
+
 SELECT
   a.createDatetime,
   e.client_id ClientId,
@@ -98,7 +98,6 @@ SELECT
   )
   SEPARATOR '; ') Diagnosis,
   CONCAT(p.lastName, ' ', LEFT(p.firstName, 1), '.', LEFT(p.patrName, 1), '.') PersonFio
-
 FROM Event e
 	INNER JOIN Action a
   	ON a.event_id = e.id
@@ -123,15 +122,14 @@ FROM Event e
     ON m.DiagID = d.MKB
     AND m.deleted = 0
 WHERE a.begDate BETWEEN :Date1 AND :Date2 + INTERVAL 1 DAY - INTERVAL 1 SECOND
-    -- AND e.id>20000000
     AND e.deleted = 0
     AND e.client_id != 18
     AND at.class=0
     AND m.id = :Diagnosis
 GROUP BY c.id, p.id
-ORDER BY a.createDatetime
+ORDER BY a.createDatetime;
 
-$P{Date1}
+
 select *
 from Event where id < 20000000 order by id desc;
 
