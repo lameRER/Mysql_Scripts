@@ -65,6 +65,10 @@ ORDER BY a.createDatetime
 
 
 
+select *
+from rbPrintTemplate where name = 'Отчет по химиотерапиям по статистическим диагнозам Excel';
+
+
 
 
 
