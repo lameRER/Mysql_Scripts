@@ -17,8 +17,16 @@ INSERT INTO gnc.rbPrintTemplateMeta (template_id, type, name, title, description
 VALUES (34408, 'Date', 'Date2', 'Введите дату окончания периода', '', null, null, null);
 
 
-
-SELECT
+select tp.`Дата установления диагноза`,
+       tp.`№ карты`,
+       tp.ФИО,
+       tp.Пол,
+       tp.Возраст,
+       tp.Регион,
+       tp.`Диагноз по МКБ и описание`,
+       tp.Врач
+from
+(SELECT
   a.createDatetime as `Дата установления диагноза`,
   e.client_id as `№ карты`,
   CONCAT_WS(' ', c.lastName, c.firstName, c.patrName) as `ФИО`,
@@ -61,7 +69,7 @@ WHERE a.begDate BETWEEN :Date1 AND :Date2 + INTERVAL 1 DAY - INTERVAL 1 SECOND
     AND at.class=0
     AND m.id = :Diagnoses
 GROUP BY c.id, p.id
-ORDER BY a.createDatetime
+ORDER BY a.createDatetime) as tp
 
 
 
