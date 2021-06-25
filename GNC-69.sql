@@ -315,4 +315,7 @@ select *
 from ActionType where group_id is null and deleted = 0 order by code;
 
 
-select * from PriceListItem where serviceCodeOW = 'A11.12.003' and priceList_id = 124
+select * from PriceListItem where  serviceCodeOW regexp 'A26.08.005'
+
+select *
+from rbService where id = 12505;
