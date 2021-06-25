@@ -313,3 +313,6 @@ join rbService r on r.id = ats.service_id
 
 select *
 from ActionType where group_id is null and deleted = 0 order by code;
+
+
+select * from PriceListItem where serviceCodeOW = 'A11.12.003' and priceList_id = 124
