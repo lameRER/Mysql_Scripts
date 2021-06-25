@@ -315,7 +315,16 @@ select *
 from ActionType where group_id is null and deleted = 0 order by code;
 
 
-select * from PriceListItem where  serviceCodeOW regexp 'A26.08.005' and priceList_id = 124
+select * from PriceListItem where  serviceCodeOW = 'A26.06.006' and priceList_id = 124
 
 select *
-from rbService where id = 12505;
+from rbService where code = 'A26.06.006';
+
+
+select *
+from rbTest_Service;
+
+
+
+select *
+from rbTest where id = 67;
