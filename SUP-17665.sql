@@ -84,10 +84,10 @@ UPDATE ActionPropertyType SET idx = 2, visibleInDR = 1, userProfile_id = null, u
 UPDATE ActionPropertyType SET idx = 21, visibleInDR = 0, userProfile_id = 1, userProfileBehaviour = 1 WHERE id = @ActionPropertyTypeOld;
 
 
-select * from
-# update
+# select * from
+update
               ActionPropertyType
-# set penalty = 100
+set penalty = 100
 where valueDomain in ('netricaTypeFromDiseaseStart', 'netricaTransportIntern', 'netricaHospChannel', 'netricaPatientConditionOnAdmission', 'netricaIntoxicationType', 'rbTransf') and actionType_id = 15084 and penalty != 100;
 
 
