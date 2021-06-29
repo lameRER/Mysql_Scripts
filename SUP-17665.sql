@@ -92,6 +92,17 @@ where valueDomain in ('netricaTypeFromDiseaseStart', 'netricaTransportIntern', '
 
 
 
+select *
+from Action where event_id = 33866563;
+
+
+select *
+from ActionPropertyType where actionType_id;
+
+
+select *
+from ActionProperty where action_id = 100754077;
+
 
 delete
 from ActionProperty_String
