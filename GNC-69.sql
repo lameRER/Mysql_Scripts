@@ -342,12 +342,29 @@ where pli.priceList_id = 124;
 
 
 
-select *
+select pct.CodeNEW code,
+       pct.NameNEW name,
+       0 eisLegacy,
+       0 nomenclatureLegacy,
+       0 license,
+       '' infis,
+       '2021-07-01' begDate,
+       '2030-12-31' endDate,
+       NULL medicalAidProfile_id,
+       0 adultUetDoctor,
+       0 adultUetAverageMedWorker,
+       0 childUetDoctor,
+       0 childUetAverageMedWorker,
+       NULL rbMedicalKind_id,
+       0 UET,
+       NULL departCode,
+       0 isComplex,
+       0 maxSubServices
 from rbService pt
-right join Price_cal_temp pct on pct.CodeNEW = pt.code and (PriceNEW != PriceOLD or NameOLD != NameNEW)
+right join Price_cal_temp pct on pct.CodeNEW = pt.code and (pct.PriceNEW != pct.PriceOLD or pct.NameOLD != pct.NameNEW)
+where pct.deleted = 0 and pct.CodeNEW is not null order by code and PriceNEW is not null
 
 
 
-
-
-
+select *
+from Price_cal_temp where CodeNEW = 'Процедуры проводятся на аппаратах ?искусственная почка? портативных моделей';
