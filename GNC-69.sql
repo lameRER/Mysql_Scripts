@@ -425,9 +425,19 @@ select
        ttjExternalCounter_id,
        ttjExternalCounter_id_cached
 from ActionType pt
-join Price_cal_temp pct on pct.CodeNEW = pt.code and (pct.PriceNEW != pct.PriceOLD or pct.NameOLD != pct.NameNEW)
+join Price_cal_temp pct on pct.CodeNEW = pt.code and (pct.PriceNEW != pct.PriceOLD/ or pct.NameOLD != pct.NameNEW)
 join PriceListItem pli on pli.serviceCodeOW = pct.CodeNEW and pli.priceList_id = 124
 where pct.deleted = 0 and pct.CodeNEW is not null order by code and PriceNEW is not null;
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -454,7 +464,10 @@ select
 from rbService a
 left join PriceListItem pli on pli.service_id = a.id and pli.priceList_id = 124
 right join Price_cal_temp pct on pct.CodeNEW = a.code
-where pct.NameNEW is not null and pct.deleted = 0 and (pct.PriceNEW != pct.PriceOLD or pct.NameOLD != pct.NameNEW)
+where pct.NameNEW is not null and pct.deleted = 0 -- and (/*pct.PriceNEW != pct.PriceOLD or*/ pct.NameOLD != pct.NameNEW)
+
+
+
 
 
 select *
