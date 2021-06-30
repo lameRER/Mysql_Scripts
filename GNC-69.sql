@@ -511,21 +511,13 @@ from
 (select pct.CodeNEW code,
        pct.NameNEW name,
        0 eisLegacy,
-       0 nomenclatureLegacy,
        0 license,
        '' infis,
        '2021-07-01' begDate,
        '2030-12-31' endDate,
        null medicalAidProfile_id,
-       0 adultUetDoctor,
-       0 adultUetAverageMedWorker,
-       0 childUetDoctor,
-       0 childUetAverageMedWorker,
        null rbMedicalKind_id,
-       0 UET,
-       null departCode,
-       0 isComplex,
-       0 maxSubServices
+       null departCode
 from rbService r
 right join Price_cal_temp pct on pct.CodeNEW = r.code
 where (pct.NameOLD != pct.NameNEW or pct.PriceOLD != pct.PriceNEW) and CodeOLD is null) as tmp
@@ -538,66 +530,51 @@ join ActionType_Service ATS on rS.id = ATS.service_id
 join ActionType A on ATS.master_id = A.id
 where priceList_id = 124;
 
-select now() createDatetime,
+
+insert into ActionType(createDatetime, createPerson_id, modifyDatetime, modifyPerson_id, class, group_id, code, name, title, flatCode, sex, age, age_bu, age_bc, age_eu, age_ec, office, showInForm, genTimetable, service_id, quotaType_id, context, defaultPlannedEndDate, defaultExecPerson_id, isMES, nomenclativeService_id, prescribedType_id, shedule_id, testTubeType_id, jobType_id, layout, loadPrintTemplate_id, dynamicNumberType_id, counter_id, ttjExternalCounter_id, ttjExternalCounter_id_cached)
+select *
+from
+(select now() createDatetime,
        null createPerson_id,
        now()modifyDatetime,
        null modifyPerson_id,
-       0 deleted,
-       0 hidden,
        0 class,
-       r1.group_id,
-       r1.code,
-       r1.name,
-       r1.title,
-       r1.flatCode,
-       r1.sex,
-       r1.age,
-       r1.age_bu,
-       r1.age_bc,
-       r1.age_eu,
-       r1.age_ec,
-       r1.office,
-       r1.showInForm,
-       r1.genTimetable,
-       r1.service_id,
-       r1.quotaType_id,
-       r1.context,
-       r1.amount,
-       r1.amountEvaluation,
-       r1.defaultStatus,
-       r1.defaultDirectionDate,
-       r1.defaultPlannedEndDate,
-       r1.defaultEndDate,
-       r1.defaultExecPerson_id,
-       r1.defaultPersonInEvent,
-       r1.defaultPersonInEditor,
-       r1.maxOccursInEvent,
-       r1.showTime,
-       r1.isMES,
-       r1.nomenclativeService_id,
-       r1.isPreferable,
-       r1.prescribedType_id,
-       r1.shedule_id,
-       r1.isRequiredCoordination,
-       r1.isRequiredTissue,
-       r1.testTubeType_id,
-       r1.jobType_id,
-       r1.mnem,
-       r1.layout,
-       r1.hasPrescriptions,
-       r1.autoclose_on_event_close,
-       r1.noteMandatory,
-       r1.canHaveAttaches,
-       r1.loadPrintTemplate_id,
-       r1.dynamicNumberType_id,
-       r1.counter_id,
-       r1.ttjExternalCounter_id,
-       r1.ttjExternalCounter_id_cached
+       NULL group_id,
+       pct.codeNEW code,
+       pct.NameNEW name,
+       pct.NameNEW title,
+       '' flatCode,
+       0 sex,
+       '' age,
+       null age_bu,
+       null age_bc,
+       null age_eu,
+       null age_ec,
+       '' office,
+       0 showInForm,
+       0 genTimetable,
+       null service_id,
+       null quotaType_id,
+       '' context,
+       0 defaultPlannedEndDate,
+       0 defaultEndDate,
+       null defaultExecPerson_id,
+       null isMES,
+       null nomenclativeService_id,
+       null prescribedType_id,
+       null shedule_id,
+       null testTubeType_id,
+       null jobType_id,
+       null layout,
+       null loadPrintTemplate_id,
+       null dynamicNumberType_id,
+       null counter_id,
+       null ttjExternalCounter_id,
+       null ttjExternalCounter_id_cached
 from ActionType r
-join ActionType r1 on r1.id = r.id and r1.id = (select id from ActionType order by id desc limit 1)
-# right join Price_cal_temp pct on pct.CodeNEW = r.code
-# where (pct.NameOLD != pct.NameNEW or pct.PriceOLD != pct.PriceNEW) and CodeOLD is null) as tmp
-# where not exists(select * from rbService where code = tmp.code and name = tmp.name and begDate = tmp.begDate and endDate = tmp.endDate);
+right join Price_cal_temp pct on pct.CodeNEW = r.code
+where (pct.NameOLD != pct.NameNEW or pct.PriceOLD != pct.PriceNEW) and CodeOLD is null) as tmp
+where not exists(select * from ActionType where name = tmp.name and code = tmp.code)
 
 
 select *
