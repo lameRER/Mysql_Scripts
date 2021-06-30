@@ -431,3 +431,11 @@ where pct.deleted = 0 and pct.CodeNEW is not null order by code and PriceNEW is 
 
 select *
 from Price_cal_temp where CodeNEW = 'Процедуры проводятся на аппаратах ?искусственная почка? портативных моделей';
+
+
+
+insert into Price_cal_temp(CodeOLD, NameOLD, PriceOLD, CodeNEW, NameNEW, PriceNEW, deleted)
+select '1', '2', '3', '4','5','6','7'
+
+
+
