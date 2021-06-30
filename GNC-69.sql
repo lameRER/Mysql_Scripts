@@ -366,11 +366,10 @@ left join PriceListItem pli on pli.serviceCodeOW = pct.CodeNEW and pli.priceList
 where pct.deleted = 0 and pct.CodeNEW is not null order by code and PriceNEW is not null;
 
 
-select id,
-       createDatetime,
-       createPerson_id,
-       modifyDatetime,
-       modifyPerson_id,
+select now() createDatetime,
+       NULL createPerson_id,
+       NOW() modifyDatetime,
+       NULL modifyPerson_id,
        pt.deleted,
        hidden,
        class,
