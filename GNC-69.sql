@@ -507,8 +507,88 @@ where not exists (select * from PriceListItem where serviceCodeOW = tmp.serviceC
 
 
 
-select *
-from Price_cal_temp pct where (pct.NameOLD != pct.NameNEW or pct.PriceOLD != pct.PriceNEW) and pct.deleted = 0 and CodeOLD is null;
+select pct.CodeNEW code,
+       pct.NameNEW name,
+       0 eisLegacy,
+       0 nomenclatureLegacy,
+       0 license,
+       '' infis,
+       '2021-07-01' begDate,
+       '2030-12-31' endDate,
+       null medicalAidProfile_id,
+       0 adultUetDoctor,
+       0 adultUetAverageMedWorker,
+       0 childUetDoctor,
+       0 childUetAverageMedWorker,
+       null rbMedicalKind_id,
+       0 UET,
+       null departCode,
+       0 isComplex,
+       0 maxSubServices
+from rbService r
+join rbService r1 on r1.id = r.id and r1.id = (select id from rbService order by id desc limit 1)
+right join Price_cal_temp pct on pct.CodeNEW = r.code and (pct.NameOLD != pct.NameNEW or pct.PriceOLD != pct.PriceNEW) and CodeOLD is null;
+
+
+select r1.id,
+       r1.createDatetime,
+       r1.createPerson_id,
+       r1.modifyDatetime,
+       r1.modifyPerson_id,
+       r1.deleted,
+       r1.hidden,
+       r1.class,
+       r1.group_id,
+       r1.code,
+       r1.name,
+       r1.title,
+       r1.flatCode,
+       r1.sex,
+       r1.age,
+       r1.age_bu,
+       r1.age_bc,
+       r1.age_eu,
+       r1.age_ec,
+       r1.office,
+       r1.showInForm,
+       r1.genTimetable,
+       r1.service_id,
+       r1.quotaType_id,
+       r1.context,
+       r1.amount,
+       r1.amountEvaluation,
+       r1.defaultStatus,
+       r1.defaultDirectionDate,
+       r1.defaultPlannedEndDate,
+       r1.defaultEndDate,
+       r1.defaultExecPerson_id,
+       r1.defaultPersonInEvent,
+       r1.defaultPersonInEditor,
+       r1.maxOccursInEvent,
+       r1.showTime,
+       r1.isMES,
+       r1.nomenclativeService_id,
+       r1.isPreferable,
+       r1.prescribedType_id,
+       r1.shedule_id,
+       r1.isRequiredCoordination,
+       r1.isRequiredTissue,
+       r1.testTubeType_id,
+       r1.jobType_id,
+       r1.mnem,
+       r1.layout,
+       r1.hasPrescriptions,
+       r1.autoclose_on_event_close,
+       r1.noteMandatory,
+       r1.canHaveAttaches,
+       r1.loadPrintTemplate_id,
+       r1.dynamicNumberType_id,
+       r1.counter_id,
+       r1.ttjExternalCounter_id,
+       r1.ttjExternalCounter_id_cached
+from ActionType r
+join ActionType r1 on r1.id = r.id and r1.id = (select id from ActionType order by id desc limit 1)
+right join Price_cal_temp pct on pct.CodeNEW = r.code and (pct.NameOLD != pct.NameNEW or pct.PriceOLD != pct.PriceNEW) and CodeOLD is null;
 
 
 select *
