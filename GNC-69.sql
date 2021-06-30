@@ -335,12 +335,16 @@ select *
 from Price_cal_temp where PriceNEW != PriceOLD or NameOLD != NameNEW;
 
 
-select pli.*
+select pli.serviceCodeOW, pli.serviceNameOW, pli.price, pli.begDate, if(pli.serviceNameOW != pct.NameNEW or pli.price != pct.PriceNEW, '2021-06-30', pli.endDate) endDate, pct.*
 from PriceListItem pli
-join Price_cal_temp pct on pct.CodeOLD = pli.serviceCodeOW
+left join Price_cal_temp pct on pct.CodeOLD = pli.serviceCodeOW and (PriceNEW != PriceOLD or NameOLD != NameNEW)
 where pli.priceList_id = 124;
 
 
+
+select *
+from rbService pt
+right join Price_cal_temp pct on pct.CodeNEW = pt.code and (PriceNEW != PriceOLD or NameOLD != NameNEW)
 
 
 
