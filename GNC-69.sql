@@ -557,7 +557,6 @@ from
        null quotaType_id,
        '' context,
        0 defaultPlannedEndDate,
-       0 defaultEndDate,
        null defaultExecPerson_id,
        null isMES,
        null nomenclativeService_id,
@@ -576,7 +575,25 @@ right join Price_cal_temp pct on pct.CodeNEW = r.code
 where (pct.NameOLD != pct.NameNEW or pct.PriceOLD != pct.PriceNEW) and CodeOLD is null) as tmp
 where not exists(select * from ActionType where name = tmp.name and code = tmp.code)
 
+insert into ActionType_Service(master_id, idx, service_id, begDate, endDate)
+select *
+from
+(select at.id master_id, 0 idx, r.id service_id, '2021-07-01' begDate, '2030-12-31' endDate
+from  rbService r
+left join Price_cal_temp pct on pct.CodeNEW = r.code
+join ActionType at on at.code = pct.CodeNEW
+where (pct.NameOLD != pct.NameNEW or pct.PriceOLD != pct.PriceNEW) and CodeOLD is null) as tmp
+where not exists(select * from ActionType_Service where service_id = tmp.service_id and master_id = tmp.master_id)
 
+select *
+from ActionType_Service order by id desc ;
+
+select *
+from ActionType where id = 11977;
+
+
+select *
+from rbService where id = 14210;
 select *
 from Price_cal_temp where CodeNEW = 'B01.005.001.013';
 
