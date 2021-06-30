@@ -466,12 +466,32 @@ left join PriceListItem pli on pli.service_id = a.id and pli.priceList_id = 124
 right join Price_cal_temp pct on pct.CodeNEW = a.code
 where pct.NameNEW is not null and pct.deleted = 0 -- and (/*pct.PriceNEW != pct.PriceOLD or*/ pct.NameOLD != pct.NameNEW)
 
-
 select *
+from
+(select pli.id,
+       createDatetime,
+       createPerson_id,
+       modifyDatetime,
+       modifyPerson_id,
+       priceList_id,
+       pli.deleted,
+       service_id,
+       serviceCodeOW,
+       serviceNameOW,
+       pli.begDate,
+       '2021-06-30' endDate,
+       price,
+       isAccumulativePrice,
+       limitPerDay,
+       limitPerMonth,
+       limitPerPriceList,
+       LCE,
+       LCE_test
 from PriceListItem pli
 join rbService r on pli.service_id = r.id
-right join Price_cal_temp pct on pct.CodeOLD = pli.serviceCodeOW
-where pli.priceList_id = 124 and pct.deleted is not null;
+right join Price_cal_temp pct on pct.CodeOLD = pli.serviceCodeOW and (pct.NameOLD != pct.NameNEW or pct.PriceOLD != pct.PriceNEW)
+where pli.priceList_id = 124 and pct.deleted is not null) as tmp
+where tmp.endDate > curdate();
 
 
 
@@ -484,7 +504,7 @@ from ActionType_Service;
 
 
 select *
-from PriceListItem where serviceCodeOW = 'A26.05.035.002';
+from PriceListItem where priceList_id = 124;
 select *
 from PriceListItem where serviceCodeOW = 'B01.018.001';
 
