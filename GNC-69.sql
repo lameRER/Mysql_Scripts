@@ -476,37 +476,31 @@ set pli.endDate = '2021-06-30'
 where pli.priceList_id = 124 and pct.deleted is not null and pli.endDate > '2021-06-30';
 
 
-
-select pli.serviceCodeOW,pli.serviceNameOW,pli.endDate,
-#        now() createDatetime,
-#        null createPerson_id,
-#        now() modifyDatetime,
-#        null modifyPerson_id,
-       pli.priceList_id,
+insert into PriceListItem(createDatetime, createPerson_id, modifyDatetime, modifyPerson_id, priceList_id, deleted, service_id, serviceCodeOW, serviceNameOW, begDate, endDate, price, isAccumulativePrice, limitPerDay, limitPerMonth, limitPerPriceList, LCE, LCE_test)
+select *
+from (select now() createDatetime,
+       null createPerson_id,
+       now() modifyDatetime,
+       null modifyPerson_id,
+       124 priceList_id,
        0 deleted,
-       service_id,
-       pct.CodeNEW code,
-       pct.NameNEW name,
-       0 eisLegacy,
-       0 nomenclatureLegacy,
-       0 license,
-       '' infis,
+       pli.service_id,
+       pct.CodeNEW serviceCodeOW,
+       pct.NameNEW serviceNameOW,
        '2021-07-01' begDate,
        '2030-12-31' endDate,
-       null medicalAidProfile_id,
-       0 adultUetDoctor,
-       0 adultUetAverageMedWorker,
-       0 childUetDoctor,
-       0 childUetAverageMedWorker,
-       null rbMedicalKind_id,
-       0 UET,
-       null departCode,
-       0 isComplex,
-       0 maxSubServices
+       pct.PriceNEW price,
+       0 isAccumulativePrice,
+       null limitPerDay,
+       null limitPerMonth,
+       null limitPerPriceList,
+       null LCE,
+       null LCE_test
 from PriceListItem pli
 join rbService r on pli.service_id = r.id
 right join Price_cal_temp pct on pct.CodeOLD = pli.serviceCodeOW and (pct.NameOLD != pct.NameNEW or pct.PriceOLD != pct.PriceNEW)
-where pli.priceList_id = 124 and pct.deleted is not null and pli.endDate and pct.deleted = 0;
+where pli.priceList_id = 124 and pct.deleted is not null and pli.endDate and pct.deleted = 0) as tmp
+where not exists (select * from PriceListItem where serviceCodeOW = tmp.serviceCodeOW and endDate = tmp.endDate)
 
 
 
@@ -514,7 +508,7 @@ where pli.priceList_id = 124 and pct.deleted is not null and pli.endDate and pct
 
 select *
 from PriceListItem pli
-right join Price_cal_temp pct on pct.CodeOLD = pli.serviceCodeOW and (pct.NameOLD != pct.NameNEW or pct.PriceOLD != pct.PriceNEW)
+join Price_cal_temp pct on pct.CodeOLD = pli.serviceCodeOW and (pct.NameOLD != pct.NameNEW or pct.PriceOLD != pct.PriceNEW) and pli.endDate > curdate() and priceList_id = 124
 
 
 select *
