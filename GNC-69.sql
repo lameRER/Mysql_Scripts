@@ -469,6 +469,9 @@ where pct.NameNEW is not null and pct.deleted = 0 -- and (/*pct.PriceNEW != pct.
 
 
 
+
+
+
 update PriceListItem pli
 join rbService r on pli.service_id = r.id
 right join Price_cal_temp pct on pct.CodeOLD = pli.serviceCodeOW and (pct.NameOLD != pct.NameNEW or pct.PriceOLD != pct.PriceNEW)
@@ -504,7 +507,15 @@ where not exists (select * from PriceListItem where serviceCodeOW = tmp.serviceC
 
 
 
+select *
+from Price_cal_temp pct where (pct.NameOLD != pct.NameNEW or pct.PriceOLD != pct.PriceNEW) and pct.deleted = 0 and CodeOLD is null;
 
+
+select *
+from Price_cal_temp where CodeNEW = 'B01.005.001.013';
+
+select *
+from PriceListItem where serviceCodeOW = 'A18.05.009';
 
 select *
 from PriceListItem pli
