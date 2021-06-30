@@ -362,7 +362,70 @@ select pct.CodeNEW code,
        0 maxSubServices
 from rbService pt
 right join Price_cal_temp pct on pct.CodeNEW = pt.code and (pct.PriceNEW != pct.PriceOLD or pct.NameOLD != pct.NameNEW)
-where pct.deleted = 0 and pct.CodeNEW is not null order by code and PriceNEW is not null
+where pct.deleted = 0 and pct.CodeNEW is not null order by code and PriceNEW is not null;
+
+
+select id,
+       createDatetime,
+       createPerson_id,
+       modifyDatetime,
+       modifyPerson_id,
+       pt.deleted,
+       hidden,
+       class,
+       group_id,
+       code,
+       name,
+       title,
+       flatCode,
+       sex,
+       age,
+       age_bu,
+       age_bc,
+       age_eu,
+       age_ec,
+       office,
+       showInForm,
+       genTimetable,
+       service_id,
+       quotaType_id,
+       context,
+       amount,
+       amountEvaluation,
+       defaultStatus,
+       defaultDirectionDate,
+       defaultPlannedEndDate,
+       defaultEndDate,
+       defaultExecPerson_id,
+       defaultPersonInEvent,
+       defaultPersonInEditor,
+       maxOccursInEvent,
+       showTime,
+       isMES,
+       nomenclativeService_id,
+       isPreferable,
+       prescribedType_id,
+       shedule_id,
+       isRequiredCoordination,
+       isRequiredTissue,
+       testTubeType_id,
+       jobType_id,
+       mnem,
+       layout,
+       hasPrescriptions,
+       autoclose_on_event_close,
+       noteMandatory,
+       canHaveAttaches,
+       loadPrintTemplate_id,
+       dynamicNumberType_id,
+       counter_id,
+       ttjExternalCounter_id,
+       ttjExternalCounter_id_cached
+from ActionType pt
+join Price_cal_temp pct on pct.CodeNEW = pt.code and (pct.PriceNEW != pct.PriceOLD or pct.NameOLD != pct.NameNEW)
+where pct.deleted = 0 and pct.CodeNEW is not null order by code and PriceNEW is not null;
+
+
 
 
 
