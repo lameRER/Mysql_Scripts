@@ -431,11 +431,29 @@ where pct.deleted = 0 and pct.CodeNEW is not null order by code and PriceNEW is 
 
 
 
-select *
+select
+       pct.CodeNEW code,
+       pct.NameNEW name,
+       0 eisLegacy,
+       0 nomenclatureLegacy,
+       0 license,
+       '' infis,
+       '2021-07-01' begDate,
+       '2030-12-31' endDate,
+       null medicalAidProfile_id,
+       0 adultUetDoctor,
+       0 adultUetAverageMedWorker,
+       0 childUetDoctor,
+       0 childUetAverageMedWorker,
+       null rbMedicalKind_id,
+       0 UET,
+       null departCode,
+       0 isComplex,
+       0 maxSubServices
 from rbService a
-join PriceListItem pli on pli.service_id = a.id and pli.priceList_id = 124
-join Price_cal_temp pct on pct.CodeNEW = a.code and pct.deleted = 0 and (pct.PriceNEW != pct.PriceOLD or pct.NameOLD != pct.NameNEW);
-
+left join PriceListItem pli on pli.service_id = a.id and pli.priceList_id = 124
+right join Price_cal_temp pct on pct.CodeNEW = a.code and pct.deleted = 0 and (pct.PriceNEW != pct.PriceOLD or pct.NameOLD != pct.NameNEW)
+where pct.deleted is not null 
 
 
 select *
