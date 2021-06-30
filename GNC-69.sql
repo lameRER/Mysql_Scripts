@@ -505,9 +505,10 @@ right join Price_cal_temp pct on pct.CodeOLD = pli.serviceCodeOW and (pct.NameOL
 where pli.priceList_id = 124 and pct.deleted is not null and pli.endDate and pct.deleted = 0) as tmp
 where not exists (select * from PriceListItem where serviceCodeOW = tmp.serviceCodeOW and endDate = tmp.endDate)
 
-
-
-select pct.CodeNEW code,
+insert into rbService(code, name, eisLegacy, license, infis, begDate, endDate, medicalAidProfile_id, rbMedicalKind_id, departCode)
+select *
+from
+(select pct.CodeNEW code,
        pct.NameNEW name,
        0 eisLegacy,
        0 nomenclatureLegacy,
@@ -526,18 +527,24 @@ select pct.CodeNEW code,
        0 isComplex,
        0 maxSubServices
 from rbService r
-join rbService r1 on r1.id = r.id and r1.id = (select id from rbService order by id desc limit 1)
-right join Price_cal_temp pct on pct.CodeNEW = r.code and (pct.NameOLD != pct.NameNEW or pct.PriceOLD != pct.PriceNEW) and CodeOLD is null;
+right join Price_cal_temp pct on pct.CodeNEW = r.code
+where (pct.NameOLD != pct.NameNEW or pct.PriceOLD != pct.PriceNEW) and CodeOLD is null) as tmp
+where not exists(select * from rbService where code = tmp.code and name = tmp.name and begDate = tmp.begDate and endDate = tmp.endDate);
 
+select A.*
+from PriceListItem
+join rbService rS on PriceListItem.service_id = rS.id
+join ActionType_Service ATS on rS.id = ATS.service_id
+join ActionType A on ATS.master_id = A.id
+where priceList_id = 124;
 
-select r1.id,
-       r1.createDatetime,
-       r1.createPerson_id,
-       r1.modifyDatetime,
-       r1.modifyPerson_id,
-       r1.deleted,
-       r1.hidden,
-       r1.class,
+select now() createDatetime,
+       null createPerson_id,
+       now()modifyDatetime,
+       null modifyPerson_id,
+       0 deleted,
+       0 hidden,
+       0 class,
        r1.group_id,
        r1.code,
        r1.name,
@@ -588,7 +595,9 @@ select r1.id,
        r1.ttjExternalCounter_id_cached
 from ActionType r
 join ActionType r1 on r1.id = r.id and r1.id = (select id from ActionType order by id desc limit 1)
-right join Price_cal_temp pct on pct.CodeNEW = r.code and (pct.NameOLD != pct.NameNEW or pct.PriceOLD != pct.PriceNEW) and CodeOLD is null;
+# right join Price_cal_temp pct on pct.CodeNEW = r.code
+# where (pct.NameOLD != pct.NameNEW or pct.PriceOLD != pct.PriceNEW) and CodeOLD is null) as tmp
+# where not exists(select * from rbService where code = tmp.code and name = tmp.name and begDate = tmp.begDate and endDate = tmp.endDate);
 
 
 select *
