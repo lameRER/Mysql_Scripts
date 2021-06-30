@@ -524,7 +524,7 @@ from PriceListItem where serviceCodeOW = 'B01.018.001';
 
 
 select *
-from Price_cal_temp
+from Price_cal_temp where CodeOLD = 'A12.05.018.001'
 
 
 select *
