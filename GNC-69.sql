@@ -368,10 +368,11 @@ where pct.deleted = 0 and pct.CodeNEW is not null order by code and PriceNEW is 
 
 
 
-select now() createDatetime,
-       NULL createPerson_id,
-       NOW() modifyDatetime,
-       NULL modifyPerson_id,
+select
+       pt.createDatetime,
+       pt.createPerson_id,
+       pt.modifyDatetime,
+       pt.modifyPerson_id,
        pt.deleted,
        hidden,
        class,
@@ -389,7 +390,7 @@ select now() createDatetime,
        office,
        showInForm,
        genTimetable,
-       service_id,
+       pt.service_id,
        quotaType_id,
        context,
        amount,
@@ -425,9 +426,15 @@ select now() createDatetime,
        ttjExternalCounter_id_cached
 from ActionType pt
 join Price_cal_temp pct on pct.CodeNEW = pt.code and (pct.PriceNEW != pct.PriceOLD or pct.NameOLD != pct.NameNEW)
+join PriceListItem pli on pli.serviceCodeOW = pct.CodeNEW and pli.priceList_id = 124
 where pct.deleted = 0 and pct.CodeNEW is not null order by code and PriceNEW is not null;
 
 
+
+select *
+from rbService a
+join PriceListItem pli on pli.service_id = a.id and pli.priceList_id = 124
+join Price_cal_temp pct on pct.CodeNEW = a.code and pct.deleted = 0 and (pct.PriceNEW != pct.PriceOLD or pct.NameOLD != pct.NameNEW);
 
 
 
