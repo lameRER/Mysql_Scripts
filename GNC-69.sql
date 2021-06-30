@@ -328,3 +328,13 @@ from rbTest_Service;
 
 select *
 from rbTest where id = 67;
+
+
+
+select *
+from Price_cal_temp;
+
+
+
+
+
