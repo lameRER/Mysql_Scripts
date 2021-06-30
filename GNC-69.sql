@@ -362,6 +362,7 @@ select pct.CodeNEW code,
        0 maxSubServices
 from rbService pt
 right join Price_cal_temp pct on pct.CodeNEW = pt.code and (pct.PriceNEW != pct.PriceOLD or pct.NameOLD != pct.NameNEW)
+left join PriceListItem pli on pli.serviceCodeOW = pct.CodeNEW and pli.priceList_id = 124
 where pct.deleted = 0 and pct.CodeNEW is not null order by code and PriceNEW is not null;
 
 
