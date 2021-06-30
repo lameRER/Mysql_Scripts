@@ -332,7 +332,16 @@ from rbTest where id = 67;
 
 
 select *
-from Price_cal_temp;
+from Price_cal_temp where PriceNEW != PriceOLD or NameOLD != NameNEW;
+
+
+select pli.*
+from PriceListItem pli
+join Price_cal_temp pct on pct.CodeOLD = pli.serviceCodeOW
+where pli.priceList_id = 124;
+
+
+
 
 
 
