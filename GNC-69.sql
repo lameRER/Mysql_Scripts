@@ -452,12 +452,18 @@ select
        0 maxSubServices
 from rbService a
 left join PriceListItem pli on pli.service_id = a.id and pli.priceList_id = 124
-right join Price_cal_temp pct on pct.CodeNEW = a.code and pct.deleted = 0 and (pct.PriceNEW != pct.PriceOLD or pct.NameOLD != pct.NameNEW)
-where pct.deleted is not null 
+right join Price_cal_temp pct on pct.CodeNEW = a.code
+where pct.NameNEW is not null and pct.deleted = 0 and (pct.PriceNEW != pct.PriceOLD or pct.NameOLD != pct.NameNEW)
 
 
 select *
-from Price_cal_temp where CodeNEW = 'Процедуры проводятся на аппаратах ?искусственная почка? портативных моделей';
+from PriceListItem where serviceCodeOW = 'A26.05.035.002';
+select *
+from PriceListItem where serviceCodeOW = 'B01.018.001';
+
+
+select *
+from rbService where id = 13980;
 
 
 
