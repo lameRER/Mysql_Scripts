@@ -466,7 +466,8 @@ left join PriceListItem pli on pli.service_id = a.id and pli.priceList_id = 124
 right join Price_cal_temp pct on pct.CodeNEW = a.code
 where pct.NameNEW is not null and pct.deleted = 0 -- and (/*pct.PriceNEW != pct.PriceOLD or*/ pct.NameOLD != pct.NameNEW)
 
-
+select *
+from ActionType_Service;
 
 
 
