@@ -466,36 +466,55 @@ left join PriceListItem pli on pli.service_id = a.id and pli.priceList_id = 124
 right join Price_cal_temp pct on pct.CodeNEW = a.code
 where pct.NameNEW is not null and pct.deleted = 0 -- and (/*pct.PriceNEW != pct.PriceOLD or*/ pct.NameOLD != pct.NameNEW)
 
-select *
-from
-(select pli.id,
-       createDatetime,
-       createPerson_id,
-       modifyDatetime,
-       modifyPerson_id,
-       priceList_id,
-       pli.deleted,
+
+
+
+update PriceListItem pli
+join rbService r on pli.service_id = r.id
+right join Price_cal_temp pct on pct.CodeOLD = pli.serviceCodeOW and (pct.NameOLD != pct.NameNEW or pct.PriceOLD != pct.PriceNEW)
+set pli.endDate = '2021-06-30'
+where pli.priceList_id = 124 and pct.deleted is not null and pli.endDate > '2021-06-30';
+
+
+
+select pli.serviceCodeOW,pli.serviceNameOW,pli.endDate,
+#        now() createDatetime,
+#        null createPerson_id,
+#        now() modifyDatetime,
+#        null modifyPerson_id,
+       pli.priceList_id,
+       0 deleted,
        service_id,
-       serviceCodeOW,
-       serviceNameOW,
-       pli.begDate,
-       '2021-06-30' endDate,
-       price,
-       isAccumulativePrice,
-       limitPerDay,
-       limitPerMonth,
-       limitPerPriceList,
-       LCE,
-       LCE_test
+       pct.CodeNEW code,
+       pct.NameNEW name,
+       0 eisLegacy,
+       0 nomenclatureLegacy,
+       0 license,
+       '' infis,
+       '2021-07-01' begDate,
+       '2030-12-31' endDate,
+       null medicalAidProfile_id,
+       0 adultUetDoctor,
+       0 adultUetAverageMedWorker,
+       0 childUetDoctor,
+       0 childUetAverageMedWorker,
+       null rbMedicalKind_id,
+       0 UET,
+       null departCode,
+       0 isComplex,
+       0 maxSubServices
 from PriceListItem pli
 join rbService r on pli.service_id = r.id
 right join Price_cal_temp pct on pct.CodeOLD = pli.serviceCodeOW and (pct.NameOLD != pct.NameNEW or pct.PriceOLD != pct.PriceNEW)
-where pli.priceList_id = 124 and pct.deleted is not null) as tmp
-where tmp.endDate > curdate();
+where pli.priceList_id = 124 and pct.deleted is not null and pli.endDate and pct.deleted = 0;
 
 
 
 
+
+select *
+from PriceListItem pli
+right join Price_cal_temp pct on pct.CodeOLD = pli.serviceCodeOW and (pct.NameOLD != pct.NameNEW or pct.PriceOLD != pct.PriceNEW)
 
 
 select *
