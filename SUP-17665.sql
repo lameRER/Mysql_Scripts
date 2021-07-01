@@ -88,16 +88,52 @@ join Action a on ap.action_id = a.id and a.deleted = 0
 join ActionProperty ap1 on ap1.action_id = a.id and ap1.deleted = 0 and ap1.type_id = @ActionPropertyTypeNew
 left join ActionProperty_Reference apr on apr.id = ap1.id
 join ActionType at2 on at2.id = a.actionType_id and at2.deleted = 0 and at2.flatCode = @flatCode
-where ap.deleted= 0 and ap.type_id = @ActionPropertyTypeOld and apr.id is not null group by ap.action_id, ap.type_id;
+where ap.deleted= 0 and ap.type_id = @ActionPropertyTypeOld and apr.id is null group by ap.action_id, ap.type_id;
 
 
 UPDATE ActionPropertyType SET idx = 2, visibleInDR = 1, userProfile_id = null, userProfileBehaviour = 0 WHERE id = @ActionPropertyTypeNew;
 UPDATE ActionPropertyType SET idx = 21, visibleInDR = 0, userProfile_id = 1, userProfileBehaviour = 1 WHERE id = @ActionPropertyTypeOld;
 
-set @ActionPropertyTypeOld = (select id from ActionPropertyType where name = 'Кем доставлен' and actionType_id = @ActionType and deleted = 0 and typeName = 'String');
-set @ActionPropertyTypeNew = (select id from ActionPropertyType where name = 'Канал доставки' and actionType_id = @ActionType and deleted = 0 and typeName = 'Reference');
+set @ActionPropertyTypeOld = (select id from ActionPropertyType where name = '№ машины' and actionType_id = @ActionType and deleted = 0 and typeName = 'String');
+set @ActionPropertyTypeNew = (select id from ActionPropertyType where name = '№ бригады' and actionType_id = @ActionType and deleted = 0 and typeName = 'Integer');
 
+# insert into ActionProperty(createDatetime, createPerson_id, modifyDatetime, modifyPerson_id, deleted, action_id, type_id, unit_id, norm, isAssigned, evaluation, isAutoFillCancelled)
+select *
+from
+(select
+        ap.createDatetime,
+        ap.createPerson_id,
+        ap.modifyDatetime,
+        ap.modifyPerson_id,
+        ap.deleted,
+        action_id,
+        @ActionPropertyTypeNew type_id,
+        ap.unit_id,
+        ap.norm,
+        isAssigned,
+        evaluation,
+        isAutoFillCancelled
+ from ActionProperty ap
+left Join ActionProperty_String aps using(id)
+join Action a on ap.action_id = a.id and a.deleted = 0
+join ActionType at2 on at2.id = a.actionType_id and at2.deleted = 0 and at2.flatCode = @flatCode
+join ActionPropertyType apt on apt.actionType_id = at2.id and apt.deleted =0 and ap.type_id = apt.id and apt.id = @ActionPropertyTypeOld
+where ap.deleted= 0 and aps.id is not null) as tmp
+where not exists(select * from ActionProperty where action_id = tmp.action_id and type_id = tmp.type_id and deleted = tmp.deleted);
 
+# insert into ActionProperty_Reference(id, `index`, value)
+select ap1.id, 0, case
+           when aps.value = 'Самостоятельно' then 2
+           when  aps.value = 'СМП' then 1
+           when aps.value = 'Неотложная помощь' then 1
+           when aps.value = 'Сан. транспорт' then 1 end
+from ActionProperty ap
+join ActionProperty_String aps on aps.id = ap.id
+join Action a on ap.action_id = a.id and a.deleted = 0
+join ActionProperty ap1 on ap1.action_id = a.id and ap1.deleted = 0 and ap1.type_id = @ActionPropertyTypeNew
+left join ActionProperty_Reference apr on apr.id = ap1.id
+join ActionType at2 on at2.id = a.actionType_id and at2.deleted = 0 and at2.flatCode = @flatCode
+where ap.deleted= 0 and ap.type_id = @ActionPropertyTypeOld and apr.id is null group by ap.action_id, ap.type_id;
 
 UPDATE ActionPropertyType SET idx = 6, visibleInDR = 1, userProfile_id = null, userProfileBehaviour = 0 WHERE id = 35471;
 UPDATE ActionPropertyType SET idx = 23, visibleInDR = 0, userProfile_id = 1, userProfileBehaviour = 1 WHERE id = 39729;
