@@ -15,13 +15,10 @@ set @ActionPropertyTypeNew = (select id from ActionPropertyType where name = @Ac
 # join ActionPropertyType apt on apt.actionType_id = at2.id and apt.deleted =0 and ap.type_id = apt.id and apt.id = @ActionPropertyTypeOld
 # where ap.deleted= 0 and aps.id is not null;
 
-SELECT `AUTO_INCREMENT`
-FROM  INFORMATION_SCHEMA.TABLES
-WHERE TABLE_SCHEMA = 's12'
-AND   TABLE_NAME   = 'ActionProperty';
 
 
-# insert into ActionProperty(createDatetime, createPerson_id, modifyDatetime, modifyPerson_id, deleted, action_id, type_id, unit_id, norm, isAssigned, evaluation, isAutoFillCancelled)
+
+insert into ActionProperty(createDatetime, createPerson_id, modifyDatetime, modifyPerson_id, deleted, action_id, type_id, unit_id, norm, isAssigned, evaluation, isAutoFillCancelled)
 select
         ap.createDatetime,
         ap.createPerson_id,
@@ -43,11 +40,16 @@ join ActionPropertyType apt on apt.actionType_id = at2.id and apt.deleted =0 and
 where ap.deleted= 0 and aps.id is not null
 
 
-select *
-from ActionProperty order by id desc ;
+select ap.*
+from ActionProperty ap
+left join ActionProperty_String aps using(id)
+left join ActionProperty_Reference apr using(id)
+join Action a on ap.action_id = a.id and a.deleted = 0
+join ActionType at2 on at2.id = a.actionType_id and at2.deleted = 0 and at2.flatCode = @flatCode
+join ActionPropertyType apt on apt.actionType_id = at2.id and apt.deleted =0 and ap.type_id = apt.id and (apt.id = @ActionPropertyTypeOld or apt.id = @ActionPropertyTypeNew)
+where ap.deleted= 0 group by type_id
 
-
-insert into ActionProperty_Reference(id, `index`, value)
+# insert into ActionProperty_Reference(id, `index`, value)
 select *
 from
 (select aps.id, 0,
