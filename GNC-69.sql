@@ -631,4 +631,26 @@ select '1', '2', '3', '4','5','6','7'
 
 
 select *
-from rbService where begDate = '2021-07-01' and endDate = '2030-12-31';
+from rbService where code regexp '^A.';
+
+
+select *
+from PriceListItem where serviceCodeOW regexp 'А27.30.113';
+
+
+
+select *
+from PriceListItem where serviceCodeOW regexp 'А09.05.233';
+
+select *
+from ActionType where code in
+(select *
+from Price_cal_temp where CodeNEW regexp '^А' and (NameOLD != NameNEW or PriceOLD != PriceNEW));
+
+
+select *
+from PriceListItem where priceList_id = 124 and serviceCodeOW = 'А09.05.090';
+
+
+select *
+from PriceListItem where priceList_id=124 order by id desc ;
