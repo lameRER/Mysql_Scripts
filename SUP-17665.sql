@@ -58,7 +58,7 @@ from ActionProperty_Reference where id =254396686;
 
 
 select *
-from s11.ActionProperty where id = 254396686;
+from ActionProperty where id = 254396686;
 
 # insert into ActionProperty_Reference(id, `index`, value)
 # select *
