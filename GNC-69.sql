@@ -630,4 +630,5 @@ insert into Price_cal_temp(CodeOLD, NameOLD, PriceOLD, CodeNEW, NameNEW, PriceNE
 select '1', '2', '3', '4','5','6','7'
 
 
-
+select *
+from rbService where begDate = '2021-07-01' and endDate = '2030-12-31';
