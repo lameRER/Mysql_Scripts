@@ -162,7 +162,7 @@ where ap.deleted= 0 and ap.type_id = @ActionPropertyTypeOld and apr.id is null g
 UPDATE ActionPropertyType SET idx = 2, visibleInDR = 1, userProfile_id = null, userProfileBehaviour = 0 WHERE id = @ActionPropertyTypeNew;
 UPDATE ActionPropertyType SET idx = 21, visibleInDR = 0, userProfile_id = 1, userProfileBehaviour = 1 WHERE id = @ActionPropertyTypeOld;
 
-
+UPDATE ActionPropertyType SET visibleInDR = 1, userProfile_id = 1, userProfileBehaviour = 1 WHERE id = 35471;
 # select * from
 # update
 #               ActionPropertyType
@@ -196,3 +196,7 @@ UPDATE ActionPropertyType SET idx = 21, visibleInDR = 0, userProfile_id = 1, use
 # Кем доставлен - оставляем
 # квота - оставляем
 # № бригады - перенести
+
+
+select *
+from ActionPropertyType where actionType_id = 15084 and deleted = 0 order by  idx ;
