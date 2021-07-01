@@ -7,17 +7,19 @@ set @ActionPropertyType = 'Доставлен';
 set @ActionPropertyTypeOld = (select id from ActionPropertyType where name = @ActionPropertyType and actionType_id = @ActionType and deleted = 0 and typeName = 'String');
 set @ActionPropertyTypeNew = (select id from ActionPropertyType where name = @ActionPropertyType and actionType_id = @ActionType and deleted = 0 and typeName = 'Reference');
 
-insert into ActionProperty_String_id_to_delete(id, idx, value)
-select aps.*
-from ActionProperty ap
-left Join ActionProperty_String aps using(id)
-join Action a on ap.action_id = a.id and a.deleted = 0
-join ActionType at2 on at2.id = a.actionType_id and at2.deleted = 0 and at2.flatCode = @flatCode
-join ActionPropertyType apt on apt.actionType_id = at2.id and apt.deleted =0 and ap.type_id = apt.id and apt.id = @ActionPropertyTypeOld
-where ap.deleted= 0 and aps.id is not null;
+# insert into ActionProperty_String_id_to_delete(id, idx, value)
+# select aps.*
+# from ActionProperty ap
+# left Join ActionProperty_String aps using(id)
+# join Action a on ap.action_id = a.id and a.deleted = 0
+# join ActionType at2 on at2.id = a.actionType_id and at2.deleted = 0 and at2.flatCode = @flatCode
+# join ActionPropertyType apt on apt.actionType_id = at2.id and apt.deleted =0 and ap.type_id = apt.id and apt.id = @ActionPropertyTypeOld
+# where ap.deleted= 0 and aps.id is not null;
 
 insert into ActionProperty_Reference(id, `index`, value)
-select aps.id, 0,
+select *
+from
+(select aps.id, 0,
        case
            when aps.value regexp '^в первые 6часов|^1 час|^2 часа|^3 часа|^4|^4 часа|^5 часов|^6 часов|^< font style="vertical-align: inherit;">< font style="vertical-align: inherit;">1 час< /font>< /font>|^< font style="vertical-align: inherit;">< font style="vertical-align: inherit;">4 часа< /font>< /font>' then 4
            when  aps.value regexp '^в течении 7-24 часов|^7-12 часов|^7-24 часов|^12-24 часов' then 5
@@ -27,7 +29,8 @@ left Join ActionProperty_String aps using(id)
 join Action a on ap.action_id = a.id and a.deleted = 0
 join ActionType at2 on at2.id = a.actionType_id and at2.deleted = 0 and at2.flatCode = @flatCode
 join ActionPropertyType apt on apt.actionType_id = at2.id and apt.deleted =0 and ap.type_id = apt.id and apt.id = @ActionPropertyTypeOld
-where ap.deleted= 0 and aps.id is not null;
+where ap.deleted= 0 and aps.id is not null) as tmp
+where not exists(select * from ActionProperty_Reference where id = tmp.id);
 
 update
 # select ap.* from
@@ -123,7 +126,7 @@ from ActionPropertyType where actionType_id = 15084 and deleted = 0;
 Состояние при поступлении - оставляем
 Доставлен - омтавляем
 Кем доставлен - оставляем
-квота -\\\1
+квота - оставляем
 № бригады - перенести
 
 
