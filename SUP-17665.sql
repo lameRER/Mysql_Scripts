@@ -148,72 +148,51 @@ where ap.deleted= 0 and ap.type_id = @ActionPropertyTypeOld and apr.id is null g
 # join ActionPropertyType apt on apt.actionType_id = at2.id and apt.deleted =0 and ap.type_id = apt.id and apt.id = @ActionPropertyTypeOld
 # where ap.deleted= 0 and aps.id is not null;
 
-update
-# select ap.* from
-    ActionProperty ap
-left Join ActionProperty_String aps using(id)
-join Action a on ap.action_id = a.id and a.deleted = 0
-join ActionType at2 on at2.id = a.actionType_id and at2.deleted = 0 and at2.flatCode = @flatCode
-join ActionPropertyType apt on apt.actionType_id = at2.id and apt.deleted =0 and ap.type_id = apt.id and apt.id = @ActionPropertyTypeOld
-set ap.type_id = @ActionPropertyTypeNew
-where ap.deleted= 0 and aps.id is not null;
+# update
+# # select ap.* from
+#     ActionProperty ap
+# left Join ActionProperty_String aps using(id)
+# join Action a on ap.action_id = a.id and a.deleted = 0
+# join ActionType at2 on at2.id = a.actionType_id and at2.deleted = 0 and at2.flatCode = @flatCode
+# join ActionPropertyType apt on apt.actionType_id = at2.id and apt.deleted =0 and ap.type_id = apt.id and apt.id = @ActionPropertyTypeOld
+# set ap.type_id = @ActionPropertyTypeNew
+# where ap.deleted= 0 and aps.id is not null;
 
 
 UPDATE ActionPropertyType SET idx = 2, visibleInDR = 1, userProfile_id = null, userProfileBehaviour = 0 WHERE id = @ActionPropertyTypeNew;
 UPDATE ActionPropertyType SET idx = 21, visibleInDR = 0, userProfile_id = 1, userProfileBehaviour = 1 WHERE id = @ActionPropertyTypeOld;
 
 
-select * from
+# select * from
 # update
-              ActionPropertyType
+#               ActionPropertyType
 # set penalty = 100
-where valueDomain in ('netricaTypeFromDiseaseStart', 'netricaTransportIntern', 'netricaHospChannel', 'netricaPatientConditionOnAdmission', 'rbTransf') and actionType_id = 15084-- and penalty != 100;
-
-
-
-select *
-from Action where event_id = 33866563;
-
-
-select *
-from ActionPropertyType where actionType_id = 15084 and deleted = 0;
-
-
-
-Кем направлен - оставлям
-Прочие направители - оставляем
-Канал доставки - переделали
-Подстанция СМП - оставляем
-Признак поступления - оставляем
-Доставлен - переделали
-№ машины - скрываем, копируем - запретить ставить ноль, Integer
-№ Наряда - оставляем
-Транспортировка - оставляем
-Район доставки - оставляем
-Диагноз направителя - оставляем
-Диагноз приемного отделения - оставляем
-Направлен в отделение - оставляем
-Доставлен в состоянии  опьянения - переделали, без штрафа
-Доставлен в состоянии опьянения - убрать, удалить
-Профиль - оставляем
-Выявлено при поступлении - оставляем
-Причина отказа от госпитализации - оставляем
-Талон ОМС ВМП - оставляем
-Состояние при поступлении - оставляем
-Доставлен - омтавляем
-Кем доставлен - оставляем
-квота - оставляем
-№ бригады - перенести
-
-
-
-
-
-
-select *
-from ActionProperty where action_id = 100754077;
-
-
-delete
-from ActionProperty_String
-where id in (select id from ActionProperty_String_id_to_delete);
+# where valueDomain in ('netricaTypeFromDiseaseStart', 'netricaTransportIntern', 'netricaHospChannel', 'netricaPatientConditionOnAdmission', 'rbTransf') and actionType_id = 15084-- and penalty != 100;
+#
+#
+#
+#
+# Кем направлен - оставлям
+# Прочие направители - оставляем
+# Канал доставки - переделали
+# Подстанция СМП - оставляем
+# Признак поступления - оставляем
+# Доставлен - переделали
+# № машины - скрываем, копируем - запретить ставить ноль, Integer
+# № Наряда - оставляем
+# Транспортировка - оставляем
+# Район доставки - оставляем
+# Диагноз направителя - оставляем
+# Диагноз приемного отделения - оставляем
+# Направлен в отделение - оставляем
+# Доставлен в состоянии  опьянения - переделали, без штрафа
+# Доставлен в состоянии опьянения - убрать, удалить
+# Профиль - оставляем
+# Выявлено при поступлении - оставляем
+# Причина отказа от госпитализации - оставляем
+# Талон ОМС ВМП - оставляем
+# Состояние при поступлении - оставляем
+# Доставлен - омтавляем
+# Кем доставлен - оставляем
+# квота - оставляем
+# № бригады - перенести
