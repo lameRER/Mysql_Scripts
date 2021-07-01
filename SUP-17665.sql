@@ -17,7 +17,9 @@ set @ActionPropertyTypeNew = (select id from ActionPropertyType where name = @Ac
 
 
 insert into ActionProperty(createDatetime, createPerson_id, modifyDatetime, modifyPerson_id, deleted, action_id, type_id, unit_id, norm, isAssigned, evaluation, isAutoFillCancelled)
-select
+select *
+from
+(select
         ap.createDatetime,
         ap.createPerson_id,
         ap.modifyDatetime,
@@ -35,7 +37,8 @@ left Join ActionProperty_String aps using(id)
 join Action a on ap.action_id = a.id and a.deleted = 0
 join ActionType at2 on at2.id = a.actionType_id and at2.deleted = 0 and at2.flatCode = @flatCode
 join ActionPropertyType apt on apt.actionType_id = at2.id and apt.deleted =0 and ap.type_id = apt.id and apt.id = @ActionPropertyTypeOld
-where ap.deleted= 0 and aps.id is not null;
+where ap.deleted= 0 and aps.id is not null) as tmp
+where not exists(select * from ActionProperty where action_id = tmp.action_id and type_id = tmp.type_id and deleted = tmp.deleted);
 
 insert into ActionProperty_Reference(id, `index`, value)
 select ap1.id, 0, case
@@ -46,12 +49,16 @@ from ActionProperty ap
 join ActionProperty_String aps on aps.id = ap.id
 join Action a on ap.action_id = a.id and a.deleted = 0
 join ActionProperty ap1 on ap1.action_id = a.id and ap1.deleted = 0 and ap1.type_id = @ActionPropertyTypeNew
-join ActionProperty_Reference apr on apr.id = ap1.id
+left join ActionProperty_Reference apr on apr.id = ap1.id
 join ActionType at2 on at2.id = a.actionType_id and at2.deleted = 0 and at2.flatCode = @flatCode
-where ap.deleted= 0 and ap.type_id = @ActionPropertyTypeOld;
+where ap.deleted= 0 and ap.type_id = @ActionPropertyTypeOld and apr.id is null;
 
 select *
-from ActionProperty_Reference where id =201956380;
+from ActionProperty_Reference where id =254396686;
+
+
+select *
+from s11.ActionProperty where id = 254396686;
 
 # insert into ActionProperty_Reference(id, `index`, value)
 # select *
