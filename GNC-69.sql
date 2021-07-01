@@ -523,6 +523,10 @@ right join Price_cal_temp pct on pct.CodeNEW = r.code
 where (pct.NameOLD != pct.NameNEW or pct.PriceOLD != pct.PriceNEW) and CodeOLD is null) as tmp
 where not exists(select * from rbService where code = tmp.code and name = tmp.name and begDate = tmp.begDate and endDate = tmp.endDate);
 
+
+
+
+
 select A.*
 from PriceListItem
 join rbService rS on PriceListItem.service_id = rS.id
@@ -573,7 +577,7 @@ from
 from ActionType r
 right join Price_cal_temp pct on pct.CodeNEW = r.code
 where (pct.NameOLD != pct.NameNEW or pct.PriceOLD != pct.PriceNEW) and CodeOLD is null) as tmp
-where not exists(select * from ActionType where name = tmp.name and code = tmp.code)
+where  exists(select * from ActionType where name = tmp.name and code = tmp.code)
 
 insert into ActionType_Service(master_id, idx, service_id, begDate, endDate)
 select *
@@ -644,8 +648,8 @@ from PriceListItem where serviceCodeOW regexp 'А09.05.233';
 
 select *
 from ActionType where code in
-(select *
-from Price_cal_temp where CodeNEW regexp '^А' and (NameOLD != NameNEW or PriceOLD != PriceNEW));
+(select CodeNEW
+from Price_cal_temp where CodeNEW regexp '^А');
 
 
 select *
@@ -653,4 +657,7 @@ from PriceListItem where priceList_id = 124 and serviceCodeOW = 'А09.05.090';
 
 
 select *
-from PriceListItem where priceList_id=124 order by id desc ;
+from PriceListItem where code regexp '^А' order by id desc ;
+
+
+select * from rbService order by id desc

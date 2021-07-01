@@ -122,7 +122,7 @@ where ap.deleted= 0 and aps.id is not null) as tmp
 where not exists(select * from ActionProperty where action_id = tmp.action_id and type_id = tmp.type_id and deleted = tmp.deleted);
 
 insert into ActionProperty_Integer(id, `index`, value)
-select ap1.id, 0, if(regexp_replace(aps.value, '\\D', '')= '',0, regexp_replace(aps.value, '\\D', '')) as `value`
+select ap1.id, 0, left(if(regexp_replace(aps.value, '\\D', '')= '',0, regexp_replace(aps.value, '\\D', '')),8) as `value`
 from ActionProperty ap
 join ActionProperty_String aps on aps.id = ap.id
 join Action a on ap.action_id = a.id and a.deleted = 0
