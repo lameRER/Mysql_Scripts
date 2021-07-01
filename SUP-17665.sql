@@ -2,7 +2,6 @@ use s12;
 set @flatCode = 'received';
 set @ActionType = (select id from ActionType where flatCode = @flatCode and deleted = 0);
 
-
 set @ActionPropertyType = 'Доставлен';
 set @ActionPropertyTypeOld = (select id from ActionPropertyType where name = @ActionPropertyType and actionType_id = @ActionType and deleted = 0 and typeName = 'String');
 set @ActionPropertyTypeNew = (select id from ActionPropertyType where name = @ActionPropertyType and actionType_id = @ActionType and deleted = 0 and typeName = 'Reference');
@@ -16,9 +15,14 @@ set @ActionPropertyTypeNew = (select id from ActionPropertyType where name = @Ac
 # join ActionPropertyType apt on apt.actionType_id = at2.id and apt.deleted =0 and ap.type_id = apt.id and apt.id = @ActionPropertyTypeOld
 # where ap.deleted= 0 and aps.id is not null;
 
-select *
-from
-(select
+SELECT `AUTO_INCREMENT`
+FROM  INFORMATION_SCHEMA.TABLES
+WHERE TABLE_SCHEMA = 's12'
+AND   TABLE_NAME   = 'ActionProperty';
+
+
+# insert into ActionProperty(createDatetime, createPerson_id, modifyDatetime, modifyPerson_id, deleted, action_id, type_id, unit_id, norm, isAssigned, evaluation, isAutoFillCancelled)
+select
         ap.createDatetime,
         ap.createPerson_id,
         ap.modifyDatetime,
@@ -36,8 +40,11 @@ left Join ActionProperty_String aps using(id)
 join Action a on ap.action_id = a.id and a.deleted = 0
 join ActionType at2 on at2.id = a.actionType_id and at2.deleted = 0 and at2.flatCode = @flatCode
 join ActionPropertyType apt on apt.actionType_id = at2.id and apt.deleted =0 and ap.type_id = apt.id and apt.id = @ActionPropertyTypeOld
-where ap.deleted= 0 and aps.id is not null) as tmp
-where not exists(select * from ActionProperty_Reference where id = tmp.id);
+where ap.deleted= 0 and aps.id is not null
+
+
+select *
+from ActionProperty order by id desc ;
 
 
 insert into ActionProperty_Reference(id, `index`, value)
