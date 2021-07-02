@@ -146,12 +146,17 @@ from ActionPropertyType where id = 39729;
 select *
 from s11.ActionProperty where action_id = 100788001;
 
+select *
+from ActionProperty where action_id = 93981719;
 
 
-
-select count(type_id) as con, group_concat(id), ActionProperty.*
-from ActionProperty where type_id = 39729 and deleted = 0 group by action_id, type_id having con > 1;
-
+select *
+from ActionProperty where find_in_set(id,
+(select group_concat(id)
+from ActionProperty where type_id = 39729 and deleted = 0 and id not in
+(select min(id)
+from ActionProperty where type_id = 39729 and deleted = 0 group by action_id, type_id having count(type_id) > 1)
+ group by action_id, type_id having count(type_id) > 1));
 # select * from
 # update
 #               ActionPropertyType
