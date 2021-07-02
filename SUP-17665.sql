@@ -123,6 +123,14 @@ join ActionPropertyType apt on apt.actionType_id = at2.id and apt.deleted =0 and
 where ap.deleted= 0 and aps.id is not null) as tmp
 where not exists(select * from ActionProperty where action_id = tmp.action_id and type_id = tmp.type_id and deleted = tmp.deleted);
 
+
+delete from ActionProperty
+where id in(
+select id
+from ActionProperty where type_id = 39729 and deleted = 0);
+
+
+
 select @ActionPropertyTypeNew;
 
 replace into ActionProperty_Integer(id, `index`, value)
@@ -160,9 +168,9 @@ group by action_id, type_id having count(type_id) > 1
 
 
 select *
-from ActionProperty where type_id = 39729 and deleted = 0 and id not in (select min(ap.id) from ActionProperty ap where ap.id=id and ap.type_id = type_id group by ap.action_id);
+from ActionProperty where type_id = 39729 and deleted = 0 and id not in (select min(ap.id) from ActionProperty ap where /*ap.id = id and ap.type_id = type_id*/ ap.type_id = 39729 group by ap.action_id);
 select *
-from ActionProperty where action_id = 96128815;
+from ActionProperty where action_id =8528991-- 96128815;
 
 
 select *
