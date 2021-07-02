@@ -23,6 +23,13 @@ select *
 from ActionProperty where action_id = 99077600;
 select *
 from ActionProperty_Integer where id = 253017930;
+
+
+select *
+from ActionProperty where action_id = 100787988;
+
+select event_id
+from Action where id = 100787988;
 #   REPLACE LOW_PRIORITY ActionProperty (createDatetime, createPerson_id, modifyDatetime, modifyPerson_id, action_id, type_id)
 
 
