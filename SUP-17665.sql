@@ -6,8 +6,8 @@ set @ActionPropertyType = 'Доставлен';
 set @ActionPropertyTypeOld = (select id from ActionPropertyType where name = @ActionPropertyType and actionType_id = @ActionType and deleted = 0 and typeName = 'String');
 set @ActionPropertyTypeNew = (select id from ActionPropertyType where name = @ActionPropertyType and actionType_id = @ActionType and deleted = 0 and typeName = 'Reference');
 
-UPDATE ActionPropertyType SET idx = 5, penalty = 100, penaltyUserProfile = '29; 7; 19; 32; 31; 53; 36; 37; 57; 48; 63', visibleInDR = 1, userProfile_id = null, userProfileBehaviour = 0 WHERE id = @ActionPropertyTypeNew;
-UPDATE ActionPropertyType SET idx = 20, penalty = 0, penaltyUserProfile = '7;19', visibleInDR = 0, userProfile_id = 1, userProfileBehaviour = 1 WHERE id = @ActionPropertyTypeOld;
+# UPDATE ActionPropertyType SET idx = 5, penalty = 100, penaltyUserProfile = '29; 7; 19; 32; 31; 53; 36; 37; 57; 48; 63', visibleInDR = 1, userProfile_id = null, userProfileBehaviour = 0 WHERE id = @ActionPropertyTypeNew;
+# UPDATE ActionPropertyType SET idx = 20, penalty = 0, penaltyUserProfile = '7;19', visibleInDR = 0, userProfile_id = 1, userProfileBehaviour = 1 WHERE id = @ActionPropertyTypeOld;
 
 insert into ActionProperty(createDatetime, createPerson_id, modifyDatetime, modifyPerson_id, deleted, action_id, type_id, unit_id, norm, isAssigned, evaluation, isAutoFillCancelled)
 select *
@@ -51,8 +51,8 @@ set @ActionPropertyTypeOld = (select id from ActionPropertyType where name = 'К
 set @ActionPropertyTypeNew = (select id from ActionPropertyType where name = 'Канал доставки' and actionType_id = @ActionType and deleted = 0 and typeName = 'Reference');
 
 
-UPDATE ActionPropertyType SET idx = 2, visibleInDR = 1, userProfile_id = null, userProfileBehaviour = 0 WHERE id = @ActionPropertyTypeNew;
-UPDATE ActionPropertyType SET idx = 21, visibleInDR = 0, userProfile_id = 1, userProfileBehaviour = 1 WHERE id = @ActionPropertyTypeOld;
+# UPDATE ActionPropertyType SET idx = 2, visibleInDR = 1, userProfile_id = null, userProfileBehaviour = 0 WHERE id = @ActionPropertyTypeNew;
+# UPDATE ActionPropertyType SET idx = 21, visibleInDR = 0, userProfile_id = 1, userProfileBehaviour = 1 WHERE id = @ActionPropertyTypeOld;
 
 insert into ActionProperty(createDatetime, createPerson_id, modifyDatetime, modifyPerson_id, deleted, action_id, type_id, unit_id, norm, isAssigned, evaluation, isAutoFillCancelled)
 select *
@@ -96,8 +96,8 @@ where ap.deleted= 0 and ap.type_id = @ActionPropertyTypeOld and apr.id is null g
 set @ActionPropertyTypeOld = (select id from ActionPropertyType where name = '№ машины' and actionType_id = @ActionType and deleted = 0 and typeName = 'String');
 set @ActionPropertyTypeNew = (select id from ActionPropertyType where name = '№ бригады' and actionType_id = @ActionType and deleted = 0 and typeName = 'Integer');
 
-UPDATE ActionPropertyType SET idx = 6, visibleInDR = 1, userProfile_id = null, userProfileBehaviour = 0 WHERE id = 39729;
-UPDATE ActionPropertyType SET idx = 23, visibleInDR = 0, userProfile_id = 1, userProfileBehaviour = 1 WHERE id = 35471;
+# UPDATE ActionPropertyType SET idx = 6, visibleInDR = 1, userProfile_id = null, userProfileBehaviour = 0 WHERE id = 39729;
+# UPDATE ActionPropertyType SET idx = 23, visibleInDR = 0, userProfile_id = 1, userProfileBehaviour = 1 WHERE id = 35471;
 
 insert into ActionProperty(createDatetime, createPerson_id, modifyDatetime, modifyPerson_id, deleted, action_id, type_id, unit_id, norm, isAssigned, evaluation, isAutoFillCancelled)
 select *
