@@ -21,7 +21,8 @@ from ActionProperty where id = 230636020;
 
 select *
 from ActionProperty where action_id = 99077600;
-
+select *
+from ActionProperty_Integer where id = 253017930;
 #   REPLACE LOW_PRIORITY ActionProperty (createDatetime, createPerson_id, modifyDatetime, modifyPerson_id, action_id, type_id)
 
 
@@ -64,7 +65,7 @@ SELECT
 
 
 
-REPLACE LOW_PRIORITY ActionProperty_Integer (id, value)
+# REPLACE LOW_PRIORITY ActionProperty_Integer (id, value)
 
 
 SELECT
