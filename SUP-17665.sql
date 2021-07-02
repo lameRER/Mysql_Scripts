@@ -146,6 +146,12 @@ from ActionPropertyType where id = 39729;
 select *
 from s11.ActionProperty where action_id = 100788001;
 
+
+
+
+select count(type_id) as con, group_concat(id), ActionProperty.*
+from ActionProperty where type_id = 39729 and deleted = 0 group by action_id, type_id having con > 1;
+
 # select * from
 # update
 #               ActionPropertyType
