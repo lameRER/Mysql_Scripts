@@ -123,6 +123,8 @@ join ActionPropertyType apt on apt.actionType_id = at2.id and apt.deleted =0 and
 where ap.deleted= 0 and aps.id is not null) as tmp
 where not exists(select * from ActionProperty where action_id = tmp.action_id and type_id = tmp.type_id and deleted = tmp.deleted);
 
+select @ActionPropertyTypeNew;
+
 replace into ActionProperty_Integer(id, `index`, value)
 select ap1.id, 0, left(if(regexp_replace(aps.value, '\\D', '')= '',112, regexp_replace(aps.value, '\\D', '')),8) as `value`
 from ActionProperty ap
@@ -134,9 +136,9 @@ join ActionType at2 on at2.id = a.actionType_id and at2.deleted = 0 and at2.flat
 where ap.deleted= 0 and ap.type_id = @ActionPropertyTypeOld and apr.id is null group by ap.action_id, ap.type_id;
 
 select *
-from ActionProperty_Integer where id = 253380156;
+from ActionProperty_Integer where id = 253134464;
 select *
-from ActionProperty where id = 253380156;
+from ActionProperty where id = 253134464;
 
 select *
 from ActionPropertyType where id = 38920;
