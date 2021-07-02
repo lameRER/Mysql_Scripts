@@ -136,6 +136,10 @@ join ActionType at2 on at2.id = a.actionType_id and at2.deleted = 0 and at2.flat
 where ap.deleted= 0 and ap.type_id = @ActionPropertyTypeOld and apr.id is null group by ap.action_id, ap.type_id;
 
 
+delete from ActionProperty_Integer
+where id in(
+select id
+from ActionProperty where type_id = 39729 and deleted = 0);
 
 delete from ActionProperty
 where id in(
