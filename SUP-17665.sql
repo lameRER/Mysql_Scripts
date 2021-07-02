@@ -129,19 +129,23 @@ replace into ActionProperty_Integer(id, `index`, value)
 select ap1.id, 0, left(if(regexp_replace(aps.value, '\\D', '')= '',112, regexp_replace(aps.value, '\\D', '')),8) as `value`
 from ActionProperty ap
 join ActionProperty_String aps on aps.id = ap.id
-join Action a on ap.action_id = a.id and a.deleted = 0 and a.event_id = 33868096
+join Action a on ap.action_id = a.id and a.deleted = 0-- and a.event_id = 33868096
 join ActionProperty ap1 on ap1.action_id = a.id and ap1.deleted = 0 and ap1.type_id = @ActionPropertyTypeNew
 left join ActionProperty_Integer apr on apr.id = ap1.id
 join ActionType at2 on at2.id = a.actionType_id and at2.deleted = 0 and at2.flatCode = @flatCode
 where ap.deleted= 0 and ap.type_id = @ActionPropertyTypeOld and apr.id is null group by ap.action_id, ap.type_id;
 
 select *
-from ActionProperty_Integer where id = 253134464;
+from ActionProperty_Integer where id = 253136204;
 select *
-from ActionProperty where id = 253134464;
+from ActionProperty where id = 253136204;
+select *
+from Action where id = 100787479;
+select *
+from ActionPropertyType where id = 39729;
+select *
+from ActionProperty where action_id = 100787479;
 
-select *
-from ActionPropertyType where id = 38920;
 # select * from
 # update
 #               ActionPropertyType
