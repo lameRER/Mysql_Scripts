@@ -1,6 +1,6 @@
 select count(type_id), ActionProperty.*
-from ActionProperty where action_id =100787988 and type_id = 39729 group by type_id;
-100787988
+from ActionProperty where action_id =100787929 and type_id = 39729 group by type_id;
+
 select *
 from Event where id = 33868103;
 
@@ -30,7 +30,8 @@ from ActionProperty where action_id = 100787988;
 
 select event_id
 from Action where id = 100787988;
-#   REPLACE LOW_PRIORITY ActionProperty (createDatetime, createPerson_id, modifyDatetime, modifyPerson_id, action_id, type_id)
+
+  REPLACE LOW_PRIORITY ActionProperty (createDatetime, createPerson_id, modifyDatetime, modifyPerson_id, action_id, type_id)
 
 
 SELECT
@@ -72,7 +73,7 @@ SELECT
 
 
 
-# REPLACE LOW_PRIORITY ActionProperty_Integer (id, value)
+REPLACE LOW_PRIORITY ActionProperty_Integer (id, value)
 
 
 SELECT

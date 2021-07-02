@@ -183,3 +183,6 @@ from s11.ActionProperty where action_id = 100788001;
 
 select *
 from ActionPropertyType where actionType_id = 15084 and deleted = 0 order by  idx ;
+
+
+select DATE_SUB(CURDATE(), INTERVAL 2 DAY)
