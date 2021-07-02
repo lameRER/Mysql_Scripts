@@ -117,21 +117,13 @@ from
         isAutoFillCancelled
  from ActionProperty ap
 left Join ActionProperty_String aps using(id)
-join Action a on ap.action_id = a.id and a.deleted = 0 and a.event_id = 33868104
+join Action a on ap.action_id = a.id and a.deleted = 0
 join ActionType at2 on at2.id = a.actionType_id and at2.deleted = 0 and at2.flatCode = @flatCode
 join ActionPropertyType apt on apt.actionType_id = at2.id and apt.deleted =0 and ap.type_id = apt.id and apt.id = @ActionPropertyTypeOld
 where ap.deleted= 0 and aps.id is not null) as tmp
 where not exists(select * from ActionProperty where action_id = tmp.action_id and type_id = tmp.type_id and deleted = tmp.deleted);
 
 
-delete from ActionProperty
-where id in(
-select id
-from ActionProperty where type_id = 39729 and deleted = 0);
-
-
-
-select @ActionPropertyTypeNew;
 
 replace into ActionProperty_Integer(id, `index`, value)
 select ap1.id, 0, left(if(regexp_replace(aps.value, '\\D', '')= '',112, regexp_replace(aps.value, '\\D', '')),8) as `value`
@@ -142,6 +134,14 @@ join ActionProperty ap1 on ap1.action_id = a.id and ap1.deleted = 0 and ap1.type
 left join ActionProperty_Integer apr on apr.id = ap1.id
 join ActionType at2 on at2.id = a.actionType_id and at2.deleted = 0 and at2.flatCode = @flatCode
 where ap.deleted= 0 and ap.type_id = @ActionPropertyTypeOld and apr.id is null group by ap.action_id, ap.type_id;
+
+
+
+delete from ActionProperty
+where id in(
+select id
+from ActionProperty where type_id = 39729 and deleted = 0);
+
 
 select *
 from ActionProperty_Integer where id = 253138657;
