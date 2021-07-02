@@ -155,7 +155,12 @@ from ActionProperty
 where type_id = 39729
   and deleted = 0
   and id not in (select min(ap.id) from ActionProperty ap where ap.type_id = type_id and id = ap.id and ap.deleted = 0)
-group by id, action_id, type_id having count(type_id) > 1
+group by action_id, type_id having count(type_id) > 1
+
+
+
+select *
+from ActionProperty ap where ap.type_id = 39729 and ap.deleted = 0 and ap.id not in (select min(id) from ActionProperty where ap.id = id and ap.deleted = 0);
 
 
 #                       and id not in
