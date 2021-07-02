@@ -33,7 +33,7 @@ join ActionPropertyType apt on apt.actionType_id = at2.id and apt.deleted =0 and
 where ap.deleted= 0 and aps.id is not null) as tmp
 where not exists(select * from ActionProperty where action_id = tmp.action_id and type_id = tmp.type_id and deleted = tmp.deleted);
 
-insert into ActionProperty_Reference(id, `index`, value)
+replace into ActionProperty_Reference(id, `index`, value)
 select ap1.id, 0, case
            when aps.value regexp '^в первые 6часов|^1 час|^2 часа|^3 часа|^4|^4 часа|^5 часов|^6 часов|^< font style="vertical-align: inherit;">< font style="vertical-align: inherit;">1 час< /font>< /font>|^< font style="vertical-align: inherit;">< font style="vertical-align: inherit;">4 часа< /font>< /font>' then 4
            when  aps.value regexp '^в течении 7-24 часов|^7-12 часов|^7-24 часов|^12-24 часов' then 5
@@ -78,7 +78,7 @@ join ActionPropertyType apt on apt.actionType_id = at2.id and apt.deleted =0 and
 where ap.deleted= 0 and aps.id is not null) as tmp
 where not exists(select * from ActionProperty where action_id = tmp.action_id and type_id = tmp.type_id and deleted = tmp.deleted);
 
-insert into ActionProperty_Reference(id, `index`, value)
+replace into ActionProperty_Reference(id, `index`, value)
 select ap1.id, 0, case
            when aps.value = 'Самостоятельно' then 2
            when  aps.value = 'СМП' then 1
@@ -123,18 +123,23 @@ join ActionPropertyType apt on apt.actionType_id = at2.id and apt.deleted =0 and
 where ap.deleted= 0 and aps.id is not null) as tmp
 where not exists(select * from ActionProperty where action_id = tmp.action_id and type_id = tmp.type_id and deleted = tmp.deleted);
 
-insert into ActionProperty_Integer(id, `index`, value)
-select ap1.id, 0, left(if(regexp_replace(aps.value, '\\D', '')= '',0, regexp_replace(aps.value, '\\D', '')),8) as `value`
+replace into ActionProperty_Integer(id, `index`, value)
+select ap1.id, 0, left(if(regexp_replace(aps.value, '\\D', '')= '',112, regexp_replace(aps.value, '\\D', '')),8) as `value`
 from ActionProperty ap
 join ActionProperty_String aps on aps.id = ap.id
-join Action a on ap.action_id = a.id and a.deleted = 0
+join Action a on ap.action_id = a.id and a.deleted = 0 and a.event_id = 33868096
 join ActionProperty ap1 on ap1.action_id = a.id and ap1.deleted = 0 and ap1.type_id = @ActionPropertyTypeNew
 left join ActionProperty_Integer apr on apr.id = ap1.id
 join ActionType at2 on at2.id = a.actionType_id and at2.deleted = 0 and at2.flatCode = @flatCode
 where ap.deleted= 0 and ap.type_id = @ActionPropertyTypeOld and apr.id is null group by ap.action_id, ap.type_id;
 
+select *
+from ActionProperty_Integer where id = 253380156;
+select *
+from ActionProperty where id = 253380156;
 
-
+select *
+from ActionPropertyType where id = 38920;
 # select * from
 # update
 #               ActionPropertyType
