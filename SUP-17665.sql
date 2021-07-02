@@ -159,14 +159,14 @@ group by action_id, type_id having count(type_id) > 1
 
 
 
-
-
+select *
+from ActionProperty where type_id = 39729 and deleted = 0 and id not in (select min(ap.id) from ActionProperty ap where ap.id=id and ap.type_id = type_id group by ap.action_id);
+select *
+from ActionProperty where action_id = 96128815;
 
 
 select *
-from ActionProperty ap where ap.type_id = 39729 and ap.action_id in(
-(select action_id
-from ActionProperty where ap.type_id = ap.type_id group by action_id having count(type_id)>1))
+from ActionProperty ap where ap.type_id = 39729 and ap.action_id in(select action_id from ActionProperty where ap.type_id = ap.type_id group by action_id having count(type_id)>1)
 
 
 
