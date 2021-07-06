@@ -56,3 +56,10 @@ select shortName
 from Organisation where id = 3196;
 select *
 from rbUserProfile_Right, rbUserRight where rbUserProfile_Right.master_id = 24 and rbUserRight.id = rbUserProfile_Right.userRight_id;
+
+
+select *
+from ActionTemplate where group_id = 464;
+
+select *
+from Person where id =2139;
