@@ -2,8 +2,11 @@ select *
 from rbUserRight where name regexp 'шаблоны';
 
 
-select * from rbUserProfile_Right, rbUserProfile where rbUserProfile_Right.userRight_id = 1 and rbUserProfile.id = rbUserProfile_Right.master_id
+select *
+from s12.rbUserProfile_Right where userRight_id = 1;
 
+insert into s12.rbUserProfile_Right (id, createDatetime, createPerson_id, modifyDatetime, modifyPerson_id, master_id, userRight_id)
+values  (1, '2017-06-16 15:02:59', 1069, '2021-06-11 16:08:57', 200, 1, 1);
 
 select *
 from Person where login = 'виста';
