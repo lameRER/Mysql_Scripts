@@ -32,12 +32,18 @@ select * from
 
 select *
 from
-(select ur.name, group_concat(up.name separator '\n') as user
+(select ur.id ur_id, ur.code, ur.name, up.id up_id, group_concat(up.name separator '\n') as user
 from rbUserRight ur
-join rbUserProfile_Right upr on ur.id = upr.userRight_id
-join rbUserProfile up on upr.master_id = up.id and up.id in (1,24)
-group by ur.id)
-where user = 'Администратор';
+left join rbUserProfile_Right upr on ur.id = upr.userRight_id
+left join rbUserProfile up on upr.master_id = up.id and up.id in (24)
+where ur.name regexp 'работа'
+group by ur.id) as tmp
+# where tmp.user = 'Администратор'
+;
+
+
+insert into rbUserProfile_Right(createDatetime, createPerson_id, modifyDatetime, modifyPerson_id, master_id, userRight_id)
+select now(), null, now(), null, 24, 146
 
 
 d68a18275455ae3eaa2c291eebb46e6d
