@@ -653,7 +653,7 @@ from Price_cal_temp where CodeNEW regexp '^А');
 
 
 select *
-from PriceListItem where serviceCodeOW = 'A12.05.004.4' and priceList_id = 124;
+from PriceListItem where serviceCodeOW = 'A09.23.005' and priceList_id = 124;
 
 
 select *
