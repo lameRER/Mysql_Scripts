@@ -30,12 +30,14 @@ select * from
 ;
 
 
-
-select rbUserProfile.name, 
-from rbUserProfile
-join rbUserProfile_Right on rbUserProfile.id = rbUserProfile_Right.master_id
-join rbUserRight on rbUserProfile_Right.userRight_id = rbUserRight.id
-;
+select *
+from
+(select ur.name, group_concat(up.name separator '\n') as user
+from rbUserRight ur
+join rbUserProfile_Right upr on ur.id = upr.userRight_id
+join rbUserProfile up on upr.master_id = up.id and up.id in (1,24)
+group by ur.id)
+where user = 'Администратор';
 
 
 d68a18275455ae3eaa2c291eebb46e6d
