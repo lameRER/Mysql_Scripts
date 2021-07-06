@@ -26,4 +26,8 @@ from s11.TakenTissueJournal where id = 104445;
 
 
 select *
+from TakenTissueJournal_log order by id desc
+
+
+select *
 from TakenTissueJournal order by id desc ;
