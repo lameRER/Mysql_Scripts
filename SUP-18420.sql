@@ -36,7 +36,7 @@ from
 from rbUserRight ur
 left join rbUserProfile_Right upr on ur.id = upr.userRight_id
 left join rbUserProfile up on upr.master_id = up.id and up.id in (24)
-where ur.name regexp 'работа'
+where ur.code = 'regReadRegistry'
 group by ur.id) as tmp
 # where tmp.user = 'Администратор'
 ;
