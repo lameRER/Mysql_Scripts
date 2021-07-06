@@ -9,6 +9,7 @@ select *
 from Person where login = 'виста';
 
 
-
+select shortName
+from Organisation where id = 3196;
 select *
 from rbUserProfile_Right, rbUserRight where rbUserProfile_Right.master_id = 24 and rbUserRight.id = rbUserProfile_Right.userRight_id;
