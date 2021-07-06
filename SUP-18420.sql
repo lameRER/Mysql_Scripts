@@ -29,6 +29,8 @@ select * from
      where userProfile_id = 24 and retireDate is null
 ;
 
+insert into Person_UserProfile(person_id, userProfile_id, createDatetime, createPerson_id, modifyDatetime, modifyPerson_id)
+select 8, 24, now(), null, now(), null
 
 select *
 from
