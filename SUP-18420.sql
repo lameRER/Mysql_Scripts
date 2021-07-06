@@ -31,8 +31,11 @@ select * from
 
 
 
-select rbUserProfile.name
-from rbUserProfile;
+select rbUserProfile.name, 
+from rbUserProfile
+join rbUserProfile_Right on rbUserProfile.id = rbUserProfile_Right.master_id
+join rbUserRight on rbUserProfile_Right.userRight_id = rbUserRight.id
+;
 
 
 d68a18275455ae3eaa2c291eebb46e6d
