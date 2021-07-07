@@ -8,3 +8,5 @@ from Person where login = 'табагуатт';
 
 select chief_id
 from OrgStructure where id = 171;
+
+
