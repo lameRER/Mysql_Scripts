@@ -523,6 +523,10 @@ right join Price_cal_temp pct on pct.CodeNEW = r.code
 where (pct.NameOLD != pct.NameNEW or pct.PriceOLD != pct.PriceNEW) and CodeOLD is null) as tmp
 where not exists(select * from rbService where code = tmp.code and name = tmp.name and begDate = tmp.begDate and endDate = tmp.endDate);
 
+
+
+
+
 select A.*
 from PriceListItem
 join rbService rS on PriceListItem.service_id = rS.id
@@ -573,7 +577,7 @@ from
 from ActionType r
 right join Price_cal_temp pct on pct.CodeNEW = r.code
 where (pct.NameOLD != pct.NameNEW or pct.PriceOLD != pct.PriceNEW) and CodeOLD is null) as tmp
-where not exists(select * from ActionType where name = tmp.name and code = tmp.code)
+where  exists(select * from ActionType where name = tmp.name and code = tmp.code)
 
 insert into ActionType_Service(master_id, idx, service_id, begDate, endDate)
 select *
@@ -630,4 +634,91 @@ insert into Price_cal_temp(CodeOLD, NameOLD, PriceOLD, CodeNEW, NameNEW, PriceNE
 select '1', '2', '3', '4','5','6','7'
 
 
+select *
+from rbService where code regexp '^A.';
 
+
+select *
+from PriceListItem where serviceCodeOW regexp 'А27.30.113';
+
+
+
+select *
+from PriceListItem where serviceCodeOW regexp 'А09.05.233';
+
+select *
+from ActionType where code in
+(select CodeNEW
+from Price_cal_temp where CodeNEW regexp '^А');
+
+
+select *
+from PriceListItem where serviceCodeOW = 'A09.23.005' and priceList_id = 124;
+
+
+select *
+from PriceListItem where code regexp '^А' order by id desc ;
+
+
+select * from rbService order by id desc
+
+
+
+select pt.*
+from PriceListItem pli
+right join price_temp_2021 pt on pt.`Номенклатура.Номенклатурный номер` = pli.serviceCodeOW
+where pli.id is null;
+
+
+
+select *
+from price_temp_2021 where `Номенклатура.Номенклатурный номер` regexp '^B';
+
+
+select *
+from PriceListItem where priceList_id = 124
+
+
+# insert into ActionType(createDatetime, createPerson_id, modifyDatetime, modifyPerson_id, class, group_id, code, name, title, flatCode, sex, age, age_bu, age_bc, age_eu, age_ec, office, showInForm, genTimetable, service_id, quotaType_id, context, defaultPlannedEndDate, defaultExecPerson_id, isMES, nomenclativeService_id, prescribedType_id, shedule_id, testTubeType_id, jobType_id, layout, loadPrintTemplate_id, dynamicNumberType_id, counter_id, ttjExternalCounter_id, ttjExternalCounter_id_cached)
+select *
+from
+(select now() createDatetime,
+       null createPerson_id,
+       now()modifyDatetime,
+       null modifyPerson_id,
+       0 class,
+       NULL group_id,
+       pct.`Номенклатура.Номенклатурный номер` code,
+       pct.`Номенклатура.Наименование полное` name,
+       pct.`Номенклатура.Наименование полное` title,
+       '' flatCode,
+       0 sex,
+       '' age,
+       null age_bu,
+       null age_bc,
+       null age_eu,
+       null age_ec,
+       '' office,
+       0 showInForm,
+       0 genTimetable,
+       null service_id,
+       null quotaType_id,
+       '' context,
+       0 defaultPlannedEndDate,
+       null defaultExecPerson_id,
+       null isMES,
+       null nomenclativeService_id,
+       null prescribedType_id,
+       null shedule_id,
+       null testTubeType_id,
+       null jobType_id,
+       null layout,
+       null loadPrintTemplate_id,
+       null dynamicNumberType_id,
+       null counter_id,
+       null ttjExternalCounter_id,
+       null ttjExternalCounter_id_cached
+from PriceListItem pl
+right join price_temp_2021 pct on pct.`Номенклатура.Номенклатурный номер` = pl.serviceCodeOW
+where pl.id is null) as tmp
+where  exists(select * from ActionType where name = tmp.name and code = tmp.code)
