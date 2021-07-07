@@ -661,3 +661,10 @@ from PriceListItem where code regexp '^А' order by id desc ;
 
 
 select * from rbService order by id desc
+
+
+
+select pt.*
+from PriceListItem pli
+right join price_temp_2021 pt on pt.`Номенклатура.Номенклатурный номер` = pli.serviceCodeOW and pt.`Номенклатура.Номенклатурный номер` != 'Итого'
+where pli.id is null;
