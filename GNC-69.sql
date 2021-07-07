@@ -666,5 +666,59 @@ select * from rbService order by id desc
 
 select pt.*
 from PriceListItem pli
-right join price_temp_2021 pt on pt.`Номенклатура.Номенклатурный номер` = pli.serviceCodeOW and pt.`Номенклатура.Номенклатурный номер` != 'Итого'
+right join price_temp_2021 pt on pt.`Номенклатура.Номенклатурный номер` = pli.serviceCodeOW
 where pli.id is null;
+
+
+
+select *
+from price_temp_2021 where `Номенклатура.Номенклатурный номер` regexp '^B';
+
+
+select *
+from PriceListItem where priceList_id = 124
+
+
+# insert into ActionType(createDatetime, createPerson_id, modifyDatetime, modifyPerson_id, class, group_id, code, name, title, flatCode, sex, age, age_bu, age_bc, age_eu, age_ec, office, showInForm, genTimetable, service_id, quotaType_id, context, defaultPlannedEndDate, defaultExecPerson_id, isMES, nomenclativeService_id, prescribedType_id, shedule_id, testTubeType_id, jobType_id, layout, loadPrintTemplate_id, dynamicNumberType_id, counter_id, ttjExternalCounter_id, ttjExternalCounter_id_cached)
+select *
+from
+(select now() createDatetime,
+       null createPerson_id,
+       now()modifyDatetime,
+       null modifyPerson_id,
+       0 class,
+       NULL group_id,
+       pct.codeNEW code,
+       pct.NameNEW name,
+       pct.NameNEW title,
+       '' flatCode,
+       0 sex,
+       '' age,
+       null age_bu,
+       null age_bc,
+       null age_eu,
+       null age_ec,
+       '' office,
+       0 showInForm,
+       0 genTimetable,
+       null service_id,
+       null quotaType_id,
+       '' context,
+       0 defaultPlannedEndDate,
+       null defaultExecPerson_id,
+       null isMES,
+       null nomenclativeService_id,
+       null prescribedType_id,
+       null shedule_id,
+       null testTubeType_id,
+       null jobType_id,
+       null layout,
+       null loadPrintTemplate_id,
+       null dynamicNumberType_id,
+       null counter_id,
+       null ttjExternalCounter_id,
+       null ttjExternalCounter_id_cached
+from PriceListItem pl
+right join price_temp_2021 pct on pct.`Номенклатура.Номенклатурный номер` = pl.serviceCodeOW
+where pl.id is null) as tmp
+where  exists(select * from ActionType where name = tmp.name and code = tmp.code)
