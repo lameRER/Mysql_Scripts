@@ -33,8 +33,13 @@ left join Person p on p.id = REGEXP_REPLACE(STRINGDECODE(urldecoder(jd.json)), '
 left join Person p1 on p1.id = REGEXP_REPLACE(STRINGDECODE(urldecoder(jd.json)), '.*\"dejur_id\":.?\"(\\\\d+)\".*', '\\\\1')
 left join Person p2 on p2.id = REGEXP_REPLACE(STRINGDECODE(urldecoder(jd.json)), '.*\"assist_id\":.?\"(\\\\d+)\".*', '\\\\1')
 left join rbBloodType rbt on rbt.id = c.bloodType_id
-WHERE e.eventType_id = 94 and e.deleted = 0 AND a.id in (100577830) and os.name is not null ORDER by
+WHERE e.eventType_id = 94 and e.deleted = 0 AND a.id in (100577830) /*and os.name is not null*/ ORDER by
 os.name, a.plannedEndDate;
+
+
+select * from Action where id = 100577830
+
+
 
 
 
