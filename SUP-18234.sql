@@ -41,5 +41,11 @@ select * from Action where id = 100577830
 
 
 
+select *
+from ActionPropertyType where ActionType = (select id
+from ActionType where flatCode = 'moving')
+where deleted = 0 order by idx
+
+
 
 
