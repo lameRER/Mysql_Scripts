@@ -4,6 +4,7 @@ from s11.rbPrintTemplate where name regexp 'план';
 
 select
 CONCAT_WS(' ', c.lastName, c.firstName, c.patrName) as FIO,
+'' as `Ward`,
 concat(m.DiagID, '-', m.BlockName) as Diagnosis,
 a.specifiedName as Operation,
 os.name as OperatingRoom,
@@ -16,6 +17,7 @@ CONCAT_WS('\n',
 rbt.name as GrBlood
 from Event e
 join Client c on c.id = e.client_id and c.deleted = 0
+left join 
 left join Diagnostic d2 on d2.event_id = e.id and d2.deleted = 0 and d2.id = (select max(d.id) from Diagnostic d where
 d.event_id = e.id)
 left join Diagnosis d3 on d3.id = d2.diagnosis_id and d3.deleted = 0
