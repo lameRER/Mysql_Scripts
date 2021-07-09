@@ -5,7 +5,6 @@ from s11.rbPrintTemplate where name regexp 'план';
 select
 CONCAT_WS(' ', c.lastName, c.firstName, c.patrName) as FIO,
 osh.code as `Ward`,
-       ap1.id,
 concat(m.DiagID, '-', m.BlockName) as Diagnosis,
 a.specifiedName as Operation,
 os.name as OperatingRoom,
@@ -33,7 +32,7 @@ apt.name = 'Анестезия')
 left join ActionProperty ap1 on ap1.action_id = (select id from Action where event_id = 33843650 and status != 2 /*a.event_id = e.id*/ and deleted = 0 and actionType_id = (select id from ActionType where flatCode = 'moving' and deleted = 0))
 and ap1.type_id = (select id from ActionPropertyType where actionType_id = (select id from ActionType where flatCode = 'moving' and deleted =0) and name = 'койка')
 left join ActionProperty_HospitalBed aph on aph.id = ap1.id
-left join OrgStructure_HospitalBed osh on osh.id = aph.id
+left join OrgStructure_HospitalBed osh on osh.id = aph.value
 left join ActionProperty_String aps on aps.id = ap.id
 left join Person p on p.id = REGEXP_REPLACE(STRINGDECODE(urldecoder(jd.json)), '.*\"hemo_id\":.?\"(\\\\d+)\".*', '\\\\1')
 left join Person p1 on p1.id = REGEXP_REPLACE(STRINGDECODE(urldecoder(jd.json)), '.*\"dejur_id\":.?\"(\\\\d+)\".*', '\\\\1')
