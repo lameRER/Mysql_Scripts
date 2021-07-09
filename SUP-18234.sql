@@ -48,4 +48,25 @@ where deleted = 0 order by idx
 
 
 
+select hbi.value
+from ActionProperty ap
+join ActionProperty_HospitalBed hbi using (id)
+join ActionPropertyType apt on apt.id = ap.type_id and apt.deleted = 0 and apt.actionType_id = (select id from ActionType where flatCode = 'moving') and apt.name = 'койка'
+where ap.deleted = 0 and ap.action_id = 100215485
+
+
+select *
+from rbHospitalBedProfile where code = 1213;
+
+
+select code
+from OrgStructure_HospitalBed where id = 1213;
+
+select *
+from Action where event_id = 33843650;
+
+
+
+
+
 
