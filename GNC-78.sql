@@ -112,7 +112,7 @@ select *
 from ActionType where name regexp 'РЕНТГЕНОЛОГИЧЕСКИЕ ИССЛЕДОВАНИЯ|КЛИНИКО-ДИАГНОСТИЧЕСКАЯ ЛАБОРАТОРИЯ';
 
 select *
-from ActionType where context = 'action_lab';
+from ActionType where name = 'КЩС венозной крови';
 
 
 
