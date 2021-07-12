@@ -1,5 +1,5 @@
 select
-       e.id,
+      /* e.id,
        et.id,
        a.id,
        os.id,
@@ -7,7 +7,7 @@ select
        d.id,
        d1.id,
        s.id,
-       pli.id,
+       pli.id,*/
        c.id `Код пациента`,
        e.setDate `Дата посещения`,
        os.name `Отделение`,
@@ -27,7 +27,7 @@ left join Action a on a.event_id = e.id and a.deleted = 0 and a.status = 2
 left join Service s on s.action_id = a.id and s.event_id = e.id and s.deleted = 0
 left join PriceListItem pli on pli.id = s.PriceListItem_id
 where e.setDate >= '2018-01-01' and e.setDate <= '2021-06-30' and e.deleted = 0
-and e.id = 3526258
+# and e.id = 3526258
 group by e.id, a.id-- limit 10
 
 
