@@ -63,7 +63,7 @@ select * from Person where login regexp 'врач';
 
 
 select *
-from rbPost where netrica_Code = '10234';
+from rbPost where name regexp 'уролог';
 
 
 
