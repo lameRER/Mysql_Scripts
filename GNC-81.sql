@@ -1,6 +1,22 @@
 select *
 from rbPrintTemplate where name = 'Сводная 007 за период ПО ВСЕМ ОТДЕЛЕНИЯМ';
 
+select aph.value
+from Action a
+join ActionType at on at.id = a.actionType_id and at.deleted = 0 and flatCode != ''
+join ActionPropertyType apt on apt.actionType_id = at.id and apt.deleted = 0 and apt.name = 1616
+join ActionProperty ap on ap.action_id = a.id and ap.type_id = apt.id
+join ActionProperty_HospitalBed aph on aph.id = ap.id
+where a.event_id = 20427951 and a.deleted = 0 order by apt.actionType_id,  apt.idx
+
+
+
+select *
+from OrgStructure_HospitalBed;
+
+
+
+
 
 select *
 from rbSpecialVariablesPreferences where name in ('SpecialVar_form007day_new');
@@ -13,7 +29,8 @@ SELECT
 
   COALESCE(outcome1.outcome_to_other, 0) AS outcome_to_other,
   COALESCE(outcome.outcome, 0)           AS outcome,
-  COALESCE(outcome.death, 0)             AS death
+  COALESCE(outcome.death, 0)             AS death,
+       income1.Client_id
 -- --------------------------------------------------------
 FROM OrgStructure _os_
   CROSS JOIN (SELECT getHospitalDayByDatetime(rbCalendar.Date, TRUE) AS Date
