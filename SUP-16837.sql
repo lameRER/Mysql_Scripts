@@ -60,3 +60,10 @@ select * from DestinationTree where deleted= 0 and visible = 1;
 
 
 select * from Person where login regexp 'врач';
+
+
+select *
+from rbPost where netrica_Code = '10234';
+
+
+
