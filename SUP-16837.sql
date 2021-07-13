@@ -76,3 +76,7 @@ select *
 from Person where id = 633;
 
 
+
+select *
+from ActionPropertyType ;
+
