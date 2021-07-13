@@ -69,7 +69,7 @@ from rbPost where netrica_Code = '10234';
 select *
 from rbPost where name regexp 'уролог';
 
-select rbPost where code
+select * from rbPost where netrica_Code = '10234'
 
 
 select *
