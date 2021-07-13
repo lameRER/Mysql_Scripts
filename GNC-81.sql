@@ -15,7 +15,8 @@ select *
 from OrgStructure_HospitalBed;
 
 
-
+select *
+from OrgStructure where name ='ОРИТ';
 
 
 select *
@@ -29,8 +30,7 @@ SELECT
 
   COALESCE(outcome1.outcome_to_other, 0) AS outcome_to_other,
   COALESCE(outcome.outcome, 0)           AS outcome,
-  COALESCE(outcome.death, 0)             AS death,
-       income1.Client_id
+  COALESCE(outcome.death, 0)             AS death
 -- --------------------------------------------------------
 FROM OrgStructure _os_
   CROSS JOIN (SELECT getHospitalDayByDatetime(rbCalendar.Date, TRUE) AS Date
