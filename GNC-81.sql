@@ -3,7 +3,7 @@ from rbPrintTemplate where name = 'Сводная 007 за период ПО В�
 
 
 select *
-from rbSpecialVariablesPreferences where name = 'SpecialVar_form007day_s_vl_2';
+from rbSpecialVariablesPreferences where name in ('SpecialVar_form007day_s_vl_2', 'SpecialVar_form007day_new');
 
 
 SELECT
