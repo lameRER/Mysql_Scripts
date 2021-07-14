@@ -21,17 +21,25 @@ WHERE
   REFERENCED_TABLE_NAME = 'Organisation' AND
   REFERENCED_COLUMN_NAME = 'id';
 
+
+
 set @orgOld = 3320;
 set @orgNew = 24726;
+# select * from
+update
+    ClientPolicy
+set insurer_id = @orgNew
+where insurer_id = @orgOld;
 
 
-select *
-from ClientPolicy where insurer_id = @orgOld;
+# select * from
+update
+Organisation
+set deleted = 1
+where id = @orgOld;
 
-select @orgOld
 
 select * from Action where org_id = @orgOld;
-
 select * from ActionProperty_Organisation where value = @orgOld;
 
 select * from ActionType where defaultOrg_id = @orgOld;
