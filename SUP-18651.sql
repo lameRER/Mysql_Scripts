@@ -25,21 +25,37 @@ WHERE
 
 set @orgOld = 3320;
 set @orgNew = 24726;
+
+set @orgOld = 3321;
+set @orgNew = 7890;
+
+set @orgOld = 24728;
+set @orgNew = 3307;
+
 # select * from
 update
     ClientPolicy
 set insurer_id = @orgNew
-where insurer_id = @orgOld;
+where insurer_id = @orgOld and deleted = 0;
 
 
 # select * from
 update
 Organisation
 set deleted = 1
-where id = @orgOld;
+where id = @orgOld and deleted = 0;
+
+
+select *
+from ClientPolicy where id = 272506;
+
+
+select *
+from Organisation where id =3320;
 
 
 select * from Action where org_id = @orgOld;
+
 select * from ActionProperty_Organisation where value = @orgOld;
 
 select * from ActionType where defaultOrg_id = @orgOld;
