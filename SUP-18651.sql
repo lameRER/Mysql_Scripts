@@ -26,7 +26,7 @@ set @orgNew = 24726;
 
 
 select *
-from ClientPolicy;
+from ClientPolicy where insurer_id = @orgOld;
 
 select @orgOld
 
