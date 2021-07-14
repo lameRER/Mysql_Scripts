@@ -1,5 +1,5 @@
 select *
-from rbPrintTemplate where name = 'Сводная 007 за период ПО ВСЕМ ОТДЕЛЕНИЯМ';
+from rbPrintTemplate where name in('Отчет по поступившим, переведенным, выписанным - круглосуточный стационар', 'Сводная 007 за период ПО ВСЕМ ОТДЕЛЕНИЯМ');
 
 select aph.value
 from Action a
