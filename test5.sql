@@ -1,17 +1,17 @@
-select distinct resrep.*
+select distinct *
 from rbEpicrisisTemplates ret
-join rbEpicrisisTemplates_rbEpicrisisSections retres on ret.id = retres.id_rbEpicrisisTemplates
-join rbEpicrisisSections res on retres.id_rbEpicrisisSections = res.id
-join rbEpicrisisSections_rbEpicrisisProperty resrep on res.id = resrep.id_rbEpicrisisSections
-join rbEpicrisisProperty rep on resrep.id_rbEpicrisisProperty = rep.id
+left join rbEpicrisisTemplates_rbEpicrisisSections retres on ret.id = retres.id_rbEpicrisisTemplates
+left join rbEpicrisisSections res on retres.id_rbEpicrisisSections = res.id
+left join rbEpicrisisSections_rbEpicrisisProperty resrep on res.id = resrep.id_rbEpicrisisSections
+left join rbEpicrisisProperty rep on resrep.id_rbEpicrisisProperty = rep.id
 where ret.code = 'Код 1';
 
 
 select *
-from OrgStructure where deleted = 0;
+from OrgStructure where deleted = 0 and name regexp 'травма|анестези';
 
 INSERT INTO s11.rbEpicrisisTemplates (name, code, id_orgStructure, printTemplate, type, isVisible, actionType_id, editableTime, canCopyOrgStr)
-VALUES ('Тест_Выписной эпикриз', 'Код 1', ' 12, 13, 14, 15, 16, 17, 18, 19,  20, 28,', '<div style="font-size:14pt; text-align:center;">
+VALUES ('Тест_Выписной эпикриз', 'Код 1', ' 18, 33,', '<div style="font-size:14pt; text-align:center;">
 <b>САНКТ-ПЕТЕРБУРГСКОЕ ГОСУДАРСТВЕННОЕ БЮДЖЕТНОЕ <br>
 УЧРЕЖДЕНИЕ ЗДРАВООХРАНЕНИЯ «ГОРОДСКАЯ БОЛЬНИЦА №15»</b></div>', null, 1, null, 0, ' 12, 13, 14, 15, 16, 17, 18, 19,  20, 28,');
 
@@ -28,13 +28,13 @@ values  ('Паспортная часть', 'Выписной'),
         ('Лист нетрудоспособности', 'Результаты исследований');
 
 insert into s11.rbEpicrisisProperty (name, description, type, defaultValue, valueDomain, printAsTable, isCopy)
-values  ('ФИО пациента', null, 7, '#SELECT CONCAT_WS('' '',  Client.lastName,Client.firstName, Client.patrName, DATE_FORMAT(Client.birthDate,''%d.%m.%Y''), '' '', age(Client.birthDate,CURDATE()), ''лет'',''ИБ №'',Event.externalId) '' ''
+values  ('ФИО пациента', '', 7, '#SELECT CONCAT_WS('' '',  Client.lastName,Client.firstName, Client.patrName, DATE_FORMAT(Client.birthDate,''%d.%m.%Y''), '' '', age(Client.birthDate,CURDATE()), ''лет'',''ИБ №'',Event.externalId) '' ''
 #FROM Event INNER JOIN Client ON Event.client_id = Client.id
 #WHERE Event.id = %s;
 
 SELECT CONCAT_WS('' '',  Client.lastName,Client.firstName, Client.patrName, ''Дата рождения'', DATE_FORMAT(Client.birthDate,''%d.%m.%Y''), '' '', age(Client.birthDate,CURDATE()), ''лет'',''ИБ №'',Event.externalId) '' ''
 FROM Event INNER JOIN Client ON Event.client_id = Client.id
-WHERE Event.id = %s', null, 0, 1),
+WHERE Event.id = %s', '', 0, 1),
         ('Находился(ась) на стационарном лечении', 'Кол-во дней прибывания', 7, 'select CONCAT_WS('' '', ''с'', Date(e.setDate), ''по'', if(e.execDate is null, CURDATE(), Date(e.execDate))) from Event e
 where e.id = %s', null, 0, 0),
         ('Адрес регистрации', null, 7, 'SELECT
@@ -74,7 +74,7 @@ WHERE
   LIMIT 1
 
  ', null, 0, 1),
-        ('Адрес проживания', null, 7, 'SELECT
+        ('Адрес проживания', '', 7, 'SELECT
   CONCAT(k.NAME,'', Район '', rd.name, '', улица '',s.NAME,'', д.'', ah.number,IF(ah.corpus LIKE '''','''',CONCAT('', корпус '',ah.corpus)),IF(a.flat LIKE '''','''',CONCAT('', кв '',a.flat)))
   FROM ClientAddress ca
   INNER JOIN Address a ON ca.address_id=a.id
@@ -100,20 +100,20 @@ WHERE
  join rbDiagnosisType rdt on rdt.id = d2.diagnosisType_id and rdt.code = ''1''
  join MKB m2 on m2.DiagID = d.MKB
  where e.deleted = 0 and e.id = %s ORDER by d2.createDatetime desc limit 1', null, 1, 1),
-        ('Сопутствующие заболевания', null, 7, 'select CONCAT_WS('' '', d.MKB,m2.DiagName) from Event e
+        ('Сопутствующие заболевания', '', 7, 'select CONCAT_WS('' '', d.MKB,m2.DiagName) from Event e
  join Diagnostic d2 on d2.event_id = e.id and d2.deleted = 0
  join Diagnosis d on d.id = d2.diagnosis_id and d.deleted = 0 and d.client_id = e.client_id
  join rbDiagnosisType rdt on rdt.id = d2.diagnosisType_id and rdt.code = ''9''
  join MKB m2 on m2.DiagID = d.MKB
  where e.deleted = 0 and e.id = %s ORDER by d2.createDatetime desc limit 1', null, 0, 1),
-        ('Осложнения основного заболевания', null, 7, 'select CONCAT_WS('' '', d.MKB,m2.DiagName) from Event e
+        ('Осложнения основного заболевания', '', 7, 'select CONCAT_WS('' '', d.MKB,m2.DiagName) from Event e
  join Diagnostic d2 on d2.event_id = e.id and d2.deleted = 0
  join Diagnosis d on d.id = d2.diagnosis_id and d.deleted = 0 and d.client_id = e.client_id
  join rbDiagnosisType rdt on rdt.id = d2.diagnosisType_id and rdt.code = ''3''
  join MKB m2 on m2.DiagID = d.MKB
  where e.deleted = 0 and e.id = %s ORDER by d2.createDatetime desc limit 1', null, 0, 1),
         ('Клинический диагноз', '', 7, null, null, 0, 1),
-        ('ИБ', null, 7, 'SELECT Event.externalId
+        ('ИБ', '', 7, 'SELECT Event.externalId
 FROM Event INNER JOIN Client ON Event.client_id = Client.id
 WHERE Event.id = %s', null, 0, 1),
         ('Отделение', 'Шапка эпикриза', 7, 'select os.name from Event e
