@@ -6,6 +6,10 @@ select *
 from Organisation where netrica_Code in('78006','78008','78010');
 
 
+3320 => 24726
+3321 => 7890
+24728 => 3307
+
 
 
 SELECT
