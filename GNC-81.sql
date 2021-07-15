@@ -10,10 +10,26 @@ join ActionProperty_HospitalBed aph on aph.id = ap.id
 where a.event_id = 20427951 and a.deleted = 0 order by apt.actionType_id,  apt.idx
 
 
+
+select distinct aph.*, a.createDatetime, ap.*
+from ActionProperty ap
+left join ActionProperty_HospitalBed aph using(id)
+join Action a on a.id = ap.action_id and a.begDate >= '2021-06-01' and a.begDate <= '2021-07-01'
+join ActionType at on at.id = a.actionType_id and at.flatCode = 'moving'
+join ActionPropertyType apt on apt.id = ap.type_id and at.id = apt.actionType_id and apt.code = 'hospitalBed'
+where aph.value is null
+
+
+select *
+from Action
+where begDate between '2021-06-01' and '2021-07-01';
+
+
+
 select *
 from rbSpecialVariablesPreferences where name = 'SpecialVar_form007day_new';
 
-
+select  getHospitalDayByDatetime('2021-06-01', false)
 
 SELECT
   formatDateToRussian(_dates.Date),
