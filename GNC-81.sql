@@ -21,19 +21,11 @@ from Action a
 join ActionType at on a.actionType_id = at.id
 where a.event_id = 20427951 order by a.id desc ;
 
-select et.name, rt.code, at.name, a.*, e.*
-from Action a
-join ActionType at on a.actionType_id = at.id
-join Event e on e.id = a.event_id
-join EventType et on e.eventType_id = et.id
-join rbRequestType rt on rt.id = et.requestType_id
-where a.event_id = 20409024 order by a.id desc ;
-
 
 
 SELECT
      Z.FIO AS 'ФИО'
-     , Z.eid
+     , z.eid
      , Z.SEX AS 'Пол'
      , Z.age AS 'age'
      , Z.OrgStr AS 'Отделение'
