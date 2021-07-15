@@ -12,6 +12,15 @@ where a.event_id = 20427951 and a.deleted = 0 order by apt.actionType_id,  apt.i
 
 
 select *
+from Event where client_id = 231224 and deleted = 0 order by id desc ;
+
+
+
+select *
+from Action where event_id = 20427951 and deleted = 0 order by id desc ;
+
+
+select *
 from OrgStructure_HospitalBed;
 
 
