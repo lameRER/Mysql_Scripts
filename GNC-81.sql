@@ -16,8 +16,595 @@ from Event where client_id = 231224 and deleted = 0 order by id desc ;
 
 
 
-select *
-from Action where event_id = 20427951 and deleted = 0 order by id desc ;
+select distinct at.name, a.*
+from Action a
+join ActionType at on a.actionType_id = at.id
+where a.event_id = 20427951 order by a.id desc ;
+
+
+
+SELECT
+     Z.FIO AS 'ФИО'
+     , Z.SEX AS 'Пол'
+     , Z.age AS 'age'
+     , Z.OrgStr AS 'Отделение'
+     , Z.HospStart AS 'Госпитализирован'
+     , Z.HospEnd AS 'Выписан'
+     , Z.bDay AS 'Койко-дни'
+     , Z.extId AS '№ИБ'
+     , Z.Finance AS 'Финансирование'
+     , Z.VMP1 AS 'ВМП - 1'
+     , Z.OMS AS 'ОМС'
+     , Z.VMP2 AS 'ВМП - 2'
+     , Z.Result AS 'Результат'
+     , Z.MKB AS 'МКБ'
+     , Z.SMKB AS 'Стат.МКБ'
+	   , Z.Chemo as 'Химиотерапия'
+     , Z.Doc AS 'Врач'
+     , Z.Region AS 'Регион'
+     , Z.City AS 'Житель'
+     , Z.STS AS 'СТС'
+     , Z.isDone AS 'ИБ закрыта'
+     , Z.Perv AS 'Первичность'
+     , Z.operation_fact AS operation_fact
+
+
+
+
+ FROM (SELECT concat_ws(' ', Client.lastName, substr(Client.firstName, 1, 1), substr(Client.patrName, 1, 1)) AS 'FIO'
+     , if(Client.sex = 1, 'М', 'Ж') AS 'SEX'
+     , timestampdiff(YEAR, Client.birthDate, Event.setDate) AS 'age'
+     , os.shortName AS 'OrgStr'
+     , date(Event.setDate) AS 'HospStart'
+     , date(a_org.endDate) AS 'HospEnd'
+     , datediff(a_org.endDate, date(Event.setDate)) AS 'bDay'
+     , Event.externalId AS 'extId'
+     , rbFinance.name AS 'Finance'
+     , qt.code AS 'VMP1'
+     , CASE
+       WHEN rbFinance.id=2
+         THEN
+         qt1.code
+       WHEN rbFinance.id=12
+         THEN
+         t.code
+       END AS 'OMS'
+     , qt2.code AS 'VMP2'
+     , rbResult.name AS 'Result'
+     , group_concat(DISTINCT d.MKB) AS 'MKB'
+     --   , ds.MKB AS 'РњРљР‘ СЃС‚Р°С‚'
+       -- ,statD.value
+       -- ,m1.DiagID
+       , m2.DiagID 'SMKB'
+	 ,chemo.name as 'Chemo'
+     , Person.lastName AS 'Doc'
+
+     -- , Client.birthDate AS 'Р”Р '
+
+       , -- (year(Event.setDate) - year(Client.birthDate)) - (DATE_FORMAT(Event.setDate, '%m%d') < DATE_FORMAT(Client.birthDate, '%m%d')) AS 'Р’РѕР·СЂР°СЃС‚',
+       --        CASE
+       --        WHEN getClientRegAddress(Client.id) LIKE BINARY '%РњРѕСЃРєРѕРІСЃРєР°СЏ РѕР±Р»%' OR getClientRegAddress(Client.id) LIKE BINARY '%РњРћ%' -- COLLATE utf8_general_ci
+       --          THEN
+       --          'РњРѕСЃРєРѕРІСЃРєР°СЏ РѕР±Р»Р°СЃС‚СЊ'
+       --        WHEN getClientRegAddress(Client.id) LIKE BINARY '%РњРѕСЃРєРІР°%'
+       --          THEN
+       --          'РњРѕСЃРєРІР°'
+       --        ELSE
+       --          'Р РµРіРёРѕРЅС‹ Р РѕСЃСЃРёР№СЃРєРѕР№ Р¤РµРґРµСЂР°С†РёРё'
+       --        END AS 'Р РµРіРёРѕРЅ'
+       CASE
+       WHEN c.name = 'Российская Федерация'
+         THEN
+         r.name
+       ELSE
+         c.name
+       END AS 'Region'
+     , -- getClientRegAddress(Client.id) as РџСЂРѕРїРёСЃР°РЅ,
+	 case when getClientRegAddressLocalityType(Client.id) = 1 then 'Город'
+	when getClientRegAddressLocalityType(Client.id) = 2 then 'Село'
+	else 'Не указано' end
+	AS 'City'
+     -- getClientLocAddress(Client.id) as РџСЂРѕР¶РёРІР°РµС‚,
+
+
+       , CASE
+       WHEN api.value = 1
+         THEN
+         'V'
+       ELSE
+         ''
+       END AS 'STS'
+     , CASE
+       WHEN Event.execDate IS NULL
+         THEN
+         ' '
+       ELSE
+         'V'
+       END AS 'isDone'
+     , CASE
+       WHEN Event.isPrimary = 1
+         THEN
+         'Первично'
+       ELSE
+         'Повторно'
+       END AS 'Perv'
+     , CASE
+       WHEN qt3.name IS NULL
+         THEN
+         ''
+       ELSE
+         'V'
+       END AS operation_fact,
+       'V' AS 'AllDayHosp'
+
+-- , GROUP_CONCAT(CONCAT(a.id, '-', d.MKB, '[',d.id,']') SEPARATOR '  ')
+-- ------------------------------------------------------------
+FROM
+  Event
+INNER JOIN EventType
+ON EventType.id = Event.eventType_id
+INNER JOIN rbFinance
+ON rbFinance.id = EventType.finance_id
+INNER JOIN rbRequestType
+ON rbRequestType.id = EventType.requestType_id
+INNER JOIN Client
+ON Client.id = Event.client_id
+
+LEFT OUTER JOIN ClientDocument cd
+ON cd.id = (
+SELECT max(id)
+FROM
+  ClientDocument
+WHERE
+  client_id = Client.id
+  AND deleted = 0
+)
+
+
+LEFT OUTER JOIN rbCountry c
+ON cd.country_id = c.id
+LEFT OUTER JOIN rbRegion r
+ON cd.region_id = r.id
+LEFT OUTER JOIN rbResult
+ON rbResult.id = Event.result_id
+
+-- Р’С‹РїРёСЃРЅРѕР№ СЌРїРёРєСЂРёР·
+LEFT JOIN Action a
+ON (a.event_id = Event.id AND a.actionType_id IN (427, 567) AND a.deleted = 0)
+LEFT JOIN Diagnostic d
+ON d.id = (
+  SELECT _d.id
+  FROM Action_Diagnosis ad
+  INNER JOIN Diagnosis ds ON ad.diagnosis_id = ds.id AND ds.deleted = 0
+  INNER JOIN Diagnostic _d ON _d.diagnosis_id = ds.id AND _d.deleted = 0
+  WHERE
+    ad.diagnosisType_id = 3 AND ad.diagnosisKind_id = 4
+   AND ad.deleted = 0
+   AND ad.action_id = a.id
+   and _d.setDate >= a.begDate and (a.endDate is null or _d.setDate <= a.endDate)
+   ORDER BY
+     _d.setDate DESC
+   LIMIT 1
+)
+LEFT JOIN (
+ActionProperty ap_chemo
+INNER
+   JOIN ActionProperty_Integer ap_chemo_val ON ap_chemo_val.id =
+ap_chemo
+.id
+INNER JOIN rbChemTherapy chemo ON chemo.id = ap_chemo_val.value
+) ON ap_chemo.action_id = a.id AND ap_chemo.type_id in (3959356,3965935)
+LEFT JOIN Diagnosis dz
+ON dz.id = d.diagnosis_id
+LEFT JOIN Event_Diagnosis e_d
+ON (e_d.diagnosis_id = dz.id AND e_d.diagnosisKind_id = 4 AND e_d.diagnosisType_id = 3 AND e_d.event_id = Event.id)
+-- IN (1, 2, 14, 15, 5)
+
+
+-- LEFT JOIN Event_Diagnosis e_ds
+-- ON (e_ds.diagnosisKind_id = 4 AND e_ds.diagnosisType_id = 6 AND e_ds.event_id = Event.id) -- IN (1, 2, 14, 15, 5)
+-- LEFT JOIN Diagnosis ds
+-- ON e_ds.diagnosis_id = ds.id
+
+LEFT JOIN (Action a2
+INNER JOIN ActionProperty ap
+ON ap.action_id = a2.id AND ap.type_id = 3963083
+INNER JOIN ActionProperty_Integer api
+ON ap.id = api.id
+)
+ON a2.event_id = Event.id
+
+-- LEFT JOIN (Action a3
+-- INNER JOIN ActionProperty ap1
+-- ON ap1.action_id = a3.id AND ap1.type_id = 3963448
+-- INNER JOIN ActionProperty_MKB statD
+-- ON ap1.id = statD.id
+--   INNER JOIN MKB m1 ON statD.value= m1.id
+-- )
+-- ON a3.event_id = Event.id
+
+LEFT OUTER JOIN ClientStatDiagnosis csd
+ON csd.id = (
+SELECT max(id)
+FROM
+  ClientStatDiagnosis csd
+WHERE
+  client_id = Client.id
+)
+LEFT OUTER JOIN MKB m2
+ON csd.mkb_id = m2.id
+
+LEFT JOIN (Action a5
+INNER JOIN ActionProperty ap3
+ON (ap3.action_id = a5.id AND a5.actionType_id = 4676 AND a5.deleted = 0)
+INNER JOIN ActionProperty_Integer api3
+ON ap3.id = api3.id
+INNER JOIN rbOperationType qt3
+ON api3.value = qt3.id
+)
+ON a5.event_id = Event.id
+
+LEFT JOIN (Action a6
+INNER JOIN ActionProperty ap6
+ON ap6.action_id = a6.id AND ap6.type_id = 3991209
+INNER JOIN ActionProperty_Integer api6
+ON ap6.id = api6.id
+)
+ON a6.event_id = Event.id
+
+LEFT OUTER JOIN Client_Quoting cq
+ON cq.event_id = Event.id
+AND cq.deleted = 0
+AND cq.is_main=1
+LEFT OUTER JOIN VMPCoupon v
+ON cq.vmpCoupon_id=v.id
+AND v.deleted = 0
+LEFT OUTER JOIN QuotaType qt
+ON qt.ID = v.quotaType_id
+LEFT OUTER JOIN VMPQuotaDetails vd
+ON vd.ID = cq.quotaDetails_id
+LEFT OUTER JOIN rbTreatment t
+ON vd.treatment_id = t.id
+
+LEFT OUTER JOIN OMSQuota o
+ON o.event_id = Event.id
+AND o.deleted = 0
+LEFT OUTER JOIN QuotaType qt1
+ON o.quotaType_id = qt1.id
+
+LEFT JOIN Person
+ON Person.id = Event.execPerson_id
+
+LEFT JOIN Action a_org
+ON a_org.id = (
+SELECT a.id
+FROM
+  Action a
+INNER JOIN ActionProperty ap
+ON ap.action_id = a.id AND ap.type_id = 7021
+INNER JOIN ActionProperty_OrgStructure apos
+ON apos.id = ap.id
+INNER JOIN OrgStructure os
+ON os.id = apos.value
+WHERE
+  a.event_id = Event.id
+  AND a.actionType_id = 113
+  AND a.deleted = 0
+ORDER BY
+  a.begDate DESC
+LIMIT
+  1)
+
+LEFT JOIN ActionProperty ap_org
+ON ap_org.action_id = a_org.id AND ap_org.type_id = 7021
+LEFT JOIN ActionProperty_OrgStructure apos_org
+ON apos_org.id = ap_org.id
+LEFT JOIN OrgStructure os
+ON os.id = apos_org.value
+
+LEFT OUTER JOIN Client_Quoting cq2
+ON cq2.event_id = Event.id
+AND cq2.deleted = 0
+AND cq2.is_main=0
+LEFT OUTER JOIN VMPCoupon v2
+ON cq2.vmpCoupon_id=v2.id
+AND v2.deleted = 0
+LEFT OUTER JOIN QuotaType qt2
+ON qt2.ID = v2.quotaType_id
+
+
+WHERE
+  Event.deleted = 0
+  -- AND rbFinance.id IN (2, 11,12)
+  AND rbRequestType.code = 'clinic'
+  AND a_org.endDate BETWEEN :Date1 + INTERVAL 6 HOUR AND :Date2 + INTERVAL 6 HOUR
+GROUP BY
+  Event.id
+-- ORDER BY
+--   os.shortName
+-- , a_org.endDate
+UNION ALL
+SELECT concat_ws(' ', Client.lastName, substr(Client.firstName, 1, 1), substr(Client.patrName, 1, 1)) AS 'FIO'
+     , if(Client.sex = 1, 'М', 'Ж') AS 'SEX'
+     , timestampdiff(YEAR, Client.birthDate, Event.setDate) AS 'age'
+     , os.shortName AS 'OrgStr'
+     , date(Event.setDate) AS 'HospStart'
+     , date(a_org.endDate) AS 'HospEnd'
+     , datediff(a_org.endDate, date(Event.setDate)) AS 'bDay'
+     , Event.externalId AS 'extId'
+     , rbFinance.name AS 'Finance'
+     , qt.code AS 'VMP1'
+     , CASE
+       WHEN rbFinance.id=2
+         THEN
+         qt1.code
+       WHEN rbFinance.id=12
+         THEN
+         t.code
+       END AS 'OMS'
+     , qt2.code AS 'VMP2'
+     , rbResult.name AS 'Result'
+     , group_concat(DISTINCT d.MKB) AS 'MKB'
+     --   , ds.MKB AS 'РњРљР‘ СЃС‚Р°С‚'
+       -- ,statD.value
+       -- ,m1.DiagID
+       , m2.DiagID 'SMKB'
+	 ,chemo.name as 'Chemo'
+     , Person.lastName AS 'Doc'
+
+     -- , Client.birthDate AS 'Р”Р '
+
+       , -- (year(Event.setDate) - year(Client.birthDate)) - (DATE_FORMAT(Event.setDate, '%m%d') < DATE_FORMAT(Client.birthDate, '%m%d')) AS 'Р’РѕР·СЂР°СЃС‚',
+       --        CASE
+       --        WHEN getClientRegAddress(Client.id) LIKE BINARY '%РњРѕСЃРєРѕРІСЃРєР°СЏ РѕР±Р»%' OR getClientRegAddress(Client.id) LIKE BINARY '%РњРћ%' -- COLLATE utf8_general_ci
+       --          THEN
+       --          'РњРѕСЃРєРѕРІСЃРєР°СЏ РѕР±Р»Р°СЃС‚СЊ'
+       --        WHEN getClientRegAddress(Client.id) LIKE BINARY '%РњРѕСЃРєРІР°%'
+       --          THEN
+       --          'РњРѕСЃРєРІР°'
+       --        ELSE
+       --          'Р РµРіРёРѕРЅС‹ Р РѕСЃСЃРёР№СЃРєРѕР№ Р¤РµРґРµСЂР°С†РёРё'
+       --        END AS 'Р РµРіРёРѕРЅ'
+       CASE
+       WHEN c.name = 'Российская Федерация'
+         THEN
+         r.name
+       ELSE
+         c.name
+       END AS 'Region'
+     , -- getClientRegAddress(Client.id) as РџСЂРѕРїРёСЃР°РЅ,
+	 case when getClientRegAddressLocalityType(Client.id) = 1 then 'Город'
+	when getClientRegAddressLocalityType(Client.id) = 2 then 'Село'
+	else 'Не указано' end
+	AS 'City'
+     -- getClientLocAddress(Client.id) as РџСЂРѕР¶РёРІР°РµС‚,
+
+
+       , CASE
+       WHEN api.value = 1
+         THEN
+         'V'
+       ELSE
+         ''
+       END AS 'STS'
+     , CASE
+       WHEN Event.execDate IS NULL
+         THEN
+         ' '
+       ELSE
+         'V'
+       END AS 'isDone'
+     , CASE
+       WHEN Event.isPrimary = 1
+         THEN
+         'Первично'
+       ELSE
+         'Повторно'
+       END AS 'Perv'
+     , CASE
+       WHEN qt3.name IS NULL
+         THEN
+         ''
+       ELSE
+         'V'
+       END AS operation_fact
+       ,CASE
+  WHEN api6.value = 1 THEN
+    'V'
+   ELSE
+     ''
+  END AS 'AllDayHosp'
+
+-- , GROUP_CONCAT(CONCAT(a.id, '-', d.MKB, '[',d.id,']') SEPARATOR '  ')
+-- ------------------------------------------------------------
+FROM
+  Event
+INNER JOIN EventType
+ON EventType.id = Event.eventType_id
+INNER JOIN rbFinance
+ON rbFinance.id = EventType.finance_id
+INNER JOIN rbRequestType
+ON rbRequestType.id = EventType.requestType_id
+INNER JOIN Client
+ON Client.id = Event.client_id
+
+LEFT OUTER JOIN ClientDocument cd
+ON cd.id = (
+SELECT max(id)
+FROM
+  ClientDocument
+WHERE
+  client_id = Client.id
+  AND deleted = 0
+)
+
+
+LEFT OUTER JOIN rbCountry c
+ON cd.country_id = c.id
+LEFT OUTER JOIN rbRegion r
+ON cd.region_id = r.id
+LEFT OUTER JOIN rbResult
+ON rbResult.id = Event.result_id
+
+-- Р’С‹РїРёСЃРЅРѕР№ СЌРїРёРєСЂРёР·
+LEFT JOIN Action a
+ON (a.event_id = Event.id AND a.actionType_id IN (427, 567) AND a.deleted = 0)
+LEFT JOIN Diagnostic d
+ON d.id = (
+  SELECT _d.id
+  FROM Action_Diagnosis ad
+  INNER JOIN Diagnosis ds ON ad.diagnosis_id = ds.id AND ds.deleted = 0
+  INNER JOIN Diagnostic _d ON _d.diagnosis_id = ds.id AND _d.deleted = 0
+  WHERE
+    ad.diagnosisType_id = 3 AND ad.diagnosisKind_id = 4
+   AND ad.deleted = 0
+   AND ad.action_id = a.id
+   and _d.setDate >= a.begDate and (a.endDate is null or _d.setDate <= a.endDate)
+   ORDER BY
+     _d.setDate DESC
+   LIMIT 1
+)
+LEFT JOIN (
+ActionProperty ap_chemo
+INNER
+   JOIN ActionProperty_Integer ap_chemo_val ON ap_chemo_val.id =
+ap_chemo
+.id
+INNER JOIN rbChemTherapy chemo ON chemo.id = ap_chemo_val.value
+) ON ap_chemo.action_id = a.id AND ap_chemo.type_id in (3959356,3965935)
+LEFT JOIN Diagnosis dz
+ON dz.id = d.diagnosis_id
+LEFT JOIN Event_Diagnosis e_d
+ON (e_d.diagnosis_id = dz.id AND e_d.diagnosisKind_id = 4 AND e_d.diagnosisType_id = 3 AND e_d.event_id = Event.id)
+-- IN (1, 2, 14, 15, 5)
+
+
+-- LEFT JOIN Event_Diagnosis e_ds
+-- ON (e_ds.diagnosisKind_id = 4 AND e_ds.diagnosisType_id = 6 AND e_ds.event_id = Event.id) -- IN (1, 2, 14, 15, 5)
+-- LEFT JOIN Diagnosis ds
+-- ON e_ds.diagnosis_id = ds.id
+
+LEFT JOIN (Action a2
+INNER JOIN ActionProperty ap
+ON ap.action_id = a2.id AND ap.type_id = 3963083
+INNER JOIN ActionProperty_Integer api
+ON ap.id = api.id
+)
+ON a2.event_id = Event.id
+
+-- LEFT JOIN (Action a3
+-- INNER JOIN ActionProperty ap1
+-- ON ap1.action_id = a3.id AND ap1.type_id = 3963448
+-- INNER JOIN ActionProperty_MKB statD
+-- ON ap1.id = statD.id
+--   INNER JOIN MKB m1 ON statD.value= m1.id
+-- )
+-- ON a3.event_id = Event.id
+
+LEFT OUTER JOIN ClientStatDiagnosis csd
+ON csd.id = (
+SELECT max(id)
+FROM
+  ClientStatDiagnosis csd
+WHERE
+  client_id = Client.id
+)
+LEFT OUTER JOIN MKB m2
+ON csd.mkb_id = m2.id
+
+LEFT JOIN (Action a5
+INNER JOIN ActionProperty ap3
+ON (ap3.action_id = a5.id AND a5.actionType_id = 4676 AND a5.deleted = 0)
+INNER JOIN ActionProperty_Integer api3
+ON ap3.id = api3.id
+INNER JOIN rbOperationType qt3
+ON api3.value = qt3.id
+)
+ON a5.event_id = Event.id
+
+LEFT JOIN (Action a6
+INNER JOIN ActionProperty ap6
+ON ap6.action_id = a6.id AND ap6.type_id = 3991209
+INNER JOIN ActionProperty_Integer api6
+ON ap6.id = api6.id
+)
+ON a6.event_id = Event.id
+
+LEFT OUTER JOIN Client_Quoting cq
+ON cq.event_id = Event.id
+AND cq.deleted = 0
+AND cq.is_main=1
+LEFT OUTER JOIN VMPCoupon v
+ON cq.vmpCoupon_id=v.id
+AND v.deleted = 0
+LEFT OUTER JOIN QuotaType qt
+ON qt.ID = v.quotaType_id
+LEFT OUTER JOIN VMPQuotaDetails vd
+ON vd.ID = cq.quotaDetails_id
+LEFT OUTER JOIN rbTreatment t
+ON vd.treatment_id = t.id
+
+LEFT OUTER JOIN OMSQuota o
+ON o.event_id = Event.id
+AND o.deleted = 0
+LEFT OUTER JOIN QuotaType qt1
+ON o.quotaType_id = qt1.id
+
+LEFT JOIN Person
+ON Person.id = Event.execPerson_id
+
+LEFT JOIN Action a_org
+ON a_org.id = (
+SELECT a.id
+FROM
+  Action a
+INNER JOIN ActionProperty ap
+ON ap.action_id = a.id AND ap.type_id = 7021
+INNER JOIN ActionProperty_OrgStructure apos
+ON apos.id = ap.id
+INNER JOIN OrgStructure os
+ON os.id = apos.value
+WHERE
+  a.event_id = Event.id
+  AND a.actionType_id = 113
+  AND a.deleted = 0
+ORDER BY
+  a.begDate DESC
+LIMIT
+  1)
+
+LEFT JOIN ActionProperty ap_org
+ON ap_org.action_id = a_org.id AND ap_org.type_id = 7021
+LEFT JOIN ActionProperty_OrgStructure apos_org
+ON apos_org.id = ap_org.id
+LEFT JOIN OrgStructure os
+ON os.id = apos_org.value
+
+LEFT OUTER JOIN Client_Quoting cq2
+ON cq2.event_id = Event.id
+AND cq2.deleted = 0
+AND cq2.is_main=0
+LEFT OUTER JOIN VMPCoupon v2
+ON cq2.vmpCoupon_id=v2.id
+AND v2.deleted = 0
+LEFT OUTER JOIN QuotaType qt2
+ON qt2.ID = v2.quotaType_id
+
+
+WHERE
+  Event.deleted = 0
+  -- AND rbFinance.id IN (2, 11,12)
+  AND rbRequestType.code = 'clinic'
+  AND a_org.endDate BETWEEN :Date1 + INTERVAL 6 HOUR AND :Date2 + INTERVAL 6 HOUR
+GROUP BY
+  Event.id
+-- ORDER BY
+--   os.shortName
+-- , a_org.endDate
+) AS Z
+WHERE Z.AllDayHosp='V'
+ORDER BY Z.OrgStr,Z.HospEnd;
+
 
 
 select *
