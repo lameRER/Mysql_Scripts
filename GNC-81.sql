@@ -21,10 +21,19 @@ from Action a
 join ActionType at on a.actionType_id = at.id
 where a.event_id = 20427951 order by a.id desc ;
 
+select et.name, rt.code, at.name, a.*, e.*
+from Action a
+join ActionType at on a.actionType_id = at.id
+join Event e on e.id = a.event_id
+join EventType et on e.eventType_id = et.id
+join rbRequestType rt on rt.id = et.requestType_id
+where a.event_id = 20409024 order by a.id desc ;
+
 
 
 SELECT
      Z.FIO AS 'ФИО'
+     , Z.eid
      , Z.SEX AS 'Пол'
      , Z.age AS 'age'
      , Z.OrgStr AS 'Отделение'
@@ -52,6 +61,7 @@ SELECT
 
 
  FROM (SELECT concat_ws(' ', Client.lastName, substr(Client.firstName, 1, 1), substr(Client.patrName, 1, 1)) AS 'FIO'
+            , Event.id as eid
      , if(Client.sex = 1, 'М', 'Ж') AS 'SEX'
      , timestampdiff(YEAR, Client.birthDate, Event.setDate) AS 'age'
      , os.shortName AS 'OrgStr'
@@ -316,7 +326,7 @@ ON qt2.ID = v2.quotaType_id
 WHERE
   Event.deleted = 0
   -- AND rbFinance.id IN (2, 11,12)
-  AND rbRequestType.code = 'clinic'
+  AND rbRequestType.code = 'hospital'
   AND a_org.endDate BETWEEN :Date1 + INTERVAL 6 HOUR AND :Date2 + INTERVAL 6 HOUR
 GROUP BY
   Event.id
@@ -325,6 +335,7 @@ GROUP BY
 -- , a_org.endDate
 UNION ALL
 SELECT concat_ws(' ', Client.lastName, substr(Client.firstName, 1, 1), substr(Client.patrName, 1, 1)) AS 'FIO'
+     , Event.id as eid
      , if(Client.sex = 1, 'М', 'Ж') AS 'SEX'
      , timestampdiff(YEAR, Client.birthDate, Event.setDate) AS 'age'
      , os.shortName AS 'OrgStr'
@@ -603,8 +614,7 @@ GROUP BY
 -- , a_org.endDate
 ) AS Z
 WHERE Z.AllDayHosp='V'
-ORDER BY Z.OrgStr,Z.HospEnd;
-
+ORDER BY Z.OrgStr,Z.HospEnd
 
 
 select *
