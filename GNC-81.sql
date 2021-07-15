@@ -21,16 +21,15 @@ where aph.value is null
 
 
 select
-apt.id, apt1.id, apo.*, ap.*
+a.event_id, ap.id, apo.*, aph.*
 from ActionProperty ap
 # left join ActionProperty_HospitalBed aph using(id)
 left join ActionProperty_OrgStructure apo using(id)
+left join ActionProperty_HospitalBed aph using(id)
 join Action a on a.id = ap.action_id
 join ActionType at on at.id = a.actionType_id and at.flatCode = 'moving'
-left
-    join ActionPropertyType apt on apt.id = ap.type_id and at.id = apt.actionType_id and apt.code = 'orgStructTransfer'
-left join ActionPropertyType apt1 on apt1.id = ap.type_id and at.id = apt1.actionType_id and apt1.id = 1616
-where a.begDate between '2021-06-01' and '2021-07-01' and apo.value is not null;
+join ActionPropertyType apt on apt.id = ap.type_id and at.id = apt.actionType_id and (apt.code = 'orgStructTransfer' or apt.id = 1616)
+where a.begDate between '2021-06-01' and '2021-07-01' ;
 
 
 select *
