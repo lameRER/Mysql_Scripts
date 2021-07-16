@@ -11,11 +11,12 @@ where `default` regexp 'setLeftMargin' and deleted = 0
 
 
 update s11.rbPrintTemplate
+join ActionType at on at.context = rbPrintTemplate.context and at.class = 0
 set `default` = case when `default` regexp 'setLeftMargin'
            then regexp_replace(rbPrintTemplate.`default`, '(setLeftMargin\\().+?(\\))', '\\120\\2')
            else regexp_replace(rbPrintTemplate.`default`, '(<head>)','\\1\n{: setLeftMargin(20) }')
        end
-where deleted = 0
+where rbPrintTemplate.deleted = 0
 
 
 
@@ -26,7 +27,7 @@ join `rbPrintTemplate_backup_21-07-16` rpt1 on rpt.id = rpt1.id
                   set rpt.`default` = rpt1.`default`
 where rpt.deleted = 0 and rpt1.deleted = 0
 
-select
+select distinct
        case
            when `default` regexp 'setLeftMargin'
            then regexp_replace(rbPrintTemplate.`default`, '(setLeftMargin\\().+?(\\))', '\\120\\2')
@@ -34,7 +35,9 @@ select
        end as new,
        rbPrintTemplate.`default`,
     rbPrintTemplate.*
-from rbPrintTemplate where deleted = 0;
+from rbPrintTemplate
+join ActionType at on at.context = rbPrintTemplate.context and at.class = 0
+where rbPrintTemplate.deleted = 0;
 
 
 select regexp_replace(rbPrintTemplate.`default`, '(<head>)','\\1\n{: setLeftMargin(20) }'), rbPrintTemplate.`default`, rbPrintTemplate.*
