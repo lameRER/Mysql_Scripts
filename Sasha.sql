@@ -1,3 +1,11 @@
+select ActionType.name, Action.*
+from Action
+join ActionType on Action.actionType_id = ActionType.id
+where event_id = (select id from Event where Event.externalId = '2525' and client_id = 278645) order by id desc ;
+
+select *
+from Client where lastName=  'Санасапова';
+
 select *
 from ActionType where name regexp 'Протокол операции' group by group_id;
 
