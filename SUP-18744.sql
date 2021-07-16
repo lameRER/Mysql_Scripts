@@ -10,7 +10,14 @@ set `default` = regexp_replace(rbPrintTemplate.`default`, '(setLeftMargin\\().+?
 where `default` regexp 'setLeftMargin' and deleted = 0
 
 
-
+select
+       case
+           when `default` regexp 'setLeftMargin'
+           then regexp_replace(rbPrintTemplate.`default`, '(setLeftMargin\\().+?(\\))', '\\120\\2')
+           else regexp_replace(rbPrintTemplate.`default`, '(<head>)','\\1\n{: setLeftMargin(20) }')
+       end as new,
+    rbPrintTemplate.*
+from rbPrintTemplate where deleted = 0;
 
 
 select regexp_replace(rbPrintTemplate.`default`, '(<head>)','\\1\n{: setLeftMargin(20) }'), rbPrintTemplate.`default`, rbPrintTemplate.*

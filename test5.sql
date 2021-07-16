@@ -1,3 +1,16 @@
+select *
+from ActionType where name regexp 'Протокол операции' group by group_id;
+
+
+select *
+from ActionPropertyType where actionType_id = 4676 and deleted = 0 order by idx;
+
+select *
+from ActionType where name = '';
+
+
+select * from ActionType where id in(65100,77754,84478,8449784533,84587)
+
 select distinct *
 from rbEpicrisisTemplates ret
 left join rbEpicrisisTemplates_rbEpicrisisSections retres on ret.id = retres.id_rbEpicrisisTemplates
