@@ -1,4 +1,10 @@
-select regexp_replace(rbPrintTemplate.`default`, '({.?)(setLeftMargin)(\(\\d+?\))(.?})', '\\1\\2(10)\\3'),
+select regexp_replace(rbPrintTemplate.`default`, '(\(\\d+\))', 'test'),
+       rbPrintTemplate.`default`,
+       rbPrintTemplate.*
+from rbPrintTemplate where `default` regexp 'setLeftMargin' and deleted = 0
+
+
+select regexp_replace(rbPrintTemplate.`default`, '\\d+', '123456789'),
        rbPrintTemplate.`default`,
        rbPrintTemplate.*
 from rbPrintTemplate where `default` regexp 'setLeftMargin' and deleted = 0
