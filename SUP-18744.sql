@@ -1,4 +1,4 @@
-select regexp_replace(rbPrintTemplate.`default`, '(\(\\d+\))', 'test'),
+select regexp_replace(rbPrintTemplate.`default`, '(setLeftMargin\\().+?(\\))', '\\120\\2'),
        rbPrintTemplate.`default`,
        rbPrintTemplate.*
 from rbPrintTemplate where `default` regexp 'setLeftMargin' and deleted = 0
