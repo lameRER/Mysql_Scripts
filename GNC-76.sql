@@ -12,3 +12,18 @@ from ActionPropertyType where id = 3982130;
 
 select *
 from rbPrintTemplate where context = 'osmotr_dnevnik' and deleted = 0;
+
+
+select *
+from Action where actionType_id =4218 order by id desc ;
+
+
+select client_id
+from Event where id =20430165;
+
+
+select sex
+from Client where id = 253201;
+
+select *
+from ;
