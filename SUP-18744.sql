@@ -17,6 +17,15 @@ set `default` = case when `default` regexp 'setLeftMargin'
        end
 where deleted = 0
 
+
+
+# select * from
+update
+              rbPrintTemplate rpt
+join `rbPrintTemplate_backup_21-07-16` rpt1 on rpt.id = rpt1.id
+                  set rpt.`default` = rpt1.`default`
+where rpt.deleted = 0 and rpt1.deleted = 0
+
 select
        case
            when `default` regexp 'setLeftMargin'
