@@ -4,6 +4,9 @@ from ActionType at where at.context = 'osmotr_dnevnik' and at.deleted = 0) and d
 
 
 select *
+from ActionType where id = 4218;
+
+select *
 from ActionPropertyType where id = 3982130;
 
 
