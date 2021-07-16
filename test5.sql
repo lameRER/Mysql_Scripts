@@ -1,6 +1,24 @@
 select *
 from ActionType where name regexp 'Протокол операции' group by group_id;
 
+select e.*
+from Event e
+where e.client_id = 330684 and
+      e.externalId = '2617';
+
+
+select *
+from Action
+join ActionType on Action.actionType_id = ActionType.id and ActionType.flatCode = 'moving'
+where event_id = 20431652;
+\
+
+select *
+from Action where actionType_id =7932 order by  id desc ;
+
+select *
+from ActionType where name = 'Выписка';
+
 
 select *
 from ActionPropertyType where actionType_id = 4676 and deleted = 0 order by idx;

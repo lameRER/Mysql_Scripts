@@ -16,6 +16,7 @@ select
            then regexp_replace(rbPrintTemplate.`default`, '(setLeftMargin\\().+?(\\))', '\\120\\2')
            else regexp_replace(rbPrintTemplate.`default`, '(<head>)','\\1\n{: setLeftMargin(20) }')
        end as new,
+       rbPrintTemplate.`default`,
     rbPrintTemplate.*
 from rbPrintTemplate where deleted = 0;
 
