@@ -1,2 +1,8 @@
+select regexp_replace(rbPrintTemplate.`default`, '({.?)(setLeftMargin)(\(.+?\))(.?})', '\\1\\2(10)\\3'),
+       rbPrintTemplate.`default`,
+       rbPrintTemplate.*
+from rbPrintTemplate where `default` regexp 'setLeftMargin' and deleted = 0
+
+
 select *
-from s11.rbprinttemplate where `default` regexp '{setLeftMargin(30)}';
+from rbPrintTemplate where `default` not regexp 'setLeftMargin' and deleted = 0;
