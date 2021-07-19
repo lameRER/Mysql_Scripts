@@ -26,12 +26,52 @@ join ActionType A on pt.code = A.code and A.class = 1 and A.deleted = 0
 select *
 from `price_temp_2021-07-19`;
 
-select pt.*, rS.*, A.*
+
+select rS.code, rS.name, pt.price, pli.*
 from `price_temp_2021-07-19` pt
-join ActionType A on pt.code = A.code and A.class = 1 and A.deleted = 0 and A.id != 4787
 join rbService rS on pt.code = rS.code
-left join ActionType_Service ats on ats.master_id = A.id and ats.service_id = rS.id
+left join PriceListItem pli on rS.id = pli.service_id and pli.begDate = '2021-07-01' and rS.endDate = '2022-01-09'
+where pli.id is  null
 ;
+
+select *
+from InvoiceItem
+
+
+select *
+from Action where event_id=20433935  and actionType_id in(4687,5096);
+
+4687
+5096
+
+
+
+select *
+from Service where action_id in(23144059,23144060
+);
+
+
+select *
+from ActionType where id in(8586,4687,5096
+                           );
+
+
+
+SELECT
+  TABLE_NAME,COLUMN_NAME,CONSTRAINT_NAME, REFERENCED_TABLE_NAME,REFERENCED_COLUMN_NAME
+FROM
+  INFORMATION_SCHEMA.KEY_COLUMN_USAGE
+WHERE
+  REFERENCED_TABLE_SCHEMA = 'gnc' AND
+  REFERENCED_TABLE_NAME = 'InvoiceItem' and
+REFERENCED_COLUMN_NAME = 'id';
+
+
+select *
+from Service;
+
+select *
+from Invoice;
 
 
 select id,
