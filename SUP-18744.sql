@@ -2,13 +2,17 @@ select *
 from ActionType where name regexp 'Эпикриз';
 
 
+select *
+from rbPrintTemplate where context = '145-16230-1';
+
+
 
 
 
 select regexp_replace(rbPrintTemplate.`default`, '(setLeftMargin\\().+?(\\))', '\\120\\2'),
        rbPrintTemplate.`default`,
        rbPrintTemplate.*
-from rbPrintTemplate where `default` regexp 'setLeftMargin' and deleted = 0
+from rbPrintTemplate where deleted = 0 and  `default`
 ;
 
 
@@ -28,6 +32,19 @@ join ActionType at on at.context = rbPrintTemplate.context and at.class = 0 and 
 #            else regexp_replace(rbPrintTemplate.`default`, '(<head>)','\\1\n{: setLeftMargin(20) }')
 #        end
 where rbPrintTemplate.deleted = 0 group by rbPrintTemplate.id
+
+
+
+
+select case when rbPrintTemplate.`default` regexp 'setLeftMargin'
+           then regexp_replace(rbPrintTemplate.`default`, '(setLeftMargin\\().+?(\\))', '\\120\\2')
+            when rbPrintTemplate.`default` regexp 'setMargins' then regexp_replace(rbPrintTemplate.`default`, '.*setMargins.*\n', '')
+           else regexp_replace(rbPrintTemplate.`default`, '(<head>)','\\1\n{: setLeftMargin(20) }')
+       end,
+       rbPrintTemplate.`default`, rbPrintTemplate.* from
+    s11.rbPrintTemplate
+join ActionType at on at.context = rbPrintTemplate.context and at.class = 0  -- and at.id =43344
+where rbPrintTemplate.deleted = 0 and rbPrintTemplate.`default` regexp 'setMargins' group by rbPrintTemplate.id
 
 
 
