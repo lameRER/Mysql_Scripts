@@ -17,3 +17,12 @@ select rt.*
 from ActionType at, rbPrintTemplate rt
 where at.id = 49963 and rt.context = at.context
 
+
+
+select *
+from Organisation where createPerson_id = 877 and createDatetime = '2021-06-30 16:01:55' ;
+
+
+
+select *
+from Person where id =877;
