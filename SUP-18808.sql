@@ -4,7 +4,7 @@ where a.event_id = e.id
   and a.deleted = 0
   and a.actionType_id = at.id
   and at.deleted = 0
-  and at.name regexp '^Протокол'
+#   and at.name regexp '^Протокол'
   and e.deleted = 0
   and e.externalId = '28657'
 and c.id = e.client_id
@@ -25,4 +25,4 @@ from Organisation where createPerson_id = 877 and createDatetime = '2021-06-30 1
 
 
 select *
-from Person where id =877;
+from Person where id =1865;
