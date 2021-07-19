@@ -3,7 +3,11 @@ from ActionType where name regexp 'Эпикриз';
 
 
 select *
-from rbPrintTemplate where context = '145-16230-1';
+from rbPrintTemplate where context = '145-16230-4';
+
+
+select *
+from ActionType where name regexp 'первичный г';
 
 
 
@@ -23,15 +27,16 @@ set `default` = regexp_replace(rbPrintTemplate.`default`, '(setLeftMargin\\().+?
 where `default` regexp 'setLeftMargin' and deleted = 0
 
 
-select * from
-# update
-    s11.rbPrintTemplate
-join ActionType at on at.context = rbPrintTemplate.context and at.class = 0 and at.id =43344
-# set `default` = case when `default` regexp 'setLeftMargin'
-#            then regexp_replace(rbPrintTemplate.`default`, '(setLeftMargin\\().+?(\\))', '\\120\\2')
-#            else regexp_replace(rbPrintTemplate.`default`, '(<head>)','\\1\n{: setLeftMargin(20) }')
-#        end
-where rbPrintTemplate.deleted = 0 group by rbPrintTemplate.id
+# select * from
+update
+    s12.rbPrintTemplate
+join ActionType at on at.context = rbPrintTemplate.context and at.class = 0
+set `default` = case when rbPrintTemplate.`default` regexp '.*setMargins.*' and rbPrintTemplate.`default` not regexp 'setLeftMargin'
+           then regexp_replace(rbPrintTemplate.`default`, '.*setMargins.*\n', '{: setLeftMargin(20) }\n{: setTopMargin(5) }\n{ :setBottomMargin(5) }\n{ :setRightMargin(5) }\n')
+           when rbPrintTemplate.`default` regexp '.*setMargins.*' and rbPrintTemplate.`default` regexp 'setLeftMargin'
+           then regexp_replace(rbPrintTemplate.`default`, '.*setMargins.*\n', '{: setTopMargin(5) }\n{ :setBottomMargin(5) }\n{ :setRightMargin(5) }\n')
+           end
+where rbPrintTemplate.deleted = 0 and rbPrintTemplate.`default` regexp 'setMargins' ;
 
 select regexp_replace(rbPrintTemplate.`default`, '.*setLeftMargin.*\n', ''),
        rbPrintTemplate.`default` from
@@ -42,8 +47,10 @@ where rbPrintTemplate.deleted = 0 and rbPrintTemplate.`default` regexp 'setLeftM
 
 
 select
-       case when rbPrintTemplate.`default` regexp '.*setMargins.*'
-           then regexp_replace(rbPrintTemplate.`default`, '.*setMargins.*\n', '{:setTopMargin(5)}\n{:setBottomMargin(5)}\n{:setRightMargin(5)}\n')
+       case when rbPrintTemplate.`default` regexp '.*setMargins.*' and rbPrintTemplate.`default` not regexp 'setLeftMargin'
+           then regexp_replace(rbPrintTemplate.`default`, '.*setMargins.*\n', '{: setLeftMargin(20) }\n{: setTopMargin(5) }\n{ :setBottomMargin(5) }\n{ :setRightMargin(5) }\n')
+           when rbPrintTemplate.`default` regexp '.*setMargins.*' and rbPrintTemplate.`default` regexp 'setLeftMargin'
+           then regexp_replace(rbPrintTemplate.`default`, '.*setMargins.*\n', '{: setTopMargin(5) }\n{ :setBottomMargin(5) }\n{ :setRightMargin(5) }\n')
            end,
 #        case when rbPrintTemplate.`default` regexp 'setLeftMargin'
 #            then regexp_replace(rbPrintTemplate.`default`, '(setLeftMargin\\().+?(\\))', '\\120\\2')
@@ -53,7 +60,7 @@ select
        rbPrintTemplate.`default`, rbPrintTemplate.* from
     s11.rbPrintTemplate
 join ActionType at on at.context = rbPrintTemplate.context and at.class = 0  -- and at.id =43344
-where rbPrintTemplate.deleted = 0 and rbPrintTemplate.`default` regexp 'setMargins' and rbPrintTemplate.`default` not regexp 'setLeftMargin' group by rbPrintTemplate.id
+where rbPrintTemplate.deleted = 0 and rbPrintTemplate.`default` regexp 'setMargins'
 
 
 
