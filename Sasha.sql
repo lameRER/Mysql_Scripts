@@ -1,6 +1,23 @@
+select *
+from rbPrintTemplate where name = 'Дневниковый осмотр';
+
+
+select *
+from rbPrintTemplate where templateText regexp 'Настоящее состояние';
+
+select *
+from ActionType where context in(select context from rbPrintTemplate where id in (16802,16821,34399))
+;
 
 
 
+select * from Event where id = 20427788
+
+select *
+from Client where id = 72609;
+
+select *
+from Action where  event_id = 20427788 and deleted = 0 and actionType_id in(7750,8207,8222,8488,8490);
 
 
 
