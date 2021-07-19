@@ -1,5 +1,5 @@
 select *
-from rbPrintTemplate where name regexp 'Шил';
+from 1rbPrintTemplate where name regexp 'Шил';
 
 
 
