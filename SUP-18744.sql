@@ -1,3 +1,11 @@
+
+
+
+
+
+
+
+
 select *
 from ActionType where name regexp 'Эпикриз';
 

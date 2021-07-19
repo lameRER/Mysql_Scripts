@@ -1,3 +1,61 @@
+
+
+
+insert into rbService (code, name, eisLegacy, license, infis, begDate, endDate, medicalAidProfile_id, rbMedicalKind_id, departCode)
+(select
+       pt.code,
+       pt.name,
+       s.eisLegacy,
+       s.license,
+       '' infis,
+       '2021-07-01' begDate,
+       '2022-01-09' endDate,
+       s.medicalAidProfile_id,
+       s.rbMedicalKind_id,
+       s.departCode
+from `price_temp_2021-07-19` pt
+left join rbService rS on pt.code = rS.code
+left join rbService s on s.id = (select id from rbService where id = 504)
+where rS.id is null)
+
+
+select *
+from `price_temp_2021-07-19` pt
+join ActionType A on pt.code = A.code and A.class = 1 and A.deleted = 0
+
+select *
+from `price_temp_2021-07-19`;
+
+select pt.*, rS.*, A.*
+from `price_temp_2021-07-19` pt
+join ActionType A on pt.code = A.code and A.class = 1 and A.deleted = 0 and A.id != 4787
+join rbService rS on pt.code = rS.code
+left join ActionType_Service ats on ats.master_id = A.id and ats.service_id = rS.id
+;
+
+
+select id,
+       code,
+       name,
+       eisLegacy,
+       nomenclatureLegacy,
+       license,
+       infis,
+       begDate,
+       endDate,
+       medicalAidProfile_id,
+       adultUetDoctor,
+       adultUetAverageMedWorker,
+       childUetDoctor,
+       childUetAverageMedWorker,
+       rbMedicalKind_id,
+       UET,
+       departCode,
+       isComplex,
+       maxSubServices
+from rbService s;
+
+
 select *
 from rbPrintTemplate where name = 'Дневниковый осмотр';
 
