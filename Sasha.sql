@@ -26,11 +26,33 @@ join ActionType A on pt.code = A.code and A.class = 1 and A.deleted = 0
 select *
 from `price_temp_2021-07-19`;
 
+select *
+from rbSpeciality;
 
-select rS.code, rS.name, pt.price, pli.*
+insert into PriceListItem (createDatetime, createPerson_id, modifyDatetime, modifyPerson_id, priceList_id, deleted, service_id, serviceCodeOW, serviceNameOW, begDate, endDate, price, isAccumulativePrice, limitPerDay, limitPerMonth, limitPerPriceList, LCE, LCE_test)
+select
+       now() createDatetime,
+       null createPerson_id,
+       now() modifyDatetime,
+       null modifyPerson_id,
+       pli1.priceList_id,
+       pli1.deleted,
+       rS.id service_id,
+       pt.code serviceCodeOW,
+       pt.name serviceNameOW,
+       '2021-07-01' begDate,
+       '2022-01-09' endDate,
+       pt.price price,
+       pli1.isAccumulativePrice,
+       pli1.limitPerDay,
+       pli1.limitPerMonth,
+       pli1.limitPerPriceList,
+       pli1.LCE,
+       pli1.LCE_test
 from `price_temp_2021-07-19` pt
 join rbService rS on pt.code = rS.code
 left join PriceListItem pli on rS.id = pli.service_id and pli.begDate = '2021-07-01' and rS.endDate = '2022-01-09'
+left join PriceListItem pli1 on pli1.id = (select id from PriceListItem order by id desc limit 1)
 where pli.id is  null
 ;
 
