@@ -10,8 +10,33 @@ from ActionType where context in(select context from rbPrintTemplate where id in
 ;
 
 
+select *
+from ActionType at, rbPrintTemplate t where at.id = 4218 and at.context = t.context;
 
-select * from Event where id = 20427788
+
+select *
+from rbPrintTemplate where id =177;
+
+
+select *
+from rbSpeciality where id in(24,114);
+
+
+select rp.*, s.*
+from Person p, rbSpeciality s, rbPost rp where p.lastName = 'Пурло' and s.id = p.speciality_id and rp.id = p.post_id;
+
+select *
+from rbSpeciality where name regexp 'нефролог';\
+
+
+select *
+from rbAcademicTitle;
+
+select *
+from rbAcademicDegree;
+
+
+select at.name, a.* from Action a, ActionType at where a.event_id = 20427788 and at.id = a.actionType_id
 
 select *
 from Client where id = 72609;
