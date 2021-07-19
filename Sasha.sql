@@ -1,3 +1,9 @@
+
+
+
+
+
+
 select ActionType.name, Action.*
 from Action
 join ActionType on Action.actionType_id = ActionType.id

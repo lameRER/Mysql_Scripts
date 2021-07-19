@@ -10,13 +10,15 @@ set `default` = regexp_replace(rbPrintTemplate.`default`, '(setLeftMargin\\().+?
 where `default` regexp 'setLeftMargin' and deleted = 0
 
 
-update s11.rbPrintTemplate
+select * from
+# update
+    s11.rbPrintTemplate
 join ActionType at on at.context = rbPrintTemplate.context and at.class = 0
-set `default` = case when `default` regexp 'setLeftMargin'
-           then regexp_replace(rbPrintTemplate.`default`, '(setLeftMargin\\().+?(\\))', '\\120\\2')
-           else regexp_replace(rbPrintTemplate.`default`, '(<head>)','\\1\n{: setLeftMargin(20) }')
-       end
-where rbPrintTemplate.deleted = 0
+# set `default` = case when `default` regexp 'setLeftMargin'
+#            then regexp_replace(rbPrintTemplate.`default`, '(setLeftMargin\\().+?(\\))', '\\120\\2')
+#            else regexp_replace(rbPrintTemplate.`default`, '(<head>)','\\1\n{: setLeftMargin(20) }')
+#        end
+where rbPrintTemplate.deleted = 0 group by rbPrintTemplate.id
 
 
 
