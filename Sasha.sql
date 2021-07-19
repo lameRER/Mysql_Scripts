@@ -8,7 +8,6 @@ select * from rbSpecialVariablesPreferences where name = 'SpecialVar_VedomostNac
 
 
 SELECT
-t.ActionId,
   t.Payer,
   t.PaymentType,
   SUM(CASE WHEN t.FinanceTransactionOperationTypeId = 1 THEN InvoiceItemSum END) Income,
@@ -178,6 +177,9 @@ from Action where event_id=20433935  and actionType_id in(4687,5096);
 select *
 from Service where action_id in(23144059,23144060
 );
+
+select *
+from Service where action_id = 23125027;
 
 
 select *
