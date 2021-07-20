@@ -91,14 +91,13 @@ select * from Service where event_id = 20433935
 
 
 
+select distinct *
+# master_id, idx, service_id, ats1.begDate, ats1.endDate
+from `price_temp_2021-07-19`
+left join rbService rS on `price_temp_2021-07-19`.code = rS.code
+left join ActionType at2 on at2.code = `price_temp_2021-07-19`.code and at2.class =1 and at2.deleted = 0 and at2.id not in(4787,4765)
 
-
-
-
-
-
-
-
+# left join ActionType_Service ats1 on ats1.id = (select id from ActionType_Service order by id desc limit 1)
 
 
 
