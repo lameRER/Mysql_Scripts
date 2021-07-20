@@ -154,25 +154,40 @@ from `price_temp_2021-07-19` pt
 # left join rbService rS on `price_temp_2021-07-19`.code = rS.code and rS.id != 14224
 join ActionType at2 on at2.code = pt.code and at2.class =1 and at2.deleted = 0 and at2.id not in(4787,4765)
 left join ActionType at3 on at3.id = (select id from ActionType order by id desc limit 1)) as tmp
-where not exists(select * from ActionType where tmp.code = code and tmp.deleted = tmp.deleted and tmp.name = name)
+where not exists(select * from ActionType where tmp.code = code and tmp.deleted = tmp.deleted and tmp.class = class)
 
 
+
+
+# select *
+# from
+# (
+    select *
+from `price_temp_2021-07-19` pt
+left join rbService r on r.code = pt.code and r.id != 14224
+left join ActionType A on pt.code = A.code and A.class = 1 and A.deleted = 0 and A.id not in(4787,4765)
+#     ) as tmp
 
 
 select *
 from
-(select *
+(select at2.*
+# master_id, idx, service_id, ats1.begDate, ats1.endDate
 from `price_temp_2021-07-19` pt
-join rbService r on r.code = pt.code
-join ActionType A on pt.code = A.code and A.class = 1 and A.deleted = 0) as tmp
-
-
+join ActionType at2 on at2.code = pt.code and at2.class =1 and at2.deleted = 0 and at2.id not in(4787,4765)) as tmp
+where not exists(select * from ActionType where tmp.code = code)
 
 
 
 select *
 from `price_temp_2021-07-19` pt
-join ActionType A on pt.code = A.code and A.class = 1 and A.deleted = 0
+left join ActionType A on pt.code = A.code and A.class = 1 and A.deleted = 0 and A.id not in(4787,4765)
+join A
+where A.id is null
+
+
+select *
+from ActionType where code = 'A12.05.006';
 
 
 select *
