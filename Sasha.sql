@@ -148,12 +148,14 @@ from ActionType where code = 'A12.05.008.001';
 
 # left join ActionType_Service ats1 on ats1.id = (select id from ActionType_Service order by id desc limit 1)
 
-insert into ActionType(createDatetime, createPerson_id, modifyDatetime, modifyPerson_id, class, group_id, code, name, title, flatCode, sex, age, age_bu, age_bc, age_eu, age_ec, office, showInForm, genTimetable, service_id, quotaType_id, context, defaultPlannedEndDate, defaultExecPerson_id, isMES, nomenclativeService_id, prescribedType_id, shedule_id, testTubeType_id, jobType_id, layout, loadPrintTemplate_id, dynamicNumberType_id, counter_id, ttjExternalCounter_id, ttjExternalCounter_id_cached)
+insert into ActionType(createDatetime, createPerson_id, modifyDatetime, modifyPerson_id, deleted, hidden, class, group_id, code, name, title, flatCode, sex, age, age_bu, age_bc, age_eu, age_ec, office, showInForm, genTimetable, service_id, quotaType_id, context, amount, amountEvaluation, defaultStatus, defaultDirectionDate, defaultPlannedEndDate, defaultEndDate, defaultExecPerson_id, defaultPersonInEvent, defaultPersonInEditor, maxOccursInEvent, showTime, isMES, nomenclativeService_id, isPreferable, prescribedType_id, shedule_id, isRequiredCoordination, isRequiredTissue, testTubeType_id, jobType_id, mnem, layout, hasPrescriptions, autoclose_on_event_close, noteMandatory, canHaveAttaches, loadPrintTemplate_id, dynamicNumberType_id, counter_id, ttjExternalCounter_id, ttjExternalCounter_id_cached)
 (select
        now() createDatetime,
        null createPerson_id,
        now() modifyDatetime,
        null modifyPerson_id,
+       0 deleted,
+       at.hidden,
        1 class,
        7244 group_id,
        pt.code code,
@@ -209,6 +211,18 @@ join ActionType at on at.id = (select id from ActionType order by id desc limit 
 where A.id is null)
 
 
+# insert into ActionType_Service(master_id, idx, service_id, begDate, endDate)
+select pli.*
+from `price_temp_2021-07-19` pt
+join rbService rS on pt.code = rS.code and rS.id != 14224
+join ActionType A on pt.code = A.code and A.class = 1 and A.deleted = 0 and A.id not in(4787,4765)
+join ActionType_Service s on s.master_id = A.id and s.service_id = rS.id
+join PriceListItem pli on pli.serviceCodeOW = pt.code and pli.deleted = 0 and pli.service_id = rS.id and pli.endDate = '2022-01-09' and pli.begDate = '2021-07-01'
+
+
+
+select *
+from ActionType;
 
 
 insert into rbService (code, name, eisLegacy, license, infis, begDate, endDate, medicalAidProfile_id, rbMedicalKind_id, departCode)
