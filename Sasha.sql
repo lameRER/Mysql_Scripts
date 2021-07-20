@@ -244,6 +244,11 @@ from rbService where id in(12597,12607,14229);
 
 
 select *
+from PriceListItem where service_id in (12597,12607,14229) and priceList_id = 124;
+
+
+
+select *
 from ActionType_Service where service_id = 14229;
 
 
