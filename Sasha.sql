@@ -231,7 +231,15 @@ from ActionType where group_id = 7244
 
 
 select *
-from ActionType where code = 'A12.05.005.001';
+from ActionType where code regexp 'A12.05.005' and class = 1;
+
+
+select *
+from ActionType_Service where master_id in (4881,4910,11995);
+
+
+select *
+from rbService where id in(12597,12607,14229);
 
 
 
