@@ -93,68 +93,21 @@ select * from Service where event_id = 20433935
 # insert into ActionType(createDatetime, createPerson_id, modifyDatetime, modifyPerson_id, class, group_id, code, name, title, flatCode, sex, age, age_bu, age_bc, age_eu, age_ec, office, showInForm, genTimetable, service_id, quotaType_id, context, defaultPlannedEndDate, defaultExecPerson_id, isMES, nomenclativeService_id, prescribedType_id, shedule_id, testTubeType_id, jobType_id, layout, loadPrintTemplate_id, dynamicNumberType_id, counter_id, ttjExternalCounter_id, ttjExternalCounter_id_cached)
 select *
 from
-(select distinct
-                now() createDatetime,
-                NULL createPerson_id,
-                now() modifyDatetime,
-                null modifyPerson_id,
-                at3.deleted,
-                at3.hidden,
-                1 class,
-                7244 group_id,
-                pt.code code,
-                pt.name name,
-                pt.name title,
-                at3.flatCode,
-                at3.sex,
-                at3.age,
-                at3.age_bu,
-                at3.age_bc,
-                at3.age_eu,
-                at3.age_ec,
-                at3.office,
-                at3.showInForm,
-                at3.genTimetable,
-                at3.service_id,
-                at3.quotaType_id,
-                at3.context,
-                at3.amount,
-                at3.amountEvaluation,
-                at3.defaultStatus,
-                at3.defaultDirectionDate,
-                at3.defaultPlannedEndDate,
-                at3.defaultEndDate,
-                at3.defaultExecPerson_id,
-                at3.defaultPersonInEvent,
-                at3.defaultPersonInEditor,
-                at3.maxOccursInEvent,
-                at3.showTime,
-                at3.isMES,
-                at3.nomenclativeService_id,
-                at3.isPreferable,
-                at3.prescribedType_id,
-                at3.shedule_id,
-                at3.isRequiredCoordination,
-                at3.isRequiredTissue,
-                at3.testTubeType_id,
-                at3.jobType_id,
-                at3.mnem,
-                at3.layout,
-                at3.hasPrescriptions,
-                at3.autoclose_on_event_close,
-                at3.noteMandatory,
-                at3.canHaveAttaches,
-                at3.loadPrintTemplate_id,
-                at3.dynamicNumberType_id,
-                at3.counter_id,
-                at3.ttjExternalCounter_id,
-                at3.ttjExternalCounter_id_cached
+(select at2.*
 # master_id, idx, service_id, ats1.begDate, ats1.endDate
 from `price_temp_2021-07-19` pt
 # left join rbService rS on `price_temp_2021-07-19`.code = rS.code and rS.id != 14224
-join ActionType at2 on at2.code = pt.code and at2.class =1 and at2.deleted = 0 and at2.id not in(4787,4765)
-left join ActionType at3 on at3.id = (select id from ActionType order by id desc limit 1)) as tmp
+join ActionType at2 on at2.code = pt.code and at2.class =1 and at2.deleted = 0 and at2.id not in(4787,4765)) as tmp
 where not exists(select * from ActionType where tmp.code = code and tmp.deleted = tmp.deleted and tmp.class = class)
+
+
+select *
+from
+(select at.*
+from ActionType at
+join `price_temp_2021-07-19` pt on pt.code = at.code
+where at.class = 1 and at.deleted = 0 and at.id not in (4787)) as tmp
+where not exists(select * from ActionType where tmp.code = code and tmp.class = class and tmp.deleted = deleted);
 
 
 
@@ -195,9 +148,65 @@ from ActionType where code = 'A12.05.008.001';
 
 # left join ActionType_Service ats1 on ats1.id = (select id from ActionType_Service order by id desc limit 1)
 
-
-
-
+insert into ActionType(createDatetime, createPerson_id, modifyDatetime, modifyPerson_id, class, group_id, code, name, title, flatCode, sex, age, age_bu, age_bc, age_eu, age_ec, office, showInForm, genTimetable, service_id, quotaType_id, context, defaultPlannedEndDate, defaultExecPerson_id, isMES, nomenclativeService_id, prescribedType_id, shedule_id, testTubeType_id, jobType_id, layout, loadPrintTemplate_id, dynamicNumberType_id, counter_id, ttjExternalCounter_id, ttjExternalCounter_id_cached)
+(select
+       now() createDatetime,
+       null createPerson_id,
+       now() modifyDatetime,
+       null modifyPerson_id,
+       1 class,
+       7244 group_id,
+       pt.code code,
+       pt.name name,
+       pt.name title,
+       at.flatCode,
+       at.sex,
+       at.age,
+       at.age_bu,
+       at.age_bc,
+       at.age_eu,
+       at.age_ec,
+       at.office,
+       at.showInForm,
+       at.genTimetable,
+       at.service_id,
+       at.quotaType_id,
+       at.context,
+       at.amount,
+       at.amountEvaluation,
+       at.defaultStatus,
+       at.defaultDirectionDate,
+       at.defaultPlannedEndDate,
+       at.defaultEndDate,
+       at.defaultExecPerson_id,
+       at.defaultPersonInEvent,
+       at.defaultPersonInEditor,
+       at.maxOccursInEvent,
+       at.showTime,
+       at.isMES,
+       at.nomenclativeService_id,
+       at.isPreferable,
+       at.prescribedType_id,
+       at.shedule_id,
+       at.isRequiredCoordination,
+       at.isRequiredTissue,
+       at.testTubeType_id,
+       at.jobType_id,
+       at.mnem,
+       at.layout,
+       at.hasPrescriptions,
+       at.autoclose_on_event_close,
+       at.noteMandatory,
+       at.canHaveAttaches,
+       at.loadPrintTemplate_id,
+       at.dynamicNumberType_id,
+       at.counter_id,
+       at.ttjExternalCounter_id,
+       at.ttjExternalCounter_id_cached
+from `price_temp_2021-07-19` pt
+left join ActionType A on pt.code = A.code and A.class= 1 and A.deleted = 0
+join ActionType at on at.id = (select id from ActionType order by id desc limit 1)
+where A.id is null)
 
 
 
