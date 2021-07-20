@@ -25,10 +25,9 @@ from rbSpecialVariablesPreferences where name = 'SpecialVar_CheckCoagulogramOMS'
 
 
 
-
-
-
-SELECT
+select *
+from
+(SELECT
   SUM(CASE WHEN apt.id IN (3922356,
       3922367,
       3922376,
@@ -64,4 +63,4 @@ WHERE apt.id IN (3922356,
       3922363)
 AND ap.isAssigned = 1
 AND ap.deleted = 0
-AND a.id = Action.id-- :ActionID
+AND a.id = :ActionID
