@@ -229,10 +229,29 @@ from rbService where id = 14229;
 select *
 from ActionType where group_id = 7244
 
+select *
+from ActionPropertyType where actionType_id in(
+select id
+from ActionType where code= 'A12.05.005' and class = 1 and deleted = 0);
+
 
 select *
-from ActionType where code regexp 'A12.05.005' and class = 1;
+from EventType where deleted = 0;
 
+
+select *
+from ActionType_EventType_check;
+
+select *
+from rbTest where id = 4011;
+
+
+
+select *
+from PriceList;
+
+select *
+from rbFinance where id =4;
 
 select *
 from ActionType_Service where master_id in (4881,4910,11995);
