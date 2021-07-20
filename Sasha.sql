@@ -212,12 +212,12 @@ where A.id is null)
 
 
 # insert into ActionType_Service(master_id, idx, service_id, begDate, endDate)
-select pli.*
+select A.id
 from `price_temp_2021-07-19` pt
 join rbService rS on pt.code = rS.code and rS.id != 14224
 join ActionType A on pt.code = A.code and A.class = 1 and A.deleted = 0 and A.id not in(4787,4765)
 join ActionType_Service s on s.master_id = A.id and s.service_id = rS.id
-join PriceListItem pli on pli.serviceCodeOW = pt.code and pli.deleted = 0 and pli.service_id = rS.id and pli.endDate = '2022-01-09' and pli.begDate = '2021-07-01' and pli.priceList_id = 124
+left join PriceListItem pli on pli.serviceCodeOW = pt.code and pli.deleted = 0 and pli.service_id = rS.id and pli.endDate = '2022-01-09' and pli.begDate = '2021-07-01' and pli.priceList_id = 124
 
 
 
@@ -235,12 +235,54 @@ select id
 from ActionType where code= 'A12.05.005' and class = 1 and deleted = 0);
 
 
+select id
+from ActionType where code regexp 'A12.05.005' and class = 1 and deleted = 0
+
 select *
 from EventType where deleted = 0;
 
+11559
+11982
+11983
+11984
+11986
+11987
+11988
+11989
+11990
+11991
+11992
+11995
+11996
+11997
 
 select *
-from ActionType_EventType_check;
+from EventType_Action where  actionType_id in(11995,4881);
+
+
+select distinct
+       et.id eventType_id,
+       idx,
+       tmp.id actionType_id,
+       speciality_id,
+       tissueType_id,
+       ETA.sex,
+       ETA.age,
+       ETA.age_bu,
+       ETA.age_bc,
+       ETA.age_eu,
+       ETA.age_ec,
+       selectionGroup,
+       actuality,
+       expose,
+       payable,
+       academicDegree_id,
+       ETA.deleted,
+       plannedEndDateTemplate_id
+from EventType et
+join (select 11559,11982,11983,11984,11986,11987,1198811989,11990,11991,11992,11995,11996,11997 as id) as tmp on 1
+where et.id != 109 and et.deleted = 0
+;
 
 select *
 from rbTest where id = 4011;
