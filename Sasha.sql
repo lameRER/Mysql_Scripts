@@ -217,8 +217,31 @@ from `price_temp_2021-07-19` pt
 join rbService rS on pt.code = rS.code and rS.id != 14224
 join ActionType A on pt.code = A.code and A.class = 1 and A.deleted = 0 and A.id not in(4787,4765)
 join ActionType_Service s on s.master_id = A.id and s.service_id = rS.id
-join PriceListItem pli on pli.serviceCodeOW = pt.code and pli.deleted = 0 and pli.service_id = rS.id and pli.endDate = '2022-01-09' and pli.begDate = '2021-07-01'
+join PriceListItem pli on pli.serviceCodeOW = pt.code and pli.deleted = 0 and pli.service_id = rS.id and pli.endDate = '2022-01-09' and pli.begDate = '2021-07-01' and pli.priceList_id = 124
 
+
+
+select *
+from rbService where id = 14229;
+
+
+
+select *
+from ActionType where group_id = 7244
+
+
+select *
+from ActionType where code = 'A12.05.005.001';
+
+
+
+select *
+from ActionType_Service where service_id = 14229;
+
+
+
+select *
+from ActionType where id = 11995;
 
 
 select *
