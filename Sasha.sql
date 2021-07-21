@@ -220,49 +220,55 @@ from `price_temp_2021-07-19` pr
 join PriceListItem
 
 
-# insert into PriceListItem(createDatetime, createPerson_id, modifyDatetime, modifyPerson_id, priceList_id, deleted, service_id, serviceCodeOW, serviceNameOW, begDate, endDate, price, isAccumulativePrice, limitPerDay, limitPerMonth, limitPerPriceList, LCE, LCE_test)
+insert into PriceListItem(createDatetime, createPerson_id, modifyDatetime, modifyPerson_id, priceList_id, deleted, service_id, serviceCodeOW, serviceNameOW, begDate, endDate, price, isAccumulativePrice, limitPerDay, limitPerMonth, limitPerPriceList, LCE, LCE_test)
 select *
-from (select now()    createDatetime,
-             null     createPerson_id,
-             now()    modifyDatetime,
-             null     modifyPerson_id,
-             pli1.priceList_id,
-             pli1.deleted,
-             rS.id    service_id,
-             pt.code  serviceCodeOW,
-             pt.name  serviceNameOW,
-             pli1.begDate,
-             pli1.endDate,
-             pt.price price,
-             pli1.isAccumulativePrice,
-             pli1.limitPerDay,
-             pli1.limitPerMonth,
-             pli1.limitPerPriceList,
-             pli1.LCE,
-             pli1.LCE_test
-      from `price_temp_2021-07-19` pt
+from
+(select
+        now() createDatetime,
+        null createPerson_id,
+        now() modifyDatetime,
+        null modifyPerson_id,
+        124 priceList_id,
+        0 deleted,
+        rS.id service_id,
+        pt.code serviceCodeOW,
+        pt.name serviceNameOW,
+        rS.begDate begDate,
+        rS.endDate endDate,
+        pt.price price,
+        pli1.isAccumulativePrice,
+        pli1.limitPerDay,
+        pli1.limitPerMonth,
+        pli1.limitPerPriceList,
+        pli1.LCE,
+        pli1.LCE_test
+ from `price_temp_2021-07-19` pt
                join rbService rS on pt.code = rS.code and rS.id != 14224
                join ActionType A on pt.code = A.code and A.class = 1 and A.deleted = 0 and A.id not in (4787, 4765)
                join ActionType_Service s on s.master_id = A.id and s.service_id = rS.id
-               join PriceListItem pli on pli.serviceCodeOW = pt.code and pli.deleted = 0 and pli.service_id = rS.id and
-                                         pli.endDate = '2022-01-09' and pli.begDate = '2021-07-01' and
-                                         pli.priceList_id = 124
-               join PriceListItem pli1 on pli1.id = (select id
-                                                     from PriceListItem
-                                                     where priceList_id = 124
-                                                       and endDate = '2022-01-09'
-                                                       and begDate = '2021-07-01'
-                                                     order by id
-                                                     limit 1)
-# where pli.id is null)
-     )as tmp
-where not exists(select * from PriceListItem where tmp.serviceCodeOW = serviceCodeOW and tmp.serviceNameOW = serviceNameOW);
+               left join PriceListItem pli on pli.serviceCodeOW = pt.code and pli.deleted = 0 and pli.service_id = rS.id and
+                                         pli.endDate = '2022-01-09' and pli.begDate = '2021-07-01' and pli.priceList_id = 124
+    join PriceListItem pli1 on pli1.id = (select id from PriceListItem where deleted = 0 and endDate = '2022-01-09' and begDate = '2021-07-01' and priceList_id = 124 order by id desc limit 1)
+    ) as tmp
+where  not exists(select * from PriceListItem where tmp.serviceCodeOW = serviceCodeOW and tmp.serviceNameOW = serviceNameOW and tmp.priceList_id = priceList_id and tmp.endDate = endDate and tmp.begDate = begDate and tmp.service_id = tmp.service_id)
+
+select *
+from `price_temp_2021-07-19` pt
+join PriceListItem pli on pli.serviceCodeOW = pt.code and pli.endDate = '2022-01-09' and pli.begDate = '2021-07-01'
 
 
 
 select *
-from rbService where id = 14229;
+from `price_temp_2021-07-19` pt
+join PriceListItem pli on pli.serviceCodeOW = pt.code and pli.endDate = '2022-01-09' and pli.begDate = '2021-07-01'
 
+
+
+
+
+
+select *
+from PriceListItem where id = 7101463;
 
 
 select *
