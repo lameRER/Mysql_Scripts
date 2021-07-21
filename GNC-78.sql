@@ -108,6 +108,26 @@ left join ActionProperty_String using(id)
 
 
 
+SELECT 'Название свойства', 'Значение свойства'
+UNION
+(SELECT apt1.name AS `Название свойства`, IF(apt1.typeName REGEXP 'Constructor|String|Text', aps.value, IF(apt1.typeName = 'Date', apd.value, IF(apt1.typeName = 'Double', apd1.value, IF(apt1.typeName = 'Integer', api.value, IF(apt1.typeName = 'Reference', apr.value, IF(apt1.typeName = 'Time', apt.value, 'ERROR')))))) AS `Значение свойства` FROM ActionProperty ap
+LEFT JOIN ActionProperty_String aps USING(id)
+LEFT JOIN ActionProperty_Reference apr USING(id)
+LEFT JOIN ActionProperty_Double apd1 USING(id)
+LEFT JOIN ActionProperty_Date apd USING(id)
+LEFT JOIN ActionProperty_Integer api USING(id)
+LEFT JOIN ActionProperty_Time apt USING(id)
+JOIN Action a ON ap.action_id = a.id AND a.deleted = 0 AND a.status = 2 and a.event_id = 8521373
+JOIN ActionPropertyType apt1 ON ap.type_id = apt1.id AND apt1.deleted = 0
+JOIN ActionType at ON a.actionType_id = at.id AND apt1.actionType_id = at.id AND at.deleted = 0 ORDER BY apt1.idx)
+
+
+select *
+from Event order by id desc ;
+
+
+
+
 select
        c.id `Код пациента`,
        at.name `Наименование манипуляции`,
