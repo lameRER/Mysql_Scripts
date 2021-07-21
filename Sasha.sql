@@ -1,3 +1,534 @@
+select *
+from rbPrintTemplate where name regexp 'Ведомость';
+
+
+select * from rbSpecialVariablesPreferences where name = 'SpecialVar_VedomostNachisleniy'
+
+
+
+
+SELECT
+  t.Payer,
+  t.PaymentType,
+  SUM(CASE WHEN t.FinanceTransactionOperationTypeId = 1 THEN InvoiceItemSum END) Income,
+  SUM(CASE WHEN t.FinanceTransactionOperationTypeId = 2 THEN -1 END * InvoiceItemSum) Refund,
+  SUM(CASE WHEN t.PaymentTypeID = 1 AND
+      t.FinanceTransactionOperationTypeId = 1 THEN t.InvoiceItemSum END) NalIncome,
+  SUM(CASE WHEN t.PaymentTypeID = 1 AND
+      t.FinanceTransactionOperationTypeId = 2 THEN -1 END * InvoiceItemSum) NalsRefund,
+  SUM(CASE WHEN t.PaymentTypeID = 2 AND
+      t.FinanceTransactionOperationTypeId = 1 THEN t.InvoiceItemSum END) bezNalIncome,
+  SUM(CASE WHEN t.PaymentTypeID = 2 AND
+      t.FinanceTransactionOperationTypeId = 2 THEN -1 END * InvoiceItemSum) bezNalsRefund,
+  SUM(CASE WHEN t.PaymentTypeID = 3 AND
+      t.FinanceTransactionOperationTypeId = 1 THEN t.InvoiceItemSum END) bezNalRSIncome,
+  SUM(CASE WHEN t.PaymentTypeID = 3 AND
+      t.FinanceTransactionOperationTypeId = 2 THEN -1 END * InvoiceItemSum) bezNalRSsRefund,
+  SUM(CASE WHEN t.PaymentTypeID in (1,2) AND
+      t.FinanceTransactionOperationTypeId = 1 THEN t.InvoiceItemSum END) KassaIn,
+  SUM(CASE WHEN t.PaymentTypeID in (1,2) AND
+      t.FinanceTransactionOperationTypeId = 2 THEN -1 END * InvoiceItemSum) KassaOut
+FROM (SELECT
+    ii.id AS InvoiceItemId,
+    CASE WHEN ft.financeOperationType_id = 1 THEN ii.sum WHEN ft.financeOperationType_id = 2 THEN -ii.sum END AS InvoiceItemSum,
+    ft.id AS FinanceTransactionId,
+    ft.trxDatetime AS FinanceTransactionDateTime,
+    ft.financeOperationType_id AS FinanceTransactionOperationTypeId,
+    pt.name AS PaymentType,
+    CASE WHEN cc.client_id IS NOT NULL THEN CONCAT_WS(' ', c_p.lastName, c_p.firstName, c_p.patrName) ELSE o_p.fullName END AS Payer,
+    CASE WHEN s.actionProperty_id IS NOT NULL AND
+        ps_pli.isAccumulativePrice = 1 THEN ap.action_id WHEN s.action_id IS NOT NULL AND
+        ISNULL(ps.id) AND
+        pli.isAccumulativePrice = 1 THEN NULL ELSE s.action_id END AS ActionId,
+    pt.id AS PaymentTypeID
+  FROM gnc.FinanceTransaction ft
+    LEFT JOIN gnc.rbPayType pt
+      ON pt.id = ft.payType_id
+    JOIN gnc.Invoice i
+      ON i.id = ft.invoice_id
+      AND i.deleted = 0
+    JOIN gnc.InvoiceItem ii
+      ON (ii.invoice_id = i.id)
+      OR (ii.refund_id = i.id
+      AND ii.deleted = 0)
+    JOIN gnc.Service s
+      ON s.id = ii.concreteService_id
+    JOIN gnc.PriceListItem pli
+      ON s.priceListItem_id = pli.id
+    LEFT JOIN gnc.Service ps
+      ON s.parent_id = ps.id
+    LEFT JOIN gnc.PriceListItem ps_pli
+      ON ps.priceListItem_id = ps_pli.id
+    LEFT JOIN gnc.ActionProperty ap
+      ON s.actionProperty_id = ap.id
+    LEFT JOIN gnc.Contract co
+      ON co.id = i.contract_id
+    LEFT JOIN gnc.Contract_Contragent cc
+      ON cc.id = co.payer_id
+    LEFT JOIN gnc.Client c_p
+      ON c_p.id = cc.client_id
+    LEFT JOIN gnc.Organisation o_p
+      ON o_p.id = cc.organisation_id
+  WHERE (ft.financeOperationType_id = 1
+  OR ft.financeOperationType_id = 2) and s.deleted = 0
+  AND ft.trxDatetime BETWEEN :Date1 AND :Date1 + INTERVAL 1 DAY - INTERVAL 1 SECOND) t
+  INNER JOIN Action a
+    ON a.id = t.ActionId and a.deleted = 0
+  INNER JOIN Event e
+    ON e.id = a.event_id
+WHERE e.client_id != 18
+GROUP BY t.FinanceTransactionId,
+         t.InvoiceItemId;
+
+select *
+from FinanceTransaction;
+
+
+
+
+
+select * from Service where event_id = 20433935
+
+
+# insert into ActionType(createDatetime, createPerson_id, modifyDatetime, modifyPerson_id, class, group_id, code, name, title, flatCode, sex, age, age_bu, age_bc, age_eu, age_ec, office, showInForm, genTimetable, service_id, quotaType_id, context, defaultPlannedEndDate, defaultExecPerson_id, isMES, nomenclativeService_id, prescribedType_id, shedule_id, testTubeType_id, jobType_id, layout, loadPrintTemplate_id, dynamicNumberType_id, counter_id, ttjExternalCounter_id, ttjExternalCounter_id_cached)
+select *
+from
+(select at2.*
+# master_id, idx, service_id, ats1.begDate, ats1.endDate
+from `price_temp_2021-07-19` pt
+# left join rbService rS on `price_temp_2021-07-19`.code = rS.code and rS.id != 14224
+join ActionType at2 on at2.code = pt.code and at2.class =1 and at2.deleted = 0 and at2.id not in(4787,4765)) as tmp
+where not exists(select * from ActionType where tmp.code = code and tmp.deleted = tmp.deleted and tmp.class = class)
+
+
+select *
+from
+(select at.*
+from ActionType at
+join `price_temp_2021-07-19` pt on pt.code = at.code
+where at.class = 1 and at.deleted = 0 and at.id not in (4787)) as tmp
+where not exists(select * from ActionType where tmp.code = code and tmp.class = class and tmp.deleted = deleted);
+
+
+
+
+# select *
+# from
+# (
+    select *
+from `price_temp_2021-07-19` pt
+left join rbService r on r.code = pt.code and r.id != 14224
+left join ActionType A on pt.code = A.code and A.class = 1 and A.deleted = 0 and A.id not in(4787,4765)
+#     ) as tmp
+
+
+select *
+from
+(select at2.*
+# master_id, idx, service_id, ats1.begDate, ats1.endDate
+from `price_temp_2021-07-19` pt
+join ActionType at2 on at2.code = pt.code and at2.class =1 and at2.deleted = 0 and at2.id not in(4787,4765)) as tmp
+where not exists(select * from ActionType where tmp.code = code)
+
+
+
+select *
+from `price_temp_2021-07-19` pt
+left join ActionType A on pt.code = A.code and A.class = 1 and A.deleted = 0 and A.id not in(4787,4765)
+join A
+where A.id is null
+
+
+select *
+from ActionType where code = 'A12.05.006';
+
+
+select *
+from ActionType where code = 'A12.05.008.001';
+
+# left join ActionType_Service ats1 on ats1.id = (select id from ActionType_Service order by id desc limit 1)
+
+insert into ActionType(createDatetime, createPerson_id, modifyDatetime, modifyPerson_id, deleted, hidden, class, group_id, code, name, title, flatCode, sex, age, age_bu, age_bc, age_eu, age_ec, office, showInForm, genTimetable, service_id, quotaType_id, context, amount, amountEvaluation, defaultStatus, defaultDirectionDate, defaultPlannedEndDate, defaultEndDate, defaultExecPerson_id, defaultPersonInEvent, defaultPersonInEditor, maxOccursInEvent, showTime, isMES, nomenclativeService_id, isPreferable, prescribedType_id, shedule_id, isRequiredCoordination, isRequiredTissue, testTubeType_id, jobType_id, mnem, layout, hasPrescriptions, autoclose_on_event_close, noteMandatory, canHaveAttaches, loadPrintTemplate_id, dynamicNumberType_id, counter_id, ttjExternalCounter_id, ttjExternalCounter_id_cached)
+(select
+       now() createDatetime,
+       null createPerson_id,
+       now() modifyDatetime,
+       null modifyPerson_id,
+       0 deleted,
+       at.hidden,
+       1 class,
+       7244 group_id,
+       pt.code code,
+       pt.name name,
+       pt.name title,
+       at.flatCode,
+       at.sex,
+       at.age,
+       at.age_bu,
+       at.age_bc,
+       at.age_eu,
+       at.age_ec,
+       at.office,
+       at.showInForm,
+       at.genTimetable,
+       at.service_id,
+       at.quotaType_id,
+       at.context,
+       at.amount,
+       at.amountEvaluation,
+       at.defaultStatus,
+       at.defaultDirectionDate,
+       at.defaultPlannedEndDate,
+       at.defaultEndDate,
+       at.defaultExecPerson_id,
+       at.defaultPersonInEvent,
+       at.defaultPersonInEditor,
+       at.maxOccursInEvent,
+       at.showTime,
+       at.isMES,
+       at.nomenclativeService_id,
+       at.isPreferable,
+       at.prescribedType_id,
+       at.shedule_id,
+       at.isRequiredCoordination,
+       at.isRequiredTissue,
+       at.testTubeType_id,
+       at.jobType_id,
+       at.mnem,
+       at.layout,
+       at.hasPrescriptions,
+       at.autoclose_on_event_close,
+       at.noteMandatory,
+       at.canHaveAttaches,
+       at.loadPrintTemplate_id,
+       at.dynamicNumberType_id,
+       at.counter_id,
+       at.ttjExternalCounter_id,
+       at.ttjExternalCounter_id_cached
+from `price_temp_2021-07-19` pt
+left join ActionType A on pt.code = A.code and A.class= 1 and A.deleted = 0
+join ActionType at on at.id = (select id from ActionType order by id desc limit 1)
+where A.id is null)
+
+
+# insert into ActionType_Service(master_id, idx, service_id, begDate, endDate)
+select A.id
+from `price_temp_2021-07-19` pt
+join rbService rS on pt.code = rS.code and rS.id != 14224
+join ActionType A on pt.code = A.code and A.class = 1 and A.deleted = 0 and A.id not in(4787,4765)
+join ActionType_Service s on s.master_id = A.id and s.service_id = rS.id
+left join PriceListItem pli on pli.serviceCodeOW = pt.code and pli.deleted = 0 and pli.service_id = rS.id and pli.endDate = '2022-01-09' and pli.begDate = '2021-07-01' and pli.priceList_id = 124
+
+
+
+select *
+from rbService where id = 14229;
+
+
+
+select *
+from ActionType where group_id = 7244
+
+select *
+from ActionPropertyType where actionType_id in(
+select id
+from ActionType where code= 'A12.05.005' and class = 1 and deleted = 0);
+
+
+select id
+from ActionType where code regexp 'A12.05.005' and class = 1 and deleted = 0
+
+select *
+from EventType where deleted = 0;
+
+11559
+11982
+11983
+11984
+11986
+11987
+11988
+11989
+11990
+11991
+11992
+11995
+11996
+11997
+
+select *
+from EventType_Action where  actionType_id in(11995,4881);
+
+
+select distinct
+       et.id eventType_id,
+       idx,
+       tmp.id actionType_id,
+       speciality_id,
+       tissueType_id,
+       ETA.sex,
+       ETA.age,
+       ETA.age_bu,
+       ETA.age_bc,
+       ETA.age_eu,
+       ETA.age_ec,
+       selectionGroup,
+       actuality,
+       expose,
+       payable,
+       academicDegree_id,
+       ETA.deleted,
+       plannedEndDateTemplate_id
+from EventType et
+join (select 11559,11982,11983,11984,11986,11987,1198811989,11990,11991,11992,11995,11996,11997 as id) as tmp on 1
+where et.id != 109 and et.deleted = 0
+;
+
+select *
+from rbTest where id = 4011;
+
+
+
+select *
+from PriceList;
+
+select *
+from rbFinance where id =4;
+
+select *
+from ActionType_Service where master_id in (4881,4910,11995);
+
+
+select *
+from rbService where id in(12597,12607,14229);
+
+
+
+select *
+from PriceListItem where service_id in (12597,12607,14229) and priceList_id = 124;
+
+
+
+select *
+from ActionType_Service where service_id = 14229;
+
+
+
+select *
+from ActionType where id = 11995;
+
+
+select *
+from ActionType;
+
+
+insert into rbService (code, name, eisLegacy, license, infis, begDate, endDate, medicalAidProfile_id, rbMedicalKind_id, departCode)
+(select
+       pt.code,
+       pt.name,
+       s.eisLegacy,
+       s.license,
+       '' infis,
+       '2021-07-01' begDate,
+       '2022-01-09' endDate,
+       s.medicalAidProfile_id,
+       s.rbMedicalKind_id,
+       s.departCode
+from `price_temp_2021-07-19` pt
+left join rbService rS on pt.code = rS.code
+left join rbService s on s.id = (select id from rbService where id = 504)
+where rS.id is null)
+
+
+select *
+from `price_temp_2021-07-19` pt
+join ActionType A on pt.code = A.code and A.class = 1 and A.deleted = 0
+
+select *
+from `price_temp_2021-07-19`;
+
+select *
+from rbSpeciality;
+
+insert into PriceListItem (createDatetime, createPerson_id, modifyDatetime, modifyPerson_id, priceList_id, deleted, service_id, serviceCodeOW, serviceNameOW, begDate, endDate, price, isAccumulativePrice, limitPerDay, limitPerMonth, limitPerPriceList, LCE, LCE_test)
+select
+       now() createDatetime,
+       null createPerson_id,
+       now() modifyDatetime,
+       null modifyPerson_id,
+       pli1.priceList_id,
+       pli1.deleted,
+       rS.id service_id,
+       pt.code serviceCodeOW,
+       pt.name serviceNameOW,
+       '2021-07-01' begDate,
+       '2022-01-09' endDate,
+       pt.price price,
+       pli1.isAccumulativePrice,
+       pli1.limitPerDay,
+       pli1.limitPerMonth,
+       pli1.limitPerPriceList,
+       pli1.LCE,
+       pli1.LCE_test
+from `price_temp_2021-07-19` pt
+join rbService rS on pt.code = rS.code
+left join PriceListItem pli on rS.id = pli.service_id and pli.begDate = '2021-07-01' and rS.endDate = '2022-01-09'
+left join PriceListItem pli1 on pli1.id = (select id from PriceListItem order by id desc limit 1)
+where pli.id is  null
+;
+
+select *
+from InvoiceItem
+
+
+select *
+from Action where event_id=20433935  and actionType_id in(4687,5096);
+
+4687
+5096
+
+
+
+select *
+from Service where action_id in(23144059,23144060
+);
+
+select *
+from Service where action_id = 23125027;
+
+
+select *
+from ActionType where id in(8586,4687,5096
+                           );
+
+
+
+SELECT
+  TABLE_NAME,COLUMN_NAME,CONSTRAINT_NAME, REFERENCED_TABLE_NAME,REFERENCED_COLUMN_NAME
+FROM
+  INFORMATION_SCHEMA.KEY_COLUMN_USAGE
+WHERE
+  REFERENCED_TABLE_SCHEMA = 'gnc' AND
+  REFERENCED_TABLE_NAME = 'InvoiceItem' and
+REFERENCED_COLUMN_NAME = 'id';
+
+
+select *
+from Service;
+
+select *
+from Invoice;
+
+
+select id,
+       code,
+       name,
+       eisLegacy,
+       nomenclatureLegacy,
+       license,
+       infis,
+       begDate,
+       endDate,
+       medicalAidProfile_id,
+       adultUetDoctor,
+       adultUetAverageMedWorker,
+       childUetDoctor,
+       childUetAverageMedWorker,
+       rbMedicalKind_id,
+       UET,
+       departCode,
+       isComplex,
+       maxSubServices
+from rbService s;
+
+
+select *
+from rbPrintTemplate where name = 'Дневниковый осмотр';
+
+
+select *
+from rbPrintTemplate where templateText regexp 'Настоящее состояние';
+
+select *
+from ActionType where context in(select context from rbPrintTemplate where id in (16802,16821,34399))
+;
+
+
+select *
+from ActionType at, rbPrintTemplate t where at.id = 4218 and at.context = t.context;
+
+
+select *
+from rbPrintTemplate where id =177;
+
+
+select *
+from rbSpeciality where id in(24,114);
+
+
+select rp.*, s.*
+from Person p, rbSpeciality s, rbPost rp where p.lastName = 'Пурло' and s.id = p.speciality_id and rp.id = p.post_id;
+
+select *
+from rbSpeciality where name regexp 'нефролог';\
+
+
+select *
+from rbAcademicTitle;
+
+select *
+from rbAcademicDegree;
+
+
+select at.name, a.* from Action a, ActionType at where a.event_id = 20427788 and at.id = a.actionType_id
+
+select *
+from Client where id = 72609;
+
+select *
+from Action where  event_id = 20427788 and deleted = 0 and actionType_id in(7750,8207,8222,8488,8490);
+
+
+
+select ActionType.name, Action.*
+from Action
+join ActionType on Action.actionType_id = ActionType.id
+where event_id = (select id from Event where Event.externalId = '2525' and client_id = 278645) order by id desc ;
+
+select *
+from Client where lastName=  'Санасапова';
+
+select *
+from ActionType where name regexp 'Протокол операции' group by group_id;
+
+select e.*
+from Event e
+where e.client_id = 330684 and
+      e.externalId = '2617';
+
+
+select *
+from Action
+join ActionType on Action.actionType_id = ActionType.id and ActionType.flatCode = 'moving'
+where event_id = 20431652;
+\
+
+select *
+from Action where actionType_id =7932 order by  id desc ;
+
+select *
+from ActionType where name = 'Выписка';
+
+
+select *
+from ActionPropertyType where actionType_id = 4676 and deleted = 0 order by idx;
+
+select *
+from ActionType where name = '';
+
+
+select * from ActionType where id in(65100,77754,84478,8449784533,84587)
+
 select distinct *
 from rbEpicrisisTemplates ret
 left join rbEpicrisisTemplates_rbEpicrisisSections retres on ret.id = retres.id_rbEpicrisisTemplates
