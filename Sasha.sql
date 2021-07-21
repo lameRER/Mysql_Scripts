@@ -258,9 +258,70 @@ join PriceListItem pli on pli.serviceCodeOW = pt.code and pli.endDate = '2022-01
 
 
 
+
+select *
+ from `price_temp_2021-07-19` pt
+               join rbService rS on pt.code = rS.code and rS.id != 14224
+               join ActionType A on pt.code = A.code and A.class = 1 and A.deleted = 0 and A.id not in (4787, 4765)
+               join ActionType_Service s on s.master_id = A.id and s.service_id = rS.id
+join PriceListItem pli on pli.serviceCodeOW = pt.code and pli.deleted = 0 and pli.service_id = rS.id and pli.endDate = '2022-01-09' and pli.begDate = '2021-07-01' and pli.priceList_id = 124
+
+
+
+select *
+from EventType et
+left join EventType_Action ETA on et.id = ETA.eventType_id
+where et.deleted =0 and et.id != 109;
+
+
+
+select
+A.*
+#        et.id eventType_id,
+#        eta1.idx,
+#        A.id actionType_id,
+#        eta1.speciality_id,
+#        eta1.tissueType_id,
+#        eta1.sex,
+#        eta1.age,
+#        eta1.age_bu,
+#        eta1.age_bc,
+#        eta1.age_eu,
+#        eta1.age_ec,
+#        eta1.selectionGroup,
+#        eta1.actuality,
+#        eta1.expose,
+#        eta1.payable,
+#        eta1.academicDegree_id,
+#        eta1.deleted,
+#        eta1.plannedEndDateTemplate_id
+from EventType_Action eta
+left join EventType et on et.id = eta.eventType_id and et.deleted =0 and et.id != 109
+join EventType_Action eta1 on eta1.id = (select id from EventType_Action order by id desc limit 1)
+join `price_temp_2021-07-19` pt on 1
+join rbService rS on pt.code = rS.code and rS.id != 14224
+join ActionType A on pt.code = A.code and A.class = 1 and A.deleted = 0 and A.id not in (4787, 4765)
+join ActionType_Service s on s.master_id = A.id and s.service_id = rS.id
+join PriceListItem pli on pli.serviceCodeOW = pt.code and pli.deleted = 0 and pli.service_id = rS.id and pli.endDate = '2022-01-09' and pli.begDate = '2021-07-01' and pli.priceList_id = 124
+group by A.id
+
+
+
+select *
+from PriceListItem where serviceCodeOW = 'A12.05.007.006';
+
+
+select *
+from rbService where id =14224;
+
+
+
+select *
+from ActionType_Service where service_id = 14224;
+
 select *
 from `price_temp_2021-07-19` pt
-join PriceListItem pli on pli.serviceCodeOW = pt.code and pli.endDate = '2022-01-09' and pli.begDate = '2021-07-01'
+join PriceListItem pli on pli.serviceCodeOW = pt.code and pli.endDate = '2022-01-09' and pli.begDate = '2021-07-01' and priceList_id = 124
 
 
 
