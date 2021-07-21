@@ -281,10 +281,14 @@ from ActionType where code = 'A12.05.005';
 
 
 
-select * from EventType_Action where eventType_id = 2-- and  actionType_id =11995
+select * from EventType_Action where eventType_id = 2 and  actionType_id =11995
 
 select *
 from ActionType_Service where master_id in (11680,11995);
+
+
+select *
+from EventType where id = 2;
 
 select *
 from rbService where id = 14229;
