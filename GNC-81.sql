@@ -11,17 +11,37 @@ where a.event_id = 20427951 and a.deleted = 0 order by apt.actionType_id,  apt.i
 
 
 
-select *
-from OrgStructure_HospitalBed;
+select distinct aph.*, a.createDatetime, ap.*
+from ActionProperty ap
+left join ActionProperty_HospitalBed aph using(id)
+join Action a on a.id = ap.action_id and a.begDate >= '2021-06-01' and a.begDate <= '2021-07-01'
+join ActionType at on at.id = a.actionType_id and at.flatCode = 'moving'
+join ActionPropertyType apt on apt.id = ap.type_id and at.id = apt.actionType_id and apt.code = 'hospitalBed'
+where aph.value is null
+
+
+select
+a.event_id, ap.id, apo.*, aph.*
+from ActionProperty ap
+# left join ActionProperty_HospitalBed aph using(id)
+left join ActionProperty_OrgStructure apo using(id)
+left join ActionProperty_HospitalBed aph using(id)
+join Action a on a.id = ap.action_id
+join ActionType at on at.id = a.actionType_id and at.flatCode = 'moving'
+join ActionPropertyType apt on apt.id = ap.type_id and at.id = apt.actionType_id and (apt.code = 'orgStructTransfer' or apt.id = 1616)
+where a.begDate between '2021-06-01' and '2021-07-01' ;
 
 
 select *
-from OrgStructure where name ='ОРИТ';
+from ActionPropertyType apt
+where apt.actionType_id = (select id from ActionType where flatCode = 'moving' and deleted = 0) and apt.deleted =0;
+
 
 
 select *
-from rbSpecialVariablesPreferences where name in ('SpecialVar_form007day_new');
+from rbSpecialVariablesPreferences where name = 'SpecialVar_form007day_new';
 
+select  getHospitalDayByDatetime('2021-06-01', false)
 
 SELECT
   formatDateToRussian(_dates.Date),
@@ -53,7 +73,7 @@ FROM OrgStructure _os_
                        (a.id = first_move.id)    AS income,
                        -- Является ли движение переводом В отделение (effective_os)
                        -- обязательно есть предыдущее движение
-                       -- Если запрошена реанимация, то текущее движениеk
+                       -- Если запрошена реанимация, то текущее движение
                        -- у которого текущее отделение не равно
                        -- 1) если запрошена реанимация, то предыдущему отделению
                        -- 2) если предыдущее отделение реанимация, то пред-предыдущему отделению
@@ -654,3 +674,62 @@ FROM OrgStructure _os_
 -- =====================================================
 WHERE _os_.id = :org_str
 GROUP BY _dates.Date
+
+
+
+
+
+select *
+from Event where client_id = 231224 and deleted = 0 order by id desc ;
+
+
+
+select distinct at.name, a.*
+from Action a
+join ActionType at on a.actionType_id = at.id
+where a.event_id = 20427951 order by a.id desc ;
+
+
+SELECT
+	concat_ws(' ', Client.lastName, substr(Client.firstName, 1, 1), substr(Client.patrName, 1, 1)) AS 'ФИО'
+	, timestampdiff(YEAR, Client.birthDate, Event.setDate) AS 'ДР'
+	, date(Event.setDate) as 'Госпитализирован'
+	, Event.externalId as '№ИБ'
+	, OrgStructure.shortName as 'Отделение'
+	, rbFinance.name as 'Финансирование'
+	, case
+		when getClientRegAddressLocalityType(Client.id) = 1 then 'Город'
+		when getClientRegAddressLocalityType(Client.id) = 2 then 'Село'
+		else 'Не указано'
+	end	AS 'Житель'
+	, if(Client.sex = 1, 'М', 'Ж') AS 'Пол'
+	, CASE
+		WHEN c.name = 'Российская Федерация' THEN r.name
+		ELSE c.name
+	END AS 'Регион'
+FROM  Event
+INNER JOIN EventType ON EventType.id = Event.eventType_id
+INNER JOIN rbFinance ON rbFinance.id = EventType.finance_id
+INNER JOIN rbRequestType ON rbRequestType.id = EventType.requestType_id
+INNER JOIN Client ON Client.id = Event.client_id
+LEFT OUTER JOIN ClientDocument cd ON cd.id = (
+	SELECT max(id)
+	FROM ClientDocument
+	WHERE client_id = Client.id AND deleted = 0
+)
+LEFT OUTER JOIN rbCountry c ON cd.country_id = c.id
+LEFT OUTER JOIN rbRegion r ON cd.region_id = r.id
+LEFT JOIN Action ON (Action.event_id = Event.id AND Action.deleted = 0 AND Action.actionType_id = 112)
+LEFT JOIN ActionProperty ON (ActionProperty.action_id = Action.id AND if(Action.id IS NULL OR (ActionProperty.type_id = 1608), 1, 0))
+LEFT JOIN ActionProperty_OrgStructure ON ActionProperty_OrgStructure.id = ActionProperty.id
+LEFT JOIN OrgStructure ON OrgStructure.id = ActionProperty_OrgStructure.value
+WHERE
+  Event.deleted = 0
+  AND rbRequestType.code = 'hospital'
+  AND ((Event.setDate) BETWEEN DATE(:Date1) + interval 6 hour AND DATE(:Date2) - interval 1 day  + interval 6 hour)
+ORDER BY
+  OrgStructure.name
+, date(Event.setDate)
+
+
+select DATE(:Date1) + interval 6 hour, DATE(:Date2) - interval 1 day + interval 6 hour
