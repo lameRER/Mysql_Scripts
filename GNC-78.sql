@@ -81,6 +81,32 @@ group by e.id, a.id order by c.id, a.createDatetime
 
 
 
+select *
+from ActionProperty ap
+left join ActionProperty_Action using(id)
+union
+select *
+from ActionProperty ap
+left join ActionProperty_String using(id)
+union
+select *
+from ActionProperty ap
+left join ActionProperty_String using(id)
+union
+select *
+from ActionProperty ap
+left join ActionProperty_String using(id)
+union
+select *
+from ActionProperty ap
+left join ActionProperty_String using(id)
+union
+select *
+from ActionProperty ap
+left join ActionProperty_String using(id)
+
+
+
 
 select
        c.id `Код пациента`,
