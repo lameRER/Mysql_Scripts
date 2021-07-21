@@ -11,3 +11,5 @@ SELECT id FROM Action WHERE Action.`event_id` = 3921176  ORDER BY id
 
 
 
+select *
+from ;

@@ -31,3 +31,4 @@ from Person where lastName='Пурло';
 update Person
 set speciality_id = 124
 where id = 1313
+
