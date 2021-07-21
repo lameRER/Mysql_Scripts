@@ -220,7 +220,7 @@ from `price_temp_2021-07-19` pr
 join PriceListItem
 
 
-insert into PriceListItem(createDatetime, createPerson_id, modifyDatetime, modifyPerson_id, priceList_id, deleted, service_id, serviceCodeOW, serviceNameOW, begDate, endDate, price, isAccumulativePrice, limitPerDay, limitPerMonth, limitPerPriceList, LCE, LCE_test)
+# insert into PriceListItem(createDatetime, createPerson_id, modifyDatetime, modifyPerson_id, priceList_id, deleted, service_id, serviceCodeOW, serviceNameOW, begDate, endDate, price, isAccumulativePrice, limitPerDay, limitPerMonth, limitPerPriceList, LCE, LCE_test)
 select *
 from
 (select
@@ -269,8 +269,19 @@ join PriceListItem pli on pli.serviceCodeOW = pt.code and pli.deleted = 0 and pl
 
 
 select *
+from EventType_Action where actionType_id in(11559,11982,11989,11995,11983,11990,11984,11991,11986,11992,11987,11996,11988,11997);
+
+
+
+
+
+select *
 from ActionType where code = 'A12.05.005';
 
+
+
+
+select * from EventType_Action where eventType_id = 2-- and  actionType_id =11995
 
 select *
 from ActionType_Service where master_id in (11680,11995);
@@ -290,8 +301,10 @@ left join EventType_Action ETA on et.id = ETA.eventType_id
 where et.deleted =0 and et.id != 109;
 
 
-insert into EventType_Action(eventType_id, actionType_id, speciality_id, tissueType_id, sex, age, age_bu, age_bc, age_eu, age_ec, actuality, academicDegree_id, plannedEndDateTemplate_id)
-select
+# insert into EventType_Action(eventType_id, actionType_id, speciality_id, tissueType_id, sex, age, age_bu, age_bc, age_eu, age_ec, actuality, academicDegree_id, plannedEndDateTemplate_id)
+select *
+from
+(select
        et.id eventType_id,
        A.id actionType_id,
        eta1.speciality_id,
@@ -314,7 +327,8 @@ join ActionType A on pt.code = A.code and A.class = 1 and A.deleted = 0 and A.id
 join ActionType_Service s on s.master_id = A.id and s.service_id = rS.id
 join PriceListItem pli on pli.serviceCodeOW = pt.code and pli.deleted = 0 and pli.service_id = rS.id and pli.endDate = '2022-01-09' and pli.begDate = '2021-07-01' and pli.priceList_id = 124
 where et.id is not null
-group by et.id, A.id
+group by et.id, A.id) as tmp
+where not exists(select * from EventType_Action where tmp.actionType_id = actionType_id and tmp.eventType_id = eventType_id)
 
 
 
