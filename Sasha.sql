@@ -980,14 +980,14 @@ from rbEpicrisisTemplates;
 
 
 select *
-from rbService where id = 13101
+from rbService where name regexp 'Проба на совместимость перед трансфузией эритроцит содержащих сред'
 
 
 select *
-from PriceListItem where service_id = 13101;
+from PriceListItem where service_id = 13730;
 
 
 
 select *
-from ActionType_Service where service_id = 13101
+from ActionType_Service where service_id = 13730
 ;

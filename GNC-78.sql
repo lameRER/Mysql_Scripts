@@ -44,6 +44,14 @@ join ActionType at on at.id = a.actionType_id and at.deleted = 0 and at.id = 454
 where d.client_id = 331512 and d.deleted = 0;
 
 
+select apt.*
+from ActionProperty ap
+    left join ActionProperty_String aps using(id)
+join Action a on a.id = ap.action_id and a.id =23156334
+join ActionType at on at.id = a.actionType_id
+join ActionPropertyType apt on apt.actionType_id = at.id and apt.id = ap.type_id -- and apt.id = 3945600
+
+
 select *
 from rbDiseaseCharacter;
 
