@@ -1081,7 +1081,8 @@ join ActionType at on at.id = (select id from ActionType where id = 11828)
 join rbService s1 on s1.id = (select id from rbService where id = 14239)) as tmp
 where not exists(select * from ActionType_Service where tmp.service_id = service_id and tmp.master_id = master_id) limit 1
 
-
+insert into PriceListItem(createDatetime, createPerson_id, modifyDatetime, modifyPerson_id, priceList_id, deleted, service_id, serviceCodeOW, serviceNameOW,
+                          begDate, endDate, price, isAccumulativePrice, limitPerDay, limitPerMonth, limitPerPriceList, LCE, LCE_test)
 select *
 from
 (select
@@ -1108,9 +1109,55 @@ join rbService s1 on s1.id = (select id from rbService where id = 14239)) as tmp
 where not exists(select * from PriceListItem where tmp.service_id = service_id and tmp.serviceNameOW = serviceNameOW and tmp.serviceCodeOW = serviceCodeOW) limit 1
 
 
+select *
+from PriceListItem where serviceCodeOW = 'A12.05.004.006';
+
 
 select *
 from ActionType where code = 'A12.05.004.006';
+
+
+
+select *
+from rbPrintTemplate where templateText regexp  'SpecialVar_PrintAmbInstResult' order by id desc ;
+
+
+select *
+from rbSpecialVariablesPreferences where name = 'SpecialVar_PrintAmbInstResult';
+
+
+select *
+from rbSpecialVariablesPreferences;
+
+
+
+ where template_id = 34391;
+
+
+
+select context
+from ActionType where name = 'Статус';
+
+
+select * from  rbPrintTemplate where context = 'status'
+
+
+SELECT
+	a.id
+FROM
+	Action a
+INNER JOIN
+	ActionType at ON a.actionType_id = at.id
+INNER JOIN
+  Event e ON a.event_id = e.id
+WHERE
+	a.plannedEndDate IS NOT NULL AND
+  at.class = 1 AND
+  at.isRequiredTissue = 0 AND
+	DATE(a.plannedEndDate) BETWEEN DATE(:Date1) AND DATE (:Date2) + INTERVAL 1 DAY - INTERVAL 1 SECOND AND
+	a.deleted = 0 AND
+	a.status = 2 AND
+  e.client_id = :ClientID;
 
 
 
