@@ -25,7 +25,8 @@ where e.setDate >= '2018-01-01' and e.setDate <= '2021-06-30' and e.deleted = 0
 group by e.id order by e.setDate;
 
 
-
+select *
+from rbDiagnosisType;
 
 
 
