@@ -25,6 +25,115 @@ where e.setDate >= '2018-01-01' and e.setDate <= '2021-06-30' and e.deleted = 0
 group by e.id order by e.setDate;
 
 
+
+select *
+from Event where client_id = 331512 and externalId = '2810';
+
+
+
+select a.id,
+       a.createDatetime,
+       a.createPerson_id,
+       a.modifyDatetime,
+       a.modifyPerson_id,
+       a.deleted,
+       externalId,
+       actionType_id,
+       a.event_id,
+       idx,
+       directionDate,
+       status,
+       setPerson_id,
+       isUrgent,
+       begDate,
+       plannedEndDate,
+       a.endDate,
+       note,
+       a.person_id,
+       office,
+       amount,
+       uet,
+       expose,
+       payStatus,
+       account,
+       finance_id,
+       prescription_id,
+       takenTissueJournal_id,
+       contract_id,
+       coordDate,
+       coordPerson_id,
+       coordAgent,
+       coordInspector,
+       coordText,
+       hospitalUidFrom,
+       pacientInQueueType,
+       AppointmentType,
+       a.version,
+       parentAction_id,
+       uuid_id,
+       dcm_study_uid,
+       uuid,
+       d.id,
+       d.createDatetime,
+       d.createPerson_id,
+       d.modifyDatetime,
+       d.modifyPerson_id,
+       d.deleted,
+       d.event_id,
+       diagnosis_id,
+       d.diagnosisType_id,
+       d.character_id,
+       stage_id,
+       phase_id,
+       d.dispanser_id,
+       sanatorium,
+       hospital,
+       d.traumaType_id,
+       speciality_id,
+       d.person_id,
+       healthGroup_id,
+       result_id,
+       d.setDate,
+       d.endDate,
+       notes,
+       rbAcheResult_id,
+       d.version,
+       action_id,
+       diagnosis_description,
+       d.MKB,
+       d.MKBEx,
+       MKB2,
+       who_id,
+       d1.id,
+       d1.createDatetime,
+       d1.createPerson_id,
+       d1.modifyDatetime,
+       d1.modifyPerson_id,
+       d1.deleted,
+       client_id,
+       d1.diagnosisType_id,
+       d1.character_id,
+       d1.MKB,
+       d1.MKBEx,
+       d1.dispanser_id,
+       d1.traumaType_id,
+       d1.setDate,
+       d1.endDate,
+       mod_id,
+       d1.person_id
+from Action a, Diagnostic d, Diagnosis d1 where a.event_id = 20435323 and a.id = d.action_id and MKB = 'N84.0' and d1.id = d.diagnosis_id;
+
+
+select *
+from Diagnosis d
+left join Diagnostic D2 on D2.diagnosis_id = d.id where d.client_id = '331512';
+
+
+
+
+select *
+from Client where lastName = 'Безверхая';
+
 select *
 from rbDiagnosisType;
 
