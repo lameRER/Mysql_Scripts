@@ -984,6 +984,14 @@ from rbService where name regexp 'Проба на совместимость п�
 
 
 select *
+from PriceListItem where serviceCodeOW = 'A12.05.004.006';
+
+
+select *
+from ;
+
+
+select *
 from PriceListItem where service_id = 13730;
 
 
@@ -995,3 +1003,37 @@ from ActionType_Service where service_id = 13730
 select *
 from ActionType where id = 6072;
 ;
+
+A12.05.004.006	Проба на совместимость перед трансфузией эритроцит содержащих сред	3 800,00
+
+
+select
+       'A12.05.004.006' code,
+       'Проба на совместимость перед трансфузией эритроцит содержащих сред' name,
+       eisLegacy,
+       nomenclatureLegacy,
+       license,
+       infis,
+       '2021-07-01' begDate,
+       '2030-12-31' endDate,
+       medicalAidProfile_id,
+       adultUetDoctor,
+       adultUetAverageMedWorker,
+       childUetDoctor,
+       childUetAverageMedWorker,
+       rbMedicalKind_id,
+       UET,
+       departCode,
+       isComplex,
+       maxSubServices
+from rbService order by id desc limit 1;
+
+
+
+
+
+
+
+
+
+
