@@ -990,4 +990,8 @@ from PriceListItem where service_id = 13730;
 
 select *
 from ActionType_Service where service_id = 13730
+
+
+select *
+from ActionType where id = 6072;
 ;
