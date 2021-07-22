@@ -211,19 +211,174 @@ join ActionType at on at.id = (select id from ActionType order by id desc limit 
 where A.id is null)
 
 
-# insert into ActionType_Service(master_id, idx, service_id, begDate, endDate)
-select A.id
+
+select *
+from PriceListItem order by id desc ;
+
+select *
+from `price_temp_2021-07-19` pr
+join PriceListItem
+
+
+# insert into PriceListItem(createDatetime, createPerson_id, modifyDatetime, modifyPerson_id, priceList_id, deleted, service_id, serviceCodeOW, serviceNameOW, begDate, endDate, price, isAccumulativePrice, limitPerDay, limitPerMonth, limitPerPriceList, LCE, LCE_test)
+select *
+from
+(select
+        now() createDatetime,
+        null createPerson_id,
+        now() modifyDatetime,
+        null modifyPerson_id,
+        124 priceList_id,
+        0 deleted,
+        rS.id service_id,
+        pt.code serviceCodeOW,
+        pt.name serviceNameOW,
+        rS.begDate begDate,
+        rS.endDate endDate,
+        pt.price price,
+        pli1.isAccumulativePrice,
+        pli1.limitPerDay,
+        pli1.limitPerMonth,
+        pli1.limitPerPriceList,
+        pli1.LCE,
+        pli1.LCE_test
+ from `price_temp_2021-07-19` pt
+               join rbService rS on pt.code = rS.code and rS.id != 14224
+               join ActionType A on pt.code = A.code and A.class = 1 and A.deleted = 0 and A.id not in (4787, 4765)
+               join ActionType_Service s on s.master_id = A.id and s.service_id = rS.id
+               left join PriceListItem pli on pli.serviceCodeOW = pt.code and pli.deleted = 0 and pli.service_id = rS.id and
+                                         pli.endDate = '2022-01-09' and pli.begDate = '2021-07-01' and pli.priceList_id = 124
+    join PriceListItem pli1 on pli1.id = (select id from PriceListItem where deleted = 0 and endDate = '2022-01-09' and begDate = '2021-07-01' and priceList_id = 124 order by id desc limit 1)
+    ) as tmp
+where  not exists(select * from PriceListItem where tmp.serviceCodeOW = serviceCodeOW and tmp.serviceNameOW = serviceNameOW and tmp.priceList_id = priceList_id and tmp.endDate = endDate and tmp.begDate = begDate and tmp.service_id = tmp.service_id)
+
+select *
 from `price_temp_2021-07-19` pt
-join rbService rS on pt.code = rS.code and rS.id != 14224
-join ActionType A on pt.code = A.code and A.class = 1 and A.deleted = 0 and A.id not in(4787,4765)
-join ActionType_Service s on s.master_id = A.id and s.service_id = rS.id
-left join PriceListItem pli on pli.serviceCodeOW = pt.code and pli.deleted = 0 and pli.service_id = rS.id and pli.endDate = '2022-01-09' and pli.begDate = '2021-07-01' and pli.priceList_id = 124
+join PriceListItem pli on pli.serviceCodeOW = pt.code and pli.endDate = '2022-01-09' and pli.begDate = '2021-07-01'
+
 
 
 
 select *
+ from `price_temp_2021-07-19` pt
+               join rbService rS on pt.code = rS.code and rS.id != 14224
+               join ActionType A on pt.code = A.code and A.class = 1 and A.deleted = 0 and A.id not in (4787, 4765)
+               join ActionType_Service s on s.master_id = A.id and s.service_id = rS.id
+join PriceListItem pli on pli.serviceCodeOW = pt.code and pli.deleted = 0 and pli.service_id = rS.id and pli.endDate = '2022-01-09' and pli.begDate = '2021-07-01' and pli.priceList_id = 124
+
+
+
+select *
+from EventType_Action where actionType_id in(11559,11982,11989,11995,11983,11990,11984,11991,11986,11992,11987,11996,11988,11997);
+
+
+
+
+
+select *
+from ActionType where code = 'A12.05.005';
+
+
+
+
+select * from EventType_Action where eventType_id = 2 and  actionType_id =11995
+
+select *
+from ActionType_Service where master_id in (11680,11995);
+
+
+select *
+from EventType where id = 2;
+
+select *
 from rbService where id = 14229;
 
+
+select *
+from PriceListItem where service_id = 14229;
+
+
+
+select *
+from EventType et
+left join EventType_Action ETA on et.id = ETA.eventType_id
+where et.deleted =0 and et.id != 109;
+
+
+# insert into EventType_Action(eventType_id, actionType_id, speciality_id, tissueType_id, sex, age, age_bu, age_bc, age_eu, age_ec, actuality, academicDegree_id, plannedEndDateTemplate_id)
+select *
+from
+(select
+       et.id eventType_id,
+       A.id actionType_id,
+       eta1.speciality_id,
+       eta1.tissueType_id,
+       eta1.sex,
+       eta1.age,
+       eta1.age_bu,
+       eta1.age_bc,
+       eta1.age_eu,
+       eta1.age_ec,
+       eta1.actuality,
+       eta1.academicDegree_id,
+       eta1.plannedEndDateTemplate_id
+from EventType_Action eta
+left join EventType et on et.id = eta.eventType_id and et.deleted =0 and et.id != 109
+join EventType_Action eta1 on eta1.id = (select id from EventType_Action order by id desc limit 1)
+join `price_temp_2021-07-19` pt on 1
+join rbService rS on pt.code = rS.code and rS.id != 14224
+join ActionType A on pt.code = A.code and A.class = 1 and A.deleted = 0 and A.id not in (4787, 4765)
+join ActionType_Service s on s.master_id = A.id and s.service_id = rS.id
+join PriceListItem pli on pli.serviceCodeOW = pt.code and pli.deleted = 0 and pli.service_id = rS.id and pli.endDate = '2022-01-09' and pli.begDate = '2021-07-01' and pli.priceList_id = 124
+where et.id is not null
+group by et.id, A.id) as tmp
+where not exists(select * from EventType_Action where tmp.actionType_id = actionType_id and tmp.eventType_id = eventType_id)
+
+
+
+select *
+from EventType where id = 2;
+
+
+insert into gnc.ActionType (id)
+values  (11559),
+        (11982),
+        (11983),
+        (11984),
+        (11986),
+        (11987),
+        (11988),
+        (11989),
+        (11990),
+        (11991),
+        (11992),
+        (11995),
+        (11996),
+        (11997);
+
+select *
+from PriceListItem where serviceCodeOW = 'A12.05.007.006';
+
+
+select *
+from rbService where id =14224;
+
+
+
+select *
+from ActionType_Service where service_id = 14224;
+
+select *
+from `price_temp_2021-07-19` pt
+join PriceListItem pli on pli.serviceCodeOW = pt.code and pli.endDate = '2022-01-09' and pli.begDate = '2021-07-01' and priceList_id = 124
+
+
+
+
+
+
+select *
+from PriceListItem where id = 7101463;
 
 
 select *
