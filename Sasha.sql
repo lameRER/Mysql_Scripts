@@ -1006,28 +1006,111 @@ from ActionType where id = 6072;
 
 A12.05.004.006	Проба на совместимость перед трансфузией эритроцит содержащих сред	3 800,00
 
-
+insert into rbService(code, name, eisLegacy, license, infis, begDate, endDate, medicalAidProfile_id, rbMedicalKind_id, departCode)
 select
        'A12.05.004.006' code,
        'Проба на совместимость перед трансфузией эритроцит содержащих сред' name,
        eisLegacy,
-       nomenclatureLegacy,
        license,
        infis,
        '2021-07-01' begDate,
        '2030-12-31' endDate,
        medicalAidProfile_id,
-       adultUetDoctor,
-       adultUetAverageMedWorker,
-       childUetDoctor,
-       childUetAverageMedWorker,
        rbMedicalKind_id,
-       UET,
-       departCode,
-       isComplex,
-       maxSubServices
+       departCode
 from rbService order by id desc limit 1;
 
+
+select *
+from rbService order by id desc ;
+
+
+# insert into ActionType(createDatetime, createPerson_id, modifyDatetime, modifyPerson_id, class, group_id, code, name, title, flatCode, sex, age, age_bu, age_bc, age_eu, age_ec, office,
+                       showInForm, genTimetable, service_id, quotaType_id, context, defaultPlannedEndDate, defaultExecPerson_id, isMES, nomenclativeService_id, prescribedType_id,
+                       shedule_id, testTubeType_id, jobType_id, layout, loadPrintTemplate_id, dynamicNumberType_id, counter_id, ttjExternalCounter_id, ttjExternalCounter_id_cached)
+select *
+from
+(select now() createDatetime,
+       null createPerson_id,
+       now() modifyDatetime,
+       null modifyPerson_id,
+       class,
+       group_id,
+       s1.code code,
+       s1.name name,
+       s1.name title,
+       flatCode,
+       sex,
+       age,
+       age_bu,
+       age_bc,
+       age_eu,
+       age_ec,
+       office,
+       showInForm,
+       genTimetable,
+       service_id,
+       quotaType_id,
+       context,
+       defaultPlannedEndDate,
+       defaultExecPerson_id,
+       isMES,
+       nomenclativeService_id,
+       prescribedType_id,
+       shedule_id,
+       testTubeType_id,
+       jobType_id,
+       layout,
+       hasPrescriptions,
+       dynamicNumberType_id,
+       counter_id,
+       ttjExternalCounter_id,
+       ttjExternalCounter_id_cached
+from ActionType at
+join rbService s1 on s1.id = (select id from rbService where id = 14239)) as tmp
+where not exists(select * from ActionType where tmp.name = name = tmp.code = code)
+
+
+insert into ActionType_Service(master_id, idx, service_id, begDate, endDate)
+select *
+from
+(select at.id master_id, idx, s1.id service_id, ats.begDate, ats.endDate
+ from
+    ActionType_Service ats
+join ActionType at on at.id = (select id from ActionType where id = 11828)
+join rbService s1 on s1.id = (select id from rbService where id = 14239)) as tmp
+where not exists(select * from ActionType_Service where tmp.service_id = service_id and tmp.master_id = master_id) limit 1
+
+
+select *
+from
+(select
+        now() createDatetime,
+        null createPerson_id,
+        now() modifyDatetime,
+        null modifyPerson_id,
+        124 priceList_id,
+        deleted,
+        service_id,
+        s1.code serviceCodeOW,
+        s1.name serviceNameOW,
+        s1.begDate begDate,
+        s1.endDate endDate,
+        3800 price,
+        isAccumulativePrice,
+        limitPerDay,
+        limitPerMonth,
+        limitPerPriceList,
+        LCE,
+        LCE_test
+ from PriceListItem pli
+join rbService s1 on s1.id = (select id from rbService where id = 14239)) as tmp
+where not exists(select * from PriceListItem where tmp.service_id = service_id and tmp.serviceNameOW = serviceNameOW and tmp.serviceCodeOW = serviceCodeOW) limit 1
+
+
+
+select *
+from ActionType where code = 'A12.05.004.006';
 
 
 
