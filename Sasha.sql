@@ -1215,7 +1215,7 @@ join EventType_Action eta1 on eta1.id = (select id from EventType_Action order b
 where at.code = @code;
 
 select *
-from Action where id = 3977422;
+from Action where id = 23157119;
 
 select *
 from ActionType where id = 3977422;
