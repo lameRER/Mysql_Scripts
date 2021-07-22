@@ -1214,5 +1214,6 @@ left join EventType et on et.deleted =0 and et.id != 109
 join EventType_Action eta1 on eta1.id = (select id from EventType_Action order by id desc limit 1)
 where at.code = @code;
 
-
+select *
+from Action where id = 23157490;
 
