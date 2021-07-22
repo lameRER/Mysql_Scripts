@@ -214,12 +214,12 @@ select *
 from Service;
 
 
-select d.*
+select ed.*
 from Event e
 join Client c on c.id = e.client_id
-left join Diagnosis d on d.client_id = c.id and d.deleted = 0
-left join Diagnostic d1 on d1.event_id = e.id and d.id = d1.diagnosis_id and d1.deleted = 0
-where e.id =1323619
+left join Event_Diagnosis ed on ed.event_id = e.id and ed.deleted = 0 and ed.diagnosisType_id = 2 and ed.diagnosisKind_id = 4
+join Diagnosis d on d.client_id = c.id
+where e.id in(20000010,20000021)
 ;
 
 select *
