@@ -31,97 +31,21 @@ from Event where client_id = 331512 and externalId = '2810';
 
 
 
-select a.id,
-       a.createDatetime,
-       a.createPerson_id,
-       a.modifyDatetime,
-       a.modifyPerson_id,
-       a.deleted,
-       externalId,
-       actionType_id,
-       a.event_id,
-       idx,
-       directionDate,
-       status,
-       setPerson_id,
-       isUrgent,
-       begDate,
-       plannedEndDate,
-       a.endDate,
-       note,
-       a.person_id,
-       office,
-       amount,
-       uet,
-       expose,
-       payStatus,
-       account,
-       finance_id,
-       prescription_id,
-       takenTissueJournal_id,
-       contract_id,
-       coordDate,
-       coordPerson_id,
-       coordAgent,
-       coordInspector,
-       coordText,
-       hospitalUidFrom,
-       pacientInQueueType,
-       AppointmentType,
-       a.version,
-       parentAction_id,
-       uuid_id,
-       dcm_study_uid,
-       uuid,
-       d.id,
-       d.createDatetime,
-       d.createPerson_id,
-       d.modifyDatetime,
-       d.modifyPerson_id,
-       d.deleted,
-       d.event_id,
-       diagnosis_id,
-       d.diagnosisType_id,
-       d.character_id,
-       stage_id,
-       phase_id,
-       d.dispanser_id,
-       sanatorium,
-       hospital,
-       d.traumaType_id,
-       speciality_id,
-       d.person_id,
-       healthGroup_id,
-       result_id,
-       d.setDate,
-       d.endDate,
-       notes,
-       rbAcheResult_id,
-       d.version,
-       action_id,
-       diagnosis_description,
-       d.MKB,
-       d.MKBEx,
-       MKB2,
-       who_id,
-       d1.id,
-       d1.createDatetime,
-       d1.createPerson_id,
-       d1.modifyDatetime,
-       d1.modifyPerson_id,
-       d1.deleted,
-       client_id,
-       d1.diagnosisType_id,
-       d1.character_id,
-       d1.MKB,
-       d1.MKBEx,
-       d1.dispanser_id,
-       d1.traumaType_id,
-       d1.setDate,
-       d1.endDate,
-       mod_id,
-       d1.person_id
-from Action a, Diagnostic d, Diagnosis d1 where a.event_id = 20435323 and a.id = d.action_id and MKB = 'N84.0' and d1.id = d.diagnosis_id;
+select *
+from Action a, Diagnostic d, Diagnosis d1 where a.event_id = 20435323 and a.id = d.action_id and d.MKB = 'N84.0' and d1.id = d.diagnosis_id;
+
+
+
+select distinct *
+from Diagnosis d
+join Diagnostic d1 on d1.diagnosis_id = d.id and d1.deleted = 0
+join Action a on a.id = d1.action_id and a.deleted =0
+join ActionType at on at.id = a.actionType_id and at.deleted = 0 and at.id = 4544
+where d.client_id = 331512 and d.deleted = 0;
+
+
+select *
+from rbDiseaseCharacter;
 
 
 select *

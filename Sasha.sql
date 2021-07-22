@@ -976,3 +976,18 @@ values  (48, 11, 49, 1, '<p style=''font-size: 11pt; text-align:center; margin-b
 
 select *
 from rbEpicrisisTemplates;
+
+
+
+select *
+from rbService where id = 13101
+
+
+select *
+from PriceListItem where service_id = 13101;
+
+
+
+select *
+from ActionType_Service where service_id = 13101
+;
