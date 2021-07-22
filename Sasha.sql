@@ -1110,13 +1110,42 @@ where not exists(select * from PriceListItem where tmp.service_id = service_id a
 
 
 select *
-from PriceListItem where serviceCodeOW = 'A12.05.004.006';
+from PriceListItem where serviceCodeOW in('A12.05.004.006','A08.30.005.002');
 
 
 select *
-from ActionType where code = 'A12.05.004.006';
+from ActionType where code in( 'A12.05.004.006','A08.30.005.002');
 
 
+
+select *
+from PriceListItem pli
+join rbService rS on pli.service_id = rS.id
+join ActionType_Service ats on rS.id = ats.service_id
+join ActionType A on ats.master_id = A.id and A.id = 11828
+
+
+select *
+from EventType_Action where actionType_id = 11828;
+
+select *
+from ActionType_Service where master_id =11828;
+
+
+select *
+from rbService where id = 14239;
+
+
+
+select *
+from PriceListItem where service_id = 14239;
+
+
+select *
+from PriceListItem where serviceCodeOW = 'A12.05.004.006';
+
+select *
+from rbService where id =12659;
 
 select *
 from rbPrintTemplate where templateText regexp  'SpecialVar_PrintAmbInstResult' order by id desc ;
