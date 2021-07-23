@@ -44,13 +44,31 @@ select  distinct ap.*
 from ActionProperty ap
          join Action a on a.id = ap.action_id and a.actionType_id = 43419
          join ActionType at on at.id = a.actionType_id
-         left join ActionPropertyType apt on apt.actionType_id = at.id
+         left join ActionPropertyType apt on apt.actionType_id = at.id and ap.type_id = apt.id
          join Event e on e.id = a.event_id
          join Client c on c.id = e.client_id and c.id =768493
          left join ActionType at2 on at2.id = @acNew
          left join ActionPropertyType apt1 on apt1.actionType_id = at2.id and apt1.deleted = 0 and apt1.name = apt.name and apt1.typeName = apt.typeName and apt1.idx = apt.idx
 
 
+select *
+from ActionProperty_Job_Ticket where id =27849269 ;
+
+
+
+select *
+from ActionPropertyType where id =14569;
+
+select *
+from Client where id = 768493;
+
+# select *
+# from ActionProperty where action_id in(
+select ap.*
+from ActionProperty ap
+join Action a on a.id = ap.action_id and a.actionType_id = @acNew
+where ap.createDatetime regexp '2021-07-23' and ap.deleted = 1
+# ) and deleted = 0;
 
 # select * from
 update
