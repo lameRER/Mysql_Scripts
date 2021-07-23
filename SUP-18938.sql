@@ -8,6 +8,27 @@ WHERE a.actionType_id = 43232 AND jt.datetime >= '2021-07-23 11:30:00' AND a.sta
 
 
 
+select distinct e.*
+from Client c
+join Event e on e.client_id = c.id and e.id = 13599772
+where c.id = 768493;
+
+
+select *
+from ActionProperty ap
+join Action a on a.id = ap.action_id and a.actionType_id = 43419
+join ActionType at on at.id = a.actionType_id
+left join ActionPropertyType apt on apt.actionType_id = at.id and apt.id = ap.type_id
+join Event e on e.id = a.event_id
+join Client c on c.id = e.client_id and c.id =768493
+
+select *
+from ActionPropertyType where id  =13625;
+
+select *
+from Action, Event where Action.event_id = Event.id and Event.client_id = 768493;
+
+
 set @acOld = 43232;
 set @acNew = 43419;
 
@@ -71,21 +92,21 @@ left join ActionPropertyType apt1 on apt1.actionType_id = at2.id and apt1.delete
 
 
 
-# select * from
-update
+select * from
+# update
               ActionProperty ap
 join Action a on a.id = ap.action_id and a.deleted = 0
-join ActionType at1 on at1.id = a.actionType_id and at1.deleted = 0 and at1.id = @acOld
+join ActionType at1 on at1.id = a.actionType_id and at1.deleted = 0 and at1.id = @acNew
 join ActionPropertyType apt on apt.actionType_id = at1.id and apt.id = ap.type_id and apt.deleted = 0
 left join ActionType at2 on at2.id = @acNew
 left join ActionPropertyType apt1 on apt1.actionType_id = at2.id and apt1.deleted = 0 and apt1.name = apt.name and apt1.typeName = apt.typeName and apt1.idx = apt.idx
-set ap.type_id = apt1.id
+# set ap.type_id = apt1.id
 where ap.action_id in
 (select ap.action_id from ActionProperty ap
 JOIN ActionProperty_Job_Ticket apjt using(id)
 JOIN Job_Ticket jt ON apjt.value = jt.id and jt.datetime >= '2021-07-23 13:00:00'
 join Action a on a.id = ap.action_id and a.deleted =0 and a.status = 1
-join ActionType at1 on at1.id = a.actionType_id and at1.deleted = 0 and at1.id = @acOld)
+join ActionType at1 on at1.id = a.actionType_id and at1.deleted = 0 and at1.id = @acNew)
 
 
 
