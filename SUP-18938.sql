@@ -12,14 +12,66 @@ set @acOld = 43232;
 set @acNew = 43419;
 
 
-select ap.* from ActionProperty ap
+select *
+from Job_Ticket;
+
+select jt.datetime, at1.id, @acOld, ap.* from ActionProperty ap
 left JOIN ActionProperty_Job_Ticket apjt using(id)
- JOIN Job_Ticket jt ON apjt.value = jt.id and jt.datetime >= '2021-07-23 13:00:00'
+left JOIN Job_Ticket jt ON apjt.value = jt.id and jt.datetime >= '2021-07-23 13:00:00'
 join Action a on a.id = ap.action_id and a.deleted =0 and a.status = 1
 join ActionType at1 on at1.id = a.actionType_id and at1.deleted = 0 and at1.id = @acOld
-left join ActionPropertyType apt on apt.actionType_id = at1.id and apt.id = ap.type_id and apt.deleted = 0
+join ActionPropertyType apt on apt.actionType_id = at1.id and apt.id = ap.type_id and apt.deleted = 0
 left join ActionType at2 on at2.id = @acNew
 left join ActionPropertyType apt1 on apt1.actionType_id = at2.id and apt1.deleted = 0 and apt1.name = apt.name and apt1.typeName = apt.typeName and apt1.idx = apt.idx;
+
+
+
+
+
+# select * from
+update
+              ActionProperty ap
+join Action a on a.id = ap.action_id and a.deleted = 0
+join ActionType at1 on at1.id = a.actionType_id and at1.deleted = 0 and at1.id = @acOld
+join ActionPropertyType apt on apt.actionType_id = at1.id and apt.id = ap.type_id and apt.deleted = 0
+left join ActionType at2 on at2.id = @acNew
+left join ActionPropertyType apt1 on apt1.actionType_id = at2.id and apt1.deleted = 0 and apt1.name = apt.name and apt1.typeName = apt.typeName and apt1.idx = apt.idx
+set ap.type_id = apt1.id
+where ap.action_id in
+(select ap.action_id from ActionProperty ap
+JOIN ActionProperty_Job_Ticket apjt using(id)
+JOIN Job_Ticket jt ON apjt.value = jt.id and jt.datetime >= '2021-07-23 13:00:00'
+join Action a on a.id = ap.action_id and a.deleted =0 and a.status = 1
+join ActionType at1 on at1.id = a.actionType_id and at1.deleted = 0 and at1.id = @acOld)
+
+
+
+select * from
+              ActionProperty ap
+join Action a on a.id = ap.action_id and a.deleted = 0
+join ActionType at1 on at1.id = a.actionType_id and at1.deleted = 0 and at1.id = @acNew
+join ActionPropertyType apt on apt.actionType_id = at1.id and apt.id = ap.type_id and apt.deleted = 0
+left join ActionType at2 on at2.id = @acNew
+left join ActionPropertyType apt1 on apt1.actionType_id = at2.id and apt1.deleted = 0 and apt1.name = apt.name and apt1.typeName = apt.typeName and apt1.idx = apt.idx
+where ap.action_id in
+(select ap.action_id from ActionProperty ap
+JOIN ActionProperty_Job_Ticket apjt using(id)
+JOIN Job_Ticket jt ON apjt.value = jt.id and jt.datetime >= '2021-07-23 13:00:00'
+join Action a on a.id = ap.action_id and a.deleted =0 and a.status = 1
+join ActionType at1 on at1.id = a.actionType_id and at1.deleted = 0 and at1.id = @acNew)
+
+
+
+select *
+from ActionPropertyType where id =14569;
+
+
+select *
+from ActionProperty where id = 27850042;
+
+
+select *
+from Action where id = 25822786;
 
 
 
