@@ -8,12 +8,20 @@ WHERE a.actionType_id = 43232 AND jt.datetime >= '2021-07-23 11:30:00' AND a.sta
 
 
 
-set @acOld = 11040;
-set @acNew = 11078;
+set @acOld = 43232;
+set @acNew = 43419;
 
 
 select *
 from ActionPropertyType where actionType_id = @acOld;
+
+
+
+select *
+from Action a
+join Action_backUp_2021_07_23 ab on ab.id = a.id
+where ab.actionType_id = @acOld and a.actionType_id = @acNew
+
 
 
 
