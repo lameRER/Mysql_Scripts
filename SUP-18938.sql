@@ -52,14 +52,31 @@ from ActionProperty ap
 
 
 
-select *
-from ActionProperty ap
-join Action a on a.id = ap.action_id and a.actionType_id = 43419
-join ActionType at on at.id = a.actionType_id
+# select * from
+update
+              ActionProperty ap
+join Action a on a.id = ap.action_id and a.id in(select action_id from ActionProperty ap
+    join Action a on a.id = ap.action_id and a.actionType_id = @acNew
+    join ActionType at on at.id = a.actionType_id
+    join ActionPropertyType apt on apt.actionType_id = at.id
+    where ap.type_id in (select id from ActionPropertyType where actionType_id = @acOld) group by action_id)
+join ActionType at on at.id = a.actionType_id and at.id = @acNew
 join ActionPropertyType apt on apt.actionType_id = at.id
-where ap.type_id in (select id from ActionPropertyType where actionType_id = @acOld);
+ join ActionType at2 on at2.id = @acOld
+ join ActionPropertyType apt1 on apt1.id = ap.type_id and apt1.actionType_id = at2.id and apt1.deleted = 0 and apt1.name = apt.name and apt1.typeName = apt.typeName and apt1.idx = apt.idx
+set ap.type_id = apt.id
+where ap.type_id in (select id from ActionPropertyType where actionType_id = @acOld)
 
 
+select *
+from ActionPropertyType where id in(14568,13624);
+
+
+select *
+from ActionPropertyType where id in(14568,13625);
+
+select *
+from ActionPropertyType where id =13625;
 
 
 
@@ -114,7 +131,6 @@ from ActionPropertyType where id = 14569;
 
 select *
 from
-(select ap.* from
 # update
               ActionProperty ap
 join Action a on a.id = ap.action_id and a.deleted = 0
@@ -128,7 +144,7 @@ where ap.action_id in
 JOIN ActionProperty_Job_Ticket apjt using(id)
 JOIN Job_Ticket jt ON apjt.value = jt.id and jt.datetime >= '2021-07-23 13:00:00'
 join Action a on a.id = ap.action_id and a.deleted =0 and a.status = 1
-join ActionType at1 on at1.id = a.actionType_id and at1.deleted = 0 and at1.id = @acNew)) as tmp
+join ActionType at1 on at1.id = a.actionType_id and at1.deleted = 0 and at1.id = @acNew)
 where not exists(select * from ActionProperty where tmp.id = id and tmp.action_id = action_id and tmp.type_id = type_id)
 
 
