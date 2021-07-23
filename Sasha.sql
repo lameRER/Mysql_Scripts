@@ -1227,3 +1227,8 @@ from ActionProperty where id = 3977422;
 
 select *
 from ActionPropertyType where id = 3977422;
+
+
+
+select *
+from s11vm.rbprinttemplate where id = 504;
