@@ -8,17 +8,23 @@ WHERE a.actionType_id = 43232 AND jt.datetime >= '2021-07-23 11:30:00' AND a.sta
 
 
 
-set @acOld = 43232;
-set @acNew = 43419;
+set @acOld = 11040;
+set @acNew = 11078;
+
+
+select *
+from ActionPropertyType where actionType_id = @acOld;
+
+
 
 
 select *
 from Job_Ticket;
 
-select jt.datetime, at1.id, @acOld, ap.* from ActionProperty ap
+select a.*, jt.datetime, at1.id, @acOld, ap.* from ActionProperty ap
 left JOIN ActionProperty_Job_Ticket apjt using(id)
 left JOIN Job_Ticket jt ON apjt.value = jt.id and jt.datetime >= '2021-07-23 13:00:00'
-join Action a on a.id = ap.action_id and a.deleted =0 and a.status = 1
+join Action a on a.id = ap.action_id and a.deleted =0-- and a.status = 1
 join ActionType at1 on at1.id = a.actionType_id and at1.deleted = 0 and at1.id = @acOld
 join ActionPropertyType apt on apt.actionType_id = at1.id and apt.id = ap.type_id and apt.deleted = 0
 left join ActionType at2 on at2.id = @acNew
@@ -56,10 +62,25 @@ left join ActionPropertyType apt1 on apt1.actionType_id = at2.id and apt1.delete
 where ap.action_id in
 (select ap.action_id from ActionProperty ap
 JOIN ActionProperty_Job_Ticket apjt using(id)
-JOIN Job_Ticket jt ON apjt.value = jt.id and jt.datetime >= '2021-07-23 13:00:00'
+JOIN Job_Ticket jt ON apjt.value = jt.id and jt.datetime >= '2021-07-23 13:30:00'
 join Action a on a.id = ap.action_id and a.deleted =0 and a.status = 1
 join ActionType at1 on at1.id = a.actionType_id and at1.deleted = 0 and at1.id = @acOld)
 
+
+
+select * from
+              ActionProperty ap
+join Action a on a.id = ap.action_id and a.deleted = 0
+join ActionType at1 on at1.id = a.actionType_id and at1.deleted = 0 and at1.id = @acNew
+join ActionPropertyType apt on apt.actionType_id = at1.id and apt.id = ap.type_id and apt.deleted = 0
+left join ActionType at2 on at2.id = @acNew
+left join ActionPropertyType apt1 on apt1.actionType_id = at2.id and apt1.deleted = 0 and apt1.name = apt.name and apt1.typeName = apt.typeName and apt1.idx = apt.idx
+where ap.action_id in
+(select ap.action_id from ActionProperty ap
+JOIN ActionProperty_Job_Ticket apjt using(id)
+JOIN Job_Ticket jt ON apjt.value = jt.id and jt.datetime >= '2021-07-23 13:00:00'
+join Action a on a.id = ap.action_id and a.deleted =0 and a.status = 1
+join ActionType at1 on at1.id = a.actionType_id and at1.deleted = 0 and at1.id = @acNew)
 
 
 select *
@@ -122,7 +143,7 @@ from ActionType where id =43419
 
 
 select *
-from ActionType where name ='Определение РНК коронавируса SARS-cov-2 в мазках со слизистой оболочки ротоглотки методом ПЦР (НЕ ИСПОЛЬЗОВАТЬ!!!)';
+from ActionType where name regexp 'Определение РНК';
 
 select *
 from ActionType order by id desc;
