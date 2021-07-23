@@ -113,6 +113,10 @@ JOIN ActionProperty ap ON Action.id = ap.action_id AND ap.deleted=0 AND ap.type_
 JOIN ActionProperty_String aps ON ap.id = aps.id
 WHERE Action.id = context.actionId"""', null, null);
 
-
-select *
+insert into OrgStructure_ActionType(master_id, actionType_id)
+select  id, 84654
 from OrgStructure where name regexp 'Травматологическое отделение';
+
+insert into DestinationTree_ActionType(master_id, actionType_id, name)
+select id, 84654, (select name from ActionType where id = 84654)
+from DestinationTree where deleted = 0 and name = 'Осмотры';
