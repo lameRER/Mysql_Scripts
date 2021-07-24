@@ -114,11 +114,11 @@ JOIN ActionProperty_String aps ON ap.id = aps.id
 WHERE Action.id = context.actionId"""', null, null);
 
 insert into OrgStructure_ActionType(master_id, actionType_id)
-select  id, 84654
+select  id, 84661
 from OrgStructure where name regexp 'Травматологическое отделение';
 
 insert into DestinationTree_ActionType(master_id, actionType_id, name)
-select id, 84654, (select name from ActionType where id = 84654)
+select id, 84661, (select name from ActionType where id = 84661)
 from DestinationTree where deleted = 0 and name = 'Осмотры';
 
 select *
@@ -425,20 +425,29 @@ values  ('','2019-11-24 12:28:46', 877, '2019-11-24 12:48:08', 877, 0, 2, null, 
          0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, null, 0, 0, 0, 0, 0, '', 0, 0, null, null, 0, 0, null, 0, 0, 0, 0, 0, null);
 
 
-insert into s12.ActionPropertyType (id, deleted, actionType_id, idx, template_id, name, shortName, descr, unit_id, typeName, valueDomain, defaultValue, isVector, norm, sex, age, penalty, penaltyUserProfile, penaltyDiagnosis, visibleInJobTicket, visibleInTableRedactor, isAssignable, test_id, defaultEvaluation, canChangeOnlyOwner, isActionNameSpecifier, laboratoryCalculator, inActionsSelectionTable, redactorSizeFactor, isFrozen, typeEditable, visibleInDR, userProfile_id, userProfileBehaviour, copyModifier, isVitalParam, vitalParamId, isODIIParam, ticketsNeeded, customSelect, autoFieldUserProfile, formulaAlias, incrementOnSave)
-values  (48536, 0, 84661, 0, null, 'Номерок', '', '', null, 'JobTicket', '7889', null, 0, '', 0, '', 0, null, null, 0, 0, 0, null, 0, 0, 0, null, 0, 0, 0, 1, 1, null, 0, 0, 0, null, 0, null, null, null, null, 0),
-        (48537, 0, 84661, 3, null, 'Наименование', '', '', null, 'String', '"Эндохирургическая аппендэктомия","Пластика позвонка","Удаление грыжи межпозвонкового диска",*', null, 0, '', 0, '', 100, null, null, 1, 0, 0, null, 0, 0, 0, null, 0, 0, 0, 1, 1, null, 0, 0, 0, null, 0, null, null, null, null, 0),
-        (48538, 0, 84661, 4, null, 'Операция', '', '', null, 'String', '"1 - основная", "0 - не основная"', null, 0, '', 0, '', 0, null, null, 1, 0, 0, null, 0, 0, 0, null, 0, 0, 0, 1, 1, null, 0, 0, 0, null, 0, null, null, null, null, 0),
-        (48539, 0, 84661, 5, null, 'Тип операции', '', '', null, 'String', '"Полостная", "Лапароскопическая", "БИОС", "Металостеосинтез", "Эндопротезирование", "PFN"', null, 0, '', 0, '', 0, null, null, 1, 0, 0, null, 0, 0, 0, null, 0, 0, 0, 1, 1, null, 0, 0, 0, null, 0, null, null, null, null, 0),
-        (48540, 0, 84661, 6, null, 'Характер операции', '', '', null, 'String', '', null, 0, '', 0, '', 0, null, null, 1, 0, 0, null, 0, 0, 0, null, 0, 0, 0, 1, 1, null, 0, 0, 0, null, 0, null, null, null, null, 0),
-        (48541, 0, 84661, 7, null, 'Анестезия', '', '', null, 'String', '"1 - общая", "2 - местная"', null, 0, '', 0, '', 0, null, null, 1, 0, 0, null, 0, 0, 0, null, 0, 0, 0, 1, 1, null, 0, 0, 0, null, 0, null, null, null, null, 0),
-        (48542, 0, 84661, 8, null, 'Хирургические осложнения', '', '', null, 'String', '', 'нет', 0, '', 0, '', 0, null, null, 1, 0, 0, null, 0, 0, 0, null, 0, 0, 0, 1, 1, null, 0, 0, 0, null, 0, null, null, null, null, 0),
-        (48543, 0, 84661, 9, null, 'Протокол оперпации', '', '', null, 'String', '', null, 0, '', 0, '', 0, null, null, 1, 0, 0, null, 0, 0, 0, null, 0, 0, 0, 1, 1, null, 0, 0, 0, null, 0, null, null, null, null, 0),
-        (48544, 0, 84661, 1, null, 'Операционная', '', '', null, 'String', '"1","2","3","4"', null, 0, '', 0, '', 100, null, null, 1, 0, 0, null, 0, 0, 0, null, 0, 0, 0, 1, 1, null, 0, 0, 0, null, 0, null, null, null, null, 0),
-        (48545, 0, 84661, 2, null, 'Показания к оперативному вмешательству', '', '', null, 'String', '', null, 0, '', 0, '', 100, null, null, 1, 0, 0, null, 0, 0, 0, null, 0, 0, 0, 1, 1, null, 0, 0, 0, null, 0, null, null, null, null, 0);
+insert into s12.ActionPropertyType (deleted, actionType_id, idx, template_id, name, shortName, descr, unit_id, typeName,
+                                    valueDomain, defaultValue, isVector, norm, sex, age, penalty, penaltyUserProfile, penaltyDiagnosis,
+                                    visibleInJobTicket, visibleInTableRedactor, isAssignable, test_id, defaultEvaluation,
+                                    canChangeOnlyOwner, isActionNameSpecifier, laboratoryCalculator, inActionsSelectionTable,
+                                    redactorSizeFactor, isFrozen, typeEditable, visibleInDR, userProfile_id, userProfileBehaviour,
+                                    copyModifier, ticketsNeeded, customSelect,
+                                    autoFieldUserProfile, formulaAlias)
+values
+       (0, 84661, 0, null, 'Номерок', '', '', null, 'JobTicket', '7889', null, 0, '', 0, '', 0, null, null, 0, 0, 0, null, 0, 0, 0, null, 0, 0, 0, 1, 1, null, 0, 0,null, null, null, null),
+        (0, 84661, 3, null, 'Наименование', '', '', null, 'String', '"Эндохирургическая аппендэктомия","Пластика позвонка","Удаление грыжи межпозвонкового диска",*', null, 0, '', 0, '', 100, null, null, 1, 0, 0, null, 0, 0, 0, null, 0, 0, 0, 1, 1, null, 0, 0,null, null, null, null),
+        (0, 84661, 4, null, 'Операция', '', '', null, 'String', '"1 - основная", "0 - не основная"', null, 0, '', 0, '', 0, null, null, 1, 0, 0, null, 0, 0, 0, null, 0, 0, 0, 1, 1, null, 0, 0,null, null, null, null),
+        (0, 84661, 5, null, 'Тип операции', '', '', null, 'String', '"Полостная", "Лапароскопическая", "БИОС", "Металостеосинтез", "Эндопротезирование", "PFN"', null, 0, '', 0, '', 0, null, null, 1, 0, 0, null, 0, 0, 0, null, 0, 0, 0, 1, 1, null, 0, 0,null, null, null, null),
+        (0, 84661, 6, null, 'Характер операции', '', '', null, 'String', '', null, 0, '', 0, '', 0, null, null, 1, 0, 0, null, 0, 0, 0, null, 0, 0, 0, 1, 1, null, 0, 0,null, null, null, null),
+        (0, 84661, 7, null, 'Анестезия', '', '', null, 'String', '"1 - общая", "2 - местная"', null, 0, '', 0, '', 0, null, null, 1, 0, 0, null, 0, 0, 0, null, 0, 0, 0, 1, 1, null, 0, 0,null, null, null, null),
+        (0, 84661, 8, null, 'Хирургические осложнения', '', '', null, 'String', '', 'нет', 0, '', 0, '', 0, null, null, 1, 0, 0, null, 0, 0, 0, null, 0, 0, 0, 1, 1, null, 0, 0,null, null, null, null),
+        (0, 84661, 9, null, 'Протокол оперпации', '', '', null, 'String', '', null, 0, '', 0, '', 0, null, null, 1, 0, 0, null, 0, 0, 0, null, 0, 0, 0, 1, 1, null, 0, 0,null, null, null, null),
+        (0, 84661, 1, null, 'Операционная', '', '', null, 'String', '"1","2","3","4"', null, 0, '', 0, '', 100, null, null, 1, 0, 0, null, 0, 0, 0, null, 0, 0, 0, 1, 1, null, 0, 0,null, null, null, null),
+        (0, 84661, 2, null, 'Показания к оперативному вмешательству', '', '', null, 'String', '', null, 0, '', 0, '', 100, null, null, 1, 0, 0, null, 0, 0, 0, null, 0, 0, 0, 1, 1, null, 0, 0,null, null, null, null);
 
-insert into s12.rbPrintTemplate (id, createDatetime, createPerson_id, modifyDatetime, modifyPerson_id, code, name, context, fileName, default, dpdAgreement, type, hideParam, banUnkeptDate, counter_id, deleted, isPatientAgreed, groupName, documentType_id, isEditableInWeb, pageOrientation)
-values  (1136, '2019-11-24 12:54:30', 877, '2019-11-26 18:07:40', 877, 'DR_oper', 'Протокол операции', 'DR_oper', '', '
+insert into s12.rbPrintTemplate (createDatetime, createPerson_id, modifyDatetime, modifyPerson_id, code, name, context, fileName,
+                                 `default`, dpdAgreement, type, hideParam, banUnkeptDate, counter_id, deleted, isPatientAgreed,
+                                 groupName, documentType_id, isEditableInWeb, pageOrientation)
+values  ('2019-11-24 12:54:30', 877, '2019-11-26 18:07:40', 877, 'DR_oper', 'Протокол операции', 'DR_oper', '', '
 <html>
 <!--Параметры страницы-->
 
@@ -484,3 +493,62 @@ values  (1136, '2019-11-24 12:54:30', 877, '2019-11-26 18:07:40', 877, 'DR_oper'
 
 
 </html>', 0, 0, 0, 0, null, 0, 0, '', null, 0, 'P');
+
+select * from ActionPropertyType where actionType_id = 84659
+
+
+select * from EventType
+
+insert into Contract_Tariff(deleted, master_id, eventType_id, tariffType, service_id, tariffCategory_id, begDate, endDate, sex, age, attachType_id, attachLPU_id, unit_id, amount, uet, price, frag1Start, frag1Sum, frag1Price, frag2Start, frag2Sum, frag2Price, limitationExceedMode, limitation, priceEx, limitation2ExceedMode, limitation2, priceEx2, MKB, federalPrice, federalLimitation, speciality_id, vat, createPerson_id, createDatetime, modifyPerson_id, modifyDatetime, caseCast_id)\
+select
+       deleted,
+      3226 master_id,
+       eventType_id,
+       2 tariffType,
+       r.id service_id,
+       tariffCategory_id,
+       '2021-07-01' begDate,
+       '2022-07-01' endDate,
+       sex,
+       age,
+       attachType_id,
+       attachLPU_id,
+       unit_id,
+       amount,
+       uet,
+      10000 price,
+       frag1Start,
+       frag1Sum,
+       frag1Price,
+       frag2Start,
+       frag2Sum,
+       frag2Price,
+       limitationExceedMode,
+       limitation,
+       priceEx,
+       limitation2ExceedMode,
+       limitation2,
+       priceEx2,
+       MKB,
+       federalPrice,
+       federalLimitation,
+       speciality_id,
+       vat,
+       ct.createPerson_id,
+       ct.createDatetime,
+       ct.modifyPerson_id,
+       ct.modifyDatetime,
+       ct.caseCast_id
+from rbService r
+join Contract_Tariff ct on ct.id = (select id from Contract_Tariff order by id desc limit 1)
+where r.id = 79354;
+
+select *
+from Contract_Tariff where eventType_id = 84;
+
+select *
+from Contract;
+
+select *
+from Event where id = 4405350
+;
