@@ -130,4 +130,8 @@ from ActionType where  name regexp 'Осмотр отделения травма
 ';
 
 select *
-from ActionPropertyType where actionType_id = 78123;
+from ActionPropertyType where actionType_id = 78123 and id = ;
+
+
+select *
+from ActionPropertyType where id = 376989;
