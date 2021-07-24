@@ -158,6 +158,9 @@ actionTypeId, actionPropertyTypeId,
 select *
 from Event where id = 4404977;
 
+select at.name, a.*
+from Action a, ActionType at where a.event_id = 4404977 and at.id = a.actionType_id;
+
 select *
 from Client where ;
 
@@ -278,3 +281,19 @@ values
         (0, 84656, 9, null, 'Смена белья', '', '', null, 'String', '"+","-"', null, 0, '', 0, '', 0, null, null, 0, 0, 0, null, 0, 0, 0, null, 0, 0, 0, 1, 1, null, 0, 0, null, null, null, null),
         (1, 84656, 11, null, 'Сатурация вечер', '', '', null, 'Integer', '', null, 0, '', 0, '', 0, null, null, 0, 0, 0, null, 0, 0, 0, null, 0, 0, 0, 1, 0, null, 0, 0, null, null, null, null),
         (0, 84656, 10, null, 'Сатурация', '', '', null, 'Integer', '', null, 0, '', 0, '', 0, null, null, 0, 0, 0, null, 0, 0, 0, null, 0, 0, 0, 1, 0, null, 0, 0, null, null, null, null);
+
+
+select
+Date(a1.plannedEndDate) `Дата операции`,
+a1.specifiedName `Название операции`
+from Event e
+join Action a on a.event_id = e.id and a.deleted = 0
+join Action a1 on a.parent_id = a1.id
+where e.deleted = 0 and e.id = 4405084;
+
+
+select at.name, a.*
+from Action a, ActionType at where a.event_id = 4405084 and at.id = a.actionType_id;
+
+select *
+from Event where externalId = '16231';
