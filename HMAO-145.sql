@@ -155,25 +155,45 @@ order by aps.id desc limit 1;
 actionTypeId, actionPropertyTypeId,
 
 
+select *
+from Event where id = 4404977;
+
+select *
+from Client where ;
+
  SQL="""SELECT lastname FROM Client where id = context.clientId ;"""
 
 
-SQL="""select aps.value from ActionProperty ap
+# SQL="""
+select '' union
+(select aps.value from ActionProperty ap
 join ActionProperty_String aps using(id)
 join Action a on a.id = ap.action_id and a.deleted = 0
 join ActionType at on at.id = a.actionType_id and at.deleted = 0 and at.id = 40662
-join ActionPropertyType apt on apt.id = ap.type_id and apt.actionType_id = at.id and apt.deleted =0 and apt.id = 384
+join ActionPropertyType apt on apt.id = ap.type_id and apt.actionType_id = at.id and apt.deleted =0 and apt.id = 380
 join Event e on a.event_id = e.id and e.deleted = 0 and e.eventType_id = context.eventTypeId
 join Client c on c.id = e.client_id and c.id = context.clientId
 where ap.deleted = 0
-order by aps.id desc limit 1;"""
+order by aps.id desc limit 1);
+# """
 
 clientId, eventTypeId
 
-select *
+select distinct rep.*
 from rbEpicrisisTemplates ret
 join rbEpicrisisTemplates_rbEpicrisisSections retres on retres.id_rbEpicrisisTemplates = ret.id
 join rbEpicrisisSections res on res.id = retres.id_rbEpicrisisSections
 join rbEpicrisisSections_rbEpicrisisProperty resrep on resrep.id_rbEpicrisisSections = res.id
 join rbEpicrisisProperty rep on rep.id = resrep.id_rbEpicrisisProperty
 where ret.id = 5
+
+
+select *
+from rbEpicrisisProperty where id = 111;
+
+select aps.value from ActionProperty ap
+left join ActionProperty_String aps using(id)
+join Action a on ap.action_id = a.id and a.deleted = 0 and a.status = 2 and a.event_id = %s
+join ActionType at2 on at2.id = a.actionType_id and at2.deleted = 0 and at2.id = 40662
+join ActionPropertyType apt on apt.actionType_id = at2.id and ap.type_id = apt.id and apt.name = 'An. morbi' and apt.deleted = 0
+where ap.deleted = 0 ORDER by a.createDatetime desc limit 1
