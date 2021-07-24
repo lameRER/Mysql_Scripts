@@ -166,3 +166,12 @@ join ActionType at on at.id = a.actionType_id  and at.deleted = 0 and at.id = 40
 join ActionPropertyType apt on apt.id = ap.type_id and apt.actionType_id = at.id and apt.deleted =0 and apt.id = 384
 order by aps.id desc limit 1;
 # """
+
+
+select *
+from rbEpicrisisTemplates ret
+join rbEpicrisisTemplates_rbEpicrisisSections retres on retres.id_rbEpicrisisTemplates = ret.id
+join rbEpicrisisSections res on res.id = retres.id_rbEpicrisisSections
+join rbEpicrisisSections_rbEpicrisisProperty resrep on resrep.id_rbEpicrisisSections = res.id
+join rbEpicrisisProperty rep on rep.id = resrep.id_rbEpicrisisProperty
+where ret.id = 5
