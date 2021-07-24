@@ -123,3 +123,11 @@ from DestinationTree where deleted = 0 and name = 'Осмотры';
 
 select *
 from ActionType where name regexp 'дежурного';
+
+
+select *
+from ActionType where  name regexp 'Осмотр отделения травматологии Стационар
+';
+
+select *
+from ActionPropertyType where actionType_id = 78123;
