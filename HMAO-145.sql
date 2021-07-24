@@ -120,3 +120,6 @@ from OrgStructure where name regexp 'Травматологическое отд
 insert into DestinationTree_ActionType(master_id, actionType_id, name)
 select id, 84654, (select name from ActionType where id = 84654)
 from DestinationTree where deleted = 0 and name = 'Осмотры';
+
+select *
+from ActionType where name regexp 'дежурного';
