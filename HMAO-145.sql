@@ -158,15 +158,17 @@ actionTypeId, actionPropertyTypeId,
  SQL="""SELECT lastname FROM Client where id = context.clientId ;"""
 
 
-# SQL="""
-select aps.value from ActionProperty ap
+SQL="""select aps.value from ActionProperty ap
 join ActionProperty_String aps using(id)
 join Action a on a.id = ap.action_id and a.deleted = 0
-join ActionType at on at.id = a.actionType_id  and at.deleted = 0 and at.id = 40662
+join ActionType at on at.id = a.actionType_id and at.deleted = 0 and at.id = 40662
 join ActionPropertyType apt on apt.id = ap.type_id and apt.actionType_id = at.id and apt.deleted =0 and apt.id = 384
-order by aps.id desc limit 1;
-# """
+join Event e on a.event_id = e.id and e.deleted = 0 and e.eventType_id = context.eventTypeId
+join Client c on c.id = e.client_id and c.id = context.clientId
+where ap.deleted = 0
+order by aps.id desc limit 1;"""
 
+clientId, eventTypeId
 
 select *
 from rbEpicrisisTemplates ret
