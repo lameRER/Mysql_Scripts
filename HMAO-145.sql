@@ -308,11 +308,15 @@ values  (0, 10003, 'Операции', 1, 'single', '', 0);
 
 select * from DestinationTree where id = 10003
 
+insert into DestinationTree_ActionType (master_id, actionType_id, name)
+select '10199', '84659', (select name from ActionType where id = 84659)
 
 select *
 from ActionType where serviceType = 4;
 
 select * from ActionPropertyType where actionType_id = 13108
+
+
 
 
 select *
@@ -321,11 +325,13 @@ from ActionType where name = 'Биопсия кожи' and group_id =72059;
 select *
 from ActionType where id in(72073,72059,79661);
 
+select * from ActionType order by id desc
+
 insert into s12.ActionType (EGISZ_code, createDatetime, createPerson_id, modifyDatetime, modifyPerson_id, deleted, class, group_id, code, name, title,
                             flatCode, sex, age, office, showInForm, genTimetable, quotaType_id, context, amount, amountEvaluation,
                             defaultStatus, defaultDirectionDate, defaultPlannedEndDate, defaultEndDate, defaultExecPerson_id,
                             defaultPersonInEvent, defaultPersonInEditor, defaultMKB, defaultMorphology, isMorphologyRequired,
-                            defaultOrg_id, maxOccursInEvent, isMES, nomenclativeService_id, showTime, isPreferable, prescribedType_id,
+                            defaultOrg_id, maxOccursInEvent, isMES, showTime, isPreferable, prescribedType_id,
                             shedule_id, isRequiredCoordination, isNomenclatureExpense, hasAssistant, propertyAssignedVisible,
                             propertyUnitVisible, propertyNormVisible, propertyEvaluationVisible, serviceType, actualAppointmentDuration,
                             visible, isSubstituteEndDateToEvent, isPrinted, withoutAgree, defaultMES, frequencyCount, frequencyPeriod,
@@ -335,10 +341,56 @@ insert into s12.ActionType (EGISZ_code, createDatetime, createPerson_id, modifyD
                             filterSpecialities, showAPOrg,  isIgnoreEventExecDate, checkPersonSet, formulaAlias)
 values  ('','2013-01-01 00:00:00', null, '2018-04-23 10:33:38', 970, 0, 0, 72059, 'мЗ004а', 'Пункция верхнечелюстной пазухи',
          'Пункция верхнечелюстной пазухи', 'мЗ004а', 0, '', '', 1, 0, null, '', 1, 0, 2, 1, 0, 2, null, 3, 0, 0, 0, 0, null, 0,
-         null, 23008, 1, 1, null, null, 0, 0, 1, 1, 1, 1, 1, 4, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, null, 0, 0, 0, 1, 0, null, 0, 0,
+         null, 1, 1, null, null, 0, 0, 1, 1, 1, 1, 1, 4, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, null, 0, 0, 0, 1, 0, null, 0, 0,
          null, null, 0, 2, null, 0, 0, 1, 0, 0, null);
 
 
-insert into s12.ActionPropertyType (id, deleted, actionType_id, idx, template_id, name, shortName, descr, unit_id, typeName, valueDomain, defaultValue, isVector, norm, sex, age, penalty, penaltyUserProfile, penaltyDiagnosis, visibleInJobTicket, visibleInTableRedactor, isAssignable, test_id, defaultEvaluation, canChangeOnlyOwner, isActionNameSpecifier, laboratoryCalculator, inActionsSelectionTable, redactorSizeFactor, isFrozen, typeEditable, visibleInDR, userProfile_id, userProfileBehaviour, copyModifier, isVitalParam, vitalParamId, isODIIParam, ticketsNeeded, customSelect, autoFieldUserProfile, formulaAlias, incrementOnSave)
-values  (54244, 0, 13108, 1, null, 'Тип операции', '', '', null, 'String', '"Полостная", "Лапароскопическая", "БИОС", "Металостеосинтез", "Эндопротезирование", "PFN"', '', 0, '', 0, '', 0, null, null, 0, 0, 0, null, 0, 0, 0, null, 0, 0, 0, 1, 1, null, 0, 1, 0, null, 0, null, null, null, null, 0),
-        (56754, 0, 13108, 2, null, 'Операционная', '', '', null, 'OrgStructure', '', '', 0, '', 0, '', 0, null, null, 0, 0, 0, null, 0, 0, 0, null, 0, 0, 0, 1, 1, null, 0, 1, 0, null, 0, null, null, null, null, 0);
+insert into s12.ActionPropertyType (deleted, actionType_id, idx, template_id, name, shortName, descr, unit_id, typeName,
+                                    valueDomain, defaultValue, isVector, norm, sex, age, penalty, penaltyUserProfile, penaltyDiagnosis,
+                                    visibleInJobTicket, visibleInTableRedactor, isAssignable, test_id, defaultEvaluation,
+                                    canChangeOnlyOwner, isActionNameSpecifier, laboratoryCalculator, inActionsSelectionTable,
+                                    redactorSizeFactor, isFrozen, typeEditable, visibleInDR, userProfile_id, userProfileBehaviour,
+                                    copyModifier, ticketsNeeded, customSelect,
+                                    autoFieldUserProfile, formulaAlias)
+values  (0, 84659, 1, null, 'Тип операции', '', '', null, 'String', '"Полостная", "Лапароскопическая", "БИОС", "Металостеосинтез", "Эндопротезирование", "PFN"', '', 0, '', 0, '', 0, null, null,
+         0, 0, 0, null, 0, 0, 0, null, 0, 0, 0, 1, 1, null, 0, 1, 0, null, null, null),
+        (0, 84659, 2, null, 'Операционная', '', '', null, 'OrgStructure', '', '', 0, '', 0, '', 0,
+         null, null, 0, 0, 0, null, 0, 0, 0, null, 0, 0, 0, 1, 1, null, 0, 1, 0, null, null, null);
+
+
+insert into rbService (createDatetime, createPerson_id, modifyDatetime, modifyPerson_id, group_id, code, name, eisLegacy,
+                       license, infis, begDate, endDate, medicalAidProfile_id, medicalAidKind_id, medicalAidType_id, dopService_id,
+                       category_id, caseCast_id, Fed_code, type, budget_id)
+select
+       s.createDatetime,
+       s.createPerson_id,
+       s.modifyDatetime,
+       s.modifyPerson_id,
+       s.group_id,
+       at.code code,
+       at.name name,
+       eisLegacy,
+       license,
+       at.code infis,
+       begDate,
+       endDate,
+       medicalAidProfile_id,
+       medicalAidKind_id,
+       medicalAidType_id,
+       dopService_id,
+       category_id,
+       caseCast_id,
+       Fed_code,
+       type,
+       budget_id
+from ActionType at
+join rbService s on s.id = (select id from rbService order by id desc  limit  1)
+where at.id = 84659
+
+
+
+select at.id master_id, idx, finance_id, s.id service_id
+from ActionType at
+join rbService s on s.code = at.code and s.name = at.code
+join ActionType_Service ats on 1
+where at.id = 84659
