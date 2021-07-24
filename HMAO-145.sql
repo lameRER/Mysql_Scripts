@@ -189,6 +189,10 @@ where ret.id = 5
 
 
 select *
+from rbEpicrisisTemplates;
+
+
+select *
 from rbEpicrisisProperty where id = 111;
 
 select aps.value from ActionProperty ap
@@ -197,3 +201,43 @@ join Action a on ap.action_id = a.id and a.deleted = 0 and a.status = 2 and a.ev
 join ActionType at2 on at2.id = a.actionType_id and at2.deleted = 0 and at2.id = 40662
 join ActionPropertyType apt on apt.actionType_id = at2.id and ap.type_id = apt.id and apt.name = 'An. morbi' and apt.deleted = 0
 where ap.deleted = 0 ORDER by a.createDatetime desc limit 1
+
+
+
+select *
+from ActionType where flatCode = 'temperatureSheet';
+
+select *
+from ActionPropertyType where actionType_id = 9749;
+
+insert into s12.ActionType (createDatetime, createPerson_id, modifyDatetime, modifyPerson_id, deleted, class, group_id, code, name, title,
+                            flatCode, sex, age, office, showInForm, genTimetable, quotaType_id, context, amount, amountEvaluation,
+                            defaultStatus, defaultDirectionDate, defaultPlannedEndDate, defaultEndDate, defaultExecPerson_id,
+                            defaultPersonInEvent, defaultPersonInEditor, defaultMKB, defaultMorphology, isMorphologyRequired,
+                            defaultOrg_id, maxOccursInEvent, isMES, nomenclativeService_id, showTime, isPreferable, prescribedType_id,
+                            shedule_id, isRequiredCoordination, isNomenclatureExpense, hasAssistant, propertyAssignedVisible,
+                            propertyUnitVisible, propertyNormVisible, propertyEvaluationVisible, serviceType, actualAppointmentDuration,
+                            visible, isSubstituteEndDateToEvent, isPrinted, withoutAgree, defaultMES, frequencyCount, frequencyPeriod,
+                            frequencyPeriodType, isStrictFrequency, isFrequencyPeriodByCalendar, counter_id, isCustomSum,
+                            recommendationExpirePeriod, recommendationControl, isExecRequiredForEventExec, isActiveGroup, lis_code,
+                            locked, filledLock, period, singleInPeriod, checkPeriod, defaultBeginDate, refferalType_id,
+                            filterPosts, filterSpecialities, showAPOrg, isIgnoreEventExecDate, checkPersonSet, formulaAlias)
+values  ('2011-11-16 13:26:56', null, '2020-02-06 14:28:54', 970, 0, 0, 9748, '4', 'Температурный лист', 'Температурный лист',
+         'temperatureSheet', 0, '', '', 0, 0, null, '', 0, 0, 2, 2, 0, 1, null, 0, 0, 0, 0, 0, null, 0, 0, null, 1, 1, null, null, 0, 0,
+         0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, null, 0, 0, 0, 1, 0, '', 0, 0, null, null, 0, 1, null, 0, 0, 1, 0, 0, null);
+
+insert into s12.ActionPropertyType (id, deleted, actionType_id, idx, template_id, name, shortName, descr, unit_id, typeName, valueDomain, defaultValue, isVector, norm, sex, age, penalty, penaltyUserProfile, penaltyDiagnosis, visibleInJobTicket, visibleInTableRedactor, isAssignable, test_id, defaultEvaluation, canChangeOnlyOwner, isActionNameSpecifier, laboratoryCalculator, inActionsSelectionTable, redactorSizeFactor, isFrozen, typeEditable, visibleInDR, userProfile_id, userProfileBehaviour, copyModifier, isVitalParam, vitalParamId, isODIIParam, ticketsNeeded, customSelect, autoFieldUserProfile, formulaAlias, incrementOnSave)
+values  (25640, 1, 9749, 0, null, 'ТемператураDEL', '', '', null, 'Temperature', '', '36.6', 0, '', 0, '', 0, null, null, 0, 0, 0, null, 0, 0, 0, null, 0, 0, 0, 1, 1, null, 0, 0, 0, null, 0, null, null, null, null, 0),
+        (25641, 0, 9749, 2, null, 'АД-макс', '', '', 17, 'ArterialPressure', '', '', 0, '', 0, '', 0, null, null, 0, 0, 0, null, 0, 0, 0, null, 0, 0, 0, 1, 1, null, 0, 0, 0, null, 0, null, null, null, null, 0),
+        (25642, 1, 9749, 3, null, 'ПульсDEL', '', '', 32, 'Pulse', '', '', 0, '', 0, '', 0, null, null, 0, 0, 0, null, 0, 0, 0, null, 0, 0, 0, 1, 1, null, 0, 0, 0, null, 0, null, null, null, null, 0),
+        (25643, 0, 9749, 4, null, 'День болезни', '', '', null, 'Integer', '', '', 0, '', 0, '', 0, null, null, 0, 0, 0, null, 0, 0, 0, null, 0, 0, 0, 1, 1, null, 0, 0, 0, null, 0, null, null, null, null, 0),
+        (25644, 0, 9749, 3, null, 'АД-мин', '', '', 17, 'ArterialPressure', '', '', 0, '', 0, '', 0, null, null, 0, 0, 0, null, 0, 0, 0, null, 0, 0, 0, 1, 1, null, 0, 0, 0, null, 0, null, null, null, null, 0),
+        (25645, 0, 9749, 5, null, 'Гиг. ванны', '', '', null, 'String', '', '', 0, '', 0, '', 0, null, null, 0, 0, 0, null, 0, 0, 0, null, 0, 0, 0, 1, 1, null, 0, 0, 0, null, 0, null, null, null, null, 0),
+        (25646, 0, 9749, 6, null, 'Вып. жидкость', '', '', null, 'String', '', '', 0, '', 0, '', 0, null, null, 0, 0, 0, null, 0, 0, 0, null, 0, 0, 0, 1, 1, null, 0, 0, 0, null, 0, null, null, null, null, 0),
+        (25647, 0, 9749, 7, null, 'Спец. процедуры', '', '', null, 'String', '', '', 0, '', 0, '', 0, null, null, 0, 0, 0, null, 0, 0, 0, null, 0, 0, 0, 1, 1, null, 0, 0, 0, null, 0, null, null, null, null, 0),
+        (49888, 0, 9749, 0, null, 'Температура', '', '', null, 'Temperature', '', null, 0, '', 0, '', 0, null, null, 0, 0, 0, null, 0, 0, 0, null, 0, 0, 0, 1, 1, null, 0, 0, 0, null, 0, null, null, null, null, 0),
+        (49892, 0, 9749, 1, null, 'Пульс', '', '', null, 'Pulse', '', null, 0, '', 0, '', 0, null, null, 0, 0, 0, null, 0, 0, 0, null, 0, 0, 0, 1, 1, null, 0, 0, 0, null, 0, null, null, null, null, 0),
+        (49896, 0, 9749, 8, null, 'Педикулез', '', '', null, 'String', '"+","-"', null, 0, '', 0, '', 0, null, null, 0, 0, 0, null, 0, 0, 0, null, 0, 0, 0, 1, 1, null, 0, 0, 0, null, 0, null, null, null, null, 0),
+        (49897, 0, 9749, 9, null, 'Смена белья', '', '', null, 'String', '"+","-"', null, 0, '', 0, '', 0, null, null, 0, 0, 0, null, 0, 0, 0, null, 0, 0, 0, 1, 1, null, 0, 0, 0, null, 0, null, null, null, null, 0),
+        (59038, 1, 9749, 11, null, 'Сатурация вечер', '', '', null, 'Integer', '', null, 0, '', 0, '', 0, null, null, 0, 0, 0, null, 0, 0, 0, null, 0, 0, 0, 1, 0, null, 0, 0, 0, null, 0, null, null, null, null, 0),
+        (59039, 0, 9749, 10, null, 'Сатурация', '', '', null, 'Integer', '', null, 0, '', 0, '', 0, null, null, 0, 0, 0, null, 0, 0, 0, null, 0, 0, 0, 1, 0, null, 0, 0, 0, null, 0, null, null, null, null, 0);
