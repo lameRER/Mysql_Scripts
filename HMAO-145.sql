@@ -129,7 +129,7 @@ select *
 from ActionType where  name regexp 'Осмотр отделения травматологии Стационар
 ';
 
-select *
+select ActionPropertyType.customSelect, ActionPropertyType.*
 from ActionPropertyType where actionType_id in(78123,40662)
 
 
@@ -156,3 +156,13 @@ actionTypeId, actionPropertyTypeId,
 
 
  SQL="""SELECT lastname FROM Client where id = context.clientId ;"""
+
+
+# SQL="""
+select aps.value from ActionProperty ap
+join ActionProperty_String aps using(id)
+join Action a on a.id = ap.action_id and a.deleted = 0
+join ActionType at on at.id = a.actionType_id  and at.deleted = 0 and at.id = 40662
+join ActionPropertyType apt on apt.id = ap.type_id and apt.actionType_id = at.id and apt.deleted =0 and apt.id = 384
+order by aps.id desc limit 1;
+# """
