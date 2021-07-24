@@ -289,7 +289,7 @@ a1.specifiedName `Название операции`
 from Event e
 join Action a on a.event_id = e.id and a.deleted = 0
 join Action a1 on a.parent_id = a1.id
-where e.deleted = 0 and e.id = 4405084;
+where e.deleted = 0 and e.id = 4405084;1
 
 
 select at.name, a.*
@@ -297,3 +297,48 @@ from Action a, ActionType at where a.event_id = 4405084 and at.id = a.actionType
 
 select *
 from Event where externalId = '16231';
+
+
+
+select *
+from DestinationTree where name regexp 'опера';
+
+insert into s12.DestinationTree (deleted, parent_id, name, visible, selectionMode, code, isVisibleForReanimationOnly)
+values  (0, 10003, 'Операции', 1, 'single', '', 0);
+
+select * from DestinationTree where id = 10003
+
+
+select *
+from ActionType where serviceType = 4;
+
+select * from ActionPropertyType where actionType_id = 13108
+
+
+select *
+from ActionType where name = 'Биопсия кожи' and group_id =72059;
+
+select *
+from ActionType where id in(72073,72059,79661);
+
+insert into s12.ActionType (EGISZ_code, createDatetime, createPerson_id, modifyDatetime, modifyPerson_id, deleted, class, group_id, code, name, title,
+                            flatCode, sex, age, office, showInForm, genTimetable, quotaType_id, context, amount, amountEvaluation,
+                            defaultStatus, defaultDirectionDate, defaultPlannedEndDate, defaultEndDate, defaultExecPerson_id,
+                            defaultPersonInEvent, defaultPersonInEditor, defaultMKB, defaultMorphology, isMorphologyRequired,
+                            defaultOrg_id, maxOccursInEvent, isMES, nomenclativeService_id, showTime, isPreferable, prescribedType_id,
+                            shedule_id, isRequiredCoordination, isNomenclatureExpense, hasAssistant, propertyAssignedVisible,
+                            propertyUnitVisible, propertyNormVisible, propertyEvaluationVisible, serviceType, actualAppointmentDuration,
+                            visible, isSubstituteEndDateToEvent, isPrinted, withoutAgree, defaultMES, frequencyCount, frequencyPeriod,
+                            frequencyPeriodType, isStrictFrequency, isFrequencyPeriodByCalendar, counter_id, isCustomSum,
+                            recommendationExpirePeriod, recommendationControl, isExecRequiredForEventExec, isActiveGroup, lis_code,
+                            locked, filledLock, period, singleInPeriod, checkPeriod, defaultBeginDate, refferalType_id, filterPosts,
+                            filterSpecialities, showAPOrg,  isIgnoreEventExecDate, checkPersonSet, formulaAlias)
+values  ('','2013-01-01 00:00:00', null, '2018-04-23 10:33:38', 970, 0, 0, 72059, 'мЗ004а', 'Пункция верхнечелюстной пазухи',
+         'Пункция верхнечелюстной пазухи', 'мЗ004а', 0, '', '', 1, 0, null, '', 1, 0, 2, 1, 0, 2, null, 3, 0, 0, 0, 0, null, 0,
+         null, 23008, 1, 1, null, null, 0, 0, 1, 1, 1, 1, 1, 4, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, null, 0, 0, 0, 1, 0, null, 0, 0,
+         null, null, 0, 2, null, 0, 0, 1, 0, 0, null);
+
+
+insert into s12.ActionPropertyType (id, deleted, actionType_id, idx, template_id, name, shortName, descr, unit_id, typeName, valueDomain, defaultValue, isVector, norm, sex, age, penalty, penaltyUserProfile, penaltyDiagnosis, visibleInJobTicket, visibleInTableRedactor, isAssignable, test_id, defaultEvaluation, canChangeOnlyOwner, isActionNameSpecifier, laboratoryCalculator, inActionsSelectionTable, redactorSizeFactor, isFrozen, typeEditable, visibleInDR, userProfile_id, userProfileBehaviour, copyModifier, isVitalParam, vitalParamId, isODIIParam, ticketsNeeded, customSelect, autoFieldUserProfile, formulaAlias, incrementOnSave)
+values  (54244, 0, 13108, 1, null, 'Тип операции', '', '', null, 'String', '"Полостная", "Лапароскопическая", "БИОС", "Металостеосинтез", "Эндопротезирование", "PFN"', '', 0, '', 0, '', 0, null, null, 0, 0, 0, null, 0, 0, 0, null, 0, 0, 0, 1, 1, null, 0, 1, 0, null, 0, null, null, null, null, 0),
+        (56754, 0, 13108, 2, null, 'Операционная', '', '', null, 'OrgStructure', '', '', 0, '', 0, '', 0, null, null, 0, 0, 0, null, 0, 0, 0, null, 0, 0, 0, 1, 1, null, 0, 1, 0, null, 0, null, null, null, null, 0);
