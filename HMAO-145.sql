@@ -388,9 +388,99 @@ join rbService s on s.id = (select id from rbService order by id desc  limit  1)
 where at.id = 84659
 
 
-
-select at.id master_id, idx, finance_id, s.id service_id
+insert into ActionType_Service(master_id, finance_id, service_id)
+select at.id master_id, 2 finance_id, s.id service_id
 from ActionType at
-join rbService s on s.code = at.code and s.name = at.code
-join ActionType_Service ats on 1
+join rbService s on s.code = at.code and s.name = at.name
+join ActionType_Service ats on ats.id = (select id from ActionType_Service order by id desc limit 1)
 where at.id = 84659
+
+
+select *
+from ActionType_Service where finance_id is not null;
+
+select * from ActionType where name regexp 'протокол операции' order by id desc
+
+select *
+from ActionPropertyType where actionType_id = 43604a;
+
+select *
+from rbPrintTemplate where context = 'DR_oper';
+
+
+insert into s12.ActionType (EGISZ_code,createDatetime, createPerson_id, modifyDatetime, modifyPerson_id, deleted, class, group_id, code, name,
+                            title, flatCode, sex, age, office, showInForm, genTimetable, quotaType_id, context, amount, amountEvaluation,
+                            defaultStatus, defaultDirectionDate, defaultPlannedEndDate, defaultEndDate, defaultExecPerson_id,
+                            defaultPersonInEvent, defaultPersonInEditor, defaultMKB, defaultMorphology, isMorphologyRequired,
+                            defaultOrg_id, maxOccursInEvent, isMES, nomenclativeService_id, showTime, isPreferable, prescribedType_id,
+                            shedule_id, isRequiredCoordination, isNomenclatureExpense, hasAssistant, propertyAssignedVisible,
+                            propertyUnitVisible, propertyNormVisible, propertyEvaluationVisible, serviceType, actualAppointmentDuration,
+                            visible, isSubstituteEndDateToEvent, isPrinted, withoutAgree, defaultMES, frequencyCount, frequencyPeriod,
+                            frequencyPeriodType, isStrictFrequency, isFrequencyPeriodByCalendar, counter_id, isCustomSum,
+                            recommendationExpirePeriod, recommendationControl, isExecRequiredForEventExec, isActiveGroup, lis_code,
+                            locked, filledLock, period, singleInPeriod, checkPeriod, defaultBeginDate, refferalType_id, filterPosts,
+                            filterSpecialities, showAPOrg, isIgnoreEventExecDate, checkPersonSet, formulaAlias)
+values  ('','2019-11-24 12:28:46', 877, '2019-11-24 12:48:08', 877, 0, 2, null, '7889-1', 'Протокол операции', 'Протокол операции', '', 0,
+         '', '', 1, 0, null, 'DR_oper', 0, 0, 0, 0, 0, 0, null, 0, 0, 0, 0, 0, null, 0, 0, null, 0, 0, null, null, 0, 0, 0, 0, 0, 0, 0,
+         0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, null, 0, 0, 0, 0, 0, '', 0, 0, null, null, 0, 0, null, 0, 0, 0, 0, 0, null);
+
+
+insert into s12.ActionPropertyType (id, deleted, actionType_id, idx, template_id, name, shortName, descr, unit_id, typeName, valueDomain, defaultValue, isVector, norm, sex, age, penalty, penaltyUserProfile, penaltyDiagnosis, visibleInJobTicket, visibleInTableRedactor, isAssignable, test_id, defaultEvaluation, canChangeOnlyOwner, isActionNameSpecifier, laboratoryCalculator, inActionsSelectionTable, redactorSizeFactor, isFrozen, typeEditable, visibleInDR, userProfile_id, userProfileBehaviour, copyModifier, isVitalParam, vitalParamId, isODIIParam, ticketsNeeded, customSelect, autoFieldUserProfile, formulaAlias, incrementOnSave)
+values  (48536, 0, 84661, 0, null, 'Номерок', '', '', null, 'JobTicket', '7889', null, 0, '', 0, '', 0, null, null, 0, 0, 0, null, 0, 0, 0, null, 0, 0, 0, 1, 1, null, 0, 0, 0, null, 0, null, null, null, null, 0),
+        (48537, 0, 84661, 3, null, 'Наименование', '', '', null, 'String', '"Эндохирургическая аппендэктомия","Пластика позвонка","Удаление грыжи межпозвонкового диска",*', null, 0, '', 0, '', 100, null, null, 1, 0, 0, null, 0, 0, 0, null, 0, 0, 0, 1, 1, null, 0, 0, 0, null, 0, null, null, null, null, 0),
+        (48538, 0, 84661, 4, null, 'Операция', '', '', null, 'String', '"1 - основная", "0 - не основная"', null, 0, '', 0, '', 0, null, null, 1, 0, 0, null, 0, 0, 0, null, 0, 0, 0, 1, 1, null, 0, 0, 0, null, 0, null, null, null, null, 0),
+        (48539, 0, 84661, 5, null, 'Тип операции', '', '', null, 'String', '"Полостная", "Лапароскопическая", "БИОС", "Металостеосинтез", "Эндопротезирование", "PFN"', null, 0, '', 0, '', 0, null, null, 1, 0, 0, null, 0, 0, 0, null, 0, 0, 0, 1, 1, null, 0, 0, 0, null, 0, null, null, null, null, 0),
+        (48540, 0, 84661, 6, null, 'Характер операции', '', '', null, 'String', '', null, 0, '', 0, '', 0, null, null, 1, 0, 0, null, 0, 0, 0, null, 0, 0, 0, 1, 1, null, 0, 0, 0, null, 0, null, null, null, null, 0),
+        (48541, 0, 84661, 7, null, 'Анестезия', '', '', null, 'String', '"1 - общая", "2 - местная"', null, 0, '', 0, '', 0, null, null, 1, 0, 0, null, 0, 0, 0, null, 0, 0, 0, 1, 1, null, 0, 0, 0, null, 0, null, null, null, null, 0),
+        (48542, 0, 84661, 8, null, 'Хирургические осложнения', '', '', null, 'String', '', 'нет', 0, '', 0, '', 0, null, null, 1, 0, 0, null, 0, 0, 0, null, 0, 0, 0, 1, 1, null, 0, 0, 0, null, 0, null, null, null, null, 0),
+        (48543, 0, 84661, 9, null, 'Протокол оперпации', '', '', null, 'String', '', null, 0, '', 0, '', 0, null, null, 1, 0, 0, null, 0, 0, 0, null, 0, 0, 0, 1, 1, null, 0, 0, 0, null, 0, null, null, null, null, 0),
+        (48544, 0, 84661, 1, null, 'Операционная', '', '', null, 'String', '"1","2","3","4"', null, 0, '', 0, '', 100, null, null, 1, 0, 0, null, 0, 0, 0, null, 0, 0, 0, 1, 1, null, 0, 0, 0, null, 0, null, null, null, null, 0),
+        (48545, 0, 84661, 2, null, 'Показания к оперативному вмешательству', '', '', null, 'String', '', null, 0, '', 0, '', 100, null, null, 1, 0, 0, null, 0, 0, 0, null, 0, 0, 0, 1, 1, null, 0, 0, 0, null, 0, null, null, null, null, 0);
+
+insert into s12.rbPrintTemplate (id, createDatetime, createPerson_id, modifyDatetime, modifyPerson_id, code, name, context, fileName, default, dpdAgreement, type, hideParam, banUnkeptDate, counter_id, deleted, isPatientAgreed, groupName, documentType_id, isEditableInWeb, pageOrientation)
+values  (1136, '2019-11-24 12:54:30', 877, '2019-11-26 18:07:40', 877, 'DR_oper', 'Протокол операции', 'DR_oper', '', '
+<html>
+<!--Параметры страницы-->
+
+
+
+{setPageSize(''A4'')}
+<!--Формат листа А4-->
+{setOrientation(''P'')}
+<!--Альбомная страница-->
+{setMargins(5)}
+<!--Отступы по краям листа-->
+
+
+
+<body style="font-size: 16pt">
+<br>Ф.И.О. {client.fullName}
+  <br>Номер и/б: {event.externalId}
+    <br>Дата: {action.endDate.toString(''dd.MM.yyyy'')}
+
+    <p align="center">
+        <B>{action.name} </B>
+    </p><br>
+
+
+    <table width="100%" border="0">
+
+
+        {for: prop in action}
+            {if: prop.value}
+                <tr><td><b>{prop.name}</b> {prop.value :n}</td></tr>
+            {end:}
+        {end:}
+    </table>
+    <br>
+      <table width="100%">
+        <tr>
+            <td>Врач</td>
+            <td align="right">{action.person.shortName}</td>
+        </tr>
+
+    </table>
+</body>
+
+
+</html>', 0, 0, 0, 0, null, 0, 0, '', null, 0, 'P');
