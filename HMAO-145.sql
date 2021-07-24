@@ -207,6 +207,36 @@ where ap.deleted = 0 ORDER by a.createDatetime desc limit 1
 select *
 from ActionType where name regexp 'Реанимация.Показатели';
 
+
+select *
+from ActionPropertyType where actionType_id= 49878;
+
+insert into s12.ActionType (EGISZ_code, createDatetime, createPerson_id, modifyDatetime, modifyPerson_id, deleted, class, group_id, code, name, title, flatCode, sex, age, office, showInForm, genTimetable, quotaType_id, context, amount, amountEvaluation, defaultStatus, defaultDirectionDate, defaultPlannedEndDate, defaultEndDate, defaultExecPerson_id, defaultPersonInEvent, defaultPersonInEditor, defaultMKB, defaultMorphology, isMorphologyRequired, defaultOrg_id, maxOccursInEvent, isMES, nomenclativeService_id, showTime, isPreferable, prescribedType_id, shedule_id, isRequiredCoordination, isNomenclatureExpense, hasAssistant, propertyAssignedVisible, propertyUnitVisible, propertyNormVisible, propertyEvaluationVisible, serviceType, actualAppointmentDuration, visible, isSubstituteEndDateToEvent, isPrinted, withoutAgree, defaultMES, frequencyCount, frequencyPeriod, frequencyPeriodType, isStrictFrequency, isFrequencyPeriodByCalendar, counter_id, isCustomSum,
+                            recommendationExpirePeriod, recommendationControl, isExecRequiredForEventExec, isActiveGroup, lis_code, locked, filledLock, period, singleInPeriod, checkPeriod, defaultBeginDate,
+                            refferalType_id, filterPosts, filterSpecialities, showAPOrg, isIgnoreEventExecDate,
+                            checkPersonSet, formulaAlias)
+values  ('', '2020-04-01 09:32:41', 200, '2020-04-01 09:32:41', 200, 0, 0, null, '001', 'Реанимация.Показатели', 'Реанимация.Показатели',
+         'reanimation_sheet', 0, '', '', 0, 0, null, '', 0, 0, 0, 2, 0, 0, null, 0, 0,
+         0, 0, 0, null, 0, 0, null, 0, 0, null, null, 0, 0, 0, 1, 1, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0,
+         0, 0, 0, null, 0, 0, 0, 0, 0, '', 0, 0, null, null, 0, 1, null, 0, 0, 0, 0, 0, null);
+
+insert into s12.ActionPropertyType (deleted, actionType_id, idx, template_id, name, shortName, descr, unit_id, typeName, valueDomain, defaultValue, isVector, norm, sex, age, penalty, penaltyUserProfile, penaltyDiagnosis,
+                                    visibleInJobTicket, visibleInTableRedactor, isAssignable, test_id, defaultEvaluation,
+                                    canChangeOnlyOwner, isActionNameSpecifier, laboratoryCalculator, inActionsSelectionTable,
+                                    redactorSizeFactor, isFrozen, typeEditable, visibleInDR, userProfile_id, userProfileBehaviour,
+                                    copyModifier, ticketsNeeded, customSelect,
+                                    autoFieldUserProfile, formulaAlias)
+values  (0, 84657, 0, null, 'Температура', '', '', null, 'Temperature', '', null, 0, '', 0, '', 0, null, null, 0, 0, 0, null, 0, 0, 0, null, 0, 0, 0, 1, 0, null, 0, 0, null, null, null, null),
+        (0, 84657, 1, null, 'Пульс', '', '', null, 'Pulse', '', null, 0, '', 0, '', 0, null, null, 0, 0, 0, null, 0, 0, 0, null, 0, 0, 0, 1, 0, null, 0, 0, null, null, null, null),
+        (0, 84657, 2, null, 'Артериальное давление систолическое', '', '', null, 'ArterialPressure', '', null, 0, '', 0, '', 0, null, null, 0, 0, 0, null, 0, 0, 0, null, 0, 0, 0, 1, 0, null, 0, 0, null, null, null, null),
+        (0, 84657, 3, null, 'Артериальное давление диастолическое', '', '', null, 'ArterialPressure', '', null, 0, '', 0, '', 0, null, null, 0, 0, 0, null, 0, 0, 0, null, 0, 0, 0, 1, 0, null, 0, 0, null, null, null, null),
+        (0, 84657, 4, null, 'Сатурация', '', '', null, 'Double', '', null, 0, '', 0, '', 0, null, null, 0, 0, 0, null, 0, 0, 0, null, 0, 0, 0, 1, 0, null, 0, 0, null, null, null, null),
+        (0, 84657, 5, null, 'Количество выпитой воды', '', '', null, 'Double', '', null, 0, '', 0, '', 0, null, null, 0, 0, 0, null, 0, 0, 0, null, 0, 0, 0, 1, 0, null, 0, 0, null, null, null, null),
+        (0, 84657, 6, null, 'Диурез', '', '', null, 'Double', '', null, 0, '', 0, '', 0, null, null, 0, 0, 0, null, 0, 0, 0, null, 0, 0, 0, 1, 0, null, 0, 0, null, null, null, null);
+
+select *
+from rbPrintTemplate where context = '';
+
 select *
 from ActionPropertyType where actionType_id = 9749;
 
