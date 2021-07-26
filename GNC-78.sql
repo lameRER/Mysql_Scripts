@@ -24,7 +24,7 @@ left join Service s on s.action_id = a.id and s.event_id = e.id and s.deleted = 
 left join PriceListItem pli on pli.id = s.PriceListItem_id
 where e.setDate >= '2018-01-01' and e.setDate <= '2021-06-30' and e.deleted = 0
 # and e.id = 3526258
-group by e.id order by e.setDate;
+group by e.id order by e.setDate desc ;
 
 
 
