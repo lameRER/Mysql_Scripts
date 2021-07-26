@@ -175,6 +175,8 @@ from Event order by id desc ;
 
 
 select
+       e.id,
+       e.externalId,
        c.id `Код пациента`,
        at.name `Наименование манипуляции`,
        a.endDate `Дата манипуляции`,
