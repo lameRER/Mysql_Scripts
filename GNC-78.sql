@@ -1,3 +1,4 @@
+# Сведенья об абулаторных приемах
 select
        e.id, e.externalId,
        COUNT(e.id) `Количество манипуляций`,
@@ -17,12 +18,12 @@ left join rbFinance rf on et.finance_id = rf.id
 left join Event_Diagnosis ed on ed.event_id = e.id and ed.diagnosisType_id = 2 and ed.diagnosisKind_id = 4 and ed.deleted = 0
 left join Diagnosis d on d.id = ed.diagnosis_id and c.id= d.client_id and d.deleted = 0
 left join Diagnostic d1 on d1.diagnosis_id = d.id and d1.deleted = 0
-join Action a on a.event_id = e.id and a.deleted = 0 and a.status = 2
+join Action a on a.event_id = e.id and a.deleted = 0
 join ActionType at on at.id = a.ActionType_id
 left join Service s on s.action_id = a.id and s.event_id = e.id and s.deleted = 0
 left join PriceListItem pli on pli.id = s.PriceListItem_id
 where e.setDate >= '2018-01-01' and e.setDate <= '2021-06-30' and e.deleted = 0
-# and e.id = 3526258
+# and e.id = 20427438
 group by e.id order by e.setDate desc ;
 
 
@@ -76,7 +77,7 @@ from rbDiagnosisType;
 
 
 
-
+# Сведенья о проводимых манипуляциях
 select
        c.id `Код пациента`,
        at.name `Наименование манипуляции`,
@@ -102,6 +103,8 @@ where e.setDate >= '2018-01-01' and e.setDate <= '2021-06-30' and e.deleted = 0
 group by e.id, a.id order by c.id, a.createDatetime desc
 
 
+
+# Сведенья о инструментальных исследований
 select
        c.id `Код пациента`,
        at.name `Наименование манипуляции`,
@@ -178,7 +181,7 @@ from Event order by id desc ;
 
 
 
-
+# Сведенья о лабораторных исследований
 select
        e.id,
        e.externalId,
