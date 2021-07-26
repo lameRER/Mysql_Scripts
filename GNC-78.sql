@@ -1,6 +1,4 @@
 select
-       e.id,
-       e.externalId,
        COUNT(e.id) `Количество манипуляций`,
        c.id `Код пациента`,
        e.setDate `Дата посещения`,
