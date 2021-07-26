@@ -23,11 +23,12 @@ order by id desc ;
 select *
 from rbSpecialVariablesPreferences where name = 'SpecialVar_CheckCoagulogramOMS';
 
-
-
 select *
-from
-(SELECT
+from rbSpecialVariablesPreferences where name = 'SpecialVar_Biomaterial';
+
+
+
+SELECT
   SUM(CASE WHEN apt.id IN (3922356,
       3922367,
       3922376,
@@ -64,3 +65,21 @@ WHERE apt.id IN (3922356,
 AND ap.isAssigned = 1
 AND ap.deleted = 0
 AND a.id = :ActionID
+
+
+
+SELECT
+  tt.id,
+  tt.code,
+  tt.name,
+  tt.group_id,
+  tt.sex,
+  ttt.name `Пробирка`
+FROM Action_TakenTissueJournal attj
+  INNER JOIN TakenTissueJournal ttj
+    ON ttj.id = attj.takenTissueJournal_id
+  INNER JOIN rbTissueType tt
+    ON tt.id = ttj.tissueType_id
+  LEFT OUTER JOIN rbTestTubeType ttt
+    ON ttj.testTubeType_id = ttt.id
+WHERE attj.action_id = :ActionId
