@@ -102,6 +102,8 @@ group by e.id, a.id order by c.id, a.createDatetime
 
 
 select
+       e.id, e.externalId,
+       et.id,
        c.id `Код пациента`,
        at.name `Наименование манипуляции`,
        a.endDate `Дата манипуляции`,
@@ -122,10 +124,14 @@ left join OrgStructure os on os.id = p.orgStructure_id and os.deleted = 0
 left join Service s on s.action_id = a.id and s.event_id = e.id and s.deleted = 0
 left join PriceListItem pli on pli.id = s.PriceListItem_id
 where e.setDate >= '2018-01-01' and e.setDate <= '2021-06-30' and e.deleted = 0
-# and e.id = 3526258
-group by e.id, a.id order by c.id, a.createDatetime
+and e.id = 20287049
+group by e.id, a.id order by c.id, a.createDatetime desc
 
+select *
+from rbFinance;
 
+select et.*
+from Event e, EventType et where e.id = 20287049 and et.id = e.eventType_id;
 
 select *
 from ActionProperty ap
