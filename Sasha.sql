@@ -1192,7 +1192,43 @@ WHERE
 
 
 
+set @code ='A12.05.004.006';
+
+insert into EventType_Action(eventType_id, actionType_id, speciality_id, tissueType_id, sex, age, age_bu, age_bc, age_eu, age_ec, actuality, academicDegree_id, plannedEndDateTemplate_id)
+select
+       et.id eventType_id,
+       at.id actionType_id,
+       speciality_id,
+       tissueType_id,
+       eta1.sex,
+       eta1.age,
+       eta1.age_bu,
+       eta1.age_bc,
+       eta1.age_eu,
+       eta1.age_ec,
+       actuality,
+       academicDegree_id,
+       plannedEndDateTemplate_id
+from ActionType at
+left join EventType et on et.deleted =0 and et.id != 109
+join EventType_Action eta1 on eta1.id = (select id from EventType_Action order by id desc limit 1)
+where at.code = @code;
+
+select *
+from Action where id = 23157119;
+
+select *
+from ActionType where id = 3977422;
+
+
+select *
+from ActionProperty where id = 3977422;
+
+
+select *
+from ActionPropertyType where id = 3977422;
 
 
 
-
+select *
+from s11vm.rbprinttemplate where id = 504;

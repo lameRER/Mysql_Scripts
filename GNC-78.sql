@@ -1,4 +1,5 @@
 select
+       e.id,
        COUNT(e.id) `Количество манипуляций`,
        c.id `Код пациента`,
        e.setDate `Дата посещения`,
@@ -9,13 +10,13 @@ select
        SUM(s.sum) `Общая стоимость`
 from Event e
 join Client c on e.client_id = c.id and c.deleted = 0
-# and c.id = 163803
 join EventType et on et.id = e.eventType_id and et.deleted = 0 and et.purpose_id = 2
 left join Person p on p.id = e.execPerson_id and p.deleted = 0
 left join OrgStructure os on os.id = e.orgStructure_id and os.deleted = 0
 left join rbFinance rf on et.finance_id = rf.id and rf.deleted = 0
-left join Diagnosis d on d.client_id = c.id and d.deleted = 0 and d.diagnosisType_id = 2
-left join Diagnostic d1 on d1.event_id = e.id and d.id = d1.diagnosis_id and d1.deleted = 0
+left join Event_Diagnosis ed on ed.event_id = e.id and ed.diagnosisType_id = 2 and ed.diagnosisKind_id = 4 and ed.deleted = 0
+left join Diagnosis d on d.id = ed.diagnosis_id and c.id= d.client_id and d.deleted = 0
+left join Diagnostic d1 on d1.diagnosis_id = d.id and d1.deleted = 0
 join Action a on a.event_id = e.id and a.deleted = 0 and a.status = 2
 join ActionType at on at.id = a.ActionType_id and at.deleted = 0
 left join Service s on s.action_id = a.id and s.event_id = e.id and s.deleted = 0
@@ -36,12 +37,16 @@ from Action a, Diagnostic d, Diagnosis d1 where a.event_id = 20435323 and a.id =
 
 
 
-select distinct *
+select distinct ed.*
 from Diagnosis d
 join Diagnostic d1 on d1.diagnosis_id = d.id and d1.deleted = 0
 join Action a on a.id = d1.action_id and a.deleted =0
 join ActionType at on at.id = a.actionType_id and at.deleted = 0 and at.id = 4544
+join Event_Diagnosis ed on ed.event_id = a.event_id and ed.diagnosisKind_id = 4 and ed.diagnosisType_id = 2
 where d.client_id = 331512 and d.deleted = 0;
+
+select *
+from Event_Diagnosis;
 
 
 select apt.*
@@ -209,13 +214,33 @@ select *
 from Service;
 
 
-select d.*
+select distinct d1.*
 from Event e
 join Client c on c.id = e.client_id
-left join Diagnosis d on d.client_id = c.id and d.deleted = 0
-left join Diagnostic d1 on d1.event_id = e.id and d.id = d1.diagnosis_id and d1.deleted = 0
-where e.id =1323619
+# join EventType et on et.id = e.eventType_id and et.deleted = 0 and et.purpose_id = 2
+# left join Event_Diagnosis ed on ed.event_id = e.id and ed.deleted = 0 and ed.diagnosisType_id = 2 and ed.diagnosisKind_id = 4 and ed.deleted = 0
+left join Diagnosis d on d.client_id = c.id and d.deleted-- and ed.diagnosis_id = d.id
+left join Diagnostic d1 on d1.diagnosis_id = d.id
+# where e.id =3526258
 ;
+
+
+
+select d1.*
+from Event e
+join Client c on c.id = e.client_id and c.id = 331512 and c.deleted = 0
+join Event_Diagnosis ed on ed.event_id = e.id and ed.diagnosisType_id = 2 and ed.diagnosisKind_id = 4 and ed.deleted = 0
+join Diagnosis d on d.id = ed.diagnosis_id and c.id= d.client_id and d.deleted = 0
+join Diagnostic d1 on d1.diagnosis_id = d.id and d1.deleted = 0
+where e.id =20435323 and e.deleted= 0 group by d1.diagnosis_id;
+
+
+select *
+from Event_Diagnosis;
+
+
+select *
+from Diagnosis where id =3820;
 
 select *
 from Service;
