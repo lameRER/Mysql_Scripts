@@ -1245,13 +1245,33 @@ from ActionType_Service where master_id = 8450;
 select *
 from rbService where id = 13822;
 
-select distinct rF.*
+select distinct pl.*
 from PriceListItem pli
 join PriceList pl on pl.id = pli.priceList_id
 join rbFinance rF on pl.finance_id = rF.id and rF.id = 19
 join Contract_PriceList cpl on cpl.priceList_id = pl.id
 join Contract c on c.id = cpl.contract_id
 where pli.service_id = 13822;
+
+
+
+select distinct pli.*
+from Event e
+join EventType et on et.id = e.eventType_id
+join rbFinance rf on rf.id = et.finance_id
+join Contract c on c.finance_id = rf.id and c.contractType_id = 3 and e.contract_id = c.id
+join Contract_PriceList cpl on cpl.contract_id = c.id
+join PriceList pl on pl.finance_id = rf.id and pl.id = cpl.priceList_id
+join PriceListItem pli on pli.priceList_id = pl.id
+where e.id = 20436792;
+
+
+select distinct pl.*, curdate()
+from PriceListItem pli
+join PriceList pl on pl.id = pli.priceList_id
+join Contract_PriceList CPL on pl.id = CPL.priceList_id
+join Contract
+where pli.service_id = 13822 and pli.endDate >= curdate();
 
 
 ;
