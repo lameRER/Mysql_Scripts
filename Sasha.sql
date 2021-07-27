@@ -1376,3 +1376,7 @@ from Contract;
 
 select *
 from rbFinance where id = 19;
+
+
+select *
+from PriceListItem where serviceCodeOW regexp '12.30.012.001.002' and endDate <= curdate();
