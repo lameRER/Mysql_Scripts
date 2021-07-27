@@ -1280,9 +1280,11 @@ select distinct c.*, curdate()
 from PriceListItem pli
 join PriceList pl on pl.id = pli.priceList_id
 join Contract_PriceList CPL on pl.id = CPL.priceList_id
-join Contract c on CPL.contract_id = c.id and c.deleted = 0 and (c.endDate >= curdate() or c.endDate is null)
+join Contract c on CPL.contract_id = c.id and c.deleted = 0 and (c.endDate >= curdate() or c.endDate is null) and c.draft = 0
 join rbFinance rf on rf.id = c.finance_id and rf.id = 19
-where pli.service_id = 13822 and pli.endDate >= curdate();
+where
+#       pli.service_id = 13822 and
+      pli.endDate >= curdate();
 
 
 ;
