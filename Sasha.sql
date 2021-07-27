@@ -1245,5 +1245,30 @@ from ActionType_Service where master_id = 8450;
 select *
 from rbService where id = 13822;
 
+select distinct pl.*
+from PriceListItem pli
+join PriceList pl on pl.id = pli.priceList_id
+join rbFinance rF on pl.finance_id = rF.id and rF.id = 19
+where pli.service_id = 13822;
+
+
 select *
-from PriceListItem where service_id = 13822;
+from PriceList where name regexp '09';
+
+
+select distinct c.*
+from Contract c
+join rbFinance f on f.id = c.finance_id and f.id = 19
+where c.contractType_id = 3
+
+
+select *
+from Contract_Tariff
+
+
+select *
+from Contract;
+
+
+select *
+from rbFinance where id = 19;
