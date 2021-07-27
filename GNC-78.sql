@@ -23,8 +23,7 @@ join ActionType at on at.id = a.ActionType_id
 left join Service s on s.action_id = a.id and s.event_id = e.id and s.deleted = 0
 left join PriceListItem pli on pli.id = s.PriceListItem_id
 where e.setDate >= '2018-01-01' and e.setDate <= '2021-06-30' and e.deleted = 0
-# and e.id = 20427438
-group by e.id order by e.setDate desc ;
+group by e.id -- order by e.setDate;
 
 
 
