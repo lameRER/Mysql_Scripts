@@ -625,7 +625,7 @@ select rp.*, s.*
 from Person p, rbSpeciality s, rbPost rp where p.lastName = 'Пурло' and s.id = p.speciality_id and rp.id = p.post_id;
 
 select *
-from rbSpeciality where name regexp 'нефролог';\
+from rbSpeciality where name regexp 'нефролог';
 
 
 select *
@@ -666,7 +666,7 @@ select *
 from Action
 join ActionType on Action.actionType_id = ActionType.id and ActionType.flatCode = 'moving'
 where event_id = 20431652;
-\
+
 
 select *
 from Action where actionType_id =7932 order by  id desc ;
@@ -852,7 +852,7 @@ join rbDiet rd on rd.id = ef.diet_id
 where e.id = %s
 GROUP by ef.diet_id
 order by ef.createDatetime', null, 0, 1),
-        (100, 'Лекарственная терапия', 'Лечение', 8, 'select DATE_FORMAT(min(dds.takeDatetime), "%d.%m.%y %H:%i") `Начало`,DATE_FORMAT(max(dds.takeDatetime), "%d.%m.%y\\n%H:%i") `Окончание`, sum(dds.takeDose) `Доза`, rsn.mnn `МНН`
+        (100, 'Лекарственная терапия', 'Лечение', 8, 'select DATE_FORMAT(min(dds.takeDatetime), "%d.%m.%y %H:%i") `Начало`,DATE_FORMAT(max(dds.takeDatetime), "%d.%m.%yn%H:%i") `Окончание`, sum(dds.takeDose) `Доза`, rsn.mnn `МНН`
 from DrugDestinationSchedule dds
 join Action a on a.id = dds.action_id and a.deleted = 0 and a.event_id = %s
 join rbStockNomenclature rsn on rsn.id = dds.nomenclature_id and rsn.deleted = 0
@@ -1285,6 +1285,66 @@ join rbFinance rf on rf.id = c.finance_id and rf.id = 19
 where
 #       pli.service_id = 13822 and
       pli.endDate >= curdate();
+
+
+
+
+SELECT @a := @a + 1 AS id, UNITED.* FROM (
+    SELECT 
+    pli.id as price_list_item_id, 
+    pli.service_id as service_id, 
+    pli.serviceCodeOW as service_code, 
+    pli.serviceNameOW as service_name, 
+    at.id as action_type_id, 
+    at.code as at_code, 
+    at.name as at_name, 
+    pl.id as pricelist_id, 
+    pli.price, 
+    pli.isAccumulativePrice as is_accumulative_price, 
+    s.isComplex as is_complex_service, 
+    at.isRequiredTissue as is_at_lab, 
+    GROUP_CONCAT(DISTINCT mr.id SEPARATOR ',') as material_resource_ids 
+    FROM ActionType at 
+    INNER JOIN ActionType_Service ats ON ats.master_id=at.id AND (CURDATE() BETWEEN ats.begDate AND COALESCE(ats.endDate, CURDATE())) 
+    LEFT JOIN ActionType_MaterialResource atmr on atmr.actionType_id  = at.id 
+    LEFT JOIN rbMaterialResource mr on mr.id = atmr.rbMaterialResource_id 
+    INNER JOIN EventType_Action e ON e.actionType_id=at.id 
+    INNER JOIN PriceListItem pli ON pli.service_id=ats.service_id 
+    INNER JOIN PriceList pl ON pli.priceList_id=pl.id 
+    INNER JOIN rbService s ON s.id=ats.service_id 
+    WHERE 
+    at.deleted=0 AND pli.deleted=0 AND pl.deleted=0 AND 
+    (CURDATE() BETWEEN pli.begDate AND pli.endDate) 
+    GROUP BY at.id, at.code, pl.id
+    UNION
+    SELECT 
+    pli.id as price_list_item_id, 
+    pli.service_id as service_id, 
+    pli.serviceCodeOW as service_code, 
+    pli.serviceNameOW as service_name, 
+    NULL as action_type_id, 
+    NULL as at_code, 
+    NULL as at_name, 
+    pl.id as pricelist_id, 
+    pli.price, 
+    pli.isAccumulativePrice as is_accumulative_price, 
+    s.isComplex as is_complex_service, 
+    NULL as is_at_lab, 
+    NULL as material_resource_ids 
+    FROM PriceListItem pli 
+    INNER JOIN PriceList pl ON pli.priceList_id=pl.id 
+    INNER JOIN rbService s ON pli.service_id=s.id 
+    LEFT JOIN ( 
+    SELECT at.id, ats.service_id 
+    FROM ActionType at 
+    INNER JOIN ActionType_Service ats ON ats.master_id=at.id AND (CURDATE() BETWEEN ats.begDate AND COALESCE(ats.endDate, CURDATE())) 
+    INNER JOIN EventType_Action e ON e.actionType_id=at.id 
+    WHERE at.deleted=0 
+    GROUP BY at.id, ats.service_id 
+    ) at_with_services ON pli.service_id=at_with_services.service_id 
+    WHERE     pli.deleted=0 AND pl.deleted=0 AND (CURDATE() BETWEEN pli.begDate AND pli.endDate) AND 
+    at_with_services.id IS NULL AND s.isComplex = 1
+) AS UNITED
 
 
 ;
