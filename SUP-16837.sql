@@ -54,7 +54,6 @@ select * from rbPrintTemplate rpt where context = 'KT-02';
 select at2.* from DestinationTree_ActionType dat, ActionType at2 
 where dat.master_id in(10073,10074) and at2.id = dat.actionType_id ;
 
-select * from destinat;
 
 select * from DestinationTree where deleted= 0 and visible = 1;
 
@@ -80,3 +79,12 @@ from Person where id = 633;
 select *
 from ActionPropertyType ;
 
+
+select *
+from ActionType where code regexp '06.09.005.003';
+
+select *
+from rbService where code regexp '06.09.005.003';
+
+select *
+from Organisation where id = 6846;

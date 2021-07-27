@@ -625,7 +625,7 @@ select rp.*, s.*
 from Person p, rbSpeciality s, rbPost rp where p.lastName = 'Пурло' and s.id = p.speciality_id and rp.id = p.post_id;
 
 select *
-from rbSpeciality where name regexp 'нефролог';\
+from rbSpeciality where name regexp 'нефролог';
 
 
 select *
@@ -666,7 +666,7 @@ select *
 from Action
 join ActionType on Action.actionType_id = ActionType.id and ActionType.flatCode = 'moving'
 where event_id = 20431652;
-\
+
 
 select *
 from Action where actionType_id =7932 order by  id desc ;
@@ -852,7 +852,7 @@ join rbDiet rd on rd.id = ef.diet_id
 where e.id = %s
 GROUP by ef.diet_id
 order by ef.createDatetime', null, 0, 1),
-        (100, 'Лекарственная терапия', 'Лечение', 8, 'select DATE_FORMAT(min(dds.takeDatetime), "%d.%m.%y %H:%i") `Начало`,DATE_FORMAT(max(dds.takeDatetime), "%d.%m.%y\\n%H:%i") `Окончание`, sum(dds.takeDose) `Доза`, rsn.mnn `МНН`
+        (100, 'Лекарственная терапия', 'Лечение', 8, 'select DATE_FORMAT(min(dds.takeDatetime), "%d.%m.%y %H:%i") `Начало`,DATE_FORMAT(max(dds.takeDatetime), "%d.%m.%yn%H:%i") `Окончание`, sum(dds.takeDose) `Доза`, rsn.mnn `МНН`
 from DrugDestinationSchedule dds
 join Action a on a.id = dds.action_id and a.deleted = 0 and a.event_id = %s
 join rbStockNomenclature rsn on rsn.id = dds.nomenclature_id and rsn.deleted = 0
@@ -1232,3 +1232,166 @@ from ActionPropertyType where id = 3977422;
 
 select *
 from s11vm.rbprinttemplate where id = 504;
+
+
+
+select *
+from ActionType where code = '1.10.1.20';
+
+select *
+from ActionType_Service where master_id = 8450;
+
+
+select *
+from rbService where id = 13822;
+
+select distinct pl.*
+from PriceListItem pli
+join PriceList pl on pl.id = pli.priceList_id
+join rbFinance rF on pl.finance_id = rF.id and rF.id = 19
+join Contract_PriceList cpl on cpl.priceList_id = pl.id
+join Contract c on c.id = cpl.contract_id
+where pli.service_id = 13822;
+
+
+
+select distinct pli.*
+from Event e
+join EventType et on et.id = e.eventType_id
+join rbFinance rf on rf.id = et.finance_id
+join Contract c on c.finance_id = rf.id and c.contractType_id = 3 and e.contract_id = c.id
+join Contract_PriceList cpl on cpl.contract_id = c.id
+join PriceList pl on pl.finance_id = rf.id and pl.id = cpl.priceList_id
+join PriceListItem pli on pli.priceList_id = pl.id
+where e.id = 20436792;
+
+
+select *
+from Contract_Specification where master_id = 75;
+
+select cs.*, et.name, c.number
+from Contract_Specification cs
+join EventType et on et.id = cs.eventType_id
+join Contract c on c.id = cs.master_id
+
+
+
+select distinct c.*, curdate()
+from PriceListItem pli
+join PriceList pl on pl.id = pli.priceList_id
+join Contract_PriceList CPL on pl.id = CPL.priceList_id
+join Contract c on CPL.contract_id = c.id and c.deleted = 0 and (c.endDate >= curdate() or c.endDate is null) and c.draft = 0
+join rbFinance rf on rf.id = c.finance_id and rf.id = 19
+where
+#       pli.service_id = 13822 and
+      pli.endDate >= curdate();
+
+
+
+
+SELECT @a := @a + 1 AS id, UNITED.* FROM (
+    SELECT 
+    pli.id as price_list_item_id, 
+    pli.service_id as service_id, 
+    pli.serviceCodeOW as service_code, 
+    pli.serviceNameOW as service_name, 
+    at.id as action_type_id, 
+    at.code as at_code, 
+    at.name as at_name, 
+    pl.id as pricelist_id, 
+    pli.price, 
+    pli.isAccumulativePrice as is_accumulative_price, 
+    s.isComplex as is_complex_service, 
+    at.isRequiredTissue as is_at_lab, 
+    GROUP_CONCAT(DISTINCT mr.id SEPARATOR ',') as material_resource_ids 
+    FROM ActionType at 
+    INNER JOIN ActionType_Service ats ON ats.master_id=at.id AND (CURDATE() BETWEEN ats.begDate AND COALESCE(ats.endDate, CURDATE())) 
+    LEFT JOIN ActionType_MaterialResource atmr on atmr.actionType_id  = at.id 
+    LEFT JOIN rbMaterialResource mr on mr.id = atmr.rbMaterialResource_id 
+    INNER JOIN EventType_Action e ON e.actionType_id=at.id 
+    INNER JOIN PriceListItem pli ON pli.service_id=ats.service_id 
+    INNER JOIN PriceList pl ON pli.priceList_id=pl.id 
+    INNER JOIN rbService s ON s.id=ats.service_id 
+    WHERE 
+    at.deleted=0 AND pli.deleted=0 AND pl.deleted=0 AND 
+    (CURDATE() BETWEEN pli.begDate AND pli.endDate) 
+    GROUP BY at.id, at.code, pl.id
+    UNION
+    SELECT 
+    pli.id as price_list_item_id, 
+    pli.service_id as service_id, 
+    pli.serviceCodeOW as service_code, 
+    pli.serviceNameOW as service_name, 
+    NULL as action_type_id, 
+    NULL as at_code, 
+    NULL as at_name, 
+    pl.id as pricelist_id, 
+    pli.price, 
+    pli.isAccumulativePrice as is_accumulative_price, 
+    s.isComplex as is_complex_service, 
+    NULL as is_at_lab, 
+    NULL as material_resource_ids 
+    FROM PriceListItem pli 
+    INNER JOIN PriceList pl ON pli.priceList_id=pl.id 
+    INNER JOIN rbService s ON pli.service_id=s.id 
+    LEFT JOIN ( 
+    SELECT at.id, ats.service_id 
+    FROM ActionType at 
+    INNER JOIN ActionType_Service ats ON ats.master_id=at.id AND (CURDATE() BETWEEN ats.begDate AND COALESCE(ats.endDate, CURDATE())) 
+    INNER JOIN EventType_Action e ON e.actionType_id=at.id 
+    WHERE at.deleted=0 
+    GROUP BY at.id, ats.service_id 
+    ) at_with_services ON pli.service_id=at_with_services.service_id 
+    WHERE     pli.deleted=0 AND pl.deleted=0 AND (CURDATE() BETWEEN pli.begDate AND pli.endDate) AND 
+    at_with_services.id IS NULL AND s.isComplex = 1
+) AS UNITED
+
+
+;
+
+
+select *
+from PriceList where name regexp '09' and con;
+
+
+select distinct pli.*
+from Contract c
+join rbFinance f on f.id = c.finance_id and f.id = 19
+join Contract_PriceList cpl on cpl.contract_id = c.id
+join PriceList pl on pl.id = cpl.priceList_id
+join PriceListItem pli on pli.priceList_id = pl.id
+where c.contractType_id = 3 and c.id =205086
+
+
+select *
+from rbFinance where deleted = 0;
+
+select *
+from Contract_Tariff
+
+
+select *
+from Contract;
+
+
+select *
+from rbFinance where id = 19;
+
+
+select pl.name, pli.*
+from PriceListItem pli
+join PriceList pl on pl.id = pli.priceList_id
+where pli.serviceCodeOW regexp 'A12.30.012.001.002|A12.30.012.001.007'
+#   and priceList_id = 124
+  and (pli.endDate >= curdate() or pli.endDate is null);
+
+
+
+select *
+from PriceListItem where id in
+(select pli.id
+from Service s
+right join PriceListItem pli on pli.id = s.PriceListItem_id
+where s.id is null and pli.id in (7100001,7099706,7097718,7098665,7098666,7099728,7097719,7097727,7098668)
+group by pli.id);
+
