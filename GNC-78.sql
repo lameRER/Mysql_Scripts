@@ -89,8 +89,8 @@ from Event e
 join Client c on e.client_id = c.id and c.deleted = 0
 join EventType et on et.id = e.eventType_id and et.purpose_id = 2
 left join rbFinance rf on et.finance_id = rf.id
-left join Diagnosis d on d.client_id = c.id and d.deleted = 0 and d.diagnosisType_id = 2
-left join Diagnostic d1 on d1.event_id = e.id and d.id = d1.diagnosis_id and d1.deleted = 0
+# left join Diagnosis d on d.client_id = c.id and d.deleted = 0 and d.diagnosisType_id = 2
+# left join Diagnostic d1 on d1.event_id = e.id and d.id = d1.diagnosis_id and d1.deleted = 0
 join Action a on a.event_id = e.id and a.deleted = 0 and a.status = 2
 join ActionType at on at.id = a.ActionType_id and at.class = 2
 left join Person p on p.id = a.person_id
@@ -99,7 +99,7 @@ left join Service s on s.action_id = a.id and s.event_id = e.id
 left join PriceListItem pli on pli.id = s.PriceListItem_id
 where e.setDate >= '2018-01-01' and e.setDate <= '2021-06-30' and e.deleted = 0
 # and e.id = 3526258
-group by e.id, a.id order by c.id, a.createDatetime desc
+group by e.id, a.id order by c.id, a.createDatetime
 
 
 
