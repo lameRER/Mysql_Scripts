@@ -6,10 +6,7 @@
 -- @variable @ev event_id
 -- @Param @act Action_id
 
-/**
-* TODO: Проверить правильной вывода запрса
-* ? Корректный ли вывод?
-*/
+
 SET @cl = 281923;
 SET @ev = 20362870;
 SET @act = 22607311;
