@@ -1386,5 +1386,12 @@ where pli.serviceCodeOW regexp 'A12.30.012.001.002|A12.30.012.001.007'
   and (pli.endDate >= curdate() or pli.endDate is null);
 
 
+
 select *
-from Service where PriceListItem_id in (7100001,7099706,7097718,7098665,7098666,7099728,7097719,7097727,7098668) group by PriceListItem_id;
+from PriceListItem where id in
+(select pli.id
+from Service s
+right join PriceListItem pli on pli.id = s.PriceListItem_id
+where s.id is null and pli.id in (7100001,7099706,7097718,7098665,7098666,7099728,7097719,7097727,7098668)
+group by pli.id);
+
