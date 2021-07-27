@@ -1232,3 +1232,18 @@ from ActionPropertyType where id = 3977422;
 
 select *
 from s11vm.rbprinttemplate where id = 504;
+
+
+
+select *
+from ActionType where code = '1.10.1.20';
+
+select *
+from ActionType_Service where master_id = 8450;
+
+
+select *
+from rbService where id = 13822;
+
+select *
+from PriceListItem where service_id = 13822;
