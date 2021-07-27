@@ -1378,5 +1378,13 @@ select *
 from rbFinance where id = 19;
 
 
+select pl.name, pli.*
+from PriceListItem pli
+join PriceList pl on pl.id = pli.priceList_id
+where pli.serviceCodeOW regexp 'A12.30.012.001.002|A12.30.012.001.007'
+#   and priceList_id = 124
+  and (pli.endDate >= curdate() or pli.endDate is null);
+
+
 select *
-from PriceListItem where serviceCodeOW regexp '12.30.012.001.002' and endDate <= curdate();
+from Service where PriceListItem_id in (7100001,7099706,7097718,7098665,7098666,7099728,7097719,7097727,7098668) group by PriceListItem_id;
