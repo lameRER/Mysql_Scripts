@@ -104,3 +104,7 @@ select *
 from ClientPolicy where insurer_id = 6846 and deleted = 0 group by client_id;
 
 
+select *
+from Event;
+
+
