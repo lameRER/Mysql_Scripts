@@ -109,14 +109,14 @@ from Event;
 
 
 
-select id,
-       createDatetime,
-       createPerson_id,
-       modifyDatetime,
-       modifyPerson_id,
-       group_id,
-       code,
-       tmp.name name,
+select rbService.id,
+       rbService.createDatetime,
+       rbService.createPerson_id,
+       rbService.modifyDatetime,
+       rbService.modifyPerson_id,
+       rbService.group_id,
+       rbService.code,
+       at.name,
        eisLegacy,
        nomenclatureLegacy,
        license,
@@ -138,9 +138,25 @@ select id,
        caseCast_id,
        netrica_Code,
        Fed_code
-from rbService,(select 'test' as name union select 'test1') as tmp
-where rbService.id = (select id from rbService order by id desc limit 1)
+from rbService, ActionType at
+where rbService.id = (select id from rbService order by id desc limit 1) and at.id in (select id from ActionType);
 
-
+(select '1'
+union
+select '2'
+union
+select '3'
+union
+select '4'
+union
+select '5'
+union
+select '6'
+union
+select '7'
+union
+select '8'
+union
+select '9')
 
 
