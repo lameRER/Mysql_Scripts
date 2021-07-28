@@ -87,7 +87,7 @@ select *
 from rbService where code regexp '06.09.005.003';
 
 select *
-from Organisation where id = 6846;
+from Organisation where id in (6846, 3310);
 
 
 select *
@@ -106,5 +106,41 @@ from ClientPolicy where insurer_id = 6846 and deleted = 0 group by client_id;
 
 select *
 from Event;
+
+
+
+select id,
+       createDatetime,
+       createPerson_id,
+       modifyDatetime,
+       modifyPerson_id,
+       group_id,
+       code,
+       tmp.name name,
+       eisLegacy,
+       nomenclatureLegacy,
+       license,
+       infis,
+       begDate,
+       endDate,
+       medicalAidProfile_id,
+       medicalAidKind_id,
+       medicalAidType_id,
+       adultUetDoctor,
+       adultUetAverageMedWorker,
+       childUetDoctor,
+       childUetAverageMedWorker,
+       qualityLevel,
+       superviseComplexityFactor,
+       tarif,
+       gr,
+       category_id,
+       caseCast_id,
+       netrica_Code,
+       Fed_code
+from rbService,(select 'test' as name union select 'test1') as tmp
+where rbService.id = (select id from rbService order by id desc limit 1)
+
+
 
 
