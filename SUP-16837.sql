@@ -88,3 +88,8 @@ from rbService where code regexp '06.09.005.003';
 
 select *
 from Organisation where id = 6846;
+
+
+
+select *
+from ClientPolicy where insurer_id = 6846 and deleted = 0 group by client_id;
