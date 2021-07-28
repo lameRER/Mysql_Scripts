@@ -91,6 +91,12 @@ from Organisation where id = 6846;
 
 
 select *
+from Organisation where fullName = 'Анестезиологии и реанимации ФГБУЗ "Клиническая больница №122 имени Л.Г. Соколова ФМБА России"';
+
+insert into s11.Organisation (createDatetime, createPerson_id, modifyDatetime, modifyPerson_id, deleted, fullName, shortName, title, net_id, infisCode, obsoleteInfisCode, OKVED, INN, KPP, OGRN, OKATO, OKPF_code, OKPF_id, OKFS_code, OKFS_id, OKPO, FSS, region, address, chief, phone, accountant, isInsurer, isCompulsoryInsurer, isVoluntaryInsurer, compulsoryServiceStop, voluntaryServiceStop, area, isHospital, notes, head_id, miacCode, isMedical, isArmyOrg, canOmitPolicyNumber, netrica_Code, DATN, DATO, grkm_code, reestrNumber, mse_code, isMSEBureau, llo_code, llo_name, FOMSCode)
+values  ('2021-06-29 11:36:40', 1069, now(), null, 0, 'Анестезиологии и реанимации ФГБУЗ "Клиническая больница №122 имени Л.Г. Соколова ФМБА России"', 'Анестезиологии и реанимации ФГБУЗ "Клиническая больница №122 име', 'Анестезиологии и реанимации ФГБУЗ "Клиническая больница №122 име', null, '', '', '', '', '', '', '', '', null, 0, null, '', '', '', '194291, СПб, пр-кт. Культуры, д.4 лит.а, ,', '', '', '', 0, 0, 0, 0, 0, '', 1, '', null, '', 1, 0, 0, '2dd209a2-e7be-49bb-afba-674e7527144b', '2000-01-01', '2200-01-01', null, null, null, null, null, null, null);
+
+select *
 from Organisation where shortName = 'нКом
 ';
 
