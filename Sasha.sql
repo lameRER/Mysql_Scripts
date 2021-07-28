@@ -1395,3 +1395,50 @@ right join PriceListItem pli on pli.id = s.PriceListItem_id
 where s.id is null and pli.id in (7100001,7099706,7097718,7098665,7098666,7099728,7097719,7097727,7098668)
 group by pli.id);
 
+
+
+select distinct ct.id,
+                deleted,
+                master_id,
+                eventType_id,
+                tariffType,
+                s.id service_id,
+                service_id,
+                tariffCategory_id,
+                ct.begDate,
+                ct.endDate,
+                sex,
+                age,
+                attachType_id,
+                attachLPU_id,
+                unit_id,
+                amount,
+                uet,
+                price,
+                frag1Start,
+                frag1Sum,
+                frag1Price,
+                frag2Start,
+                frag2Sum,
+                frag2Price,
+                limitationExceedMode,
+                limitation,
+                priceEx,
+                limitation2ExceedMode,
+                limitation2,
+                priceEx2,
+                MKB,
+                federalPrice,
+                federalLimitation,
+                speciality_id,
+                vat,
+                ct.createPerson_id,
+                ct.createDatetime,
+                ct.modifyPerson_id,
+                ct.modifyDatetime,
+                ct.caseCast_id
+from Contract_Tariff ct, rbService s where s.id in(43328,43327) and ct.service_id = 15475;
+
+
+select *
+from Contract_Tariff;
