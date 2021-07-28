@@ -90,6 +90,11 @@ select *
 from Organisation where id = 6846;
 
 
+select *
+from Organisation where shortName = 'нКом
+';
 
 select *
 from ClientPolicy where insurer_id = 6846 and deleted = 0 group by client_id;
+
+
