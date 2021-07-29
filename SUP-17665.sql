@@ -205,6 +205,13 @@ select *
 from s12.ActionPropertyType where actionType_id = 15084 and deleted = 0 and (name = 'Канал доставки' or name = 'Доставлен')
 
 select *
+from Event where externalId = '30769';
+
+
+select *
+from Client where id = 962656;
+
+select *
 from Action limit 1;
 #
 #
