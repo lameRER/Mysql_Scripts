@@ -194,16 +194,25 @@ from ActionProperty ap where ap.type_id = 39729 and ap.action_id in(select actio
 
 select * from
 # update
-              ActionPropertyType
+              s12.ActionPropertyType
 # set penalty = 100
 where valueDomain in ('netricaTypeFromDiseaseStart', 'netricaTransportIntern', 'netricaHospChannel', 'netricaPatientConditionOnAdmission', 'rbTransf') and actionType_id = 15084-- and penalty != 100;
+
+select *
+from s11.ActionPropertyType where actionType_id = 15084 and deleted = 0 and (name = 'Канал доставки' or name = 'Доставлен')
+union all
+select *
+from s12.ActionPropertyType where actionType_id = 15084 and deleted = 0 and (name = 'Канал доставки' or name = 'Доставлен')
+
+select *
+from Action limit 1;
 #
 #
 #
 #
 # Кем направлен - оставлям
 # Прочие направители - оставляем
-# Канал доставки - переделали
+# Канал доставки - переделали4
 # Подстанция СМП - оставляем
 # Признак поступления - оставляем
 # Доставлен - переделали
