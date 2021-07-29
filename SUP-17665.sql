@@ -192,11 +192,11 @@ from ActionProperty ap where ap.type_id = 39729 and ap.action_id in(select actio
 
 
 
-# select * from
+select * from
 # update
-#               ActionPropertyType
+              ActionPropertyType
 # set penalty = 100
-# where valueDomain in ('netricaTypeFromDiseaseStart', 'netricaTransportIntern', 'netricaHospChannel', 'netricaPatientConditionOnAdmission', 'rbTransf') and actionType_id = 15084-- and penalty != 100;
+where valueDomain in ('netricaTypeFromDiseaseStart', 'netricaTransportIntern', 'netricaHospChannel', 'netricaPatientConditionOnAdmission', 'rbTransf') and actionType_id = 15084-- and penalty != 100;
 #
 #
 #
@@ -237,3 +237,7 @@ select DATE_SUB(CURDATE(), INTERVAL 2 DAY)
 
 select *
 from Event where eventType_id = 94 order by id desc;
+
+
+select *
+;
