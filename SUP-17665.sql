@@ -1,4 +1,4 @@
-use s12;
+use s11;
 set @flatCode = 'received';
 set @ActionType = (select id from ActionType where flatCode = @flatCode and deleted = 0);
 
@@ -117,7 +117,7 @@ from
         isAutoFillCancelled
  from ActionProperty ap
 left Join ActionProperty_String aps using(id)
-join Action a on ap.action_id = a.id and a.deleted = 0 and a.event_id = 33868109
+join Action a on ap.action_id = a.id and a.deleted = 0-- and a.event_id = 33868109
 join ActionType at2 on at2.id = a.actionType_id and at2.deleted = 0 and at2.flatCode = @flatCode
 join ActionPropertyType apt on apt.actionType_id = at2.id and apt.deleted =0 and ap.type_id = apt.id and apt.id = @ActionPropertyTypeOld
 where ap.deleted= 0 and aps.id is not null) as tmp
@@ -147,9 +147,9 @@ where ap.deleted= 0 and ap.type_id = @ActionPropertyTypeOld and apr.id is null g
 # from ActionProperty where type_id = 39729 and deleted = 0);
 
 
-update ActionProperty
-set deleted = 1
-where id in (select id from ActionProperty where type_id = 39729 and deleted = 0);
+# update ActionProperty
+# set deleted = 1
+# where id in (select id from ActionProperty where type_id = 39729 and deleted = 0);
 
 
 select *
@@ -192,11 +192,11 @@ from ActionProperty ap where ap.type_id = 39729 and ap.action_id in(select actio
 
 
 
-# select * from
+select * from
 # update
-#               ActionPropertyType
+              ActionPropertyType
 # set penalty = 100
-# where valueDomain in ('netricaTypeFromDiseaseStart', 'netricaTransportIntern', 'netricaHospChannel', 'netricaPatientConditionOnAdmission', 'rbTransf') and actionType_id = 15084-- and penalty != 100;
+where valueDomain in ('netricaTypeFromDiseaseStart', 'netricaTransportIntern', 'netricaHospChannel', 'netricaPatientConditionOnAdmission', 'rbTransf') and actionType_id = 15084-- and penalty != 100;
 #
 #
 #
@@ -232,3 +232,12 @@ from ActionPropertyType where actionType_id = 15084 and deleted = 0 order by  id
 
 
 select DATE_SUB(CURDATE(), INTERVAL 2 DAY)
+
+
+
+select *
+from Event where eventType_id = 94 order by id desc;
+
+
+select *
+;
