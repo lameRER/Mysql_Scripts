@@ -232,3 +232,8 @@ from ActionPropertyType where actionType_id = 15084 and deleted = 0 order by  id
 
 
 select DATE_SUB(CURDATE(), INTERVAL 2 DAY)
+
+
+
+select *
+from Event where eventType_id = 94 order by id desc;
