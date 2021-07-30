@@ -135,3 +135,7 @@ union
 select 'Дата и время прибытия в МО с пациентом' as name
     ) as apt1
 where apt.id = (select id from ActionPropertyType where typeName = 'string' order by id desc limit 1);
+
+
+select *
+from ActionPropertyType where actionType_id in (select id from ActionType where group_id = 56182);
