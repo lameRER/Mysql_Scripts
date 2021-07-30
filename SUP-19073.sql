@@ -5,10 +5,13 @@
 Региз-ВП-091
 Региз-covid19-014
 
-set @
 
-set @name = '';
+
+set @name = 'Регис-ХСН-093';
 set @code = '19073';
+set @group = (select id from ActionType where code regexp concat('^', @code) and name = @name);
+
+
 
 insert into ActionType(createDatetime, createPerson_id, modifyDatetime, modifyPerson_id, class, group_id, code, name, title, flatCode, sex, age, office, showInForm, genTimetable,
                        quotaType_id, context, defaultPlannedEndDate, defaultExecPerson_id, defaultOrg_id, isMES, nomenclativeService_id, prescribedType_id, shedule_id, counter_id,
@@ -19,10 +22,10 @@ select
        now() modifyDatetime,
        null modifyPerson_id,
        class,
-       group_id,
-       concat(@code, '-', (select count(code) from ActionType where group_id = 56182 and code regexp @code)+1) code,
-       @name name,
-       @name title,
+       @group group_id,
+       concat(@code, '-', (select count(code) from ActionType where group_id = @group)+1) code,
+       'Осмотр кардиолога' name,
+       'Осмотр кардиолога' title,
        flatCode,
        sex,
        age,
@@ -45,7 +48,7 @@ select
        singleInPeriod,
        refferalType_id,
        formulaAlias
-from ActionType at where at.group_id = 56182 and at.id = (select id from ActionType where group_id = at.group_id order by id desc limit 1)
+from ActionType at where at.id = @group;
 
 
 select *
