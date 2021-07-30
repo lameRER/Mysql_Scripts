@@ -194,16 +194,32 @@ from ActionProperty ap where ap.type_id = 39729 and ap.action_id in(select actio
 
 select * from
 # update
-              ActionPropertyType
+              s12.ActionPropertyType
 # set penalty = 100
 where valueDomain in ('netricaTypeFromDiseaseStart', 'netricaTransportIntern', 'netricaHospChannel', 'netricaPatientConditionOnAdmission', 'rbTransf') and actionType_id = 15084-- and penalty != 100;
+
+select *
+from s11.ActionPropertyType where actionType_id = 15084 and deleted = 0 and (name = 'Канал доставки' or name = 'Доставлен')
+union all
+select *
+from s12.ActionPropertyType where actionType_id = 15084 and deleted = 0 and (name = 'Канал доставки' or name = 'Доставлен')
+
+select *
+from Event where externalId = '30769';
+
+
+select *
+from Client where id = 962656;
+
+select *
+from Action limit 1;
 #
 #
 #
 #
 # Кем направлен - оставлям
 # Прочие направители - оставляем
-# Канал доставки - переделали
+# Канал доставки - переделали4
 # Подстанция СМП - оставляем
 # Признак поступления - оставляем
 # Доставлен - переделали
@@ -239,5 +255,12 @@ select *
 from Event where eventType_id = 94 order by id desc;
 
 
-select *
+select * from ActionType where name regexp 'осмотр.* врача' order by id desc
 ;
+
+
+
+
+SELECT `a`.`id`, `a`.`actualAppointmentDuration`, `a`.`age`, `a`.`amount`, `a`.`amountEvaluation`, `a`.`checkPeriod`, `a`.`checkPersonSet`, `a`.`class`, `a`.`code`, `a`.`context`, `a`.`counter_id`, `a`.`createDatetime`, `a`.`createPerson_id`, `a`.`defaultBeginDate`, `a`.`defaultDirectionDate`, `a`.`defaultEndDate`, `a`.`defaultExecPerson_id`, `a`.`defaultMES`, `a`.`defaultMKB`, `a`.`defaultMorphology`, `a`.`defaultOrg_id`, `a`.`defaultPersonInEditor`, `a`.`defaultPersonInEvent`, `a`.`defaultPlannedEndDate`, `a`.`defaultStatus`, `a`.`deleted`, `a`.`eventStatusMod`, `a`.`filledLock`, `a`.`filterPosts`, `a`.`filterSpecialities`, `a`.`flatCode`, `a`.`formulaAlias`, `a`.`frequencyCount`, `a`.`frequencyPeriod`, `a`.`frequencyPeriodType`, `a`.`genTimetable`, `a`.`group_id`, `a`.`hasAssistant`, `a`.`isActiveGroup`, `a`.`isAllowedAfterDeath`, `a`.`isAllowedDateAfterDeath`, `a`.`isCustomSum`, `a`.`isExecRequiredForEventExec`, `a`.`isFrequencyPeriodByCalendar`, `a`.`isIgnoreEventExecDate`, `a`.`isMES`, `a`.`isMorphologyRequired`, `a`.`isNomenclatureExpense`, `a`.`isPreferable`, `a`.`isPrinted`, `a`.`isRequiredCoordination`, `a`.`isStrictFrequency`, `a`.`isSubstituteEndDateToEvent`, `a`.`lis_code`, `a`.`locked`, `a`.`maxOccursInEvent`, `a`.`modifyDatetime`, `a`.`modifyPerson_id`, `a`.`name`, `a`.`nomenclativeService_id`, `a`.`office`, `a`.`period`, `a`.`prescribedType_id`, `a`.`propertyAssignedVisible`, `a`.`propertyEvaluationVisible`, `a`.`propertyNormVisible`, `a`.`propertyUnitVisible`, `a`.`quotaType_id`, `a`.`recommendationControl`, `a`.`recommendationExpirePeriod`, `a`.`refferalType_id`, `a`.`serviceType`, `a`.`sex`, `a`.`shedule_id`, `a`.`showAPNotes`, `a`.`showAPOrg`, `a`.`showInForm`, `a`.`showTime`, `a`.`singleInPeriod`, `a`.`title`, `a`.`visible`, `a`.`withoutAgree`
+FROM `ActionType` AS `a`
+WHERE (`a`.`name` = 'Осмотр дежурного врача') AND (`a`.`code` = '2282-1')
