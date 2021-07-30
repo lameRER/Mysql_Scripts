@@ -5,8 +5,9 @@
 Региз-ВП-091
 Региз-covid19-014
 
+set @
 
-set @name = 'Региз-covid19-014';
+set @name = '';
 set @code = '19073';
 
 insert into ActionType(createDatetime, createPerson_id, modifyDatetime, modifyPerson_id, class, group_id, code, name, title, flatCode, sex, age, office, showInForm, genTimetable,
