@@ -7,7 +7,7 @@
 
 
 
-set @name = 'Регис-ХСН-093';
+set @name = 'Региз-ОНМК-007';
 set @code = '19073';
 set @group = (select id from ActionType where code regexp concat('^', @code) and name = @name);
 
@@ -23,9 +23,9 @@ select
        null modifyPerson_id,
        class,
        @group group_id,
-       concat(@code, '-', (select count(code) from ActionType where group_id = @group)+1) code,
-       'План ведения пациента' name,
-       'План ведения пациента' title,
+       concat((select code from ActionType where id = @group), '-', (select count(code) from ActionType where group_id = @group)+1) code,
+       'Врач ОРИТ/БИТР' name,
+       'Врач ОРИТ/БИТР' title,
        flatCode,
        sex,
        age,
@@ -64,7 +64,7 @@ select
        apt1.name name,
        shortName,
        descr,
-       unit_id,
+       null unit_id,
        typeName,
        valueDomain,
        defaultValue,
@@ -84,21 +84,30 @@ select
 from ActionPropertyType apt
 join ActionType at on at.group_id = @group and at.id = (select id from ActionType where group_id = @group order by id desc limit 1)
 join (
-select 'Организация ведения пациента' as name union
-select 'Наблюдение специалиста по СН в ФГБУ НМИЦ им В.А. Алмазова' as name union
-select 'Рекомендации по вакцинации против пневмококковой инфекции и гриппа' as name union
-select 'Рекомендации по объему физических нагрузок на амбулаторном этапе' as name union
-select 'Рекомендации по санации полости рта и очагов инфекции' as name union
-select 'Рекомендации по водно-солевому режиму' as name union
-select 'Рекомендованный объем выпиваемой жидкости' as name union
-select 'Рекомендации по ежедневному взвешиванию с ведением дневника веса' as name union
-select 'Рекомендован контроль натрия, калия, креатинина в соответствии с шагами титрации' as name union
-select 'Рекомендован СМЭКГ (Холтер)' as name union
-select 'Рекомендована консультация Кардиохирург' as name union
-select 'Рекомендована консультация Аритмолог' as name union
-select 'Рекомендована консультация Кардиолог - специалист по СН' as name union
-select 'Рекомендованы высокотехнологичные (ВТ) методы лечения' as name union
-select 'Рекомендована паллиативная терапия' as name
+select 'Дата и время поступления' as name union
+select 'Дата и время перевода' as name union
+select 'Уровень сознания, в соответствии со шкалой комы Глазго(VIMISSSZ1)' as name union
+select 'АД при переводе' as name union
+select 'Мерцательная аритмия по ЭКГ за все время пребывания' as name union
+select 'Повышение температуры тела более 37,50С за все время пребывания' as name union
+select 'Проведенные вмешательства' as name union
+select '(в случае ТЛТ)' as name union
+select 'Дата и время начала ТЛТ' as name union
+select 'Дата и время окончания ТЛТ' as name union
+select 'наименование и доза тромболитиков:' as name union
+select 'Альтеплаза' as name union
+select 'Альтеплаза.Доза (в мг/кг)' as name union
+select 'Стафилокиназа' as name union
+select 'Стафилокиназа.Доза(доза фиксирована)' as name union
+select 'Балл по NIHSS после ТЛТ (VIMISSSZ3)' as name union
+select 'Максимальное АД за 24ч после ТЛТ' as name union
+select 'Осложнения ТЛТ' as name union
+select '(в случае ТЭ)' as name union
+select 'балл по NIHSS после ТЭ (VIMISSSZ3)' as name union
+select 'Максимальное АД за 24 ч после ТЭ' as name union
+select 'Питание' as name union
+select 'Проведенная терапия' as name union
+select 'Результаты анализов на момент перевода' as name
     ) as apt1
 where apt.id = (select id from ActionPropertyType where typeName = 'string' order by id desc limit 1);
 
@@ -314,8 +323,42 @@ values
 (3, 0, '3', 'ИКД'),
 (4, 0, '4', 'ТС');
 
+
+
+
+
+
+
+
+
+create table netricaHospitalType(
+  id int(10),
+  deleted tinyint(1),
+  code varchar(8),
+  name varchar(128)
+);
+
+insert into netricaHospitalType (id, deleted, code, name)
+values
+(1, 0, '1', 'госпитализация не требуется'),
+(2, 0, '2', 'ПСО'),
+(3, 0, '3', 'РСЦ'),
+(4, 0, '4', 'иной стационар'),
+(5, 0, '5', 'отказ от госпитализации');
+
 select ActionPropertyType.vitalParamId, ActionPropertyType.isVitalParam, typeName, valueDomain, name, ActionPropertyType.*
 from ActionPropertyType where actionType_id = (select id from ActionType where group_id = @group order by id desc limit 1) and deleted = 0;
+
+
+
+select ActionPropertyType.vitalParamId, ActionPropertyType.isVitalParam, typeName, valueDomain, name, ActionPropertyType.*
+from ActionPropertyType where vitalParamId in (
+    select ActionPropertyType.vitalParamId
+    from ActionPropertyType
+    where actionType_id = (select id from ActionType where group_id = @group order by id desc limit 1)
+      and ActionPropertyType.deleted = 0
+);
+
 
 select *
 from ActionPropertyType where isVitalParam = 1;
@@ -336,3 +379,25 @@ from ActionType where id= 56237;
 
 select *
 from ActionType where group_id = 56182;
+
+
+select at.name, at.group_id, apt.*
+from ActionPropertyType apt, ActionType at where apt.actionType_id = at.id and apt.name regexp 'VIMISSSZ2' and at.group_id = 56182;
+
+
+select *
+from ActionPropertyType where actionType_id = 56183 and deleted = 0 order by idx;
+
+select *
+from ActionType where id in(56182,56210);
+
+select *
+from ActionType where group_id = 56182;
+
+
+select apt.*
+from ActionType at, ActionPropertyType apt where at.group_id = 56238 and apt.actionType_id = at.id and apt.deleted =0;
+
+
+select *
+from VIMISSSZ14;
