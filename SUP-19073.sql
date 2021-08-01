@@ -7,7 +7,7 @@
 
 
 
-set @name = 'Региз-ОНМК-007';
+set @name = 'Региз-онко-095';
 set @code = '19073';
 set @group = (select id from ActionType where code regexp concat('^', @code) and name = @name);
 
@@ -24,8 +24,8 @@ select
        class,
        @group group_id,
        concat((select code from ActionType where id = @group), '-', (select count(code) from ActionType where group_id = @group)+1) code,
-       'Врач ОРИТ/БИТР' name,
-       'Врач ОРИТ/БИТР' title,
+       'Диспансерное наблюдение' name,
+       'Диспансерное наблюдение' title,
        flatCode,
        sex,
        age,
@@ -359,6 +359,11 @@ from ActionPropertyType where vitalParamId in (
       and ActionPropertyType.deleted = 0
 );
 
+
+select apt.name, apt.valueDomain, v.*
+from rbVitalParams v
+left join ActionPropertyType apt on apt.vitalParamId = v.id
+where v.name regexp 'поражения'
 
 select *
 from ActionPropertyType where isVitalParam = 1;
