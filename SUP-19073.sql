@@ -24,8 +24,8 @@ select
        class,
        @group group_id,
        concat(@code, '-', (select count(code) from ActionType where group_id = @group)+1) code,
-       'Осмотр кардиолога' name,
-       'Осмотр кардиолога' title,
+       'План ведения пациента' name,
+       'План ведения пациента' title,
        flatCode,
        sex,
        age,
@@ -49,13 +49,6 @@ select
        refferalType_id,
        formulaAlias
 from ActionType at where at.id = @group;
-
-
-select *
-from ActionType where group_id = 56182 and code regexp @code;
-
-select *
-from ActionType where id = 56243;
 
 
 
@@ -89,71 +82,23 @@ select
        autoFieldUserProfile,
        apt.formulaAlias
 from ActionPropertyType apt
-join ActionType at on at.group_id = @group
+join ActionType at on at.group_id = @group and at.id = (select id from ActionType where group_id = @group order by id desc limit 1)
 join (
-select 'Статус диспансерного учета' as name
-union
-select 'Функциональный класс по NYHA' as name
-union
-select 'Инвалидность (группа)' as name
-union
-select 'Курение' as name
-union
-select 'Употребление алкоголя' as name
-union
-select 'Санация очагов инфекции, полости рта' as name
-union
-select 'Вакцинация от гриппа в течение года' as name
-union
-select 'Вакцинация от пневмококка в течение 5 лет' as name
-union
-select 'Дневник веса' as name
-union
-select 'Рост' as name
-union
-select 'Вес' as name
-union
-select 'САД' as name
-union
-select 'ДАД' as name
-union
-select 'САД' as name
-union
-select 'ДАД' as name
-union
-select 'ЧСС' as name
-union
-select 'Отеки' as name
-union
-select 'Сатурация кислорода  (%)' as name
-union
-select 'Была ли отмена препарата' as name
-union
-select 'Была ли титрация препарата' as name
-union
-select 'Если была отмена/ остановка титрации, указать причину' as name
-union
-select 'Результаты инструментальных обследований:' as name
-union
-select 'Ритм на ЭКГ' as name
-union
-select 'ЧСС на ЭКГ(количество в минуту)' as name
-union
-select 'Ширина QRS (секунд)' as name
-union
-select 'Дата  Эхо-КГ' as name
-union
-select 'Фракция выброса по Simpson (%)' as name
-union
-select 'Фракция выброса по Teichholz (%)' as name
-union
-select 'Наличие патологического числа желудочковых нарушений ритма при последнем Холтеровском мониторировании ЭКГ' as name
-union
-select 'Дата Рентгена органов грудной клетки' as name
-union
-select 'План ведения пациента' as name
-union
-select 'Назначенные медикаменты, включая препараты следующих групп' as name
+select 'Организация ведения пациента' as name union
+select 'Наблюдение специалиста по СН в ФГБУ НМИЦ им В.А. Алмазова' as name union
+select 'Рекомендации по вакцинации против пневмококковой инфекции и гриппа' as name union
+select 'Рекомендации по объему физических нагрузок на амбулаторном этапе' as name union
+select 'Рекомендации по санации полости рта и очагов инфекции' as name union
+select 'Рекомендации по водно-солевому режиму' as name union
+select 'Рекомендованный объем выпиваемой жидкости' as name union
+select 'Рекомендации по ежедневному взвешиванию с ведением дневника веса' as name union
+select 'Рекомендован контроль натрия, калия, креатинина в соответствии с шагами титрации' as name union
+select 'Рекомендован СМЭКГ (Холтер)' as name union
+select 'Рекомендована консультация Кардиохирург' as name union
+select 'Рекомендована консультация Аритмолог' as name union
+select 'Рекомендована консультация Кардиолог - специалист по СН' as name union
+select 'Рекомендованы высокотехнологичные (ВТ) методы лечения' as name union
+select 'Рекомендована паллиативная терапия' as name
     ) as apt1
 where apt.id = (select id from ActionPropertyType where typeName = 'string' order by id desc limit 1);
 
@@ -278,8 +223,116 @@ values  (1, 0, '1', 'Синусовый'),
         (4, 0, '4', 'Другое');
 
 
+create table netricaDecompensationReason(
+  id int(10),
+  deleted tinyint(1),
+  code varchar(8),
+  name varchar(128)
+);
+
+insert into netricaDecompensationReason (id, deleted, code, name)
+values
+       (1, 0, '1', 'Несоблюдение рекомендаций по медикаментозной терапии'),
+(2, 0, '2', 'Несоблюдение водно-солевого режима'),
+(3, 0, '3', 'Несоблюдение режима физической нагрузки'),
+(4, 0, '4', 'Применение НПВС'),
+(5, 0, '5', 'Инфекционные заболевания'),
+(6, 0, '6', 'ТЭЛА'),
+(7, 0, '7', 'Тахиаритмия'),
+(8, 0, '8', 'Инфаркт'),
+(9, 0, '9', 'Нестабильная стенокардия миокарда'),
+(10, 0, '10', 'ОКС'),
+(11, 0, '11', 'Другие');
+
+
+
+create table netricaReasonPerformingElectroImpulseTherapy(
+  id int(10),
+  deleted tinyint(1),
+  code varchar(8),
+  name varchar(128)
+);
+
+insert into netricaReasonPerformingElectroImpulseTherapy (id, deleted, code, name)
+values
+(1, 0, '1', 'Желудочковые нарушения ритма'),
+(2, 0, '2', 'Фибрилляция - трепетание предсердий');
+
+
+create table netricaShownNotshown(
+  id int(10),
+  deleted tinyint(1),
+  code varchar(8),
+  name varchar(128)
+);
+
+insert into netricaShownNotshown (id, deleted, code, name)
+values
+(1, 0, '1', 'Показано'),
+(2, 0, '2', 'Не Показано');
+
+
+create table netricaLiquidVolume(
+  id int(10),
+  deleted tinyint(1),
+  code varchar(8),
+  name varchar(128)
+);
+
+insert into netricaLiquidVolume (id, deleted, code, name)
+values
+(1, 0, '1', 'До 1700 мл/сут'),
+(2, 0, '2', 'Без ограничений');
+
+create table netricaControlOfSodiumPotassiumCreatinine(
+  id int(10),
+  deleted tinyint(1),
+  code varchar(8),
+  name varchar(128)
+);
+
+insert into netricaControlOfSodiumPotassiumCreatinine (id, deleted, code, name)
+values
+(1, 0, '1', 'Через 1 неделю'),
+(2, 0, '2', 'Через 2 недели'),
+(3, 0, '3', '1 раз в месяц'),
+(4, 0, '4', '1 раз в квартал'),
+(5, 0, '5', 'не показан');
+
+
+create table netricaVT(
+  id int(10),
+  deleted tinyint(1),
+  code varchar(8),
+  name varchar(128)
+);
+
+insert into netricaVT (id, deleted, code, name)
+values
+(1, 0, '1', 'СРТ'),
+(2, 0, '2', 'СРТД'),
+(3, 0, '3', 'ИКД'),
+(4, 0, '4', 'ТС');
+
 select ActionPropertyType.vitalParamId, ActionPropertyType.isVitalParam, typeName, valueDomain, name, ActionPropertyType.*
-from ActionPropertyType where actionType_id = (select id from ActionType where name = 'Осмотр кардиолога' and code = '19073-1') and deleted = 0 and vitalParamId = 0 and isVitalParam = 0;
+from ActionPropertyType where actionType_id = (select id from ActionType where group_id = @group order by id desc limit 1) and deleted = 0;
 
 select *
 from ActionPropertyType where isVitalParam = 1;
+
+
+select typeName
+from ActionPropertyType where typeName regexp '^R|^I' group by typeName;
+
+
+select *
+from ActionPropertyType where actionType_id in
+(select id
+from ActionType where group_id = @`group`) and deleted = 0;
+
+select *
+from ActionType where id= 56237;
+
+
+select *
+from ActionType where group_id = 56182;
