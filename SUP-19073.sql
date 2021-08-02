@@ -173,6 +173,30 @@ from ActionPropertyType where actionType_id = (select id from ActionType where n
 
 
 
+create table netricaCircumstancesOfTumorDetection(
+  id int(10),
+  deleted tinyint(1),
+  code varchar(8),
+  name varchar(128)
+);
+
+insert into netricaCircumstancesOfTumorDetection (id, deleted, code, name)
+values
+(9, 0, '9', 'Дополнительная диспансеризация'),
+(8, 0, '8', 'Осмотр специалиста'),
+(11, 0, '11', 'Профилактическая флюорография'),
+(10, 0, '10', 'Диспансерное наблюдение больных с предраком'),
+(14, 0, '14', 'Иммуноферментный скрининг рака предстательной железы'),
+(13, 0, '13', 'Профилактическая маммография'),
+(12, 0, '12', 'Цитологический скрининг шейки матки'),
+(7, 0, '7', 'При других обстоятельствах'),
+(1, 0, '1', 'Обратился сам'),
+(6, 0, '6', 'Неизвестно'),
+(5, 0, '5', 'Посмертно без аутопсии'),
+(4, 0, '4', 'Посмертно при аутопсии'),
+(3, 0, '3', 'Активно в смотровом кабинете'),
+(2, 0, '2', 'Активно при профосмотре');
+
 create table netricaDiagnosisConfirmationMethod(
   id int(10),
   deleted tinyint(1),
