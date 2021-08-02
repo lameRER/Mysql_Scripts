@@ -66,7 +66,7 @@ select
        descr,
        null unit_id,
        typeName,
-       valueDomain,
+       '' valueDomain,
        defaultValue,
        norm,
        apt.sex,
@@ -84,14 +84,60 @@ select
 from ActionPropertyType apt
 join ActionType at on at.group_id = @group and at.id = (select id from ActionType where group_id = @group order by id desc limit 1)
 join (
-
+select 'Вид и номер первично-множественной опухоли (в случае нескольких опухолей указанные ниже сведения приводятся для каждой опухоли отдельно)' as name union
+select 'Диагноз онкозаболевания как основного заболевания, в статусе «заключительный».' as name union
+select 'Дата установления диагноза' as name union
+select 'Сторона поражения' as name union
+select 'cT' as name union
+select 'cN' as name union
+select 'cМ' as name union
+select 'Вид опухоли' as name union
+select 'Стадия на момент установления' as name union
+select 'Дата установления диагноза' as name union
+select 'Метод подтверждения диагноза ' as name union
+select 'Локализация отдаленных метастазов' as name union
+select 'Обстоятельства выявления опухоли' as name union
+select 'pT' as name union
+select 'pN' as name union
+select 'pM ' as name union
+select 'Уровень дифференцировки тканей' as name union
+select 'Вид опухоли' as name union
+select 'Топографические коды опухоли' as name union
+select 'Мутации гена BRAF' as name union
+select 'Мутации гена c-KIT' as name union
+select 'Мутации гена NRAS ' as name union
+select 'Мутации гена KRAS' as name union
+select 'Мутации гена HRAS' as name union
+select 'Мутации гена EGFR (T790M)' as name union
+select 'Мутации гена EGFR (делеция в 19 экзоне)' as name union
+select 'Мутации гена ALK ' as name union
+select 'Мутации гена ROS1' as name union
+select 'Мутации генов BRCA ' as name union
+select 'Экспрессия HER2' as name union
+select 'Экспрессия PD-L1' as name union
+select 'Рецепторы эстрогена' as name union
+select 'Рецепторы прогестерона' as name union
+select 'Ki-67' as name union
+select 'План ведения пациента ' as name union
+select 'Рекомендована химиотерапия - сроки, условия и т.п., при наличии' as name union
+select 'Рекомендована хирургическая операция - сроки, условия и т.п., при наличии' as name union
+select 'Рекомендована лучевая терапия - сроки, условия и т.п., при наличии' as name union
+select 'Рекомендована гормоноиммунотерапия – вид, схема,  сроки, условия и т.п., при наличии' as name union
+select 'Рекомендована гормонотерапия – схема, сроки, условия и т.п., при наличии' as name union
+select 'Рекомендована иммунотерапия – схема, сроки, условия и т.п., при наличии' as name union
+select 'Причины поздней диагностики (по справочнику) ' as name union
+select 'Сведения о клиническом разборе настоящего случая (текст)' as name
     ) as apt1
 where apt.id = (select id from ActionPropertyType where typeName = 'string' order by id desc limit 1);
 
 select ActionPropertyType.vitalParamId, ActionPropertyType.isVitalParam, typeName, valueDomain, name, ActionPropertyType.*
 from ActionPropertyType where actionType_id = (select id from ActionType where group_id = @group order by id desc limit 1) and deleted = 0;
 
+select *
+from rbVitalParams where code = '236';
 
+select *
+from ActionType where group_id = @group;
 
 select ActionPropertyType.vitalParamId, ActionPropertyType.isVitalParam, typeName, valueDomain, name, ActionPropertyType.*
 from ActionPropertyType where vitalParamId in (
