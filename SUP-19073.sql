@@ -136,7 +136,8 @@ from ActionPropertyType where actionType_id = (select id from ActionType where g
 
 
 select *
-from rbVitalParams where id =535
+from rbVitalParams where id =244
+
 ;
 
 select ActionPropertyType.vitalParamId, ActionPropertyType.isVitalParam, typeName, valueDomain, name, ActionPropertyType.*
@@ -173,6 +174,24 @@ from ActionPropertyType where actionType_id = (select id from ActionType where n
 
 select *
 from netricaCircumstancesOfTumorDetection;
+
+select *
+from netricaExpressionHER2;
+
+create table netricaExpressionHER2(
+  id int(10),
+  deleted tinyint(1),
+  code varchar(8),
+  name varchar(128)
+);
+
+insert into netricaExpressionHER2 (id, deleted, code, name)
+values
+(1, 0, '0', 'Негативный'),
+(2, 0, '1', 'Негативный'),
+(3, 0, '2', 'Спорный'),
+(4, 0, '3', 'Позитивный');
+
 
 create table netricaCircumstancesOfTumorDetection(
   id int(10),
