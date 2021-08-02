@@ -84,32 +84,36 @@ select
 from ActionPropertyType apt
 join ActionType at on at.group_id = @group and at.id = (select id from ActionType where group_id = @group order by id desc limit 1)
 join (
-select 'Дата и время поступления' as name union
-select 'Дата и время перевода' as name union
-select 'Уровень сознания, в соответствии со шкалой комы Глазго(VIMISSSZ1)' as name union
-select 'АД при переводе' as name union
-select 'Мерцательная аритмия по ЭКГ за все время пребывания' as name union
-select 'Повышение температуры тела более 37,50С за все время пребывания' as name union
-select 'Проведенные вмешательства' as name union
-select '(в случае ТЛТ)' as name union
-select 'Дата и время начала ТЛТ' as name union
-select 'Дата и время окончания ТЛТ' as name union
-select 'наименование и доза тромболитиков:' as name union
-select 'Альтеплаза' as name union
-select 'Альтеплаза.Доза (в мг/кг)' as name union
-select 'Стафилокиназа' as name union
-select 'Стафилокиназа.Доза(доза фиксирована)' as name union
-select 'Балл по NIHSS после ТЛТ (VIMISSSZ3)' as name union
-select 'Максимальное АД за 24ч после ТЛТ' as name union
-select 'Осложнения ТЛТ' as name union
-select '(в случае ТЭ)' as name union
-select 'балл по NIHSS после ТЭ (VIMISSSZ3)' as name union
-select 'Максимальное АД за 24 ч после ТЭ' as name union
-select 'Питание' as name union
-select 'Проведенная терапия' as name union
-select 'Результаты анализов на момент перевода' as name
+
     ) as apt1
 where apt.id = (select id from ActionPropertyType where typeName = 'string' order by id desc limit 1);
+
+select ActionPropertyType.vitalParamId, ActionPropertyType.isVitalParam, typeName, valueDomain, name, ActionPropertyType.*
+from ActionPropertyType where actionType_id = (select id from ActionType where group_id = @group order by id desc limit 1) and deleted = 0;
+
+
+
+select ActionPropertyType.vitalParamId, ActionPropertyType.isVitalParam, typeName, valueDomain, name, ActionPropertyType.*
+from ActionPropertyType where vitalParamId in (
+    select ActionPropertyType.vitalParamId
+    from ActionPropertyType
+    where actionType_id = (select id from ActionType where group_id = @group order by id desc limit 1)
+      and ActionPropertyType.deleted = 0
+);
+
+
+select apt.name, apt.valueDomain, v.*
+from rbVitalParams v
+left join ActionPropertyType apt on apt.vitalParamId = v.id
+where v.name regexp 'поражения'
+
+
+
+
+select typeName
+from ActionPropertyType where typeName regexp '^R|^I' group by typeName;
+
+
 
 
 select *
@@ -346,31 +350,12 @@ values
 (4, 0, '4', 'иной стационар'),
 (5, 0, '5', 'отказ от госпитализации');
 
-select ActionPropertyType.vitalParamId, ActionPropertyType.isVitalParam, typeName, valueDomain, name, ActionPropertyType.*
-from ActionPropertyType where actionType_id = (select id from ActionType where group_id = @group order by id desc limit 1) and deleted = 0;
 
-
-
-select ActionPropertyType.vitalParamId, ActionPropertyType.isVitalParam, typeName, valueDomain, name, ActionPropertyType.*
-from ActionPropertyType where vitalParamId in (
-    select ActionPropertyType.vitalParamId
-    from ActionPropertyType
-    where actionType_id = (select id from ActionType where group_id = @group order by id desc limit 1)
-      and ActionPropertyType.deleted = 0
-);
-
-
-select apt.name, apt.valueDomain, v.*
-from rbVitalParams v
-left join ActionPropertyType apt on apt.vitalParamId = v.id
-where v.name regexp 'поражения'
 
 select *
 from ActionPropertyType where isVitalParam = 1;
 
 
-select typeName
-from ActionPropertyType where typeName regexp '^R|^I' group by typeName;
 
 
 select *
