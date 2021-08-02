@@ -172,11 +172,28 @@ from ActionPropertyType where actionType_id in (select id from ActionType where 
 select ActionPropertyType.vitalParamId, ActionPropertyType.isVitalParam, typeName, valueDomain, name, ActionPropertyType.*
 from ActionPropertyType where actionType_id = (select id from ActionType where name = 'Осмотр кардиолога' and code = '19073-1') and deleted = 0;
 
-select *
-from netricaCircumstancesOfTumorDetection;
+create table netricaReasonsDiagnosis(
+  id int(10),
+  deleted tinyint(1),
+  code varchar(8),
+  name varchar(128)
+);
 
-select *
-from netricaExpressionHER2;
+insert into netricaReasonsDiagnosis (id, deleted, code, name)
+values
+(1, 0, '1', 'Неизвестно'),
+(2, 0, '2', 'Скрытое течение болезни'),
+(3, 0, '3', 'Несвоевременное обращение'),
+(4, 0, '4', 'Отказ от обследования'),
+(5, 0, '5', 'Неполное обследование'),
+(6, 0, '6', 'Несовершенство диспансеризации'),
+(7, 0, '7', 'Ошибка клиническая'),
+(8, 0, '8', 'Ошибка рентгенологическая'),
+(9, 0, '9', 'Ошибка морфологическая'),
+(10, 0, '10', 'Ошибка др. специалистов'),
+(11, 0, '11', 'Другое');
+
+
 
 create table netricaExpressionHER2(
   id int(10),
@@ -519,8 +536,10 @@ select *
 from ActionType where id in(56182,56210);
 
 select *
-from ActionType where group_id = 56182;
+from ActionType where group_id = 56239;
 
+select *
+from ActionPropertyType where actionType_id = 56257 and deleted = 0;
 
 select apt.*
 from ActionType at, ActionPropertyType apt where at.group_id = 56238 and apt.actionType_id = at.id and apt.deleted =0;
