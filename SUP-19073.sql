@@ -135,7 +135,9 @@ select ActionPropertyType.vitalParamId, ActionPropertyType.isVitalParam, typeNam
 from ActionPropertyType where actionType_id = (select id from ActionType where group_id = @group order by id desc limit 1) and deleted = 0;
 
 select *
-from rbVitalParams where code = '236';
+from  v
+join ActionPropertyType apt on apt.vitalParamId = v.id
+where v.id in (296,302,395,394,558,569,454,535,367,356,765,338,314,257,582,287,397,149,141,423,460,313,410,205,501,479,166,445,277,319,156,432,411,541,188,404,347,244,209,612)
 
 select *
 from ActionType where group_id = @group;
