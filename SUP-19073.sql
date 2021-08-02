@@ -172,6 +172,19 @@ select ActionPropertyType.vitalParamId, ActionPropertyType.isVitalParam, typeNam
 from ActionPropertyType where actionType_id = (select id from ActionType where name = 'Осмотр кардиолога' and code = '19073-1') and deleted = 0;
 
 
+create table netricaTumorType(
+  id int(10),
+  deleted tinyint(1),
+  code varchar(8),
+  name varchar(128)
+);
+
+insert into netricaTumorType (id, deleted, code, name)
+values
+(1, 0 , '1', 'Онкогематология'),
+(2, 0 , '2', 'Солидная опухоль');
+
+
 create table netricaDestructionSide(
   id int(10),
   deleted tinyint(1),
