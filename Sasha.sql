@@ -1442,3 +1442,9 @@ from Contract_Tariff ct, rbService s where s.id in(43328,43327) and ct.service_i
 
 select *
 from Contract_Tariff;
+
+
+
+select *
+from OrgStructure
+where name regexp  'стационар';
