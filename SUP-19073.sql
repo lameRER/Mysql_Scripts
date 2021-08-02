@@ -136,7 +136,8 @@ from ActionPropertyType where actionType_id = (select id from ActionType where g
 
 
 select *
-from rbVitalParams where id =395;
+from rbVitalParams where id =394
+;
 
 select ActionPropertyType.vitalParamId, ActionPropertyType.isVitalParam, typeName, valueDomain, name, ActionPropertyType.*
 from ActionPropertyType where vitalParamId in (
@@ -158,7 +159,8 @@ where v.name regexp 'поражения'
 select typeName
 from ActionPropertyType where typeName regexp '^R|^I' group by typeName;
 
-
+select *
+from netricaDestructionSide;
 
 
 select *
@@ -168,6 +170,21 @@ from ActionPropertyType where actionType_id in (select id from ActionType where 
 
 select ActionPropertyType.vitalParamId, ActionPropertyType.isVitalParam, typeName, valueDomain, name, ActionPropertyType.*
 from ActionPropertyType where actionType_id = (select id from ActionType where name = 'Осмотр кардиолога' and code = '19073-1') and deleted = 0;
+
+
+create table netricaDestructionSide(
+  id int(10),
+  deleted tinyint(1),
+  code varchar(8),
+  name varchar(128)
+);
+
+insert into netricaDestructionSide (id, deleted, code, name)
+values
+(1, 0, '1', 'Правая'),
+(2, 0, '2', 'Левая');
+
+
 
 
 select *
@@ -197,7 +214,7 @@ create table netricaYesNoThrew(
   name varchar(128)
 );
 
-insert into s11.netricaYesNoThrew (id, deleted, code, name)
+insert into netricaYesNoThrew (id, deleted, code, name)
 values  (1, 0, '1', 'Да'),
         (2, 0, '2', 'Нет'),
         (3, 0, '3', 'Бросил');
