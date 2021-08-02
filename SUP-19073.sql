@@ -171,7 +171,8 @@ from ActionPropertyType where actionType_id in (select id from ActionType where 
 select ActionPropertyType.vitalParamId, ActionPropertyType.isVitalParam, typeName, valueDomain, name, ActionPropertyType.*
 from ActionPropertyType where actionType_id = (select id from ActionType where name = 'Осмотр кардиолога' and code = '19073-1') and deleted = 0;
 
-
+select *
+from netricaCircumstancesOfTumorDetection;
 
 create table netricaCircumstancesOfTumorDetection(
   id int(10),
