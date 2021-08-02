@@ -136,7 +136,7 @@ from ActionPropertyType where actionType_id = (select id from ActionType where g
 
 
 select *
-from rbVitalParams where id =394
+from rbVitalParams where id =535
 ;
 
 select ActionPropertyType.vitalParamId, ActionPropertyType.isVitalParam, typeName, valueDomain, name, ActionPropertyType.*
@@ -170,6 +170,24 @@ from ActionPropertyType where actionType_id in (select id from ActionType where 
 
 select ActionPropertyType.vitalParamId, ActionPropertyType.isVitalParam, typeName, valueDomain, name, ActionPropertyType.*
 from ActionPropertyType where actionType_id = (select id from ActionType where name = 'Осмотр кардиолога' and code = '19073-1') and deleted = 0;
+
+
+
+create table netricaDiagnosisConfirmationMethod(
+  id int(10),
+  deleted tinyint(1),
+  code varchar(8),
+  name varchar(128)
+);
+
+insert into netricaDiagnosisConfirmationMethod (id, deleted, code, name)
+values
+(1, 0, '1', 'морфологический'),
+(2, 0, '2', 'цитологический'),
+(3, 0, '3', 'эксплоративная операция'),
+(4, 0, '4', 'лабораторно-инструментальный'),
+(5, 0, '5', 'только клинический'),
+(6, 0, '6', 'неизвестно');
 
 
 create table netricaTumorType(
