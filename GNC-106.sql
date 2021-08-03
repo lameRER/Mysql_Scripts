@@ -73,4 +73,4 @@ from ActionType at
 left join ActionType_Service ats on ats.master_id = at.id
 left join rbService r on r.id = ats.service_id
 left join PriceListItem pli on pli.service_id = r.id and pli.deleted = 0 and pli.endDate >= curdate()
-where pli.serviceNameOW regexp 'гликопротеин IgG';
+where at.name regexp 'Исследование фиксированных антитромбоцитарных антител методом проточной цитофлуориметрии';
