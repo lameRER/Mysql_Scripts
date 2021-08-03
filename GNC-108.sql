@@ -20,7 +20,7 @@ where e.id =20439099;
 
 
 
-select e.id eventID, et.name EventName, c.number Contract, cpl.id ContractPriceList, pl.name PriceList, pli.serviceCodeOW PiceServiceCodeOW , pli.serviceNameOW PriceServiceNameOW, pli.begDate PriceBegDate, pli.endDate PriceEndDate, s.code ServiceCode, s.name ServiceName, s.begDate ServiceBegDate, s.endDate ServiceEndDate, ats.id ActionTypeService, at.code ActionTypeCode, at.name ActionTypeName, f.id finance
+select c.id, e.id eventID, et.name EventName, c.number Contract, cpl.id ContractPriceList, pl.name PriceList, pli.serviceCodeOW PiceServiceCodeOW , pli.serviceNameOW PriceServiceNameOW, pli.begDate PriceBegDate, pli.endDate PriceEndDate, s.code ServiceCode, s.name ServiceName, s.begDate ServiceBegDate, s.endDate ServiceEndDate, ats.id ActionTypeService, at.code ActionTypeCode, at.name ActionTypeName, f.id finance
 from Event e
  left join EventType et on e.eventType_id = et.id and et.deleted = 0
  left join Contract c on c.id = e.contract_id and c.deleted=  0
@@ -33,6 +33,12 @@ from Event e
  left join rbFinance f on f.id = c.finance_id and f.id = pl.finance_id and et.finance_id = f.id and f.deleted = 0
 where e.id = :eventId -- 20439099;
 
+
+select *
+from Contract_PriceList where contract_id = 217331;
+
+select *
+from Event where id = 20439173;
 
 select *
 from rbFinance where id =20;
