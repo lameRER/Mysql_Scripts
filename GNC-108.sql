@@ -1,6 +1,9 @@
 select *
 from Event where externalId = '2021/73034';
 
+select *
+from Event where externalId = '2021/73100'
+
 
 select pl.*
 from Event e
