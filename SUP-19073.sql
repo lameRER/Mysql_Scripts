@@ -66,7 +66,7 @@ select
        descr,
        null unit_id,
        typeName,
-       valueDomain,
+       '' valueDomain,
        defaultValue,
        norm,
        apt.sex,
@@ -84,32 +84,84 @@ select
 from ActionPropertyType apt
 join ActionType at on at.group_id = @group and at.id = (select id from ActionType where group_id = @group order by id desc limit 1)
 join (
-select 'Дата и время поступления' as name union
-select 'Дата и время перевода' as name union
-select 'Уровень сознания, в соответствии со шкалой комы Глазго(VIMISSSZ1)' as name union
-select 'АД при переводе' as name union
-select 'Мерцательная аритмия по ЭКГ за все время пребывания' as name union
-select 'Повышение температуры тела более 37,50С за все время пребывания' as name union
-select 'Проведенные вмешательства' as name union
-select '(в случае ТЛТ)' as name union
-select 'Дата и время начала ТЛТ' as name union
-select 'Дата и время окончания ТЛТ' as name union
-select 'наименование и доза тромболитиков:' as name union
-select 'Альтеплаза' as name union
-select 'Альтеплаза.Доза (в мг/кг)' as name union
-select 'Стафилокиназа' as name union
-select 'Стафилокиназа.Доза(доза фиксирована)' as name union
-select 'Балл по NIHSS после ТЛТ (VIMISSSZ3)' as name union
-select 'Максимальное АД за 24ч после ТЛТ' as name union
-select 'Осложнения ТЛТ' as name union
-select '(в случае ТЭ)' as name union
-select 'балл по NIHSS после ТЭ (VIMISSSZ3)' as name union
-select 'Максимальное АД за 24 ч после ТЭ' as name union
-select 'Питание' as name union
-select 'Проведенная терапия' as name union
-select 'Результаты анализов на момент перевода' as name
+select 'Вид и номер первично-множественной опухоли (в случае нескольких опухолей указанные ниже сведения приводятся для каждой опухоли отдельно)' as name union
+select 'Диагноз онкозаболевания как основного заболевания, в статусе «заключительный».' as name union
+select 'Дата установления диагноза' as name union
+select 'Сторона поражения' as name union
+select 'cT' as name union
+select 'cN' as name union
+select 'cМ' as name union
+select 'Вид опухоли' as name union
+select 'Стадия на момент установления' as name union
+select 'Дата установления диагноза' as name union
+select 'Метод подтверждения диагноза ' as name union
+select 'Локализация отдаленных метастазов' as name union
+select 'Обстоятельства выявления опухоли' as name union
+select 'pT' as name union
+select 'pN' as name union
+select 'pM ' as name union
+select 'Уровень дифференцировки тканей' as name union
+select 'Вид опухоли' as name union
+select 'Топографические коды опухоли' as name union
+select 'Мутации гена BRAF' as name union
+select 'Мутации гена c-KIT' as name union
+select 'Мутации гена NRAS ' as name union
+select 'Мутации гена KRAS' as name union
+select 'Мутации гена HRAS' as name union
+select 'Мутации гена EGFR (T790M)' as name union
+select 'Мутации гена EGFR (делеция в 19 экзоне)' as name union
+select 'Мутации гена ALK ' as name union
+select 'Мутации гена ROS1' as name union
+select 'Мутации генов BRCA ' as name union
+select 'Экспрессия HER2' as name union
+select 'Экспрессия PD-L1' as name union
+select 'Рецепторы эстрогена' as name union
+select 'Рецепторы прогестерона' as name union
+select 'Ki-67' as name union
+select 'План ведения пациента ' as name union
+select 'Рекомендована химиотерапия - сроки, условия и т.п., при наличии' as name union
+select 'Рекомендована хирургическая операция - сроки, условия и т.п., при наличии' as name union
+select 'Рекомендована лучевая терапия - сроки, условия и т.п., при наличии' as name union
+select 'Рекомендована гормоноиммунотерапия – вид, схема,  сроки, условия и т.п., при наличии' as name union
+select 'Рекомендована гормонотерапия – схема, сроки, условия и т.п., при наличии' as name union
+select 'Рекомендована иммунотерапия – схема, сроки, условия и т.п., при наличии' as name union
+select 'Причины поздней диагностики (по справочнику) ' as name union
+select 'Сведения о клиническом разборе настоящего случая (текст)' as name
     ) as apt1
 where apt.id = (select id from ActionPropertyType where typeName = 'string' order by id desc limit 1);
+
+
+select ActionPropertyType.vitalParamId, ActionPropertyType.isVitalParam, typeName, valueDomain, name, ActionPropertyType.*
+from ActionPropertyType where actionType_id = (select id from ActionType where group_id = @group order by id desc limit 1) and deleted = 0;
+
+
+select *
+from rbVitalParams where id =244
+
+;
+
+select ActionPropertyType.vitalParamId, ActionPropertyType.isVitalParam, typeName, valueDomain, name, ActionPropertyType.*
+from ActionPropertyType where vitalParamId in (
+    select ActionPropertyType.vitalParamId
+    from ActionPropertyType
+    where actionType_id = (select id from ActionType where group_id = @group order by id desc limit 1)
+      and ActionPropertyType.deleted = 0
+);
+
+
+select apt.name, apt.valueDomain, v.*
+from rbVitalParams v
+left join ActionPropertyType apt on apt.vitalParamId = v.id
+where v.name regexp 'поражения'
+
+
+
+
+select typeName
+from ActionPropertyType where typeName regexp '^R|^I' group by typeName;
+
+select *
+from netricaDestructionSide;
 
 
 select *
@@ -119,6 +171,112 @@ from ActionPropertyType where actionType_id in (select id from ActionType where 
 
 select ActionPropertyType.vitalParamId, ActionPropertyType.isVitalParam, typeName, valueDomain, name, ActionPropertyType.*
 from ActionPropertyType where actionType_id = (select id from ActionType where name = 'Осмотр кардиолога' and code = '19073-1') and deleted = 0;
+
+create table netricaReasonsDiagnosis(
+  id int(10),
+  deleted tinyint(1),
+  code varchar(8),
+  name varchar(128)
+);
+
+insert into netricaReasonsDiagnosis (id, deleted, code, name)
+values
+(1, 0, '1', 'Неизвестно'),
+(2, 0, '2', 'Скрытое течение болезни'),
+(3, 0, '3', 'Несвоевременное обращение'),
+(4, 0, '4', 'Отказ от обследования'),
+(5, 0, '5', 'Неполное обследование'),
+(6, 0, '6', 'Несовершенство диспансеризации'),
+(7, 0, '7', 'Ошибка клиническая'),
+(8, 0, '8', 'Ошибка рентгенологическая'),
+(9, 0, '9', 'Ошибка морфологическая'),
+(10, 0, '10', 'Ошибка др. специалистов'),
+(11, 0, '11', 'Другое');
+
+
+
+create table netricaExpressionHER2(
+  id int(10),
+  deleted tinyint(1),
+  code varchar(8),
+  name varchar(128)
+);
+
+insert into netricaExpressionHER2 (id, deleted, code, name)
+values
+(1, 0, '0', 'Негативный'),
+(2, 0, '1', 'Негативный'),
+(3, 0, '2', 'Спорный'),
+(4, 0, '3', 'Позитивный');
+
+
+create table netricaCircumstancesOfTumorDetection(
+  id int(10),
+  deleted tinyint(1),
+  code varchar(8),
+  name varchar(128)
+);
+
+insert into netricaCircumstancesOfTumorDetection (id, deleted, code, name)
+values
+(9, 0, '9', 'Дополнительная диспансеризация'),
+(8, 0, '8', 'Осмотр специалиста'),
+(11, 0, '11', 'Профилактическая флюорография'),
+(10, 0, '10', 'Диспансерное наблюдение больных с предраком'),
+(14, 0, '14', 'Иммуноферментный скрининг рака предстательной железы'),
+(13, 0, '13', 'Профилактическая маммография'),
+(12, 0, '12', 'Цитологический скрининг шейки матки'),
+(7, 0, '7', 'При других обстоятельствах'),
+(1, 0, '1', 'Обратился сам'),
+(6, 0, '6', 'Неизвестно'),
+(5, 0, '5', 'Посмертно без аутопсии'),
+(4, 0, '4', 'Посмертно при аутопсии'),
+(3, 0, '3', 'Активно в смотровом кабинете'),
+(2, 0, '2', 'Активно при профосмотре');
+
+create table netricaDiagnosisConfirmationMethod(
+  id int(10),
+  deleted tinyint(1),
+  code varchar(8),
+  name varchar(128)
+);
+
+insert into netricaDiagnosisConfirmationMethod (id, deleted, code, name)
+values
+(1, 0, '1', 'морфологический'),
+(2, 0, '2', 'цитологический'),
+(3, 0, '3', 'эксплоративная операция'),
+(4, 0, '4', 'лабораторно-инструментальный'),
+(5, 0, '5', 'только клинический'),
+(6, 0, '6', 'неизвестно');
+
+
+create table netricaTumorType(
+  id int(10),
+  deleted tinyint(1),
+  code varchar(8),
+  name varchar(128)
+);
+
+insert into netricaTumorType (id, deleted, code, name)
+values
+(1, 0 , '1', 'Онкогематология'),
+(2, 0 , '2', 'Солидная опухоль');
+
+
+create table netricaDestructionSide(
+  id int(10),
+  deleted tinyint(1),
+  code varchar(8),
+  name varchar(128)
+);
+
+insert into netricaDestructionSide (id, deleted, code, name)
+values
+(1, 0, '1', 'Правая'),
+(2, 0, '2', 'Левая');
+
+
 
 
 select *
@@ -148,7 +306,7 @@ create table netricaYesNoThrew(
   name varchar(128)
 );
 
-insert into s11.netricaYesNoThrew (id, deleted, code, name)
+insert into netricaYesNoThrew (id, deleted, code, name)
 values  (1, 0, '1', 'Да'),
         (2, 0, '2', 'Нет'),
         (3, 0, '3', 'Бросил');
@@ -346,31 +504,12 @@ values
 (4, 0, '4', 'иной стационар'),
 (5, 0, '5', 'отказ от госпитализации');
 
-select ActionPropertyType.vitalParamId, ActionPropertyType.isVitalParam, typeName, valueDomain, name, ActionPropertyType.*
-from ActionPropertyType where actionType_id = (select id from ActionType where group_id = @group order by id desc limit 1) and deleted = 0;
 
-
-
-select ActionPropertyType.vitalParamId, ActionPropertyType.isVitalParam, typeName, valueDomain, name, ActionPropertyType.*
-from ActionPropertyType where vitalParamId in (
-    select ActionPropertyType.vitalParamId
-    from ActionPropertyType
-    where actionType_id = (select id from ActionType where group_id = @group order by id desc limit 1)
-      and ActionPropertyType.deleted = 0
-);
-
-
-select apt.name, apt.valueDomain, v.*
-from rbVitalParams v
-left join ActionPropertyType apt on apt.vitalParamId = v.id
-where v.name regexp 'поражения'
 
 select *
 from ActionPropertyType where isVitalParam = 1;
 
 
-select typeName
-from ActionPropertyType where typeName regexp '^R|^I' group by typeName;
 
 
 select *
@@ -397,8 +536,10 @@ select *
 from ActionType where id in(56182,56210);
 
 select *
-from ActionType where group_id = 56182;
+from ActionType where group_id = 56239;
 
+select *
+from ActionPropertyType where actionType_id = 56257 and deleted = 0;
 
 select apt.*
 from ActionType at, ActionPropertyType apt where at.group_id = 56238 and apt.actionType_id = at.id and apt.deleted =0;

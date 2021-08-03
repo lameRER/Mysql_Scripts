@@ -1442,3 +1442,13 @@ from Contract_Tariff ct, rbService s where s.id in(43328,43327) and ct.service_i
 
 select *
 from Contract_Tariff;
+
+set @name = 'Изолятор';
+
+select *
+from OrgStructure
+where id =3;
+
+
+select *
+from Person where lastName = 'котова';
