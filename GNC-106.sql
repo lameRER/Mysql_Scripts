@@ -1,8 +1,8 @@
-select r.*
+select at.*
 from ActionType at
-join ActionType_Service ats on ats.master_id = at.id
-join rbService r on r.id = ats.service_id
-left join PriceListItem pli on pli.service_id = r.id and pli.deleted = 0 and pli.endDate >= curdate()
+left join ActionType_Service ats on ats.master_id = at.id
+left join rbService r on r.id = ats.service_id
+left join PriceListItem pli on pli.service_id = r.id and pli.deleted = 0 -- and pli.endDate >= curdate()
 where at.name regexp 'Исследование фиксированных антитромбоцитарных антител методом проточной цитофлуориметрии';
 
 
@@ -66,7 +66,7 @@ from
     pli.deleted=0 AND pl.deleted=0 AND (CURDATE() BETWEEN pli.begDate AND pli.endDate) AND 
     at_with_services.id IS NULL AND s.isComplex = 1
 ) AS UNITED) as tmp
-where tmp.service_id in (13920)
+where tmp.service_id in (13920,13920)
 
 select at.*
 from ActionType at
