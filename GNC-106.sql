@@ -66,7 +66,7 @@ from
     pli.deleted=0 AND pl.deleted=0 AND (CURDATE() BETWEEN pli.begDate AND pli.endDate) AND 
     at_with_services.id IS NULL AND s.isComplex = 1
 ) AS UNITED) as tmp
-where tmp.service_id in (13920,13920)
+where tmp.service_id in (12567,14220)
 
 select at.*
 from ActionType at
