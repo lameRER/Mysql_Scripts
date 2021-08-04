@@ -63,7 +63,7 @@ co.id as coId,
     LEFT JOIN gnc.ActionProperty ap
       ON s.actionProperty_id = ap.id
     LEFT JOIN gnc.Contract co
-      ON co.id = i.contract_id
+      ON co.id = i.contract_id and co.deleted = 0
     LEFT JOIN gnc.Contract_Contragent cc
       ON cc.id = co.payer_id
     LEFT JOIN gnc.Client c_p
@@ -81,4 +81,10 @@ WHERE e.client_id != 18
 GROUP BY t.FinanceTransactionId,
          t.InvoiceItemId;
 
+
+
+select *
+from Contract c
+left join Contract_Contragent cc on cc.id = c.payer_id
+where c.id = 217089;
 
