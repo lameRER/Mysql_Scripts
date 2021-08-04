@@ -15,6 +15,14 @@ order by  retres.idx, resrep.idx;
 select *
 from rbEpicrisisTemplates_rbEpicrisisSections;
 
+
+select *
+from s11.rbEpicrisisProperty;
+
+
+select *
+from s11.rbEpicrisisSections_rbEpicrisisProperty where id_rbEpicrisisProperty = 2178;
+
 select *
 from rbEpicrisisSections where name in (select 'Общий осмотр' as name union
     select 'Обследования' as name) ;
@@ -46,8 +54,18 @@ select
 from rbEpicrisisTemplates_rbEpicrisisSections retres
 where retres.id = (select id from rbEpicrisisTemplates_rbEpicrisisSections order by id desc limit 1);
 
+
+
 select *
-from s11.ActionType where class = 3 and group_id  = 10164;
+from s11.ActionType
+where group_id = (
+    select id
+    from s11.ActionType
+    where name regexp '^лаб'
+      and class = 1
+      and group_id is null
+)
+;
 
 
 select *
@@ -166,3 +184,7 @@ from rbEpicrisisTemplates where code = 'код 1';
 
 select *
 from rbEpicrisisTemplates;
+
+
+select *
+from s11.Person where userProfile_id = 1;
