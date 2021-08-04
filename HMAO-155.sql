@@ -47,21 +47,46 @@ from rbEpicrisisTemplates_rbEpicrisisSections retres
 where retres.id = (select id from rbEpicrisisTemplates_rbEpicrisisSections order by id desc limit 1);
 
 
+drop temporary table temp_res
+
+create temporary table temp_res(
+    select 'Общий осмотр' as name
+)
+
+drop temporary table temp_rep
 
 create temporary table temp_rep(
-select 'ФИО пациента' as name union
-select 'Дата рождения' as name union
-select 'Место жительства' as name union
-select 'Место работы и род занятий' as name union
-select 'Дата поступления' as name union
-select 'Заключительный клинический диагноз' as name
+select 'Жалобы при поступлении' as name union
+select 'Anamnesis morbi' as name union
+select 'Anamnesis vitae' as name union
+select 'Общий осмотр' as name
 )
 
 
-select *
-from temp_rep;
+insert into rbEpicrisisSections_rbEpicrisisProperty(id_rbEpicrisisSections, id_rbEpicrisisProperty, idx, htmlTemplate, orgStruct, isRequired, isEditable, isOld)
+select
+       max(res.id) id_rbEpicrisisSections,
+       max(rep.id) id_rbEpicrisisProperty,
+       row_number() over () idx,
+       htmlTemplate,
+       orgStruct,
+       isRequired,
+       isEditable,
+       isOld
+from rbEpicrisisSections_rbEpicrisisProperty resrep
+join rbEpicrisisProperty rep on rep.name in (select tp.name from temp_rep tp)
+join rbEpicrisisSections res on res.name = (select ts.name from temp_res ts)
+where resrep.id = (select id from rbEpicrisisSections_rbEpicrisisProperty order by id desc limit 1)
+group by rep.name, res.name
+order by rep.id;
 
-insert into rbEpicrisisProperty(demo_stand.rbEpicrisisProperty.name, demo_stand.rbEpicrisisProperty.description, demo_stand.rbEpicrisisProperty.type, demo_stand.rbEpicrisisProperty.defaultValue, demo_stand.rbEpicrisisProperty.valueDomain, demo_stand.rbEpicrisisProperty.printAsTable, demo_stand.rbEpicrisisProperty.isCopy)
+
+select *
+from rbEpicrisisProperty where name in
+(select *
+from temp_rep);
+
+insert into rbEpicrisisProperty(name, description, type, defaultValue, valueDomain, printAsTable, isCopy)
 select
        tmp.name,
        description,
@@ -75,6 +100,12 @@ join (select * from temp_rep
     ) as tmp
 where rep.id = (select id from rbEpicrisisProperty order by id desc limit 1);
 
+
+
+
+
+select max(id)
+from rbEpicrisisProperty where name in (select name from temp_rep) group by name;
 
 
 select count(rep.id) num,
