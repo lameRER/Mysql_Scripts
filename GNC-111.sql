@@ -6,7 +6,7 @@ from rbSpecialVariablesPreferences where name = 'SpecialVar_VedomostNachisleniy'
 
 
 SELECT
-       t.iId,
+       t.inumber,
        t.coId,
        t.InvoiceItemId,
        t.sId,
@@ -33,7 +33,7 @@ SELECT
       t.FinanceTransactionOperationTypeId = 2 THEN -1 END * InvoiceItemSum) KassaOut
 FROM (SELECT
 co.id as coId,
-             i.id as iId,
+             i.number as inumber,
              s.id as sId,
              ps.id as psId,
     ii.id AS InvoiceItemId,
@@ -103,6 +103,18 @@ update Invoice
 set contract_id = 217144
 where id = 148478
 
+update Invoice
+set contract_id = 217140
+where id = 148479
+
+update Invoice
+set contract_id = 217149
+where id = 148485
+
+update Invoice
+set contract_id = 217154
+where id = 148489
+
 
 select distinct e.contract_id, i.*
  FROM gnc.FinanceTransaction ft
@@ -140,7 +152,7 @@ WHERE (ft.financeOperationType_id = 1
 
 
 select e.externalId
-from Event e, Client c where c.id = e.client_id and e.contract_id =217144;
+from Event e, Client c where c.id = e.client_id and e.contract_id =217154;
 
 
 select *
