@@ -13,7 +13,14 @@ order by  retres.idx, resrep.idx;
 
 
 select *
-from rbEpicrisisProperty where name regexp 'госпитализ';
+from rbEpicrisisProperty where id in (104,106,107);
+
+
+select *
+from rbEpicrisisSections where id = 17;
+
+select *
+from rbEpicrisisSections_rbEpicrisisProperty where id_rbEpicrisisSections = 17;
 
 drop temporary table if exists temp_ret;
 drop temporary table if exists temp_res;
@@ -34,10 +41,8 @@ select 'Зав. отделением' as name
 );
 
 
-select *
-from rbEpicrisisProperty;
 
-insert into s11.rbEpicrisisProperty(name, description, type, defaultValue, valueDomain, printAsTable, isCopy)
+insert into rbEpicrisisProperty(name, description, type, defaultValue, valueDomain, printAsTable, isCopy)
 select *
 from
 (select
@@ -49,9 +54,9 @@ from
        printAsTable,
        isCopy
 from temp_rep
-join s11.rbEpicrisisProperty rep on rep.id = (select id from s11.rbEpicrisisProperty order by id desc limit 1)
+join s11.rbEpicrisisProperty rep on rep.id = (select id from rbEpicrisisProperty order by id desc limit 1)
 ) as tmp
-where not exists(select * from s11.rbEpicrisisProperty where tmp.name = name and tmp.description = tmp.description);
+where not exists(select * from rbEpicrisisProperty where tmp.name = name);
 
 insert into rbEpicrisisSections_rbEpicrisisProperty(id_rbEpicrisisSections, id_rbEpicrisisProperty, idx, htmlTemplate, orgStruct, isRequired, isEditable, isOld)
 select *
@@ -91,15 +96,4 @@ from
     ) as tmp
 where not exists(select * from rbEpicrisisTemplates_rbEpicrisisSections where tmp.id_rbEpicrisisSections = id_rbEpicrisisSections and tmp.id_rbEpicrisisTemplates = id_rbEpicrisisSections)
 
-
-select *
-from rbEpicrisisProperty;
-
-
-select *
-from rbEpicrisisSections_rbEpicrisisProperty where id_rbEpicrisisProperty = 105;
-
-
-select *
-from rbEpicrisisSections where id = 21;
 
