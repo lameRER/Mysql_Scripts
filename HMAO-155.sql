@@ -12,6 +12,13 @@ order by  retres.idx, resrep.idx;
 -- order by rep.id
 
 
+select *
+from rbEpicrisisTemplates_rbEpicrisisSections;
+
+select *
+from rbEpicrisisSections where name in (select 'Общий осмотр' as name union
+    select 'Обследования' as name) ;
+
 set @retid = (select id from rbEpicrisisTemplates where code = '1');
 
 
@@ -22,7 +29,8 @@ select
        description
 from rbEpicrisisSections res
 join (
-select '' as name
+select 'Общий осмотр' as name union
+    select 'Обследования' as name
     ) as tmp
 where res.id = (select id from rbEpicrisisSections order by id desc limit 1);
 
@@ -40,17 +48,30 @@ where retres.id = (select id from rbEpicrisisTemplates_rbEpicrisisSections order
 
 
 
+create temporary table temp_rep(
+select 'ФИО пациента' as name union
+select 'Дата рождения' as name union
+select 'Место жительства' as name union
+select 'Место работы и род занятий' as name union
+select 'Дата поступления' as name union
+select 'Заключительный клинический диагноз' as name
+)
+
+
+select *
+from temp_rep;
+
+insert into rbEpicrisisProperty(demo_stand.rbEpicrisisProperty.name, demo_stand.rbEpicrisisProperty.description, demo_stand.rbEpicrisisProperty.type, demo_stand.rbEpicrisisProperty.defaultValue, demo_stand.rbEpicrisisProperty.valueDomain, demo_stand.rbEpicrisisProperty.printAsTable, demo_stand.rbEpicrisisProperty.isCopy)
 select
-       name,
+       tmp.name,
        description,
        type,
-       defaultValue,
+       'select ''''' defaultValue,
        valueDomain,
        printAsTable,
        isCopy
 from rbEpicrisisProperty rep
-join (
-    
+join (select * from temp_rep
     ) as tmp
 where rep.id = (select id from rbEpicrisisProperty order by id desc limit 1);
 
