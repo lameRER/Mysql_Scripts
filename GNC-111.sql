@@ -6,6 +6,8 @@ from rbSpecialVariablesPreferences where name = 'SpecialVar_VedomostNachisleniy'
 
 
 SELECT
+       t.coId,
+       t.InvoiceItemId,
   t.Payer,
   t.PaymentType,
   SUM(CASE WHEN t.FinanceTransactionOperationTypeId = 1 THEN InvoiceItemSum END) Income,
@@ -27,6 +29,7 @@ SELECT
   SUM(CASE WHEN t.PaymentTypeID in (1,2) AND
       t.FinanceTransactionOperationTypeId = 2 THEN -1 END * InvoiceItemSum) KassaOut
 FROM (SELECT
+co.id as coId,
     ii.id AS InvoiceItemId,
     CASE WHEN ft.financeOperationType_id = 1 THEN ii.sum WHEN ft.financeOperationType_id = 2 THEN -ii.sum END AS InvoiceItemSum,
     ft.id AS FinanceTransactionId,
@@ -77,3 +80,5 @@ FROM (SELECT
 WHERE e.client_id != 18
 GROUP BY t.FinanceTransactionId,
          t.InvoiceItemId;
+
+
