@@ -96,8 +96,40 @@ from Client c, Event e where e.client_id = c.id and e.id = 20437663;
 
 4806
 
-select cc.*
+
+select distinct co.*
+ FROM gnc.FinanceTransaction ft
+    LEFT JOIN gnc.rbPayType pt
+      ON pt.id = ft.payType_id
+    JOIN gnc.Invoice i
+      ON i.id = ft.invoice_id
+      AND i.deleted = 0
+    JOIN gnc.InvoiceItem ii
+      ON (ii.invoice_id = i.id)
+      OR (ii.refund_id = i.id
+      AND ii.deleted = 0)
+    JOIN gnc.Service s
+      ON s.id = ii.concreteService_id
+    JOIN gnc.PriceListItem pli
+      ON s.priceListItem_id = pli.id
+    LEFT JOIN gnc.Service ps
+      ON s.parent_id = ps.id
+    LEFT JOIN gnc.PriceListItem ps_pli
+      ON ps.priceListItem_id = ps_pli.id
+    LEFT JOIN gnc.ActionProperty ap
+      ON s.actionProperty_id = ap.id
+    LEFT JOIN gnc.Contract co
+      ON co.id = i.contract_id and co.id =217089
+    LEFT JOIN gnc.Contract_Contragent cc
+      ON cc.id = co.payer_id and cc.id = 110912
+    LEFT JOIN gnc.Client c_p
+      ON c_p.id = cc.client_id
+    LEFT JOIN gnc.Organisation o_p
+      ON o_p.id = cc.organisation_id
+
+select i.*
 from Contract c
+join Invoice i on i.contract_id = c.id and i.deleted= 0
 left join Contract_Contragent cc on cc.id = c.payer_id
 where c.id = 217089;
 
