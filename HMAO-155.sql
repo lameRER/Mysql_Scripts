@@ -12,25 +12,30 @@ order by  retres.idx, resrep.idx;
 -- order by rep.id
 
 
-drop temporary table temp_ret;
-drop temporary table temp_res;
-drop temporary table temp_rep;
+select *
+from rbEpicrisisProperty where name regexp 'госпитализ';
 
-create temporary table temp_ret(
-    select '1' as name
+drop temporary table if exists temp_ret;
+drop temporary table if exists temp_res;
+drop temporary table if exists temp_rep;
+
+create temporary table if not exists temp_ret(
+    select '1' as code
 );
 
-create temporary table temp_res(
-    select 'Лист нетрудоспособности' as name
+create temporary table if not exists temp_res(
+    select 'Прочее' as name
 );
-create temporary table temp_rep(
-select name
-    from s11.ActionType
-    where name regexp '^лаб'
-      and class = 1
-      and group_id is null
+create temporary table if not exists temp_rep(
+select 'Результат госпитализации' as name union
+select 'Рекомендации лечащего врача' as name union
+select 'Лечащий врач' as name union
+select 'Зав. отделением' as name
 );
 
+
+select *
+from rbEpicrisisProperty;
 
 insert into s11.rbEpicrisisProperty(name, description, type, defaultValue, valueDomain, printAsTable, isCopy)
 select *
@@ -67,6 +72,24 @@ where resrep.id = (select id from rbEpicrisisSections_rbEpicrisisProperty order 
 group by rep.name, res.name) as tmp
 where not exists(select * from rbEpicrisisSections_rbEpicrisisProperty where tmp.id_rbEpicrisisProperty = id_rbEpicrisisProperty and tmp.id_rbEpicrisisSections = id_rbEpicrisisSections );
 
+
+insert into rbEpicrisisTemplates_rbEpicrisisSections(id_rbEpicrisisTemplates, id_rbEpicrisisSections, idx, htmlTemplate, isRequired, isEditable)
+select *
+from
+(
+    select
+           max(ret.id) id_rbEpicrisisTemplates,
+           max(res.id) id_rbEpicrisisSections,
+           (select ifnull(max(idx), -1) from rbEpicrisisTemplates_rbEpicrisisSections where id_rbEpicrisisTemplates = ret.id) + row_number() over () idx,
+           htmlTemplate,
+           isRequired,
+           isEditable
+    from rbEpicrisisTemplates_rbEpicrisisSections retres
+    join rbEpicrisisTemplates ret on ret.code = (select code from temp_ret)
+    join rbEpicrisisSections res on res.name = (select name from temp_res)
+    where retres.id = (select id from rbEpicrisisTemplates_rbEpicrisisSections order by id desc limit 1) group by res.name, ret.name
+    ) as tmp
+where not exists(select * from rbEpicrisisTemplates_rbEpicrisisSections where tmp.id_rbEpicrisisSections = id_rbEpicrisisSections and tmp.id_rbEpicrisisTemplates = id_rbEpicrisisSections)
 
 
 select *
