@@ -90,14 +90,14 @@ GROUP BY t.FinanceTransactionId,
 select *
 from Service where id in(5008332,5008460,5008675,5008337,5008338,5008590) group by event_id;
 
-
-select *
+217089
+select e.contract_id
 from Client c, Event e where e.client_id = c.id and e.id = 20437663;
 
 4806
 
 
-select distinct i.*
+select di1stinct i.*
  FROM gnc.FinanceTransaction ft
     LEFT JOIN gnc.rbPayType pt
       ON pt.id = ft.payType_id
@@ -128,7 +128,15 @@ select distinct i.*
       ON o_p.id = cc.organisation_id
 WHERE (ft.financeOperationType_id = 1
   OR ft.financeOperationType_id = 2) and s.deleted = 0
-  AND ft.trxDatetime BETWEEN :Date1 AND :Date1 + INTERVAL 1 DAY - INTERVAL 1 SECOND and co.id =217089
+  AND ft.trxDatetime BETWEEN :Date1 AND :Date1 + INTERVAL 1 DAY - INTERVAL 1 SECOND and i.number = '15637'
+
+
+select *
+from Contract where id = 217089;
+
+
+select *
+from Contract_Contragent where id = 110912;
 
 
 
