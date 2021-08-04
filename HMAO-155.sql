@@ -56,16 +56,11 @@ where retres.id = (select id from rbEpicrisisTemplates_rbEpicrisisSections order
 
 
 
-select *
-from s11.ActionType
-where group_id = (
-    select id
+select name
     from s11.ActionType
     where name regexp '^лаб'
       and class = 1
-      and group_id is null
-)
-;
+      and group_id is null;
 
 
 select *
@@ -81,10 +76,11 @@ create temporary table temp_res(
 drop temporary table temp_rep
 
 create temporary table temp_rep(
-select 'Жалобы при поступлении' as name union
-select 'Anamnesis morbi' as name union
-select 'Anamnesis vitae' as name union
-select 'Общий осмотр' as name
+select name
+    from s11.ActionType
+    where name regexp '^лаб'
+      and class = 1
+      and group_id is null
 )
 
 
