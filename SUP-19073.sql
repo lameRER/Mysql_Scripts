@@ -547,3 +547,7 @@ from ActionType at, ActionPropertyType apt where at.group_id = 56238 and apt.act
 
 select *
 from VIMISSSZ14;
+
+
+select *
+from rbVitalParams where code = '6';
