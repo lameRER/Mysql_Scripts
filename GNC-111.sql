@@ -97,7 +97,7 @@ from Client c, Event e where e.client_id = c.id and e.id = 20437663;
 4806
 
 
-select distinct co.*
+select distinct i.*
  FROM gnc.FinanceTransaction ft
     LEFT JOIN gnc.rbPayType pt
       ON pt.id = ft.payType_id
@@ -119,13 +119,21 @@ select distinct co.*
     LEFT JOIN gnc.ActionProperty ap
       ON s.actionProperty_id = ap.id
     LEFT JOIN gnc.Contract co
-      ON co.id = i.contract_id and co.id =217089
+      ON co.id = i.contract_id
     LEFT JOIN gnc.Contract_Contragent cc
-      ON cc.id = co.payer_id and cc.id = 110912
+      ON cc.id = co.payer_id
     LEFT JOIN gnc.Client c_p
       ON c_p.id = cc.client_id
     LEFT JOIN gnc.Organisation o_p
       ON o_p.id = cc.organisation_id
+WHERE (ft.financeOperationType_id = 1
+  OR ft.financeOperationType_id = 2) and s.deleted = 0
+  AND ft.trxDatetime BETWEEN :Date1 AND :Date1 + INTERVAL 1 DAY - INTERVAL 1 SECOND and co.id =217089
+
+
+
+select c.*
+from Event e, Client c where c.id = e.client_id and e.id = 20437663;
 
 select i.*
 from Contract c
