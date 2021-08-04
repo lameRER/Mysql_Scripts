@@ -6,6 +6,7 @@ from rbSpecialVariablesPreferences where name = 'SpecialVar_VedomostNachisleniy'
 
 
 SELECT
+       t.iId,
        t.coId,
        t.InvoiceItemId,
        t.sId,
@@ -32,6 +33,7 @@ SELECT
       t.FinanceTransactionOperationTypeId = 2 THEN -1 END * InvoiceItemSum) KassaOut
 FROM (SELECT
 co.id as coId,
+             i.id as iId,
              s.id as sId,
              ps.id as psId,
     ii.id AS InvoiceItemId,
@@ -87,8 +89,8 @@ GROUP BY t.FinanceTransactionId,
 
 
 
-select *
-from Service where id in(5008332,5008460,5008675,5008337,5008338,5008590) group by event_id;
+select e.contract_id
+from Service s, Event e where s.id in(5008332) and e.id = s.event_id;
 
 217089
 select e.contract_id
@@ -97,7 +99,12 @@ from Client c, Event e where e.client_id = c.id and e.id = 20437663;
 4806
 
 
-select di1stinct i.*
+update Invoice
+set contract_id = 217144
+where id = 148478
+
+
+select distinct e.contract_id, i.*
  FROM gnc.FinanceTransaction ft
     LEFT JOIN gnc.rbPayType pt
       ON pt.id = ft.payType_id
@@ -126,9 +133,14 @@ select di1stinct i.*
       ON c_p.id = cc.client_id
     LEFT JOIN gnc.Organisation o_p
       ON o_p.id = cc.organisation_id
+join Event e on s.event_id = e.id
 WHERE (ft.financeOperationType_id = 1
   OR ft.financeOperationType_id = 2) and s.deleted = 0
-  AND ft.trxDatetime BETWEEN :Date1 AND :Date1 + INTERVAL 1 DAY - INTERVAL 1 SECOND and i.number = '15637'
+  AND ft.trxDatetime BETWEEN :Date1 AND :Date1 + INTERVAL 1 DAY - INTERVAL 1 SECOND and i.id in(148479,148485,148489,148478)
+
+
+select e.externalId
+from Event e, Client c where c.id = e.client_id and e.contract_id =217144;
 
 
 select *
