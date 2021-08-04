@@ -12,6 +12,10 @@ order by  retres.idx, resrep.idx;
 -- order by rep.id
 
 
+set @retid = (select id from rbEpicrisisTemplates where code = '1');
+
+
+
 insert into rbEpicrisisSections(name, description)
 select
        tmp.name,
@@ -23,10 +27,32 @@ select '' as name
 where res.id = (select id from rbEpicrisisSections order by id desc limit 1);
 
 
-select id, id_rbEpicrisisTemplates, id_rbEpicrisisSections, idx, htmlTemplate, isRequired, isEditable
+insert into rbEpicrisisTemplates_rbEpicrisisSections(id_rbEpicrisisTemplates, id_rbEpicrisisSections, idx, htmlTemplate, isRequired, isEditable)
+select
+       @retid id_rbEpicrisisTemplates,
+       (select last_insert_id()) id_rbEpicrisisSections,
+       idx,
+       htmlTemplate,
+       isRequired,
+       isEditable
 from rbEpicrisisTemplates_rbEpicrisisSections retres
 where retres.id = (select id from rbEpicrisisTemplates_rbEpicrisisSections order by id desc limit 1);
 
+
+
+select
+       name,
+       description,
+       type,
+       defaultValue,
+       valueDomain,
+       printAsTable,
+       isCopy
+from rbEpicrisisProperty rep
+join (
+    
+    ) as tmp
+where rep.id = (select id from rbEpicrisisProperty order by id desc limit 1);
 
 
 
