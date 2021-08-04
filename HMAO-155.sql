@@ -21,7 +21,7 @@ from s11.rbEpicrisisProperty;
 
 
 select *
-from s11.rbEpicrisisSections_rbEpicrisisProperty where id_rbEpicrisisProperty = 2178;
+from s11.rbEpicrisisSections_rbEpicrisisProperty where id_rbEpicrisisProperty = 2256;
 
 select *
 from rbEpicrisisSections where name in (select 'Общий осмотр' as name union

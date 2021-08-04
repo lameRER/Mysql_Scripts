@@ -24,3 +24,6 @@ LEFT JOIN ActionProperty ap ON a.id = ap.action_id AND ap.deleted=0 AND ap.type_
 left join ActionProperty_Reference apr ON ap.id = apr.id
 LEFT JOIN rbSpaTreatmentSanator ON apr.value = rbSpaTreatmentSanator.id
 WHERE e.id= 31398 and rbSpaTreatmentSanator.name is not null;
+
+
+
