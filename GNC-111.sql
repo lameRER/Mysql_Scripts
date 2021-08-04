@@ -8,6 +8,8 @@ from rbSpecialVariablesPreferences where name = 'SpecialVar_VedomostNachisleniy'
 SELECT
        t.coId,
        t.InvoiceItemId,
+       t.sId,
+       t.psId,
   t.Payer,
   t.PaymentType,
   SUM(CASE WHEN t.FinanceTransactionOperationTypeId = 1 THEN InvoiceItemSum END) Income,
@@ -30,6 +32,8 @@ SELECT
       t.FinanceTransactionOperationTypeId = 2 THEN -1 END * InvoiceItemSum) KassaOut
 FROM (SELECT
 co.id as coId,
+             s.id as sId,
+             ps.id as psId,
     ii.id AS InvoiceItemId,
     CASE WHEN ft.financeOperationType_id = 1 THEN ii.sum WHEN ft.financeOperationType_id = 2 THEN -ii.sum END AS InvoiceItemSum,
     ft.id AS FinanceTransactionId,
@@ -63,7 +67,7 @@ co.id as coId,
     LEFT JOIN gnc.ActionProperty ap
       ON s.actionProperty_id = ap.id
     LEFT JOIN gnc.Contract co
-      ON co.id = i.contract_id and co.deleted = 0
+      ON co.id = i.contract_id
     LEFT JOIN gnc.Contract_Contragent cc
       ON cc.id = co.payer_id
     LEFT JOIN gnc.Client c_p
@@ -84,7 +88,23 @@ GROUP BY t.FinanceTransactionId,
 
 
 select *
+from Service where id in(5008332,5008460,5008675,5008337,5008338,5008590) group by event_id;
+
+
+select *
+from Client c, Event e where e.client_id = c.id and e.id = 20437663;
+
+4806
+
+select cc.*
 from Contract c
 left join Contract_Contragent cc on cc.id = c.payer_id
 where c.id = 217089;
 
+
+select *
+from Organisation where id = 4806;
+
+
+select *
+from Service;
