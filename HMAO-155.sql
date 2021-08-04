@@ -46,6 +46,13 @@ select
 from rbEpicrisisTemplates_rbEpicrisisSections retres
 where retres.id = (select id from rbEpicrisisTemplates_rbEpicrisisSections order by id desc limit 1);
 
+select *
+from s11.ActionType where class = 3 and group_id  = 10164;
+
+
+select *
+from s11.ActionPropertyType where actionType_id = 8749;
+
 
 drop temporary table temp_res
 
@@ -64,7 +71,9 @@ select 'Общий осмотр' as name
 
 
 insert into rbEpicrisisSections_rbEpicrisisProperty(id_rbEpicrisisSections, id_rbEpicrisisProperty, idx, htmlTemplate, orgStruct, isRequired, isEditable, isOld)
-select
+select *
+from
+(select
        max(res.id) id_rbEpicrisisSections,
        max(rep.id) id_rbEpicrisisProperty,
        row_number() over () idx,
@@ -77,8 +86,21 @@ from rbEpicrisisSections_rbEpicrisisProperty resrep
 join rbEpicrisisProperty rep on rep.name in (select tp.name from temp_rep tp)
 join rbEpicrisisSections res on res.name = (select ts.name from temp_res ts)
 where resrep.id = (select id from rbEpicrisisSections_rbEpicrisisProperty order by id desc limit 1)
-group by rep.name, res.name
-order by rep.id;
+group by rep.name, res.name) as tmp
+where not exists(select * from rbEpicrisisSections_rbEpicrisisProperty where tmp.id_rbEpicrisisProperty = id_rbEpicrisisProperty and tmp.id_rbEpicrisisSections = id_rbEpicrisisSections );
+
+
+insert into s11.rbEpicrisisProperty(name, description, type, defaultValue, valueDomain, printAsTable, isCopy)
+select
+       temp_rep.name,
+       description,
+       type,
+       defaultValue,
+       valueDomain,
+       printAsTable,
+       isCopy
+from temp_rep
+join s11.rbEpicrisisProperty rep on rep.id = (select id from s11.rbEpicrisisProperty order by id desc limit 1);
 
 
 select *
