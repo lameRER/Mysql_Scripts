@@ -735,7 +735,7 @@ select
        null modifyPerson_id,
        124 priceList_id,
        0 deleted,
-       pli.service_id service_id,
+       ifnull(pli.service_id,s.id) service_id,
        pg.code serviceCodeOW,
        pg.name serviceNameOW,
        '2021-07-01' begDate,
@@ -750,9 +750,40 @@ select
 from price_gnc_21_08_05 pg
 left join PriceListItem pli on pli.serviceCodeOW = pg.code -- and (pli.endDate >= curdate() or pli.endDate is null) and pli.priceList_id = 124
 join PriceListItem pli_or on pli_or.id = (select id from PriceListItem order by id desc limit 1)
+join rbService s on s.code in (select code from temp_rbservice)
 # where pli.id is null
 group by pg.code) as tmp
-where not exists(select * from PriceListItem where serviceCodeOW = tmp.serviceCodeOW and serviceNameOW = tmp.serviceNameOW and tmp.price = price and priceList_id = 124 and (endDate >= curdate() or endDate is null) and tmp.service_id = service_id)
+where not exists(select * from PriceListItem where serviceCodeOW = tmp.serviceCodeOW and serviceNameOW = tmp.serviceNameOW and tmp.price = price and priceList_id = 124 and (endDate >= curdate() or endDate is null) and tmp.service_id = service_id and tmp.deleted = deleted)
+
+
+create temporary table temp_rbservice
+(select
+       pg.code code,
+       pg.name name,
+       eisLegacy,
+       nomenclatureLegacy,
+       license,
+       infis,
+       '2021-07-01' begDate,
+       '2030-12-31' endDate,
+       medicalAidProfile_id,
+       adultUetDoctor,
+       adultUetAverageMedWorker,
+       childUetDoctor,
+       childUetAverageMedWorker,
+       rbMedicalKind_id,
+       UET,
+       departCode,
+       isComplex,
+       maxSubServices
+from price_gnc_21_08_05 pg
+left join PriceListItem pli on pg.code = pli.serviceCodeOW
+join rbService s on s.id = (select id from rbService order by id desc limit 1)
+where pli.id is null)
+
+
+insert into rbService(code, name, eisLegacy, nomenclatureLegacy, license, infis, begDate, endDate, medicalAidProfile_id, adultUetDoctor, adultUetAverageMedWorker, childUetDoctor, childUetAverageMedWorker, rbMedicalKind_id, UET, departCode, isComplex, maxSubServices)
+select * from temp_rbservice
 
 
 select curdate()-1
