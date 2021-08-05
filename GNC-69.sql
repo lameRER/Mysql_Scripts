@@ -725,9 +725,29 @@ where  exists(select * from ActionType where name = tmp.name and code = tmp.code
 
 
 
-select *
+select pli_or.id,
+       pli_or.createDatetime,
+       pli_or.createPerson_id,
+       pli_or.modifyDatetime,
+       pli_or.modifyPerson_id,
+       pli_or.priceList_id,
+       pli_or.deleted,
+       pli_or.service_id,
+       pli_or.serviceCodeOW,
+       pli_or.serviceNameOW,
+       pli_or.begDate,
+       pli_or.endDate,
+       pli_or.price,
+       pli_or.isAccumulativePrice,
+       pli_or.limitPerDay,
+       pli_or.limitPerMonth,
+       pli_or.limitPerPriceList,
+       pli_or.LCE,
+       pli_or.LCE_test
 from price_gnc_21_08_05 pg
-left join PriceListItem pli on pli.serviceCodeOW = pg.code -- and (pli.endDate >= curdate() or pli.endDate is null) and pli.priceList_id = 124
+left join PriceListItem pli on pli.serviceCodeOW = pg.code
+left join PriceListItem pli1 on pli1.serviceCodeOW = pg.code and (pli1.endDate >= curdate() or pli1.endDate is null) and pli1.priceList_id = 124
+left join PriceListItem pli_or on pli_or.id = (select id from PriceListItem order by id desc limit 1)
 where pli.id is null group by pg.code
 
 
