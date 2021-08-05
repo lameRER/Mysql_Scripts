@@ -723,8 +723,11 @@ right join price_temp_2021 pct on pct.`Номенклатура.Номенкла
 where pl.id is null) as tmp
 where  exists(select * from ActionType where name = tmp.name and code = tmp.code)
 
+select *
+from PriceListItem where service_id = 12970 and serviceCodeOW = 'A11.12.001';
 
-
+select *
+from (
 select
        now() createDatetime,
        null createPerson_id,
@@ -735,9 +738,9 @@ select
        pli.service_id service_id,
        pg.code serviceCodeOW,
        pg.name serviceNameOW,
-       pli_or.begDate,
-       pli_or.endDate,
-       pli_or.price,
+       '2021-07-01' begDate,
+       '2030-12-31' endDate,
+       pg.price price,
        pli_or.isAccumulativePrice,
        pli_or.limitPerDay,
        pli_or.limitPerMonth,
@@ -747,9 +750,26 @@ select
 from price_gnc_21_08_05 pg
 left join PriceListItem pli on pli.serviceCodeOW = pg.code -- and (pli.endDate >= curdate() or pli.endDate is null) and pli.priceList_id = 124
 join PriceListItem pli_or on pli_or.id = (select id from PriceListItem order by id desc limit 1)
-where pli.id is null group by pg.code
+# where pli.id is null
+group by pg.code) as tmp
+where not exists(select * from PriceListItem where serviceCodeOW = tmp.serviceCodeOW and serviceNameOW = tmp.serviceNameOW and tmp.price = price and priceList_id = 124 and (endDate >= curdate() or endDate is null) and tmp.service_id = service_id)
 
 
+select curdate()-1
+drop table temp_priceListItem_backup;
+create table temp_priceListItem_backup
+(select * from PriceListItem);
+
+
+# update
+select * from
+PriceListItem
+# set endDate = curdate()-1
+where priceList_id = 124 and endDate >= curdate();
+
+
+select *
+from PriceListItem order by id desc ;
 
 select *
 from price_gnc_21_08_05 pg
