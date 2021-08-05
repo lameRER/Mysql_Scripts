@@ -1,9 +1,13 @@
+
+
+
+
 use s11;
 set @flatCode = 'received';
 set @ActionType = (select id from ActionType where flatCode = @flatCode and deleted = 0);
 
 set @ActionPropertyType = 'Доставлен';
-set @ActionPropertyTypeOld = (select id from ActionPropertyType where name = @ActionPropertyType and actionType_id = @ActionType and deleted = 0 and typeName = 'String');
+set @ActionPropertyTypeOld = (select id from ActionPropertyType where name = concat(@ActionPropertyType,':') and actionType_id = @ActionType and deleted = 0 and typeName = 'String');
 set @ActionPropertyTypeNew = (select id from ActionPropertyType where name = @ActionPropertyType and actionType_id = @ActionType and deleted = 0 and typeName = 'Reference');
 
 # UPDATE ActionPropertyType SET idx = 5, penalty = 100, penaltyUserProfile = '29; 7; 19; 32; 31; 53; 36; 37; 57; 48; 63', visibleInDR = 1, userProfile_id = null, userProfileBehaviour = 0 WHERE id = @ActionPropertyTypeNew;
