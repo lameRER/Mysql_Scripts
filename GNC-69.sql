@@ -783,7 +783,10 @@ where pli.id is null)
 
 
 insert into rbService(code, name, eisLegacy, nomenclatureLegacy, license, infis, begDate, endDate, medicalAidProfile_id, adultUetDoctor, adultUetAverageMedWorker, childUetDoctor, childUetAverageMedWorker, rbMedicalKind_id, UET, departCode, isComplex, maxSubServices)
-select * from temp_rbservice
+select *
+from
+(select * from temp_rbservice) as tmp
+where not exists(select * from rbService where tmp.code = code and tmp.name = name and endDate = tmp.endDate and begDate = tmp.begDate)
 
 
 select curdate()-1
