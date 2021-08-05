@@ -724,17 +724,19 @@ where pl.id is null) as tmp
 where  exists(select * from ActionType where name = tmp.name and code = tmp.code)
 
 
-
-select count(pg.code), pg.*, pli.*
+select *
+from PriceListItem  where serviceCodeOW in (
+select pg.code
 from price_gnc_21_08_05 pg
 left join PriceListItem pli on pli.serviceCodeOW = pg.code and (pli.endDate >= curdate() or pli.endDate is null) and pli.priceList_id = 124
-group by pg.code
+group by pg.code having count(pg.code) > 1)
+and (endDate >= curdate() or endDate is null) and priceList_id = 124
 
 
-select pg.*, pli.*
+select *
 from price_gnc_21_08_05 pg
 left join PriceListItem pli on pli.serviceCodeOW = pg.code and (pli.endDate >= curdate() or pli.endDate is null) and pli.priceList_id = 124
-where pg.code = 'A08.30.013.001'
+where pg.code = 'A04.30.001.001'
 
 
 select *
