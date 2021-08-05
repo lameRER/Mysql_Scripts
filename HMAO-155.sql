@@ -1,7 +1,15 @@
-select count(rep.id) num,
-GROUP_CONCAT(CONCAT_WS(' ', ret.id_orgStructure , ret.code, ret.name,'retres.idx:',retres.idx,'resper.idx:',resrep.idx) separator '\n') ret,
+select count(a.id), e.id
+from Event e, Action a where e.id = a.event_id group by e.id;
+
+
+select getClientLocAddressId((select id from Client order by id limit 1))
+
+select
+#        count(rep.id) num,
+# GROUP_CONCAT(CONCAT_WS(' ', ret.id_orgStructure , ret.code, ret.name,'retres.idx:',retres.idx,'resper.idx:',resrep.idx) separator '\n') ret,
 -- GROUP_CONCAT(CONCAT_WS(' ', retres.id, resrep.id, res.id, res.name, res.description)separator '\n') res,
-res.*, rep.* from rbEpicrisisTemplates ret
+# res.*,
+       rep.* from rbEpicrisisTemplates ret
 left join rbEpicrisisTemplates_rbEpicrisisSections retres on retres.id_rbEpicrisisTemplates = ret.id
 left join rbEpicrisisSections res on retres.id_rbEpicrisisSections = res.id
 left join rbEpicrisisSections_rbEpicrisisProperty resrep on resrep.id_rbEpicrisisSections = res.id
@@ -11,16 +19,15 @@ group by rep.id
 order by  retres.idx, resrep.idx;
 -- order by rep.id
 
+#SELECT CONCAT_WS(' ',  Client.lastName,Client.firstName, Client.patrName, DATE_FORMAT(Client.birthDate,'%d.%m.%Y'), ' ', age(Client.birthDate,CURDATE()), 'лет','ИБ №',Event.externalId) ' '
+#FROM Event INNER JOIN Client ON Event.client_id = Client.id
+#WHERE Event.id = %s;
 
-select *
-from rbEpicrisisProperty where id in (104,106,107);
+SELECT CONCAT_WS(' ', 'Дата рождения', DATE_FORMAT(Client.birthDate,'%d.%m.%Y'), ' ', age(Client.birthDate,CURDATE()), 'лет','ИБ №',Event.externalId) ' '
+FROM Event INNER JOIN Client ON Event.client_id = Client.id
+WHERE Event.id = %s
 
 
-select *
-from rbEpicrisisSections where id = 21;
-
-select *
-from rbEpicrisisSections_rbEpicrisisProperty where id_rbEpicrisisSections = 17;
 
 drop temporary table if exists temp_ret;
 drop temporary table if exists temp_res;
