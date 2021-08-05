@@ -41,6 +41,14 @@ select 'Зав. отделением' as name
 );
 
 
+select *
+from
+(select temp_res.name, id, res.name, description
+ from temp_res
+join rbEpicrisisSections res on res.id = (select id from rbEpicrisisSections order by id desc limit 1)
+    ) as tmp
+where not exists(select * from rbEpicrisisSections where tmp.name = name)
+
 
 insert into rbEpicrisisProperty(name, description, type, defaultValue, valueDomain, printAsTable, isCopy)
 select *
