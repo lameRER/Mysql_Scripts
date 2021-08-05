@@ -2,10 +2,17 @@ select *
 from rbPrintTemplate where name ='Ведомость начислений за услугу по контрагенту';
 
 select *
-from rbSpecialVariablesPreferences where name = 'SpecialVar_VedomostNachisleniyByClient';
+from rbSpecialVariablesPreferences where name = 'SpecialVar_V`edomostNachisleniyByClient';
+
+20433957
+
+select at.name, s.*, a.*
+from Action a, Event e, ActionType at, Service s
+where e.id = a.event_id and e.id in(20433935) and at.id = a.actionType_id and s.event_id = e.id and s.action_id = a.id;
 
 
-
+select *
+from Service where event_id = 20433935;
 
 
 SELECT
@@ -53,7 +60,7 @@ FROM (SELECT
       OR (ii.refund_id = i.id
       AND ii.deleted = 0)
     JOIN gnc.Service s
-      ON s.id = ii.concreteService_id
+      ON s.id = ii.concreteService_id and s.deleted = 0
     JOIN gnc.PriceListItem pli
       ON s.priceListItem_id = pli.id
     LEFT JOIN gnc.Service ps
