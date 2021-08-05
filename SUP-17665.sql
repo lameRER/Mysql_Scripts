@@ -1,6 +1,22 @@
 
 
 
+select aps.value
+from ActionProperty_String aps,
+     ActionProperty ap,
+     ActionPropertyType apt,
+     ActionType at,
+     Action a
+where aps.id = ap.id
+and apt.id = ap.type_id and a.id = ap.action_id
+and at.id = apt.actionType_id and apt.id = 35423
+and a.actionType_id = at.id
+group by value;
+
+
+select *
+from ActionPropertyType where name = 'доставлен:';
+
 
 use s11;
 set @flatCode = 'received';
@@ -39,9 +55,9 @@ where not exists(select * from ActionProperty where action_id = tmp.action_id an
 
 replace into ActionProperty_Reference(id, `index`, value)
 select ap1.id, 0, case
-           when aps.value regexp '^в первые 6часов|^1 час|^2 часа|^3 часа|^4|^4 часа|^5 часов|^6 часов|^< font style="vertical-align: inherit;">< font style="vertical-align: inherit;">1 час< /font>< /font>|^< font style="vertical-align: inherit;">< font style="vertical-align: inherit;">4 часа< /font>< /font>' then 4
-           when  aps.value regexp '^в течении 7-24 часов|^7-12 часов|^7-24 часов|^12-24 часов' then 5
-           when aps.value regexp '^менее 2 суток|^более 24-х часов|^более 7 суток|^менее 3 суток|^менее 4 суток|^менее 5 суток|^менее 6 суток|^менее 7 суток|^позднее 24-х часов' then 6 end
+           when aps.value regexp '^в первые 6часов|^1 час|^2 часа|^3 часа|^4|^4 часа|^5 часов|^6 часов|^< font style="vertical-align: inherit;">< font style="vertical-align: inherit;">1 час< /font>< /font>|^< font style="vertical-align: inherit;">< font style="vertical-align: inherit;">4 часа< /font>< /font>|^4$' then 4
+           when  aps.value regexp '^в течении 7-24 часов|^7-12 часов|^7-24 часов|^12-24 часов|^5$' then 5
+           when aps.value regexp '^менее 2 суток|^более 24-х часов|^более 7 суток|^менее 3 суток|^менее 4 суток|^менее 5 суток|^менее 6 суток|^менее 7 суток|^позднее 24-х часов|^6$' then 6 end
 from ActionProperty ap
 join ActionProperty_String aps on aps.id = ap.id
 join Action a on ap.action_id = a.id and a.deleted = 0
