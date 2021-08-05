@@ -17,7 +17,7 @@ from rbEpicrisisProperty where id in (104,106,107);
 
 
 select *
-from rbEpicrisisSections where id = 17;
+from rbEpicrisisSections where id = 21;
 
 select *
 from rbEpicrisisSections_rbEpicrisisProperty where id_rbEpicrisisSections = 17;
@@ -41,13 +41,14 @@ select 'Зав. отделением' as name
 );
 
 
+insert into rbEpicrisisSections(name, description)
 select *
 from
-(select temp_res.name, id, res.name, description
+(select temp_res.name name, '' description
  from temp_res
 join rbEpicrisisSections res on res.id = (select id from rbEpicrisisSections order by id desc limit 1)
     ) as tmp
-where not exists(select * from rbEpicrisisSections where tmp.name = name)
+where not exists(select * from rbEpicrisisSections where tmp.name = name);
 
 
 insert into rbEpicrisisProperty(name, description, type, defaultValue, valueDomain, printAsTable, isCopy)
