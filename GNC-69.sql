@@ -722,3 +722,9 @@ from PriceListItem pl
 right join price_temp_2021 pct on pct.`Номенклатура.Номенклатурный номер` = pl.serviceCodeOW
 where pl.id is null) as tmp
 where  exists(select * from ActionType where name = tmp.name and code = tmp.code)
+
+
+
+select *
+from price_gnc_21_08_05 pg
+left join PriceListItem pli on pli.serviceCodeOW = pg.code;
