@@ -726,36 +726,27 @@ where  exists(select * from ActionType where name = tmp.name and code = tmp.code
 select *
 from PriceListItem where service_id = 12970 and serviceCodeOW = 'A11.12.001';
 
-select *
-from (
-select
-       now() createDatetime,
-       null createPerson_id,
-       now() modifyDatetime,
-       null modifyPerson_id,
-       124 priceList_id,
-       0 deleted,
-       ifnull(pli.service_id,s.id) service_id,
-       pg.code serviceCodeOW,
-       pg.name serviceNameOW,
-       '2021-07-01' begDate,
-       '2030-12-31' endDate,
-       pg.price price,
-       pli_or.isAccumulativePrice,
-       pli_or.limitPerDay,
-       pli_or.limitPerMonth,
-       pli_or.limitPerPriceList,
-       pli_or.LCE,
-       pli_or.LCE_test
-from price_gnc_21_08_05 pg
-left join PriceListItem pli on pli.serviceCodeOW = pg.code -- and (pli.endDate >= curdate() or pli.endDate is null) and pli.priceList_id = 124
-join PriceListItem pli_or on pli_or.id = (select id from PriceListItem order by id desc limit 1)
-join rbService s on s.code in (select code from temp_rbservice)
-# where pli.id is null
-group by pg.code) as tmp
-where not exists(select * from PriceListItem where serviceCodeOW = tmp.serviceCodeOW and serviceNameOW = tmp.serviceNameOW and tmp.price = price and priceList_id = 124 and (endDate >= curdate() or endDate is null) and tmp.service_id = service_id and tmp.deleted = deleted)
 
 
+
+
+
+
+
+
+
+
+
+
+A06.09.005.003йцв
+https://skillbox.ru/media/code/ne_windows_edinoy_kak_pisat_krossplatformennye_prilozheniya_s_gui_na_c/
+
+
+
+
+select * from price_gnc_21_08_05
+
+#TODO: Поменять киррилицу на латиницу в "price_gnc_21_08_05"
 create temporary table temp_rbservice
 (select
        pg.code code,
@@ -782,11 +773,56 @@ join rbService s on s.id = (select id from rbService order by id desc limit 1)
 where pli.id is null)
 
 
+
+
+select *
+from (
+select
+       now() createDatetime,
+       null createPerson_id,
+       now() modifyDatetime,
+       null modifyPerson_id,
+       124 priceList_id,
+       0 deleted,
+       pli.id,
+       pli.service_id as pliid,
+       s.id as sid,
+       ifnull(pli.service_id,s.id) service_id,
+       s.code, s.name,
+       pg.code serviceCodeOW,
+       pg.name serviceNameOW,
+       '2021-07-01' begDate,
+       '2030-12-31' endDate,
+       pg.price price,
+       pli_or.isAccumulativePrice,
+       pli_or.limitPerDay,
+       pli_or.limitPerMonth,
+       pli_or.limitPerPriceList,
+       pli_or.LCE,
+       pli_or.LCE_test
+from price_gnc_21_08_05 pg
+left join PriceListItem pli on pli.serviceCodeOW = pg.code
+left join rbService s1 on s1.id = pli.service_id and (s1.endDate >= curdate() or s1.endDate is null)
+join PriceListItem pli_or on pli_or.id = (select id from PriceListItem order by id desc limit 1)
+left join rbService s on s.code in (select code from temp_rbservice) and s.code = pg.code
+# where pli.id is null
+group by pg.code) as tmp
+where not exists(select * from PriceListItem where serviceCodeOW = tmp.serviceCodeOW and serviceNameOW = tmp.serviceNameOW and tmp.price = price and priceList_id = 124 and (endDate >= curdate() or endDate is null) and tmp.service_id = service_id and tmp.deleted = deleted)
+
+
 insert into rbService(code, name, eisLegacy, nomenclatureLegacy, license, infis, begDate, endDate, medicalAidProfile_id, adultUetDoctor, adultUetAverageMedWorker, childUetDoctor, childUetAverageMedWorker, rbMedicalKind_id, UET, departCode, isComplex, maxSubServices)
 select *
 from
 (select * from temp_rbservice) as tmp
 where not exists(select * from rbService where tmp.code = code and tmp.name = name and endDate = tmp.endDate and begDate = tmp.begDate)
+A12.30.012.001.012
+
+select *
+from rbService where id = 12610;
+
+select *
+from PriceListItem where id in (7091648,7098289);
+
 
 
 select curdate()-1
@@ -794,12 +830,32 @@ drop table temp_priceListItem_backup;
 create table temp_priceListItem_backup
 (select * from PriceListItem);
 
-
 # update
 select * from
 PriceListItem
 # set endDate = curdate()-1
 where priceList_id = 124 and endDate >= curdate();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 select *
