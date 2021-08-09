@@ -1,10 +1,4 @@
-select count(a.id), e.id
-from Event e, Action a where e.id = a.event_id group by e.id;
-select c.id from Event e, Client c where c.id = e.client_id and e.id = 15706
 
-select getClientWork((select c.id from Event e, Client c where c.id = e.client_id and e.id = 15706))
-
-select getClientWork((select c.id from Event e, Client c where c.id = e.client_id and e.id = %s))
 
 select
 #        count(rep.id) num,
