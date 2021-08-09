@@ -1,6 +1,25 @@
 select * from Action order by id desc
 
 
+select *
+from ActionPropertyType where actionType_id in
+(select id
+from ActionType where flatCode = 'oper_protocol') order by idx, name;
+
+
+select name
+from OrgStructure where  id = 67;
+
+SQL=""" SELECT id FROM OrgStructure
+ WHERE id =
+(SELECT apr.value FROM ActionProperty_OrgStructure apr WHERE apr.id IN (SELECT ap.id FROM ActionProperty ap WHERE ap.action_id IN
+(SELECT a.id FROM Action a WHERE a.deleted = 0 AND a.id = (SELECT parent_id FROM Action a WHERE a.id = context.actionId ) AND a.actionType_id IN
+(SELECT at.id FROM ActionType at WHERE at.deleted = 0 AND at.serviceType = 4)) AND ap.type_id IN (SELECT apt.id FROM ActionPropertyType apt WHERE apt.deleted = 0 AND apt.name = 'Операционная' )))"""
+
+REFERENCE="oper_plan.operation"
+
+
+select * from
 
 select *
 from ActionPropertyType where name = 'Операционная';
