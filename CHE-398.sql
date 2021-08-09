@@ -1,7 +1,19 @@
+select * from Action order by id desc
+
+
+
 select *
 from ActionPropertyType where name = 'Операционная';
 
 
+select *
+from ActionPropertyType where actionType_id = 13723;
+
+select *
+from ActionPropertyType where id = 132381;
+
+select *
+from ActionType where id = 13723;
 
 
 select at.name, a.*
@@ -30,7 +42,7 @@ select *
 from ActionProperty_Reference where id = 442994;
 
 
-select * from ActionPropertyType where id = 185363
+select * from ActionPropertyType where actionType_id = 13723
 
 select *
 from ActionType where id = 25596;
