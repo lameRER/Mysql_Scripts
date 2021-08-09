@@ -1,6 +1,6 @@
-select *
-from Action
-where (id in (104136,104135) or actionType_id = 25596 and deleted = 0) and event_id = 27944;
+select at.name, a.*
+from Action a, ActionType at
+where (a.id in (104136,104135) or a.actionType_id = 25596 and a.deleted = 0) and a.event_id = 27944 and at.id = a.actionType_id;
 
 
 select ActionPropertyType.formulaAlias, ActionPropertyType.*
@@ -11,6 +11,10 @@ from ActionType where id in(23662));
 
 select *
 from ActionType where id in(23662)
+
+
+select *
+from ActionType where group_id = 21403 and class=  2;
 
 select *
 from ActionProperty  where action_id = 104003 and type_id = 185363;
