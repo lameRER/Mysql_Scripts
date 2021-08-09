@@ -15,14 +15,6 @@ group by rep.id
 order by  retres.idx, resrep.idx;
 -- order by rep.id
 
-#SELECT CONCAT_WS(' ',  Client.lastName,Client.firstName, Client.patrName, DATE_FORMAT(Client.birthDate,'%d.%m.%Y'), ' ', age(Client.birthDate,CURDATE()), 'лет','ИБ №',Event.externalId) ' '
-#FROM Event INNER JOIN Client ON Event.client_id = Client.id
-#WHERE Event.id = %s;
-
-SELECT CONCAT_WS(' ', 'Дата рождения', DATE_FORMAT(Client.birthDate,'%d.%m.%Y'), ' ', age(Client.birthDate,CURDATE()), 'лет','ИБ №',Event.externalId) ' '
-FROM Event INNER JOIN Client ON Event.client_id = Client.id
-WHERE Event.id = %s
-
 
 
 drop temporary table if exists temp_ret;
@@ -109,3 +101,15 @@ from
 where not exists(select * from rbEpicrisisTemplates_rbEpicrisisSections where tmp.id_rbEpicrisisSections = id_rbEpicrisisSections and tmp.id_rbEpicrisisTemplates = id_rbEpicrisisSections)
 
 
+select ap.*
+from ActionProperty ap
+join Action a on ap.action_id = a.id and a.deleted = 0
+join ActionType at on at.id = a.actionType_id and at.deleted =0 and at.group_id = 84449
+join ActionPropertyType apt on apt.actionType_id = at.id and ap.type_id = apt.id
+where ap.deleted = 0
+select *
+from ActionType where group_id = 84449 and deleted = 0;
+
+
+select *
+from Organisation where id = (select org_id from Person where org_id is not null limit 1);
