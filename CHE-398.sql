@@ -1,3 +1,9 @@
+select *
+from ActionPropertyType where name = 'Операционная';
+
+
+
+
 select at.name, a.*
 from Action a, ActionType at
 where (a.id in (104136,104135) or a.actionType_id = 25596 and a.deleted = 0) and a.event_id = 27944 and at.id = a.actionType_id;
@@ -22,6 +28,16 @@ from ActionProperty  where action_id = 104003 and type_id = 185363;
 
 select *
 from ActionProperty_Reference where id = 442994;
+
+
+select * from ActionPropertyType where id = 185363
+
+select *
+from ActionType where id = 25596;
+
+
+select *
+from ActionType where name regexp 'протокол операции';
 
 select *
 from ActionPropertyType where actionType_id =
