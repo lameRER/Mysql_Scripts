@@ -117,3 +117,8 @@ from ActionType where formulaAlias = 'oper_plan');
 
 select *
 from ActionType where ;
+
+
+
+select *
+from ActionPropertyType where name = 'Ассистент 2';
