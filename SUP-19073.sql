@@ -551,3 +551,16 @@ from VIMISSSZ14;
 
 select *
 from rbVitalParams where code = '6';
+
+
+
+select *
+from s11.Person where userProfile_id = 1;
+
+
+
+select *
+from rborgs
+
+select *
+from ActionType where id = 1;;
