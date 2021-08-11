@@ -143,7 +143,7 @@ from ActionPropertyType where actionType_id = (select id from ActionType where g
 
 
 select *
-from rbVitalParams where code = '285'
+from rbVitalParams where code = '328'
 
 ;
 
