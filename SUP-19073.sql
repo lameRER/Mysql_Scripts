@@ -7,7 +7,7 @@
 
 
 
-set @name = 'Региз-онко-095';
+set @name = 'Региз-МБ-093';
 set @code = '19073';
 set @group = (select id from ActionType where code regexp concat('^', @code) and name = @name);
 
@@ -16,7 +16,9 @@ set @group = (select id from ActionType where code regexp concat('^', @code) and
 insert into ActionType(createDatetime, createPerson_id, modifyDatetime, modifyPerson_id, class, group_id, code, name, title, flatCode, sex, age, office, showInForm, genTimetable,
                        quotaType_id, context, defaultPlannedEndDate, defaultExecPerson_id, defaultOrg_id, isMES, nomenclativeService_id, prescribedType_id, shedule_id, counter_id,
                        isActiveGroup, lis_code, period, singleInPeriod, refferalType_id, formulaAlias)
-select
+select *
+from
+(select
        now() createDatetime,
        null createPerson_id,
        now() modifyDatetime,
@@ -24,8 +26,8 @@ select
        class,
        @group group_id,
        concat((select code from ActionType where id = @group), '-', (select count(code) from ActionType where group_id = @group)+1) code,
-       'Диспансерное наблюдение' name,
-       'Диспансерное наблюдение' title,
+       'Амбулаторный прием, осуществляемый врачом акушером-гинекологом' name,
+       'Амбулаторный прием, осуществляемый врачом акушером-гинекологом' title,
        flatCode,
        sex,
        age,
@@ -48,18 +50,17 @@ select
        singleInPeriod,
        refferalType_id,
        formulaAlias
-from ActionType at where at.id = @group;
+from ActionType at where at.id = @group) as tmp
+where not exists(select * from ActionType where name = tmp.name and group_id = tmp.group_id);
 
 
 
-
-set @num = -1;
 
 insert into ActionPropertyType(actionType_id, idx, template_id, name, shortName, descr, unit_id, typeName, valueDomain, defaultValue, norm, sex, age, penaltyUserProfile,
                                penaltyDiagnosis, test_id, laboratoryCalculator, userProfile_id, vitalParamId, ticketsNeeded, customSelect, autoFieldUserProfile, formulaAlias)
 select
        at.id actionType_id,
-       @num:=@num+1 idx,
+       row_number() over ()-1 idx,
        template_id,
        apt1.name name,
        shortName,
