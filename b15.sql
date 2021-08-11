@@ -14,3 +14,10 @@ from rbUserProfile where code != '';
 
 
 select * from OrgStructure
+
+
+select *
+from Person;
+
+select *
+from person_;
