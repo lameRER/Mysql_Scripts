@@ -167,6 +167,10 @@ where v.name regexp 'поражения'
 select typeName
 from ActionPropertyType where typeName regexp '^R|^I' group by typeName;
 
+
+select rbVitalParams.dict_OID, rbVitalParams.*
+from rbVitalParams;
+
 select *
 from netricaDestructionSide;
 
@@ -571,3 +575,7 @@ from rborgs
 
 select *
 from ActionType where id = 1;
+
+
+select *
+from ActionPropertyType where valueDomain regexp '<|>';
