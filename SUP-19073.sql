@@ -563,4 +563,4 @@ select *
 from rborgs
 
 select *
-from ActionType where id = 1;;
+from ActionType where id = 1;
