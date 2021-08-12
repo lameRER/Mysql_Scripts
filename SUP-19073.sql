@@ -156,10 +156,9 @@ from ActionPropertyType where vitalParamId in (
 );
 
 
-select apt.name, apt.valueDomain, v.*
-from rbVitalParams v
-left join ActionPropertyType apt on apt.vitalParamId = v.id
-where v.name regexp 'поражения'
+
+select *
+from ActionPropertyType where actionType_id = 56258;
 
 
 
