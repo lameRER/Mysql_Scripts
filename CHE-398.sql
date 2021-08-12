@@ -21,6 +21,15 @@ join rbDiagnosisType rdt on rdt.id = d.diagnosisType_id and rdt.name REGEXP 'к�
 where e.client_id = context.clientId
 order by d.createDatetime DESC limit 1"""
 
+
+
+select  CONCAT_WS(' ', m2.DiagID, concat(m2.DiagName,'\n')) from Event e
+join Diagnostic d on d.event_id = e.id and d.deleted = 0
+join Diagnosis d2 on d2.id = d.diagnosis_id and d2.deleted = 0
+join MKB m2 on m2.DiagID = d2.MKB
+join rbDiagnosisType rdt on rdt.id = d.diagnosisType_id
+join Client c ON c.id = e.client_id and c.id = 61021 WHERE d.deleted=0 AND rdt.name LIKE '%Основной%' and e.eventType_id=84 ORDER BY d.id DESC LIMIT 1
+
 select e.client_id
 from Action a, Event e
 where a.id = 105923 and a.event_id = e.id;
