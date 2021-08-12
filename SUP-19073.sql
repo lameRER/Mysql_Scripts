@@ -7,7 +7,7 @@
 
 
 
-set @name = 'Региз-онко-095';
+set @name = 'Региз-МБ-093';
 set @code = '19073';
 set @group = (select id from ActionType where code regexp concat('^', @code) and name = @name);
 
@@ -16,7 +16,9 @@ set @group = (select id from ActionType where code regexp concat('^', @code) and
 insert into ActionType(createDatetime, createPerson_id, modifyDatetime, modifyPerson_id, class, group_id, code, name, title, flatCode, sex, age, office, showInForm, genTimetable,
                        quotaType_id, context, defaultPlannedEndDate, defaultExecPerson_id, defaultOrg_id, isMES, nomenclativeService_id, prescribedType_id, shedule_id, counter_id,
                        isActiveGroup, lis_code, period, singleInPeriod, refferalType_id, formulaAlias)
-select
+select *
+from
+(select
        now() createDatetime,
        null createPerson_id,
        now() modifyDatetime,
@@ -24,8 +26,8 @@ select
        class,
        @group group_id,
        concat((select code from ActionType where id = @group), '-', (select count(code) from ActionType where group_id = @group)+1) code,
-       'Диспансерное наблюдение' name,
-       'Диспансерное наблюдение' title,
+       'Амбулаторный прием, осуществляемый врачом акушером-гинекологом' name,
+       'Амбулаторный прием, осуществляемый врачом акушером-гинекологом' title,
        flatCode,
        sex,
        age,
@@ -48,18 +50,17 @@ select
        singleInPeriod,
        refferalType_id,
        formulaAlias
-from ActionType at where at.id = @group;
+from ActionType at where at.id = @group) as tmp
+where not exists(select * from ActionType where name = tmp.name and group_id = tmp.group_id);
 
 
 
-
-set @num = -1;
 
 insert into ActionPropertyType(actionType_id, idx, template_id, name, shortName, descr, unit_id, typeName, valueDomain, defaultValue, norm, sex, age, penaltyUserProfile,
                                penaltyDiagnosis, test_id, laboratoryCalculator, userProfile_id, vitalParamId, ticketsNeeded, customSelect, autoFieldUserProfile, formulaAlias)
 select
        at.id actionType_id,
-       @num:=@num+1 idx,
+       row_number() over ()-1 idx,
        template_id,
        apt1.name name,
        shortName,
@@ -84,49 +85,55 @@ select
 from ActionPropertyType apt
 join ActionType at on at.group_id = @group and at.id = (select id from ActionType where group_id = @group order by id desc limit 1)
 join (
-select 'Вид и номер первично-множественной опухоли (в случае нескольких опухолей указанные ниже сведения приводятся для каждой опухоли отдельно)' as name union
-select 'Диагноз онкозаболевания как основного заболевания, в статусе «заключительный».' as name union
-select 'Дата установления диагноза' as name union
-select 'Сторона поражения' as name union
-select 'cT' as name union
-select 'cN' as name union
-select 'cМ' as name union
-select 'Вид опухоли' as name union
-select 'Стадия на момент установления' as name union
-select 'Дата установления диагноза' as name union
-select 'Метод подтверждения диагноза ' as name union
-select 'Локализация отдаленных метастазов' as name union
-select 'Обстоятельства выявления опухоли' as name union
-select 'pT' as name union
-select 'pN' as name union
-select 'pM ' as name union
-select 'Уровень дифференцировки тканей' as name union
-select 'Вид опухоли' as name union
-select 'Топографические коды опухоли' as name union
-select 'Мутации гена BRAF' as name union
-select 'Мутации гена c-KIT' as name union
-select 'Мутации гена NRAS ' as name union
-select 'Мутации гена KRAS' as name union
-select 'Мутации гена HRAS' as name union
-select 'Мутации гена EGFR (T790M)' as name union
-select 'Мутации гена EGFR (делеция в 19 экзоне)' as name union
-select 'Мутации гена ALK ' as name union
-select 'Мутации гена ROS1' as name union
-select 'Мутации генов BRCA ' as name union
-select 'Экспрессия HER2' as name union
-select 'Экспрессия PD-L1' as name union
-select 'Рецепторы эстрогена' as name union
-select 'Рецепторы прогестерона' as name union
-select 'Ki-67' as name union
-select 'План ведения пациента ' as name union
-select 'Рекомендована химиотерапия - сроки, условия и т.п., при наличии' as name union
-select 'Рекомендована хирургическая операция - сроки, условия и т.п., при наличии' as name union
-select 'Рекомендована лучевая терапия - сроки, условия и т.п., при наличии' as name union
-select 'Рекомендована гормоноиммунотерапия – вид, схема,  сроки, условия и т.п., при наличии' as name union
-select 'Рекомендована гормонотерапия – схема, сроки, условия и т.п., при наличии' as name union
-select 'Рекомендована иммунотерапия – схема, сроки, условия и т.п., при наличии' as name union
-select 'Причины поздней диагностики (по справочнику) ' as name union
-select 'Сведения о клиническом разборе настоящего случая (текст)' as name
+select 'Вес' as name union
+select 'ЧСС' as name union
+select 'Срок беременности(недели)' as name union
+select 'САД на правой руке' as name union
+select 'ДАД на правой руке' as name union
+select 'САД на левой руке' as name union
+select 'ДАД на левой руке' as name union
+select 'САД до беременности' as name union
+select 'ДАД до беременности' as name union
+select 'Дата следующей явки' as name union
+select 'Прибавка веса' as name union
+select 'Средняя прибавка за неделю' as name union
+select 'Высота стояния дна матки' as name union
+select 'Сердцебиение плода (+ЧСС)' as name union
+select 'Первое шевеление плода (в неделях)' as name union
+select 'Отеки при беременности' as name union
+select 'Окружность живота' as name union
+select 'Положение плода' as name union
+select 'Предлежание плода' as name union
+select 'Шевеление плода' as name union
+select 'ИМТ' as name union
+select 'Рост' as name union
+select 'Вес до беременности' as name union
+select 'Группа крови и резус фактор (беременной)' as name union
+select 'Семейное положение' as name union
+select 'Условия труда (профессиональные вредности)беременной' as name union
+select 'Пороки сердца с нарушением кровообращения' as name union
+select 'Преэклампсия была у матери или сестры' as name union
+select 'Тип патологической реакции для сбора алергоанамнеза' as name union
+select 'Вредные привычки  (беременной)' as name union
+select 'Дата последней менструации' as name union
+select 'Дата взятия на учёт' as name union
+select 'Половая жизнь с' as name union
+select 'Контрацепция' as name union
+select 'Способ оплодотворения' as name union
+select 'Внутриматочные вмешательства' as name union
+select 'Вид/длительность бесплодия' as name union
+select 'Особенности течения предыдущих беременностей/патологии беременности' as name union
+select 'Течение настоящей беременности до постановки на учет' as name union
+select 'Группа крови и резус фактор отца' as name union
+select 'Возраст отца' as name union
+select 'Телефон отца' as name union
+select 'Условия труда (профессиональные вредности) отца' as name union
+select 'У отца: ВИЧ' as name union
+select 'У отца: Сифилис' as name union
+select 'Вредные привычки отца' as name union
+select 'Роды первые' as name union
+select 'Факторы перинатального риска(шкала Радзинского)' as name union
+select 'Сумма баллов по шкале Радзинского' as name
     ) as apt1
 where apt.id = (select id from ActionPropertyType where typeName = 'string' order by id desc limit 1);
 
@@ -136,7 +143,7 @@ from ActionPropertyType where actionType_id = (select id from ActionType where g
 
 
 select *
-from rbVitalParams where id =244
+from rbVitalParams where code = '304'
 
 ;
 
@@ -159,6 +166,10 @@ where v.name regexp 'поражения'
 
 select typeName
 from ActionPropertyType where typeName regexp '^R|^I' group by typeName;
+
+
+select rbVitalParams.dict_OID, rbVitalParams.*
+from rbVitalParams;
 
 select *
 from netricaDestructionSide;
@@ -563,4 +574,8 @@ select *
 from rborgs
 
 select *
-from ActionType where id = 1;;
+from ActionType where id = 1;
+
+
+select *
+from ActionPropertyType where valueDomain regexp '<|>';
