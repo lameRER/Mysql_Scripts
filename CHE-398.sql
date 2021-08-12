@@ -6,23 +6,16 @@ from JsonData;
 select ActionPropertyType.customSelect, ActionPropertyType.*
 from ActionPropertyType where actionType_id in
 (select id
-from ActionType where flatCode = 'oper_protocol') and name = 'Ассистент 2' and deleted = 0 order by idx, name;
+from ActionType where flatCode = 'oper_protocol') and name regexp 'код' and deleted = 0 order by idx, name;
 
-# SQL="
-SELECT apr.value FROM ActionProperty_Person apr
-      WHERE apr.id IN
-            (SELECT ap.id FROM ActionProperty ap
-                WHERE ap.action_id IN
-                  (SELECT a.id FROM Action a
-                  WHERE a.deleted = 0 AND a.id =
-                                          (SELECT parent_id FROM Action a
-                                          WHERE a.id = 104651 ) AND a.actionType_id IN
-                                                                              (SELECT at.id FROM ActionType at
-                                                                              WHERE at.deleted = 0 AND at.serviceType = 4)) AND ap.type_id IN
-                                                                                                                                (SELECT apt.id FROM ActionPropertyType apt
-                                                                                                                                WHERE apt.deleted = 0 AND apt.name = 'Ассистент 2' ));
-# "
-
+# SQL="""
+select d2.MKB from Event e
+join Diagnostic d on d.event_id = e.id and d.deleted = 0
+join Diagnosis d2 on d2.id = d.diagnosis_id and d.deleted = 0
+join rbDiagnosisType rdt on rdt.id = d.diagnosisType_id and rdt.name REGEXP 'клинический|заключительный'
+where e.client_id =
+order by d.createDatetime DESC limit 1;
+# """
 
 select *
 from ActionPropertyType where actionType_id = 25596;
