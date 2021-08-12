@@ -9,3 +9,4 @@ or name = 'Договор на оказание немедицинской ус�
 
 select *
 from rbPrintTemplate where templateText regexp 'elif';
+
