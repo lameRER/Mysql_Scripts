@@ -578,8 +578,3 @@ from ActionType where id = 1;
 
 select *
 from ActionPropertyType where valueDomain regexp '<|>';
-
-
-
-select apt.*
-from s11.ActionPropertyType apt, s11.ActionType at where apt.actionType_id = at.id and at.flatCode= 'moving';
