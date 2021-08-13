@@ -20,4 +20,6 @@ select *
 from Person;
 
 select *
-from person_;
+from rbUserProfile;
+select *
+from Person where login = 'test';
