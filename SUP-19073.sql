@@ -29,8 +29,8 @@ from
        class,
        @group group_id,
        concat((select code from ActionType where id = @group), '-', (select count(code) from ActionType where group_id = @group)+1) code,
-       'Амбулаторный прием, пневмония' name,
-       'Амбулаторный прием, пневмония' title,
+       'Выписка' name,
+       'Выписка' title,
        flatCode,
        sex,
        age,
@@ -57,6 +57,38 @@ from ActionType at where at.id = @group) as tmp
 where not exists(select * from ActionType where name = tmp.name and group_id = tmp.group_id);
 
 
+drop temporary table if exists temp_apt
+create temporary table if not exists temp_apt
+(
+select 'Степень тяжести (на дату поступления)' as name union
+select 'Степень тяжести (на дату выписки)' as name union
+select 'Количество баллов по шкале CRB-65' as name union
+select 'Количество баллов по шкале CURB-65' as name union
+select 'Количество баллов по шкале SMART-COP (необязательный параметр, только в случае пневмонии тяжелой степени тяжести)' as name union
+select 'Класс риска по шкале PORT (необязательный параметр, только в случае пневмонии тяжелой степени тяжести)' as name union
+select 'Количество "малых" критериев IDSA/ATS (необязательный параметр, только в случае пневмонии тяжелой степени тяжести)' as name union
+select 'Количество "больших" критериев IDSA/ATS (необязательный параметр, только в случае пневмонии тяжелой степени тяжести)' as name union
+select 'Дата появления первых симптомов заболевания' as name union
+select 'Беременность' as name union
+select 'САД (сидя)' as name union
+select 'ДАД (сидя)' as name union
+select 'САД (стоя)' as name union
+select 'ДАД (стоя)' as name union
+select 'ЧСС' as name union
+select 'ЧДД' as name union
+select 'Цианоз (без кислородотерапии)' as name union
+select 'Температура тела' as name union
+select 'Диурез' as name union
+select 'Локальные перкуторные изменения' as name union
+select 'Локальные аускультативные изменения' as name union
+select 'Сатурация кислорода' as name union
+select 'Парциальное напряжение кислорода в артериальной крови (для пневмонии тяжелой степени тяжести)' as name union
+select 'Тип пневмонии в зависимости от места возникновения' as name union
+select 'Дата проведения рентгенографии органов грудной клетки в 2-ух отведениях' as name union
+select 'Локальные очагово-инфильтративные изменения в лёгких' as name union
+select 'Дата проведения бронхоскопии (при наличии показаний)' as name union
+select 'План ведения пациента' as name
+)
 
 
 insert into ActionPropertyType(actionType_id, idx, template_id, name, shortName, descr, unit_id, typeName, valueDomain, defaultValue, norm, sex, age, penaltyUserProfile,
@@ -87,31 +119,7 @@ select
        apt.formulaAlias
 from ActionPropertyType apt
 join ActionType at on at.group_id = @group and at.id = (select id from ActionType where group_id = @group order by id desc limit 1)
-join (
-select 'Температура тела' as name union
-select 'Тип пневмонии в зависимости от места возникновения' as name union
-select 'САД (сидя)' as name union
-select 'ДАД (сидя)' as name union
-select 'САД (стоя)' as name union
-select 'ДАД (стоя)' as name union
-select 'ЧСС' as name union
-select 'ЧДД' as name union
-select 'Степень тяжести' as name union
-select 'Пациент направлен на госпитализацию' as name union
-select 'Дата направления пациента на госпитализацию' as name union
-select 'Пациент отказался от госпитализации' as name union
-select 'Дата появления первых симптомов заболевания' as name union
-select 'Беременность' as name union
-select 'Локальные перкуторные изменения' as name union
-select 'Локальные аускультативные изменения' as name union
-select 'Количество баллов по шкале CRB-65' as name union
-select 'Пациент направлен на госпитализацию (для случаев, когда пациент направлен на госпитализацию)' as name union
-select 'Дата направления пациента на госпитализацию (для случаев, когда пациент направлен на госпитализацию)' as name union
-select 'Пациент отказался от госпитализации (для случаев, когда пациент направлен на госпитализацию)' as name union
-select 'Дата проведения рентгенографии органов грудной клетки в 2-ух отведениях' as name union
-select 'Локальные очагово-инфильтративные изменения в лёгких' as name union
-select 'План ведения пациента' as name
-    ) as apt1
+join temp_apt apt1
 where apt.id = (select id from ActionPropertyType where typeName = 'string' order by id desc limit 1);
 
 
@@ -120,7 +128,7 @@ from ActionPropertyType where actionType_id = (select id from ActionType where g
 
 
 select *
-from rbVitalParams where code = '220'
+from rbVitalParams where code = '85'
 
 ;
 
