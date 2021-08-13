@@ -128,7 +128,7 @@ from ActionPropertyType where actionType_id = (select id from ActionType where g
 
 
 select *
-from rbVitalParams where code = '87'
+from rbVitalParams where code = '98'
 
 ;
 
@@ -149,7 +149,7 @@ from ActionPropertyType where actionType_id = 56258;
 
 
 select typeName
-from ActionPropertyType where typeName regexp '^R|^I' group by typeName;
+from ActionPropertyType where typeName regexp '^R|^I|^t' group by typeName;
 
 
 select rbVitalParams.dict_OID, rbVitalParams.*
