@@ -29,8 +29,8 @@ from
        class,
        @group group_id,
        concat((select code from ActionType where id = @group), '-', (select count(code) from ActionType where group_id = @group)+1) code,
-       'Амбулаторный прием, осуществляемый врачом акушером-гинекологом' name,
-       'Амбулаторный прием, осуществляемый врачом акушером-гинекологом' title,
+       'Амбулаторный прием, пневмония' name,
+       'Амбулаторный прием, пневмония' title,
        flatCode,
        sex,
        age,
@@ -88,55 +88,29 @@ select
 from ActionPropertyType apt
 join ActionType at on at.group_id = @group and at.id = (select id from ActionType where group_id = @group order by id desc limit 1)
 join (
-select 'Вес' as name union
+select 'Температура тела' as name union
+select 'Тип пневмонии в зависимости от места возникновения' as name union
+select 'САД (сидя)' as name union
+select 'ДАД (сидя)' as name union
+select 'САД (стоя)' as name union
+select 'ДАД (стоя)' as name union
 select 'ЧСС' as name union
-select 'Срок беременности(недели)' as name union
-select 'САД на правой руке' as name union
-select 'ДАД на правой руке' as name union
-select 'САД на левой руке' as name union
-select 'ДАД на левой руке' as name union
-select 'САД до беременности' as name union
-select 'ДАД до беременности' as name union
-select 'Дата следующей явки' as name union
-select 'Прибавка веса' as name union
-select 'Средняя прибавка за неделю' as name union
-select 'Высота стояния дна матки' as name union
-select 'Сердцебиение плода (+ЧСС)' as name union
-select 'Первое шевеление плода (в неделях)' as name union
-select 'Отеки при беременности' as name union
-select 'Окружность живота' as name union
-select 'Положение плода' as name union
-select 'Предлежание плода' as name union
-select 'Шевеление плода' as name union
-select 'ИМТ' as name union
-select 'Рост' as name union
-select 'Вес до беременности' as name union
-select 'Группа крови и резус фактор (беременной)' as name union
-select 'Семейное положение' as name union
-select 'Условия труда (профессиональные вредности)беременной' as name union
-select 'Пороки сердца с нарушением кровообращения' as name union
-select 'Преэклампсия была у матери или сестры' as name union
-select 'Тип патологической реакции для сбора алергоанамнеза' as name union
-select 'Вредные привычки  (беременной)' as name union
-select 'Дата последней менструации' as name union
-select 'Дата взятия на учёт' as name union
-select 'Половая жизнь с' as name union
-select 'Контрацепция' as name union
-select 'Способ оплодотворения' as name union
-select 'Внутриматочные вмешательства' as name union
-select 'Вид/длительность бесплодия' as name union
-select 'Особенности течения предыдущих беременностей/патологии беременности' as name union
-select 'Течение настоящей беременности до постановки на учет' as name union
-select 'Группа крови и резус фактор отца' as name union
-select 'Возраст отца' as name union
-select 'Телефон отца' as name union
-select 'Условия труда (профессиональные вредности) отца' as name union
-select 'У отца: ВИЧ' as name union
-select 'У отца: Сифилис' as name union
-select 'Вредные привычки отца' as name union
-select 'Роды первые' as name union
-select 'Факторы перинатального риска(шкала Радзинского)' as name union
-select 'Сумма баллов по шкале Радзинского' as name
+select 'ЧДД' as name union
+select 'Степень тяжести' as name union
+select 'Пациент направлен на госпитализацию' as name union
+select 'Дата направления пациента на госпитализацию' as name union
+select 'Пациент отказался от госпитализации' as name union
+select 'Дата появления первых симптомов заболевания' as name union
+select 'Беременность' as name union
+select 'Локальные перкуторные изменения' as name union
+select 'Локальные аускультативные изменения' as name union
+select 'Количество баллов по шкале CRB-65' as name union
+select 'Пациент направлен на госпитализацию (для случаев, когда пациент направлен на госпитализацию)' as name union
+select 'Дата направления пациента на госпитализацию (для случаев, когда пациент направлен на госпитализацию)' as name union
+select 'Пациент отказался от госпитализации (для случаев, когда пациент направлен на госпитализацию)' as name union
+select 'Дата проведения рентгенографии органов грудной клетки в 2-ух отведениях' as name union
+select 'Локальные очагово-инфильтративные изменения в лёгких' as name union
+select 'План ведения пациента' as name
     ) as apt1
 where apt.id = (select id from ActionPropertyType where typeName = 'string' order by id desc limit 1);
 
@@ -146,7 +120,7 @@ from ActionPropertyType where actionType_id = (select id from ActionType where g
 
 
 select *
-from rbVitalParams where code = '304'
+from rbVitalParams where code = '220'
 
 ;
 
