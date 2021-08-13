@@ -6,8 +6,11 @@
 Региз-covid19-014
 
 
+delete from ActionType
+where id = 56259
 
-set @name = 'Региз-МБ-093';
+
+set @name = 'Региз-ВП-091';
 set @code = '19073';
 set @group = (select id from ActionType where code regexp concat('^', @code) and name = @name);
 
