@@ -128,7 +128,7 @@ from ActionPropertyType where actionType_id = (select id from ActionType where g
 
 
 select *
-from rbVitalParams where code = '99'
+from rbVitalParams where code = '220'
 
 ;
 
