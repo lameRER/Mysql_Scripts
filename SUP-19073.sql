@@ -27,8 +27,8 @@ from
        class,
        @group group_id,
        concat((select code from ActionType where id = @group), '-', (select count(code) from ActionType where group_id = @group)+1) code,
-       'Сведения о заболевании и состоянии' name,
-       'Сведения о заболевании и состоянии' title,
+       'Протокол осмотра' name,
+       'Протокол осмотра' title,
        flatCode,
        sex,
        age,
@@ -58,22 +58,12 @@ where not exists(select * from ActionType where name = tmp.name and group_id = t
 drop temporary table if exists temp_apt;
 create temporary table if not exists temp_apt
 (
-select 'Дата проявления клинических симптомов ' as name union
-select 'Наличие вакцинации от гриппа' as name union
-select 'Наличие вакцинации от пневмококковой инфекции' as name union
-select 'Наличие беременности' as name union
-select 'Триместр беременности' as name union
-select 'Уровень сатурации кислорода крови (если измерен)' as name union
+select 'Пациент находится на ИВЛ' as name union
+select 'Пациент находится на ЭКМО' as name union
+select 'Пациент находится в ОРИТ' as name union
+select 'Уровень сатурации кислорода в крови (в случае многократных измерений – дать минимальное за истекшие сутки)' as name union
 select 'Тяжесть течения заболевания' as name union
-select 'Применяется ли противовирусное лечение' as name union
-select 'Признак наличия хронических заболеваний  бронхо-легочной системы' as name union
-select 'Признак наличия хронических заболеваний  сердечно-сосудистой системы' as name union
-select 'Признак наличия хронических заболеваний  эндокринной системы' as name union
-select 'Признак наличия ВИЧ' as name union
-select 'Признак наличия туберкулеза' as name union
-select 'Признак наличия онкологических заболеваний' as name union
-select 'Признак наличия иных заболеваний' as name union
-select 'Эпидномер ' as name
+select 'Применяется ли противовирусное лечение' as name
 )
 
 
@@ -114,12 +104,12 @@ from ActionPropertyType where actionType_id = (select id from ActionType where g
 
 
 select *
-from rbVitalParams where code = '39'
+from rbVitalParams where code = '429';
 select *
-from ActionType where id = 56261;
+from ActionType where id = 56262;
 
 select *
-from ActionPropertyType where actionType_id = 56261
+from ActionPropertyType where actionType_id = 56262
 
 ;
 
