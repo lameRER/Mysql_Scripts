@@ -5,6 +5,10 @@ from rbPrintTemplate where id = 390;
 
 
 
+select *
+from ActionPropertyType where actionType_id = (select id from ActionType where context = 'QR');
+
+
  select CONCAT_WS('/', IFNULL(c.lastName,''), ifnull(c.firstName,''), ifnull(c.patrName,''),
     ifnull(DATE_FORMAT(c.birthDate, '%d.%m.%Y'),''), CASE when c.sex = 1 then 'Мужской' when c.sex = 2 then 'Женский' else
     '' end,
@@ -25,7 +29,7 @@ from rbPrintTemplate where id = 390;
     join Event e on e.client_id = c.id and e.deleted = 0
     join Action a on a.event_id = e.id and a.deleted = 0
     join ActionType at2 on at2.id = a.actionType_id and at2.deleted = 0 and at2.context = 'QR'
-    JOIN ActionPropertyType apt on apt.actionType_id = at2.id and apt.deleted = 0
+    JOIN ActionPropertyType apt on apt.actionType_id = at2.id and apt.deleted = 0 and apt.name not in ('Этап вакцинации', 'Вакцина')
     left join ActionProperty ap on ap.action_id = a.id and ap.deleted = 0 and apt.id = ap.type_id
     left join ActionProperty_String aps on aps.id = ap.id
     left join ActionProperty_Integer api on api.id = ap.id
@@ -38,6 +42,7 @@ from rbPrintTemplate where id = 390;
     left join netricaSMO ns on ns.OGRN = o2.OGRN AND o2.KPP = ns.KPP
     join Person p2 on p2.id = e.execPerson_id and p2.deleted = 0
     where c.deleted = 0 and e.id = 224460
+
 
 
 
