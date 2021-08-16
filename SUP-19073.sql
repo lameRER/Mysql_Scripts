@@ -6,11 +6,9 @@
 Региз-covid19-014
 
 
-delete from ActionType
-where id = 56259
 
 
-set @name = 'Региз-ВП-091';
+set @name = 'Региз-covid19-014';
 set @code = '19073';
 set @group = (select id from ActionType where code regexp concat('^', @code) and name = @name);
 
@@ -29,8 +27,8 @@ from
        class,
        @group group_id,
        concat((select code from ActionType where id = @group), '-', (select count(code) from ActionType where group_id = @group)+1) code,
-       'Выписка' name,
-       'Выписка' title,
+       'Сведения о заболевании и состоянии' name,
+       'Сведения о заболевании и состоянии' title,
        flatCode,
        sex,
        age,
@@ -57,37 +55,25 @@ from ActionType at where at.id = @group) as tmp
 where not exists(select * from ActionType where name = tmp.name and group_id = tmp.group_id);
 
 
-drop temporary table if exists temp_apt
+drop temporary table if exists temp_apt;
 create temporary table if not exists temp_apt
 (
-select 'Степень тяжести (на дату поступления)' as name union
-select 'Степень тяжести (на дату выписки)' as name union
-select 'Количество баллов по шкале CRB-65' as name union
-select 'Количество баллов по шкале CURB-65' as name union
-select 'Количество баллов по шкале SMART-COP (необязательный параметр, только в случае пневмонии тяжелой степени тяжести)' as name union
-select 'Класс риска по шкале PORT (необязательный параметр, только в случае пневмонии тяжелой степени тяжести)' as name union
-select 'Количество "малых" критериев IDSA/ATS (необязательный параметр, только в случае пневмонии тяжелой степени тяжести)' as name union
-select 'Количество "больших" критериев IDSA/ATS (необязательный параметр, только в случае пневмонии тяжелой степени тяжести)' as name union
-select 'Дата появления первых симптомов заболевания' as name union
-select 'Беременность' as name union
-select 'САД (сидя)' as name union
-select 'ДАД (сидя)' as name union
-select 'САД (стоя)' as name union
-select 'ДАД (стоя)' as name union
-select 'ЧСС' as name union
-select 'ЧДД' as name union
-select 'Цианоз (без кислородотерапии)' as name union
-select 'Температура тела' as name union
-select 'Диурез' as name union
-select 'Локальные перкуторные изменения' as name union
-select 'Локальные аускультативные изменения' as name union
-select 'Сатурация кислорода' as name union
-select 'Парциальное напряжение кислорода в артериальной крови (для пневмонии тяжелой степени тяжести)' as name union
-select 'Тип пневмонии в зависимости от места возникновения' as name union
-select 'Дата проведения рентгенографии органов грудной клетки в 2-ух отведениях' as name union
-select 'Локальные очагово-инфильтративные изменения в лёгких' as name union
-select 'Дата проведения бронхоскопии (при наличии показаний)' as name union
-select 'План ведения пациента' as name
+select 'Дата проявления клинических симптомов ' as name union
+select 'Наличие вакцинации от гриппа' as name union
+select 'Наличие вакцинации от пневмококковой инфекции' as name union
+select 'Наличие беременности' as name union
+select 'Триместр беременности' as name union
+select 'Уровень сатурации кислорода крови (если измерен)' as name union
+select 'Тяжесть течения заболевания' as name union
+select 'Применяется ли противовирусное лечение' as name union
+select 'Признак наличия хронических заболеваний  бронхо-легочной системы' as name union
+select 'Признак наличия хронических заболеваний  сердечно-сосудистой системы' as name union
+select 'Признак наличия хронических заболеваний  эндокринной системы' as name union
+select 'Признак наличия ВИЧ' as name union
+select 'Признак наличия туберкулеза' as name union
+select 'Признак наличия онкологических заболеваний' as name union
+select 'Признак наличия иных заболеваний' as name union
+select 'Эпидномер ' as name
 )
 
 
@@ -128,7 +114,12 @@ from ActionPropertyType where actionType_id = (select id from ActionType where g
 
 
 select *
-from rbVitalParams where code = '220'
+from rbVitalParams where code = '39'
+select *
+from ActionType where id = 56261;
+
+select *
+from ActionPropertyType where actionType_id = 56261
 
 ;
 
