@@ -91,7 +91,7 @@ SELECT
         ON p2.id = e.execPerson_id
         AND p2.deleted = 0
     WHERE c.deleted = 0
-    AND e.id = 224460
+    AND e.id = 224460;
 
 
 select CONCAT_WS('/', IFNULL(c.lastName,''), ifnull(c.firstName,''), ifnull(c.patrName,''),
@@ -126,7 +126,7 @@ select CONCAT_WS('/', IFNULL(c.lastName,''), ifnull(c.firstName,''), ifnull(c.pa
     left join Organisation o2 on o2.id = cp.insurer_id and o2.deleted = 0
     left join netricaSMO ns on ns.OGRN = o2.OGRN AND o2.KPP = ns.KPP
     join Person p2 on p2.id = e.execPerson_id and p2.deleted = 0
-    where c.deleted = 0 and e.id = 224460
+    where c.deleted = 0 and e.id = 224460;
 
 select *
 from Event where client_id = 613821;
