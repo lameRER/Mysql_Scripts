@@ -27,8 +27,8 @@ from
        class,
        @group group_id,
        concat((select code from ActionType where id = @group), '-', (select count(code) from ActionType where group_id = @group)+1) code,
-       'Протокол осмотра' name,
-       'Протокол осмотра' title,
+       'Выписка' name,
+       'Выписка' title,
        flatCode,
        sex,
        age,
@@ -58,18 +58,22 @@ where not exists(select * from ActionType where name = tmp.name and group_id = t
 drop temporary table if exists temp_apt;
 create temporary table if not exists temp_apt
 (
-select 'Пациент находится на ИВЛ' as name union
-select 'Пациент находится на ЭКМО' as name union
-select 'Пациент находится в ОРИТ' as name union
-select 'Уровень сатурации кислорода в крови (в случае многократных измерений – дать минимальное за истекшие сутки)' as name union
-select 'Тяжесть течения заболевания' as name union
-select 'Применяется ли противовирусное лечение' as name
+select 'Поликлиника наблюдения пациента' as name union
+select 'Адрес пребывания пациента' as name union
+select 'Телефон для связи с пациентом' as name union
+select 'Эпидномер' as name union
+select 'Поликлиника наблюдения пациента' as name union
+select 'Адрес пребывания пациента' as name union
+select 'Телефон для связи с пациентом' as name union
+select 'Эпидномер' as name
 )
 
 
 insert into ActionPropertyType(actionType_id, idx, template_id, name, shortName, descr, unit_id, typeName, valueDomain, defaultValue, norm, sex, age, penaltyUserProfile,
                                penaltyDiagnosis, test_id, laboratoryCalculator, userProfile_id, vitalParamId, ticketsNeeded, customSelect, autoFieldUserProfile, formulaAlias)
-select
+select *
+from
+(select
        at.id actionType_id,
        row_number() over ()-1 idx,
        template_id,
@@ -96,7 +100,8 @@ select
 from ActionPropertyType apt
 join ActionType at on at.group_id = @group and at.id = (select id from ActionType where group_id = @group order by id desc limit 1)
 join temp_apt apt1
-where apt.id = (select id from ActionPropertyType where typeName = 'string' order by id desc limit 1);
+where apt.id = (select id from ActionPropertyType where typeName = 'string' order by id desc limit 1)) as tmp
+where not exists(select * from ActionPropertyType where tmp.actionType_id = actionType_id and tmp.name = name);
 
 
 select ActionPropertyType.vitalParamId, ActionPropertyType.isVitalParam, typeName, valueDomain, name, ActionPropertyType.*
@@ -104,14 +109,12 @@ from ActionPropertyType where actionType_id = (select id from ActionType where g
 
 
 select *
-from rbVitalParams where code = '429';
+from rbVitalParams where code = '503';
 select *
-from ActionType where id = 56262;
+from ActionType where id = 56264;
 
 select *
-from ActionPropertyType where actionType_id = 56262
-
-;
+from ActionPropertyType where actionType_id = 56264;
 
 select ActionPropertyType.vitalParamId, ActionPropertyType.isVitalParam, typeName, valueDomain, name, ActionPropertyType.*
 from ActionPropertyType where vitalParamId in (
