@@ -7,7 +7,8 @@
 
 
 
-set @name = 'Региз-МБ-093';
+
+set @name = 'Региз-covid19-014';
 set @code = '19073';
 set @group = (select id from ActionType where code regexp concat('^', @code) and name = @name);
 
@@ -26,8 +27,8 @@ from
        class,
        @group group_id,
        concat((select code from ActionType where id = @group), '-', (select count(code) from ActionType where group_id = @group)+1) code,
-       'Амбулаторный прием, осуществляемый врачом акушером-гинекологом' name,
-       'Амбулаторный прием, осуществляемый врачом акушером-гинекологом' title,
+       'Выписка' name,
+       'Выписка' title,
        flatCode,
        sex,
        age,
@@ -54,11 +55,25 @@ from ActionType at where at.id = @group) as tmp
 where not exists(select * from ActionType where name = tmp.name and group_id = tmp.group_id);
 
 
+drop temporary table if exists temp_apt;
+create temporary table if not exists temp_apt
+(
+select 'Поликлиника наблюдения пациента' as name union
+select 'Адрес пребывания пациента' as name union
+select 'Телефон для связи с пациентом' as name union
+select 'Эпидномер' as name union
+select 'Поликлиника наблюдения пациента' as name union
+select 'Адрес пребывания пациента' as name union
+select 'Телефон для связи с пациентом' as name union
+select 'Эпидномер' as name
+)
 
 
 insert into ActionPropertyType(actionType_id, idx, template_id, name, shortName, descr, unit_id, typeName, valueDomain, defaultValue, norm, sex, age, penaltyUserProfile,
                                penaltyDiagnosis, test_id, laboratoryCalculator, userProfile_id, vitalParamId, ticketsNeeded, customSelect, autoFieldUserProfile, formulaAlias)
-select
+select *
+from
+(select
        at.id actionType_id,
        row_number() over ()-1 idx,
        template_id,
@@ -84,58 +99,9 @@ select
        apt.formulaAlias
 from ActionPropertyType apt
 join ActionType at on at.group_id = @group and at.id = (select id from ActionType where group_id = @group order by id desc limit 1)
-join (
-select 'Вес' as name union
-select 'ЧСС' as name union
-select 'Срок беременности(недели)' as name union
-select 'САД на правой руке' as name union
-select 'ДАД на правой руке' as name union
-select 'САД на левой руке' as name union
-select 'ДАД на левой руке' as name union
-select 'САД до беременности' as name union
-select 'ДАД до беременности' as name union
-select 'Дата следующей явки' as name union
-select 'Прибавка веса' as name union
-select 'Средняя прибавка за неделю' as name union
-select 'Высота стояния дна матки' as name union
-select 'Сердцебиение плода (+ЧСС)' as name union
-select 'Первое шевеление плода (в неделях)' as name union
-select 'Отеки при беременности' as name union
-select 'Окружность живота' as name union
-select 'Положение плода' as name union
-select 'Предлежание плода' as name union
-select 'Шевеление плода' as name union
-select 'ИМТ' as name union
-select 'Рост' as name union
-select 'Вес до беременности' as name union
-select 'Группа крови и резус фактор (беременной)' as name union
-select 'Семейное положение' as name union
-select 'Условия труда (профессиональные вредности)беременной' as name union
-select 'Пороки сердца с нарушением кровообращения' as name union
-select 'Преэклампсия была у матери или сестры' as name union
-select 'Тип патологической реакции для сбора алергоанамнеза' as name union
-select 'Вредные привычки  (беременной)' as name union
-select 'Дата последней менструации' as name union
-select 'Дата взятия на учёт' as name union
-select 'Половая жизнь с' as name union
-select 'Контрацепция' as name union
-select 'Способ оплодотворения' as name union
-select 'Внутриматочные вмешательства' as name union
-select 'Вид/длительность бесплодия' as name union
-select 'Особенности течения предыдущих беременностей/патологии беременности' as name union
-select 'Течение настоящей беременности до постановки на учет' as name union
-select 'Группа крови и резус фактор отца' as name union
-select 'Возраст отца' as name union
-select 'Телефон отца' as name union
-select 'Условия труда (профессиональные вредности) отца' as name union
-select 'У отца: ВИЧ' as name union
-select 'У отца: Сифилис' as name union
-select 'Вредные привычки отца' as name union
-select 'Роды первые' as name union
-select 'Факторы перинатального риска(шкала Радзинского)' as name union
-select 'Сумма баллов по шкале Радзинского' as name
-    ) as apt1
-where apt.id = (select id from ActionPropertyType where typeName = 'string' order by id desc limit 1);
+join temp_apt apt1
+where apt.id = (select id from ActionPropertyType where typeName = 'string' order by id desc limit 1)) as tmp
+where not exists(select * from ActionPropertyType where tmp.actionType_id = actionType_id and tmp.name = name);
 
 
 select ActionPropertyType.vitalParamId, ActionPropertyType.isVitalParam, typeName, valueDomain, name, ActionPropertyType.*
@@ -143,9 +109,12 @@ from ActionPropertyType where actionType_id = (select id from ActionType where g
 
 
 select *
-from rbVitalParams where code = '304'
+from rbVitalParams where code = '503';
+select *
+from ActionType where id = 56264;
 
-;
+select *
+from ActionPropertyType where actionType_id = 56264;
 
 select ActionPropertyType.vitalParamId, ActionPropertyType.isVitalParam, typeName, valueDomain, name, ActionPropertyType.*
 from ActionPropertyType where vitalParamId in (
@@ -164,7 +133,7 @@ from ActionPropertyType where actionType_id = 56258;
 
 
 select typeName
-from ActionPropertyType where typeName regexp '^R|^I' group by typeName;
+from ActionPropertyType where typeName regexp '^R|^I|^t' group by typeName;
 
 
 select rbVitalParams.dict_OID, rbVitalParams.*

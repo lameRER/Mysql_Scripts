@@ -20,4 +20,13 @@ select *
 from Person;
 
 select *
-from person_;
+from rbUserProfile;
+select *
+from Person where login = 'test';
+
+select *
+from DestinationTree where name = 'Осмотры' and deleted=0;
+
+
+select *
+from DestinationTree_ActionType where master_id = 10029;
