@@ -11,7 +11,3 @@ from ActionType where context = 'dnevnik_stac';
 
 select *
 from rbPrintTemplate where templateText regexp 'curator';
-
-
-select *
-from Person;
