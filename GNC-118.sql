@@ -14,4 +14,11 @@ from rbPrintTemplate where templateText regexp 'curator';
 
 
 select *
-from Person;
+from Person where lastName = 'Кольгаева';
+
+
+select *
+from PersonCurator where person_id=  3407;
+
+select *
+from Person  where id = 1270
