@@ -547,3 +547,68 @@ from ActionType where id = 1;
 
 select *
 from ActionPropertyType where valueDomain regexp '<|>';
+
+select vp.*, ActionPropertyType.isVitalParam, ActionPropertyType.vitalParamId, ActionPropertyType.valueDomain, ActionPropertyType.typeName, ActionPropertyType.*
+from ActionPropertyType
+join rbVitalParams vp on vp.id = ActionPropertyType.vitalParamId
+where actionType_id in
+(select id from ActionType at where group_id in
+(select id
+from ActionType where group_id =
+(select id
+from ActionType where name = 'региз')
+and code regexp '^19073'))
+and vitalParamId not in (0,1) and deleted = 0 and isVitalParam = 0
+;
+
+select *
+from netricaYesNo;
+
+set @dict_OID = '1.2.643.5.1.13.13.11.1064';
+set @valueDomain = 'netricaTypePathologicalReaction';
+set @vitId = 281;
+
+update
+    ActionPropertyType apt
+join rbVitalParams vp on vp.id = apt.vitalParamId
+set apt.isVitalParam = 1,
+    apt.valueDomain = @valueDomain,
+    vp.dict_OID = @dict_OID
+where vp.id = @vitId;
+
+SET @t1 =CONCAT('create table  ',@valueDomain,
+'
+(  id int(10) NOT NULL AUTO_INCREMENT,
+deleted tinyint(1),
+code varchar(8),
+name varchar(128),
+primary key (id));');
+ PREPARE stmt3 FROM @t1;
+ EXECUTE stmt3;
+
+SET @t1 =CONCAT('insert into ', @valueDomain, ' (deleted, code, name) values
+(0, ''33'', ''Другие виды непереносимости''),
+(0, ''32'', ''Пищевая непереносимость''),
+(0, ''20'', ''Аллергические реакции''),
+(0, ''31'', ''Лекарственная непереносимость''),
+(0, ''30'', ''Индивидуальная непереносимость''),
+(0, ''24'', ''Другие аллергии''),
+(0, ''23'', ''Инсектная аллергия''),
+(0, ''22'', ''Пищевая аллергия''),
+(0, ''21'', ''Лекарственная аллергия''),
+(0, ''10'', ''Атопическая гиперчувствительно'');
+');
+ PREPARE stmt3 FROM @t1;
+ EXECUTE stmt3;
+
+
+
+
+select vp.*, apt.*
+from rbVitalParams vp
+join ActionPropertyType apt on apt.vitalParamId = vp.id
+where vp.dict_OID = @dict_OID;
+
+
+select *
+from netricaPrehospitalTreatment;
