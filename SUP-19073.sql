@@ -567,7 +567,7 @@ where id = 558;
 
 update ActionPropertyType
 set isVitalParam = 1, valueDomain = 'netricaNodusClassifier'
-where id = 61827;
+where id = 61828;
 
 
 
@@ -580,6 +580,21 @@ create table netricaNodusClassifier(
 
 insert into netricaNodusClassifier (deleted, code, name)
 values
+(0, 'N3c', 'N3c'),
+(0, 'Нет', 'Нет'),
+(0, 'N3', 'N3'),
+(0, 'N2c', 'N2c'),
+(0, 'N2b', 'N2b'),
+(0, 'N2a', 'N2a'),
+(0, 'N1c', 'N1c'),
+(0, 'N1b', 'N1b'),
+(0, 'N1a', 'N1a'),
+(0, 'N3b', 'N3b'),
+(0, 'N3a', 'N3a'),
+(0, 'N2', 'N2'),
+(0, 'N1', 'N1'),
+(0, 'N0', 'N0'),
+(0, 'Nx', 'Nx');
 
 
 create table netricaTumorClassifier(
@@ -592,68 +607,36 @@ create table netricaTumorClassifier(
 insert into netricaTumorClassifier (deleted, code, name)
 values
 (0, 'T1c', 'T1c'),
-(0, 'T1c', 'T1c'),
-(0, 'T1c3', 'T1c3'),
 (0, 'T1c3', 'T1c3'),
 (0, 'T1mi', 'T1mi'),
-(0, 'T1mi', 'T1mi'),
-(0, 'Нет', 'Нет'),
 (0, 'Нет', 'Нет'),
 (0, 'T3a', 'T3a'),
-(0, 'T3a', 'T3a'),
-(0, 'T3b', 'T3b'),
 (0, 'T3b', 'T3b'),
 (0, 'T4', 'T4'),
-(0, 'T4', 'T4'),
-(0, 'T2b', 'T2b'),
 (0, 'T2b', 'T2b'),
 (0, 'T4a', 'T4a'),
-(0, 'T4a', 'T4a'),
-(0, 'T2a', 'T2a'),
 (0, 'T2a', 'T2a'),
 (0, 'T1c2', 'T1c2'),
-(0, 'T1c2', 'T1c2'),
-(0, 'T1c1', 'T1c1'),
 (0, 'T1c1', 'T1c1'),
 (0, 'T4b', 'T4b'),
-(0, 'T4b', 'T4b'),
-(0, 'T3', 'T3'),
 (0, 'T3', 'T3'),
 (0, 'T2', 'T2'),
-(0, 'T2', 'T2'),
-(0, 'T1b', 'T1b'),
 (0, 'T1b', 'T1b'),
 (0, 'Tis', 'Tis'),
-(0, 'Tis', 'Tis'),
-(0, 'T1a', 'T1a'),
 (0, 'T1a', 'T1a'),
 (0, 'T1', 'T1'),
-(0, 'T1', 'T1'),
-(0, 'T0', 'T0'),
 (0, 'T0', 'T0'),
 (0, 'Tx', 'Tx'),
-(0, 'Tx', 'Tx'),
-(0, 'T4c', 'T4c'),
 (0, 'T4c', 'T4c'),
 (0, 'T1b2', 'T1b2'),
-(0, 'T1b2', 'T1b2'),
-(0, 'T1b1', 'T1b1'),
 (0, 'T1b1', 'T1b1'),
 (0, 'T1a2', 'T1a2'),
-(0, 'T1a2', 'T1a2'),
-(0, 'T1a1', 'T1a1'),
 (0, 'T1a1', 'T1a1'),
 (0, 'Ta', 'Ta'),
-(0, 'Ta', 'Ta'),
-(0, 'T3c', 'T3c'),
 (0, 'T3c', 'T3c'),
 (0, 'T2c', 'T2c'),
-(0, 'T2c', 'T2c'),
-(0, 'T4d', 'T4d'),
 (0, 'T4d', 'T4d'),
 (0, 'T2a2', 'T2a2'),
-(0, 'T2a2', 'T2a2'),
-(0, 'T2a1', 'T2a1'),
 (0, 'T2a1', 'T2a1');
 
 
