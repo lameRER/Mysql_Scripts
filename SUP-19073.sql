@@ -548,7 +548,7 @@ from ActionType where id = 1;
 select *
 from ActionPropertyType where valueDomain regexp '<|>';
 
-select ActionPropertyType.id, vp.code, vp.name, vp.possible_values, vp.dict_OID, ActionPropertyType.isVitalParam, ActionPropertyType.vitalParamId, ActionPropertyType.valueDomain, ActionPropertyType.typeName, ActionPropertyType.*
+select ActionPropertyType.id, vp.*, ActionPropertyType.isVitalParam, ActionPropertyType.vitalParamId, ActionPropertyType.valueDomain, ActionPropertyType.typeName, ActionPropertyType.*
 from ActionPropertyType
 join rbVitalParams vp on vp.id = ActionPropertyType.vitalParamId
 where actionType_id in
@@ -561,10 +561,102 @@ and code regexp '^19073'))
 and vitalParamId not in (0,1) and deleted = 0 and isVitalParam = 0
 ;
 
+update rbVitalParams
+set dict_OID = '1.2.643.2.69.1.1.1.143'
+where id = 558;
 
 update ActionPropertyType
-set isVitalParam = 1, valueDomain = 'netricaPrehospitalTreatment'
-where id = 61692;
+set isVitalParam = 1, valueDomain = 'netricaNodusClassifier'
+where id = 61827;
+
+
+
+create table netricaNodusClassifier(
+  id int(10),
+  deleted tinyint(1),
+  code varchar(8),
+  name varchar(128)
+);
+
+insert into netricaNodusClassifier (deleted, code, name)
+values
+
+
+create table netricaTumorClassifier(
+  id int(10),
+  deleted tinyint(1),
+  code varchar(8),
+  name varchar(128)
+);
+
+insert into netricaTumorClassifier (deleted, code, name)
+values
+(0, 'T1c', 'T1c'),
+(0, 'T1c', 'T1c'),
+(0, 'T1c3', 'T1c3'),
+(0, 'T1c3', 'T1c3'),
+(0, 'T1mi', 'T1mi'),
+(0, 'T1mi', 'T1mi'),
+(0, 'Нет', 'Нет'),
+(0, 'Нет', 'Нет'),
+(0, 'T3a', 'T3a'),
+(0, 'T3a', 'T3a'),
+(0, 'T3b', 'T3b'),
+(0, 'T3b', 'T3b'),
+(0, 'T4', 'T4'),
+(0, 'T4', 'T4'),
+(0, 'T2b', 'T2b'),
+(0, 'T2b', 'T2b'),
+(0, 'T4a', 'T4a'),
+(0, 'T4a', 'T4a'),
+(0, 'T2a', 'T2a'),
+(0, 'T2a', 'T2a'),
+(0, 'T1c2', 'T1c2'),
+(0, 'T1c2', 'T1c2'),
+(0, 'T1c1', 'T1c1'),
+(0, 'T1c1', 'T1c1'),
+(0, 'T4b', 'T4b'),
+(0, 'T4b', 'T4b'),
+(0, 'T3', 'T3'),
+(0, 'T3', 'T3'),
+(0, 'T2', 'T2'),
+(0, 'T2', 'T2'),
+(0, 'T1b', 'T1b'),
+(0, 'T1b', 'T1b'),
+(0, 'Tis', 'Tis'),
+(0, 'Tis', 'Tis'),
+(0, 'T1a', 'T1a'),
+(0, 'T1a', 'T1a'),
+(0, 'T1', 'T1'),
+(0, 'T1', 'T1'),
+(0, 'T0', 'T0'),
+(0, 'T0', 'T0'),
+(0, 'Tx', 'Tx'),
+(0, 'Tx', 'Tx'),
+(0, 'T4c', 'T4c'),
+(0, 'T4c', 'T4c'),
+(0, 'T1b2', 'T1b2'),
+(0, 'T1b2', 'T1b2'),
+(0, 'T1b1', 'T1b1'),
+(0, 'T1b1', 'T1b1'),
+(0, 'T1a2', 'T1a2'),
+(0, 'T1a2', 'T1a2'),
+(0, 'T1a1', 'T1a1'),
+(0, 'T1a1', 'T1a1'),
+(0, 'Ta', 'Ta'),
+(0, 'Ta', 'Ta'),
+(0, 'T3c', 'T3c'),
+(0, 'T3c', 'T3c'),
+(0, 'T2c', 'T2c'),
+(0, 'T2c', 'T2c'),
+(0, 'T4d', 'T4d'),
+(0, 'T4d', 'T4d'),
+(0, 'T2a2', 'T2a2'),
+(0, 'T2a2', 'T2a2'),
+(0, 'T2a1', 'T2a1'),
+(0, 'T2a1', 'T2a1');
+
+
 
 create table netricaPrehospitalTreatment(
   id int(10),
@@ -583,4 +675,3 @@ values
 (3, 0, '3', 'Седативные'),
 (2, 0, '2', 'Гипотензивные'),
 (1, 0, '1', 'Кристаллоиды');
-
