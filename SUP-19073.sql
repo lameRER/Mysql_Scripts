@@ -548,7 +548,7 @@ from ActionType where id = 1;
 select *
 from ActionPropertyType where valueDomain regexp '<|>';
 
-select vp.*, ActionPropertyType.isVitalParam, ActionPropertyType.vitalParamId, ActionPropertyType.defaultValue, ActionPropertyType.typeName, ActionPropertyType.*
+select vp.code, vp.name, vp.possible_values, vp.dict_OID, ActionPropertyType.isVitalParam, ActionPropertyType.vitalParamId, ActionPropertyType.defaultValue, ActionPropertyType.typeName, ActionPropertyType.*
 from ActionPropertyType
 join rbVitalParams vp on vp.id = ActionPropertyType.vitalParamId
 where actionType_id in
@@ -560,3 +560,23 @@ from ActionType where name = 'региз')
 and code regexp '^19073'))
 and vitalParamId not in (0,1) and deleted = 0 and isVitalParam = 0
 ;
+
+
+create table netricaPrehospitalTreatment(
+  id int(10),
+  deleted tinyint(1),
+  code varchar(8),
+  name varchar(128)
+);
+
+insert into netricaPrehospitalTreatment (id, deleted, code, name)
+values
+(4, 0, '4', 'Антиаритмики'),
+(8, 0, '8', 'Катетеризация периферической вены'),
+(7, 0, '7', 'Интубация трахеи'),
+(6, 0, '6', 'Противоотечные'),
+(5, 0, '5', 'Нейропротекторы'),
+(3, 0, '3', 'Седативные'),
+(2, 0, '2', 'Гипотензивные'),
+(1, 0, '1', 'Кристаллоиды');
+
