@@ -548,7 +548,7 @@ from ActionType where id = 1;
 select *
 from ActionPropertyType where valueDomain regexp '<|>';
 
-select ActionPropertyType.id, vp.*, ActionPropertyType.isVitalParam, ActionPropertyType.vitalParamId, ActionPropertyType.valueDomain, ActionPropertyType.typeName, ActionPropertyType.*
+select vp.*, ActionPropertyType.isVitalParam, ActionPropertyType.vitalParamId, ActionPropertyType.valueDomain, ActionPropertyType.typeName, ActionPropertyType.*
 from ActionPropertyType
 join rbVitalParams vp on vp.id = ActionPropertyType.vitalParamId
 where actionType_id in
@@ -562,9 +562,9 @@ and vitalParamId not in (0,1) and deleted = 0 and isVitalParam = 0
 ;
 
 
-set @dict_OID = '1.2.643.2.69.1.1.1.150.35';
-set @valueDomain = 'netricaSwellingDuringPregnancy';
-set @vitId = 298;
+set @dict_OID = '1.2.643.2.69.1.1.1.150.37';
+set @valueDomain = 'netricaFetalPosition';
+set @vitId = 489;
 
 update
     ActionPropertyType apt
@@ -585,9 +585,9 @@ primary key (id));');
  EXECUTE stmt3;
 
 SET @t1 =CONCAT('insert into ', @valueDomain, ' (deleted, code, name) values
-(0, ''2'', ''На голенях''),
-(0, ''3'', ''Нижних конечностей''),
-(0, ''1'', ''Отсутствуют'');
+(0, ''3'', ''косое''),
+(0, ''1'', ''продольное''),
+(0, ''2'', ''поперечное'');
 ');
  PREPARE stmt3 FROM @t1;
  EXECUTE stmt3;
