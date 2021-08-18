@@ -647,4 +647,4 @@ where vp.dict_OID = @dict_OID;
 
 
 select *
-from netricaInternationalClassificationDiseasesOncology;
+from netricaPrehospitalTreatment;
