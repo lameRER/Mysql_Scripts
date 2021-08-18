@@ -548,7 +548,7 @@ from ActionType where id = 1;
 select *
 from ActionPropertyType where valueDomain regexp '<|>';
 
-select vp.code, vp.name, vp.possible_values, vp.dict_OID, ActionPropertyType.isVitalParam, ActionPropertyType.vitalParamId, ActionPropertyType.defaultValue, ActionPropertyType.typeName, ActionPropertyType.*
+select ActionPropertyType.id, vp.code, vp.name, vp.possible_values, vp.dict_OID, ActionPropertyType.isVitalParam, ActionPropertyType.vitalParamId, ActionPropertyType.valueDomain, ActionPropertyType.typeName, ActionPropertyType.*
 from ActionPropertyType
 join rbVitalParams vp on vp.id = ActionPropertyType.vitalParamId
 where actionType_id in
@@ -561,6 +561,10 @@ and code regexp '^19073'))
 and vitalParamId not in (0,1) and deleted = 0 and isVitalParam = 0
 ;
 
+
+update ActionPropertyType
+set isVitalParam = 1, valueDomain = 'netricaPrehospitalTreatment'
+where id = 61692;
 
 create table netricaPrehospitalTreatment(
   id int(10),
