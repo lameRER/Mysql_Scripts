@@ -561,29 +561,45 @@ and code regexp '^19073'))
 and vitalParamId not in (0,1) and deleted = 0 and isVitalParam = 0
 ;
 
+
+set @dict_OID = '1.2.643.2.69.1.1.1.147';
+set @valueDomain = 'netricaDifferentiationDegree';
+
 select apt.*
 from rbVitalParams vp
 join ActionPropertyType apt on apt.vitalParamId = vp.id
-where vp.dict_OID ='1.2.643.2.69.1.1.1.143';
+where vp.dict_OID = @dict_OID;
 
 select *
 from rbVitalParams where id = 338;
 
-create table netricaTumorClassifier(
+
+set @query = (create table '+@valueDomain +'(id int(10), deleted tinyint(1), code varchar(8), name varchar(128));
+
+select @query
+
+EXECUTE('create table '+ @valueDomain +'(id int(10), deleted tinyint(1), code varchar(8), name varchar(128));');
+
+# EXEC sp_executesql @query
+
+create table @valueDomain(
   id int(10),
   deleted tinyint(1),
   code varchar(8),
   name varchar(128)
 );
 
-insert into netricaTumorClassifier (deleted, code, name)
+insert into @valueDomain (deleted, code, name)
 values
-
+(0, 'X', 'Не определена'),
+(0, '1', 'Низкодифференцированная'),
+(0, '3', 'Высокодифференцированная'),
+(0, '2', 'Умереннодифференцированная');
 
 update
     ActionPropertyType apt
 join rbVitalParams vp on vp.id = apt.vitalParamId
 set apt.isVitalParam = 1,
-    apt.valueDomain = 'netricaTumorClassifier',
-    vp.dict_OID = '1.2.643.2.69.1.1.1.144'
-where vp.id = 314;
+    apt.valueDomain = @valueDomain,
+    vp.dict_OID = @dict_OID
+where vp.id = 582;
