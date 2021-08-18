@@ -561,59 +561,13 @@ and code regexp '^19073'))
 and vitalParamId not in (0,1) and deleted = 0 and isVitalParam = 0
 ;
 
-update rbVitalParams
-set dict_OID = '1.2.643.2.69.1.1.1.142'
-where id = 569;
+select apt.*
+from rbVitalParams vp
+join ActionPropertyType apt on apt.vitalParamId = vp.id
+where vp.dict_OID ='1.2.643.2.69.1.1.1.143';
 
-update ActionPropertyType
-set isVitalParam = 1, valueDomain = 'netricaMetastasisClassifier'
-where id = 61829;
-
-
-create table netricaMetastasisClassifier(
-  id int(10),
-  deleted tinyint(1),
-  code varchar(8),
-  name varchar(128)
-);
-
-insert into netricaMetastasisClassifier (deleted, code, name)
-values
-(0, 'M1b', 'M1b'),
-(0, 'M1c', 'M1c'),
-(0, 'M1', 'M1'),
-(0, 'Нет', 'Нет'),
-(0, 'M1a', 'M1a'),
-(0, 'M0', 'M0'),
-(0, 'MX', 'MX');
-
-
-
-create table netricaNodusClassifier(
-  id int(10),
-  deleted tinyint(1),
-  code varchar(8),
-  name varchar(128)
-);
-
-insert into netricaNodusClassifier (deleted, code, name)
-values
-(0, 'N3c', 'N3c'),
-(0, 'Нет', 'Нет'),
-(0, 'N3', 'N3'),
-(0, 'N2c', 'N2c'),
-(0, 'N2b', 'N2b'),
-(0, 'N2a', 'N2a'),
-(0, 'N1c', 'N1c'),
-(0, 'N1b', 'N1b'),
-(0, 'N1a', 'N1a'),
-(0, 'N3b', 'N3b'),
-(0, 'N3a', 'N3a'),
-(0, 'N2', 'N2'),
-(0, 'N1', 'N1'),
-(0, 'N0', 'N0'),
-(0, 'Nx', 'Nx');
-
+select *
+from rbVitalParams where id = 338;
 
 create table netricaTumorClassifier(
   id int(10),
@@ -624,55 +578,12 @@ create table netricaTumorClassifier(
 
 insert into netricaTumorClassifier (deleted, code, name)
 values
-(0, 'T1c', 'T1c'),
-(0, 'T1c3', 'T1c3'),
-(0, 'T1mi', 'T1mi'),
-(0, 'Нет', 'Нет'),
-(0, 'T3a', 'T3a'),
-(0, 'T3b', 'T3b'),
-(0, 'T4', 'T4'),
-(0, 'T2b', 'T2b'),
-(0, 'T4a', 'T4a'),
-(0, 'T2a', 'T2a'),
-(0, 'T1c2', 'T1c2'),
-(0, 'T1c1', 'T1c1'),
-(0, 'T4b', 'T4b'),
-(0, 'T3', 'T3'),
-(0, 'T2', 'T2'),
-(0, 'T1b', 'T1b'),
-(0, 'Tis', 'Tis'),
-(0, 'T1a', 'T1a'),
-(0, 'T1', 'T1'),
-(0, 'T0', 'T0'),
-(0, 'Tx', 'Tx'),
-(0, 'T4c', 'T4c'),
-(0, 'T1b2', 'T1b2'),
-(0, 'T1b1', 'T1b1'),
-(0, 'T1a2', 'T1a2'),
-(0, 'T1a1', 'T1a1'),
-(0, 'Ta', 'Ta'),
-(0, 'T3c', 'T3c'),
-(0, 'T2c', 'T2c'),
-(0, 'T4d', 'T4d'),
-(0, 'T2a2', 'T2a2'),
-(0, 'T2a1', 'T2a1');
 
 
-
-create table netricaPrehospitalTreatment(
-  id int(10),
-  deleted tinyint(1),
-  code varchar(8),
-  name varchar(128)
-);
-
-insert into netricaPrehospitalTreatment (id, deleted, code, name)
-values
-(4, 0, '4', 'Антиаритмики'),
-(8, 0, '8', 'Катетеризация периферической вены'),
-(7, 0, '7', 'Интубация трахеи'),
-(6, 0, '6', 'Противоотечные'),
-(5, 0, '5', 'Нейропротекторы'),
-(3, 0, '3', 'Седативные'),
-(2, 0, '2', 'Гипотензивные'),
-(1, 0, '1', 'Кристаллоиды');
+update
+    ActionPropertyType apt
+join rbVitalParams vp on vp.id = apt.vitalParamId
+set apt.isVitalParam = 1,
+    apt.valueDomain = 'netricaTumorClassifier',
+    vp.dict_OID = '1.2.643.2.69.1.1.1.144'
+where vp.id = 314;
