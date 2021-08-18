@@ -547,3 +547,16 @@ from ActionType where id = 1;
 
 select *
 from ActionPropertyType where valueDomain regexp '<|>';
+
+select vp.*, ActionPropertyType.isVitalParam, ActionPropertyType.vitalParamId, ActionPropertyType.defaultValue, ActionPropertyType.typeName, ActionPropertyType.*
+from ActionPropertyType
+join rbVitalParams vp on vp.id = ActionPropertyType.vitalParamId
+where actionType_id in
+(select id from ActionType at where group_id in
+(select id
+from ActionType where group_id =
+(select id
+from ActionType where name = 'региз')
+and code regexp '^19073'))
+and vitalParamId not in (0,1) and deleted = 0 and isVitalParam = 0
+;
