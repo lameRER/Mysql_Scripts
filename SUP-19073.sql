@@ -562,12 +562,30 @@ and vitalParamId not in (0,1) and deleted = 0 and isVitalParam = 0
 ;
 
 update rbVitalParams
-set dict_OID = '1.2.643.2.69.1.1.1.143'
-where id = 558;
+set dict_OID = '1.2.643.2.69.1.1.1.142'
+where id = 569;
 
 update ActionPropertyType
-set isVitalParam = 1, valueDomain = 'netricaNodusClassifier'
-where id = 61828;
+set isVitalParam = 1, valueDomain = 'netricaMetastasisClassifier'
+where id = 61829;
+
+
+create table netricaMetastasisClassifier(
+  id int(10),
+  deleted tinyint(1),
+  code varchar(8),
+  name varchar(128)
+);
+
+insert into netricaMetastasisClassifier (deleted, code, name)
+values
+(0, 'M1b', 'M1b'),
+(0, 'M1c', 'M1c'),
+(0, 'M1', 'M1'),
+(0, 'Нет', 'Нет'),
+(0, 'M1a', 'M1a'),
+(0, 'M0', 'M0'),
+(0, 'MX', 'MX');
 
 
 
