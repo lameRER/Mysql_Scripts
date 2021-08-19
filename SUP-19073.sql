@@ -538,8 +538,6 @@ from s11.Person where userProfile_id = 1;
 
 
 
-select *
-from rborgs
 
 select *
 from ActionType where id = 1;
@@ -563,10 +561,12 @@ and vitalParamId not in (0,1) and deleted = 0 and isVitalParam = 0
 
 select *
 from netricaYesNo;
+select *
+from netricaBloodRhfactorDonors;
 
-set @dict_OID = '1.2.643.5.1.13.13.11.1064';
-set @valueDomain = 'netricaTypePathologicalReaction';
-set @vitId = 281;
+set @dict_OID = '1.2.643.2.69.1.1.1.64';
+set @valueDomain = 'netricaMO';
+set @vitId = 593;
 
 update
     ActionPropertyType apt
@@ -587,24 +587,14 @@ primary key (id));');
  EXECUTE stmt3;
 
 SET @t1 =CONCAT('insert into ', @valueDomain, ' (deleted, code, name) values
-(0, ''33'', ''Другие виды непереносимости''),
-(0, ''32'', ''Пищевая непереносимость''),
-(0, ''20'', ''Аллергические реакции''),
-(0, ''31'', ''Лекарственная непереносимость''),
-(0, ''30'', ''Индивидуальная непереносимость''),
-(0, ''24'', ''Другие аллергии''),
-(0, ''23'', ''Инсектная аллергия''),
-(0, ''22'', ''Пищевая аллергия''),
-(0, ''21'', ''Лекарственная аллергия''),
-(0, ''10'', ''Атопическая гиперчувствительно'');
+(0, ''2'', ''Анурия''),
+(0, ''1'', ''Олигурия'');
 ');
  PREPARE stmt3 FROM @t1;
  EXECUTE stmt3;
 
 
-
-
-select vp.*, apt.*
+select vp.*, apt.valueDomain
 from rbVitalParams vp
 join ActionPropertyType apt on apt.vitalParamId = vp.id
 where vp.dict_OID = @dict_OID;
