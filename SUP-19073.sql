@@ -538,8 +538,6 @@ from s11.Person where userProfile_id = 1;
 
 
 
-select *
-from rborgs
 
 select *
 from ActionType where id = 1;
@@ -563,10 +561,12 @@ and vitalParamId not in (0,1) and deleted = 0 and isVitalParam = 0
 
 select *
 from netricaYesNo;
+select *
+from netricaBloodRhfactorDonors;
 
-set @dict_OID = '1.2.643.2.69.1.1.1.150.33';
-set @valueDomain = 'netricaTypeInfertility';
-set @vitId = 517;
+set @dict_OID = '1.2.643.2.69.1.1.1.150.34';
+set @valueDomain = 'netricaBloodRhfactorDonors';
+set @vitId = 563;
 
 update
     ActionPropertyType apt
@@ -587,18 +587,7 @@ primary key (id));');
  EXECUTE stmt3;
 
 SET @t1 =CONCAT('insert into ', @valueDomain, ' (deleted, code, name) values
-(0, ''2'', ''Бесплодие первичное 2 года''),
-(0, ''6'', ''Бесплодие первичное более 5 лет''),
-(0, ''1'', ''Бесплодие первичное 1 год''),
-(0, ''9'', ''Бесплодие вторичное 3 года''),
-(0, ''3'', ''Бесплодие первичное 3 года''),
-(0, ''4'', ''Бесплодие первичное 4 года''),
-(0, ''5'', ''Бесплодие первичное 5 лет''),
-(0, ''7'', ''Бесплодие вторичное 1 год''),
-(0, ''8'', ''Бесплодие вторичное 2 года''),
-(0, ''10'', ''Бесплодие вторичное 4 года''),
-(0, ''11'', ''Бесплодие вторичное 5 лет''),
-(0, ''12'', ''Бесплодие вторичное более 5 лет'');
+
 ');
  PREPARE stmt3 FROM @t1;
  EXECUTE stmt3;
