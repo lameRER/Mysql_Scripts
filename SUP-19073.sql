@@ -564,9 +564,9 @@ from netricaYesNo;
 select *
 from netricaBloodRhfactorDonors;
 
-set @dict_OID = '1.2.643.2.69.1.1.1.150.21';
-set @valueDomain = 'netricaPerinatalRiskFactors';
-set @vitId = 416;
+set @dict_OID = '1.2.643.2.69.1.1.1.150.22';
+set @valueDomain = 'netricaDiuresis';
+set @vitId = 342;
 
 update
     ActionPropertyType apt
@@ -587,7 +587,8 @@ primary key (id));');
  EXECUTE stmt3;
 
 SET @t1 =CONCAT('insert into ', @valueDomain, ' (deleted, code, name) values
-
+(0, ''2'', ''Анурия''),
+(0, ''1'', ''Олигурия'');
 ');
  PREPARE stmt3 FROM @t1;
  EXECUTE stmt3;
