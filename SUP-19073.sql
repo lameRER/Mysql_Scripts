@@ -564,9 +564,9 @@ from netricaYesNo;
 select *
 from netricaBloodRhfactorDonors;
 
-set @dict_OID = '1.2.643.2.69.1.1.1.150.34';
-set @valueDomain = 'netricaBloodRhfactorDonors';
-set @vitId = 563;
+set @dict_OID = '1.2.643.2.69.1.1.1.150.13';
+set @valueDomain = 'netricaYesNo';
+set @vitId = 420;
 
 update
     ActionPropertyType apt
@@ -593,9 +593,7 @@ SET @t1 =CONCAT('insert into ', @valueDomain, ' (deleted, code, name) values
  EXECUTE stmt3;
 
 
-
-
-select vp.*, apt.*
+select vp.*, apt.valueDomain
 from rbVitalParams vp
 join ActionPropertyType apt on apt.vitalParamId = vp.id
 where vp.dict_OID = @dict_OID;
