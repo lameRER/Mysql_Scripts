@@ -564,8 +564,8 @@ and vitalParamId not in (0,1) and deleted = 0 and isVitalParam = 0
 select *
 from netricaYesNo;
 
-set @dict_OID = '1.2.643.5.1.13.13.11.1064';
-set @valueDomain = 'netricaTypePathologicalReaction';
+set @dict_OID = '1.2.643.5.1.13.13.11.1058';
+set @valueDomain = 'netricaHabitsAddictions';
 set @vitId = 281;
 
 update
