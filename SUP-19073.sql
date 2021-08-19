@@ -564,9 +564,9 @@ from netricaYesNo;
 select *
 from netricaBloodRhfactorDonors;
 
-set @dict_OID = '1.2.643.2.69.1.1.1.150.22';
-set @valueDomain = 'netricaDiuresis';
-set @vitId = 342;
+set @dict_OID = '1.2.643.2.69.1.1.1.64';
+set @valueDomain = 'netricaMO';
+set @vitId = 593;
 
 update
     ActionPropertyType apt
