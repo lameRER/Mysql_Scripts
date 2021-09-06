@@ -342,24 +342,24 @@ where pli.priceList_id = 124;
 
 
 
-select pct.CodeNEW as code,
-       pct.NameNEW as name,
-       0           as eisLegacy,
-       0           as nomenclatureLegacy,
-       0           as license,
-       ''             infis,
-       '2021-07-01'   begDate,
-       '2030-12-31'   endDate,
-       NULL           medicalAidProfile_id,
-       0              adultUetDoctor,
-       0              adultUetAverageMedWorker,
-       0              childUetDoctor,
-       0              childUetAverageMedWorker,
-       NULL           rbMedicalKind_id,
-       0              UET,
-       NULL departCode,
-       0 isComplex,
-       0 maxSubServices
+select pct.CodeNEW  as code,
+       pct.NameNEW  as name,
+       0            as eisLegacy,
+       0            as nomenclatureLegacy,
+       0            as license,
+       ''           as infis,
+       '2021-07-01' as begDate,
+       '2030-12-31' as endDate,
+       NULL         as medicalAidProfile_id,
+       0            as adultUetDoctor,
+       0            as adultUetAverageMedWorker,
+       0            as childUetDoctor,
+       0            as childUetAverageMedWorker,
+       NULL         as rbMedicalKind_id,
+       0            as UET,
+       NULL         as departCode,
+       0            as isComplex,
+       0 as maxSubServices
 from rbService pt
 right join Price_cal_temp pct on pct.CodeNEW = pt.code and (pct.PriceNEW != pct.PriceOLD or pct.NameOLD != pct.NameNEW)
 left join PriceListItem pli on pli.serviceCodeOW = pct.CodeNEW and pli.priceList_id = 124
@@ -443,24 +443,24 @@ where pct.deleted = 0 and pct.CodeNEW is not null order by code and PriceNEW is 
 
 select
        pct.*,
-       pct.CodeNEW code,
-       pct.NameNEW name,
-       0 eisLegacy,
-       0 nomenclatureLegacy,
-       0 license,
-       '' infis,
-       '2021-07-01' begDate,
-       '2030-12-31' endDate,
-       null medicalAidProfile_id,
-       0 adultUetDoctor,
-       0 adultUetAverageMedWorker,
-       0 childUetDoctor,
-       0 childUetAverageMedWorker,
-       null rbMedicalKind_id,
-       0 UET,
-       null departCode,
-       0 isComplex,
-       0 maxSubServices
+       pct.CodeNEW  as code,
+       pct.NameNEW  as name,
+       0            as eisLegacy,
+       0            as nomenclatureLegacy,
+       0            as license,
+       ''           as infis,
+       '2021-07-01' as begDate,
+       '2030-12-31' as endDate,
+       null         as medicalAidProfile_id,
+       0            as adultUetDoctor,
+       0            as adultUetAverageMedWorker,
+       0            as childUetDoctor,
+       0            as childUetAverageMedWorker,
+       null         as rbMedicalKind_id,
+       0            as UET,
+       null         as departCode,
+       0            as isComplex,
+       0 as maxSubServices
 from rbService a
 left join PriceListItem pli on pli.service_id = a.id and pli.priceList_id = 124
 right join Price_cal_temp pct on pct.CodeNEW = a.code
@@ -749,14 +749,14 @@ select * from price_gnc_21_08_05;
 #TODO: Поменять киррилицу на латиницу в "price_gnc_21_08_05"
 create temporary table temp_rbservice
 (select
-       pg.code code,
-       pg.name name,
+       pg.code      as code,
+       pg.name      as name,
        eisLegacy,
        nomenclatureLegacy,
        license,
        infis,
-       '2021-07-01' begDate,
-       '2030-12-31' endDate,
+       '2021-07-01' as begDate,
+       '2030-12-31' as endDate,
        medicalAidProfile_id,
        adultUetDoctor,
        adultUetAverageMedWorker,
