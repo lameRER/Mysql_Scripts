@@ -12,8 +12,8 @@ from ActionPropertyType where norm != '' limit 100;
 call procEpicrisisAnalyzes(33721812, "'Covid-19'");
 
 
-set @EventID = 33721812;
-set @AnalyzesType = "'Covid-19'";
+set @EventID = 33889131;
+set @AnalyzesType = "'Биохимические исследования'";
 
 SET @subq = 'select DATE_FORMAT(ttj.datetimeTaken, "%d.%m.%y\n%H:%i") valas, ttj.datetimeTaken val, case when apt.typeName = ''String'' THEN aps.value when apt.typeName = ''Reference'' THEN apr.value when apt.typeName = ''Date'' THEN apd.value end from ActionProperty ap left join ActionProperty_String aps using(id) left join ActionProperty_Reference apr using(id) left join ActionProperty_Date apd using(id) join Action a on a.id = ap.action_id and a.deleted = 0 and a.event_id = 33824866 join Event e2 on e2.id = a.event_id and e2.deleted = 0 join ActionType at2 on at2.id = a.actionType_id and at2.deleted = 0 join ActionType at3 on at3.id = at2.group_id and at3.deleted = 0 and at3.name = ''Биохимические исследования'' join ActionPropertyType apt on apt.id = ap.type_id and apt.actionType_id = at2.id and at2.id in (select DISTINCT apt.actionType_id from ActionPropertyType apt where apt.valueDomain REGEXP ''999|9767|2-9'') and apt.name != ''Номерок'' join TakenTissueJournal ttj on ttj.id = a.takenTissueJournal_id and ttj.client_id = e2.client_id where ap.deleted = 0 GROUP by ttj.datetimeTaken';
 
@@ -88,6 +88,7 @@ SET SESSION group_concat_max_len = 10000;   -- just in case
     PREPARE _sql FROM @stmt;
     EXECUTE _sql;
     DEALLOCATE PREPARE _sql;
+select @sums
 SET @stmt2 = CONCAT(
             'SELECT ',
                 'apt.Name', ',\n',
