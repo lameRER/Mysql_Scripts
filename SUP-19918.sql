@@ -4,6 +4,11 @@ from rbEpicrisisProperty where defaultValue regexp 'call';
 select ap.*
 from ActionProperty ap, Action a where a.event_id = 33721812 and a.id = ap.action_id;
 
+
+select *
+from ActionPropertyType where norm != '' limit 100;
+
+
 call procEpicrisisAnalyzes(33721812, "'Covid-19'");
 
 
@@ -36,7 +41,7 @@ SET SESSION group_concat_max_len = 10000;   -- just in case
     DEALLOCATE PREPARE _sql;
 SET @stmt2 = CONCAT(
             'SELECT ',
-                'apt.Name', ', ap.norm', ',\n',
+                'apt.Name', ', apt.norm', ',\n',
                 @sums,
             	'\n FROM ActionProperty ap left join ActionProperty_String aps using(id) left join ActionProperty_Reference apr using(id) left join ActionProperty_Date apd using(id) join Action a on a.id = ap.action_id and a.deleted = 0 and a.event_id = ',
             	@EventID,
