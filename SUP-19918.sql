@@ -4,6 +4,14 @@ from rbEpicrisisProperty where defaultValue regexp 'call';
 select ap.*
 from ActionProperty ap, Action a where a.event_id = 33721812 and a.id = ap.action_id;
 
+select *
+from ActionProperty_Reference limit 100;
+
+select *
+from TakenTissueJournal order by id desc limit 100;
+
+select *
+from rbTissueType;
 
 select *
 from ActionPropertyType where norm != '' limit 100;
@@ -41,7 +49,7 @@ SET SESSION group_concat_max_len = 10000;   -- just in case
     DEALLOCATE PREPARE _sql;
 SET @stmt2 = CONCAT(
             'SELECT ',
-                'apt.Name', ', apt.norm', ',\n',
+                'apt.Name', ', ap.norm', ',\n',
                 @sums,
             	'\n FROM ActionProperty ap left join ActionProperty_String aps using(id) left join ActionProperty_Reference apr using(id) left join ActionProperty_Date apd using(id) join Action a on a.id = ap.action_id and a.deleted = 0 and a.event_id = ',
             	@EventID,
@@ -88,7 +96,7 @@ SET SESSION group_concat_max_len = 10000;   -- just in case
     PREPARE _sql FROM @stmt;
     EXECUTE _sql;
     DEALLOCATE PREPARE _sql;
-select @sums
+select @sums;
 SET @stmt2 = CONCAT(
             'SELECT ',
                 'apt.Name', ',\n',
