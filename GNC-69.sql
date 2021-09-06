@@ -4,12 +4,12 @@ from rbService where name = 'Осмотр (консультация) врачо�
 
 select ActionType.*
 from ActionType where id in(select master_id
-from ActionType_Service where service_id = 14016)
+from ActionType_Service where service_id = 14016);
 
 
 
 select *
-from EventType
+from EventType;
 
 
 select *
@@ -43,10 +43,10 @@ from ActionType
 join ActionType at2 on at2.group_id = ActionType.id
 where ActionType.group_id in(select id
 from ActionType where group_id = (select id
-from ActionType where id = 9147))
+from ActionType where id = 9147));
 
 
-SELECT * FROM PriceListItem pli WHERE pli.priceList_id=124
+SELECT * FROM PriceListItem pli WHERE pli.priceList_id=124;
 
 
 select *
@@ -85,7 +85,7 @@ select
 #        pgt.code as newCode, pli.serviceCodeOW, pgt.name as newName, pli.serviceNameOW, concat(pgt.price,'.00') newPrice, pli.price, pli.deleted
 from price_gnc_temp pgt
 left join PriceListItem pli on pli.serviceCodeOW = pgt.code and pli.priceList_id = 124 and (pgt.name != pli.serviceNameOW or concat(pgt.price,'.00') != pli.price)
-group by pgt.code
+group by pgt.code;
 
 
 
@@ -100,18 +100,18 @@ from PriceList where id = 124;
 
 select
 #        pgt.two,
-       now() createDatetime,
-       null createPerson_id,
-       now() modifyDatetime,
-       null modifyPerson_id,
+       now()          as createDatetime,
+       null           as createPerson_id,
+       now()          as modifyDatetime,
+       null           as modifyPerson_id,
        A.deleted,
        A.hidden,
        A.class,
-       at2.id group_id,
-       pgt.code code,
-       TRIM(pgt.name) name,
-       TRIM(pgt.code) title,
-       '' flatCode,
+       at2.id         as group_id,
+       pgt.code       as code,
+       TRIM(pgt.name) as name,
+       TRIM(pgt.code) as title,
+       ''             as flatCode,
        A.sex,
        A.age,
        A.age_bu,
@@ -160,22 +160,22 @@ left join rbService r on pgt.code = r.code and right(pgt.code, length(pgt.code)-
 left join ActionType_Service ATS on r.id = ATS.service_id
 left join ActionType A on ATS.master_id = A.id or A.id = 7953
 join ActionType at2 on trim(at2.name) = trim(pgt.two) -- and at2.group_id = 9148
-where r.code is null and pgt.one = '2. СТАЦИОНАРНАЯ ПОМОЩЬ, ОПЕРАТИВНЫЕ ВМЕШАТЕЛЬСТВА ' and pgt.three is null group by pgt.name
+where r.code is null and pgt.one = '2. СТАЦИОНАРНАЯ ПОМОЩЬ, ОПЕРАТИВНЫЕ ВМЕШАТЕЛЬСТВА ' and pgt.three is null group by pgt.name;
 
 
 select
-       now() createDatetime,
-       null createPerson_id,
-       now() modifyDatetime,
-       null modifyPerson_id,
+       now()          as createDatetime,
+       null           as createPerson_id,
+       now()          as modifyDatetime,
+       null           as modifyPerson_id,
        A.deleted,
        A.hidden,
        A.class,
-       at2.id group_id,
-       pgt.code code,
-       TRIM(pgt.name) name,
-       TRIM(pgt.name) title,
-       '' flatCode,
+       at2.id         as group_id,
+       pgt.code       as code,
+       TRIM(pgt.name) as name,
+       TRIM(pgt.name) as title,
+       ''             as flatCode,
        A.sex,
        A.age,
        A.age_bu,
@@ -224,28 +224,28 @@ left join rbService r on pgt.code = r.code and right(pgt.code, length(pgt.code)-
 left join ActionType_Service ATS on r.id = ATS.service_id
 left join ActionType A on ATS.master_id = A.id or A.id = 7953
 join ActionType at2 on trim(at2.name) = trim(pgt.two) -- and at2.group_id = 9148
-where r.code is null and pgt.one = '1. АМБУЛАТОРНО-ПОЛИКЛИНИЧЕСКАЯ ПОМОЩЬ ' and pgt.three is null and pgt.code is not null
+where r.code is null and pgt.one = '1. АМБУЛАТОРНО-ПОЛИКЛИНИЧЕСКАЯ ПОМОЩЬ ' and pgt.three is null and pgt.code is not null;
 
 select *
-from price_gnc_temp where one = '2. СТАЦИОНАРНАЯ ПОМОЩЬ, ОПЕРАТИВНЫЕ ВМЕШАТЕЛЬСТВА '
+from price_gnc_temp where one = '2. СТАЦИОНАРНАЯ ПОМОЩЬ, ОПЕРАТИВНЫЕ ВМЕШАТЕЛЬСТВА ';
 
 select *
 from ActionType where group_id in (select id
-from ActionType where group_id = 9148)
+from ActionType where group_id = 9148);
 
 
 select
-       now() createDatetime,
-       NULL createPerson_id,
-       NOW() modifyDatetime,
-       NULL modifyPerson_id,
+       now()                                           as createDatetime,
+       NULL                                            as createPerson_id,
+       NOW()                                           as modifyDatetime,
+       NULL                                            as modifyPerson_id,
        deleted,
        hidden,
        class,
-       9147 group_id,
+       9147                                            as group_id,
        code,
-      'СТАЦИОНАРНАЯ ПОМОЩЬ, ОПЕРАТИВНЫЕ ВМЕШАТЕЛЬСТВА' name,
-      'СТАЦИОНАРНАЯ ПОМОЩЬ, ОПЕРАТИВНЫЕ ВМЕШАТЕЛЬСТВА' title,
+      'СТАЦИОНАРНАЯ ПОМОЩЬ, ОПЕРАТИВНЫЕ ВМЕШАТЕЛЬСТВА' as name,
+      'СТАЦИОНАРНАЯ ПОМОЩЬ, ОПЕРАТИВНЫЕ ВМЕШАТЕЛЬСТВА' as title,
        flatCode,
        sex,
        age,
@@ -307,7 +307,7 @@ from ActionType where class =3 and deleted = 0 ;
 select *
 from ActionType at2
 join ActionType_Service ats on ats.master_id = at2.id
-join rbService r on r.id = ats.service_id
+join rbService r on r.id = ats.service_id;
 
 
 
@@ -315,7 +315,7 @@ select *
 from ActionType where group_id is null and deleted = 0 order by code;
 
 
-select * from PriceListItem where  serviceCodeOW = 'A26.06.006' and priceList_id = 124
+select * from PriceListItem where  serviceCodeOW = 'A26.06.006' and priceList_id = 124;
 
 select *
 from rbService where code = 'A26.06.006';
@@ -335,31 +335,31 @@ select *
 from Price_cal_temp where PriceNEW != PriceOLD or NameOLD != NameNEW;
 
 
-select pli.serviceCodeOW, pli.serviceNameOW, pli.price, pli.begDate, if(pli.serviceNameOW != pct.NameNEW or pli.price != pct.PriceNEW, '2021-06-30', pli.endDate) endDate, pct.*
+select pli.serviceCodeOW,pli.serviceNameOW,pli.price,pli.begDate,if(pli.serviceNameOW != pct.NameNEW or pli.price != pct.PriceNEW, '2021-06-30', pli.endDate) as endDate,pct.*
 from PriceListItem pli
 left join Price_cal_temp pct on pct.CodeOLD = pli.serviceCodeOW and (PriceNEW != PriceOLD or NameOLD != NameNEW)
 where pli.priceList_id = 124;
 
 
 
-select pct.CodeNEW code,
-       pct.NameNEW name,
-       0 eisLegacy,
-       0 nomenclatureLegacy,
-       0 license,
-       '' infis,
-       '2021-07-01' begDate,
-       '2030-12-31' endDate,
-       NULL medicalAidProfile_id,
-       0 adultUetDoctor,
-       0 adultUetAverageMedWorker,
-       0 childUetDoctor,
-       0 childUetAverageMedWorker,
-       NULL rbMedicalKind_id,
-       0 UET,
-       NULL departCode,
-       0 isComplex,
-       0 maxSubServices
+select pct.CodeNEW  as code,
+       pct.NameNEW  as name,
+       0            as eisLegacy,
+       0            as nomenclatureLegacy,
+       0            as license,
+       ''           as infis,
+       '2021-07-01' as begDate,
+       '2030-12-31' as endDate,
+       NULL         as medicalAidProfile_id,
+       0            as adultUetDoctor,
+       0            as adultUetAverageMedWorker,
+       0            as childUetDoctor,
+       0            as childUetAverageMedWorker,
+       NULL         as rbMedicalKind_id,
+       0            as UET,
+       NULL         as departCode,
+       0            as isComplex,
+       0 as maxSubServices
 from rbService pt
 right join Price_cal_temp pct on pct.CodeNEW = pt.code and (pct.PriceNEW != pct.PriceOLD or pct.NameOLD != pct.NameNEW)
 left join PriceListItem pli on pli.serviceCodeOW = pct.CodeNEW and pli.priceList_id = 124
@@ -425,7 +425,7 @@ select
        ttjExternalCounter_id,
        ttjExternalCounter_id_cached
 from ActionType pt
-join Price_cal_temp pct on pct.CodeNEW = pt.code and (pct.PriceNEW != pct.PriceOLD/ or pct.NameOLD != pct.NameNEW)
+join Price_cal_temp pct on pct.CodeNEW = pt.code and (pct.PriceNEW != pct.PriceOLD or pct.NameOLD != pct.NameNEW)
 join PriceListItem pli on pli.serviceCodeOW = pct.CodeNEW and pli.priceList_id = 124
 where pct.deleted = 0 and pct.CodeNEW is not null order by code and PriceNEW is not null;
 
@@ -443,28 +443,28 @@ where pct.deleted = 0 and pct.CodeNEW is not null order by code and PriceNEW is 
 
 select
        pct.*,
-       pct.CodeNEW code,
-       pct.NameNEW name,
-       0 eisLegacy,
-       0 nomenclatureLegacy,
-       0 license,
-       '' infis,
-       '2021-07-01' begDate,
-       '2030-12-31' endDate,
-       null medicalAidProfile_id,
-       0 adultUetDoctor,
-       0 adultUetAverageMedWorker,
-       0 childUetDoctor,
-       0 childUetAverageMedWorker,
-       null rbMedicalKind_id,
-       0 UET,
-       null departCode,
-       0 isComplex,
-       0 maxSubServices
+       pct.CodeNEW  as code,
+       pct.NameNEW  as name,
+       0            as eisLegacy,
+       0            as nomenclatureLegacy,
+       0            as license,
+       ''           as infis,
+       '2021-07-01' as begDate,
+       '2030-12-31' as endDate,
+       null         as medicalAidProfile_id,
+       0            as adultUetDoctor,
+       0            as adultUetAverageMedWorker,
+       0            as childUetDoctor,
+       0            as childUetAverageMedWorker,
+       null         as rbMedicalKind_id,
+       0            as UET,
+       null         as departCode,
+       0            as isComplex,
+       0 as maxSubServices
 from rbService a
 left join PriceListItem pli on pli.service_id = a.id and pli.priceList_id = 124
 right join Price_cal_temp pct on pct.CodeNEW = a.code
-where pct.NameNEW is not null and pct.deleted = 0 -- and (/*pct.PriceNEW != pct.PriceOLD or*/ pct.NameOLD != pct.NameNEW)
+where pct.NameNEW is not null and pct.deleted = 0; -- and (/*pct.PriceNEW != pct.PriceOLD or*/ pct.NameOLD != pct.NameNEW)
 
 
 
@@ -503,7 +503,7 @@ from PriceListItem pli
 join rbService r on pli.service_id = r.id
 right join Price_cal_temp pct on pct.CodeOLD = pli.serviceCodeOW and (pct.NameOLD != pct.NameNEW or pct.PriceOLD != pct.PriceNEW)
 where pli.priceList_id = 124 and pct.deleted is not null and pli.endDate and pct.deleted = 0) as tmp
-where not exists (select * from PriceListItem where serviceCodeOW = tmp.serviceCodeOW and endDate = tmp.endDate)
+where not exists (select * from PriceListItem where serviceCodeOW = tmp.serviceCodeOW and endDate = tmp.endDate);
 
 insert into rbService(code, name, eisLegacy, license, infis, begDate, endDate, medicalAidProfile_id, rbMedicalKind_id, departCode)
 select *
@@ -577,7 +577,7 @@ from
 from ActionType r
 right join Price_cal_temp pct on pct.CodeNEW = r.code
 where (pct.NameOLD != pct.NameNEW or pct.PriceOLD != pct.PriceNEW) and CodeOLD is null) as tmp
-where  exists(select * from ActionType where name = tmp.name and code = tmp.code)
+where  exists(select * from ActionType where name = tmp.name and code = tmp.code);
 
 insert into ActionType_Service(master_id, idx, service_id, begDate, endDate)
 select *
@@ -587,7 +587,7 @@ from  rbService r
 left join Price_cal_temp pct on pct.CodeNEW = r.code
 join ActionType at on at.code = pct.CodeNEW
 where (pct.NameOLD != pct.NameNEW or pct.PriceOLD != pct.PriceNEW) and CodeOLD is null) as tmp
-where not exists(select * from ActionType_Service where service_id = tmp.service_id and master_id = tmp.master_id)
+where not exists(select * from ActionType_Service where service_id = tmp.service_id and master_id = tmp.master_id);
 
 select *
 from ActionType_Service order by id desc ;
@@ -606,7 +606,7 @@ from PriceListItem where serviceCodeOW = 'A18.05.009';
 
 select *
 from PriceListItem pli
-join Price_cal_temp pct on pct.CodeOLD = pli.serviceCodeOW and (pct.NameOLD != pct.NameNEW or pct.PriceOLD != pct.PriceNEW) and pli.endDate > curdate() and priceList_id = 124
+join Price_cal_temp pct on pct.CodeOLD = pli.serviceCodeOW and (pct.NameOLD != pct.NameNEW or pct.PriceOLD != pct.PriceNEW) and pli.endDate > curdate() and priceList_id = 124;
 
 
 select *
@@ -622,7 +622,7 @@ from PriceListItem where serviceCodeOW = 'B01.018.001';
 
 
 select *
-from Price_cal_temp where CodeOLD = 'A12.05.018.001'
+from Price_cal_temp where CodeOLD = 'A12.05.018.001';
 
 
 select *
@@ -631,7 +631,7 @@ from rbService where id = 13980;
 
 
 insert into Price_cal_temp(CodeOLD, NameOLD, PriceOLD, CodeNEW, NameNEW, PriceNEW, deleted)
-select '1', '2', '3', '4','5','6','7'
+select '1', '2', '3', '4','5','6','7';
 
 
 select *
@@ -657,10 +657,10 @@ from PriceListItem where serviceCodeOW = 'A09.23.005' and priceList_id = 124;
 
 
 select *
-from PriceListItem where code regexp '^А' order by id desc ;
+from PriceListItem where serviceCodeOW regexp '^А' order by id desc ;
 
 
-select * from rbService order by id desc
+select * from rbService order by id desc;
 
 
 
@@ -676,7 +676,7 @@ from price_temp_2021 where `Номенклатура.Номенклатурны�
 
 
 select *
-from PriceListItem where priceList_id = 124
+from PriceListItem where priceList_id = 124;
 
 
 # insert into ActionType(createDatetime, createPerson_id, modifyDatetime, modifyPerson_id, class, group_id, code, name, title, flatCode, sex, age, age_bu, age_bc, age_eu, age_ec, office, showInForm, genTimetable, service_id, quotaType_id, context, defaultPlannedEndDate, defaultExecPerson_id, isMES, nomenclativeService_id, prescribedType_id, shedule_id, testTubeType_id, jobType_id, layout, loadPrintTemplate_id, dynamicNumberType_id, counter_id, ttjExternalCounter_id, ttjExternalCounter_id_cached)
@@ -721,7 +721,7 @@ from
 from PriceListItem pl
 right join price_temp_2021 pct on pct.`Номенклатура.Номенклатурный номер` = pl.serviceCodeOW
 where pl.id is null) as tmp
-where  exists(select * from ActionType where name = tmp.name and code = tmp.code)
+where  exists(select * from ActionType where name = tmp.name and code = tmp.code);
 
 select *
 from PriceListItem where service_id = 12970 and serviceCodeOW = 'A11.12.001';
@@ -738,25 +738,25 @@ from PriceListItem where service_id = 12970 and serviceCodeOW = 'A11.12.001';
 
 
 
-A06.09.005.003йцв
-https://skillbox.ru/media/code/ne_windows_edinoy_kak_pisat_krossplatformennye_prilozheniya_s_gui_na_c/
+# A06.09.005.003йцв
+# https://skillbox.ru/media/code/ne_windows_edinoy_kak_pisat_krossplatformennye_prilozheniya_s_gui_na_c/
 
 
 
 
-select * from price_gnc_21_08_05
+select * from price_gnc_21_08_05;
 
 #TODO: Поменять киррилицу на латиницу в "price_gnc_21_08_05"
 create temporary table temp_rbservice
 (select
-       pg.code code,
-       pg.name name,
+       pg.code      as code,
+       pg.name      as name,
        eisLegacy,
        nomenclatureLegacy,
        license,
        infis,
-       '2021-07-01' begDate,
-       '2030-12-31' endDate,
+       '2021-07-01' as begDate,
+       '2030-12-31' as endDate,
        medicalAidProfile_id,
        adultUetDoctor,
        adultUetAverageMedWorker,
@@ -770,7 +770,7 @@ create temporary table temp_rbservice
 from price_gnc_21_08_05 pg
 left join PriceListItem pli on pg.code = pli.serviceCodeOW
 join rbService s on s.id = (select id from rbService order by id desc limit 1)
-where pli.id is null)
+where pli.id is null);
 
 
 
@@ -807,15 +807,15 @@ join PriceListItem pli_or on pli_or.id = (select id from PriceListItem order by 
 left join rbService s on s.code in (select code from temp_rbservice) and s.code = pg.code
 # where pli.id is null
 group by pg.code) as tmp
-where not exists(select * from PriceListItem where serviceCodeOW = tmp.serviceCodeOW and serviceNameOW = tmp.serviceNameOW and tmp.price = price and priceList_id = 124 and (endDate >= curdate() or endDate is null) and tmp.service_id = service_id and tmp.deleted = deleted)
+where not exists(select * from PriceListItem where serviceCodeOW = tmp.serviceCodeOW and serviceNameOW = tmp.serviceNameOW and tmp.price = price and priceList_id = 124 and (endDate >= curdate() or endDate is null) and tmp.service_id = service_id and tmp.deleted = deleted);
 
 
 insert into rbService(code, name, eisLegacy, nomenclatureLegacy, license, infis, begDate, endDate, medicalAidProfile_id, adultUetDoctor, adultUetAverageMedWorker, childUetDoctor, childUetAverageMedWorker, rbMedicalKind_id, UET, departCode, isComplex, maxSubServices)
 select *
 from
 (select * from temp_rbservice) as tmp
-where not exists(select * from rbService where tmp.code = code and tmp.name = name and endDate = tmp.endDate and begDate = tmp.begDate)
-A12.30.012.001.012
+where not exists(select * from rbService where tmp.code = code and tmp.name = name and endDate = tmp.endDate and begDate = tmp.begDate);
+# A12.30.012.001.012
 
 select *
 from rbService where id = 12610;
@@ -825,7 +825,7 @@ from PriceListItem where id in (7091648,7098289);
 
 
 
-select curdate()-1
+select curdate()-1;
 drop table temp_priceListItem_backup;
 create table temp_priceListItem_backup
 (select * from PriceListItem);
@@ -864,7 +864,7 @@ from PriceListItem order by id desc ;
 select *
 from price_gnc_21_08_05 pg
 left join PriceListItem pli on pli.serviceCodeOW = pg.code and (pli.endDate >= curdate() or pli.endDate is null) and pli.priceList_id = 124
-where pg.code = 'A04.30.001.001'
+where pg.code = 'A04.30.001.001';
 
 
 select *
