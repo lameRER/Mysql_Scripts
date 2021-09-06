@@ -1,3 +1,5 @@
+drop procedure procEpicrisisAnalyzes;
+
 create
     definer = dbuser@`%` procedure procEpicrisisAnalyzes(IN EventID int(10), IN AnalyzesType varchar(50))
 BEGIN
