@@ -28,3 +28,6 @@ from ActionPropertyType where typeName = 'JobTicket' and valueDomain like '%+%' 
 
 select *
 from rbJobType;
+
+select *
+from ActionPropertyType where valueDomain regexp '59';
