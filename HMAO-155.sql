@@ -30,4 +30,39 @@ select *
 from rbJobType;
 
 select *
-from ActionPropertyType where valueDomain regexp '59';
+from ActionPropertyType where valueDomain regexp '59' and typeName = 'jobTicket';
+
+select group_id
+from ActionType where id = 84468;
+
+select *
+from ActionPropertyType where actionType_id in
+(select id
+from ActionType where group_id = 84449)
+and typeName = 'JobTicket'
+
+
+select event_id
+from Action where id = 84450;
+
+select group_id
+from ActionType where group_id = 84449
+
+select name
+from ActionType where id = 84449;
+
+
+call procEpicrisisAnalyzes(47762, "'Лабораторные исследования'")
+
+
+call procEpicrisisAnalyzes((), "'Лабораторные исследования'")
+
+
+select *
+from Event where externalId = '484644';
+
+
+select *
+from Event where externalId in
+(select TakenTissueJournal.externalId
+from TakenTissueJournal);
