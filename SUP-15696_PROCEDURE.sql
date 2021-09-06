@@ -30,7 +30,7 @@ SET SESSION group_concat_max_len = 10000;   -- just in case
     DEALLOCATE PREPARE _sql;
 SET @stmt2 = CONCAT(
             'SELECT ',
-                'apt.Name as `Наименование`', ', ap.norm', ',\n',
+                'apt.Name as `Наименование`', ', ap.norm as `Норма`', ',\n',
                  ifnull(CONCAT(@sums), "'null'"),            
             	'\n FROM ActionProperty ap left join ActionProperty_String aps using(id) left join ActionProperty_Reference apr using(id) left join ActionProperty_Date apd using(id) join Action a on a.id = ap.action_id and a.deleted = 0 and a.event_id = ',
             	EventID, 
