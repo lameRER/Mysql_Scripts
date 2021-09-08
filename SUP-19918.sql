@@ -1,5 +1,5 @@
 select *
-from rbEpicrisisProperty where defaultValue regexp 'call';
+from r where defaultValue regexp 'call';
 
 select ap.*
 from ActionProperty ap, Action a where a.event_id = 33721812 and a.id = ap.action_id;
