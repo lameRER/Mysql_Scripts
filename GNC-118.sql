@@ -1,7 +1,7 @@
 select *
 from rbPrintTemplate where context =
 (select context
-from ActionType where name = 'Дневниковый осмотр (стационар)')
+from ActionType where name = 'Дневниковый осмотр (стационар)');
 
 
 select *
@@ -21,4 +21,10 @@ select *
 from PersonCurator where person_id=  3407;
 
 select *
+from Person where id = 1270;
+
+select *
 from Person  where id = 1270
+
+select *
+from Event where id = 20430356;
