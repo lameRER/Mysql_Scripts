@@ -1,4 +1,4 @@
-select id, code, name, templateText
+select id, name, templateText
 from rbPrintTemplate where templateText regexp 'Заместитель генерального директора.*Троицкая';
 
 
