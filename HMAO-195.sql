@@ -1,15 +1,39 @@
 select count(rep.id) num,
 GROUP_CONCAT(CONCAT_WS(' ', ret.id_orgStructure , ret.code, ret.name,'retres.idx:',retres.idx,'resper.idx:',resrep.idx) separator '\n') ret,
--- GROUP_CONCAT(CONCAT_WS(' ', retres.id, resrep.id, res.id, res.name, res.description)separator '\n') res,
+GROUP_CONCAT(CONCAT_WS(' ', retres.id, resrep.id, res.id, res.name, res.description)separator '\n') res,
 rep.* from rbEpicrisisTemplates ret
 left join rbEpicrisisTemplates_rbEpicrisisSections retres on retres.id_rbEpicrisisTemplates = ret.id
 left join rbEpicrisisSections res on retres.id_rbEpicrisisSections = res.id
 left join rbEpicrisisSections_rbEpicrisisProperty resrep on resrep.id_rbEpicrisisSections = res.id
 left join rbEpicrisisProperty rep on resrep.id_rbEpicrisisProperty = rep.id
--- where rep.name REGEXP 'проведенное ле' and resrep.id = 39871
+where ret.id and res.id = 472
 group by rep.id
 order by  retres.idx, resrep.idx;
 -- order by rep.id
+
+
+
+# call procEpicrisisAnalyzes(%s, "'Лабораторные исследования'")
+
+
+select *
+from rbJobType where code = 'neftu-1-1';
+
+
+select *
+from ActionPropertyType where valueDomain = '59' and typeName = 'JobTicket';
+
+select *
+from ActionType where id = 84450;
+
+select *
+from ActionType where id = 84812;
+
+select *
+from rbEpicrisisProperty where id in (2266,2319);
+
+
+;
 
 
 
