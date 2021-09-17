@@ -4,7 +4,8 @@ create
 definer = dbuser@`%` procedure procEpicrisisDiagnostic(IN EventID int(10), IN DiagnosticType varchar(200))
 BEGIN
 
-SET @subq = Concat('select apt.name, DATE_FORMAT(a.endDate, "%d.%m.%y\n%H:%i") valas, a.endDate val from ActionProperty ap ',
+SET @subq = Concat('select if((select jt.id from Job_Ticket jt where jt.id = (select apjt.value from ActionProperty_Job_Ticket apjt where apjt.id = ap.id)), DATE_FORMAT(a.endDate, "%d.%m.%y\n%H:%i"), null) valas, '
+                   'if((select jt.id from Job_Ticket jt where jt.id = (select apjt.value from ActionProperty_Job_Ticket apjt where apjt.id = ap.id)), a.endDate, NULL) val from ActionProperty ap ',
 'left join ActionProperty_String aps using(id) ',
 'join Action a on ap.action_id = a.id and a.deleted = 0 and a.status = 2 and a.event_id = ',
 EventID,
@@ -18,7 +19,7 @@ EventID,
 'left join ActionType at4 on at4.group_id = at3.id and at4.deleted = 0 and at4.class = 1 and at4.serviceType !=4 ',
 'where at2.id = 27600 and at2.deleted = 0) at2 on at2.id = a.actionType_id ',
 'join ActionType at3 on at3.id = at2.group_id and at3.name = ', DiagnosticType,
-' join ActionPropertyType apt on apt.id = ap.type_id and apt.actionType_id = at2.id ',
+' join ActionPropertyType apt on apt.id = ap.type_id and apt.actionType_id = at2.id and apt.typeName = ''JobTicket''',
 ' GROUP by a.endDate');
 
 
@@ -63,7 +64,7 @@ SET @stmt2 = CONCAT(
                     'join ActionType at4 on at4.group_id = at3.id and at4.deleted = 0 and at4.class = 1 and at4.serviceType !=4 where at2.id = 27600 and at2.deleted = 0) at2 on at2.id = a.actionType_id '
                     'join ActionType at3 on at3.id = at2.group_id and at3.name = ', DiagnosticType,
                     'join ActionPropertyType apt on apt.id = ap.type_id and apt.actionType_id = at2.id ',
-                ' WHERE apt.name != ''Номерок''',
+                ' WHERE apt.name != ''Номерок''', if(CONCAT(@sums) is not null, '', ' and apt.name is null'),
             	' GROUP by a.endDate');
 
 
