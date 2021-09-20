@@ -26,4 +26,6 @@ from rbPrintTemplate order by id desc limit 1;
 select * from rbPrintTemplate order by id desc;
 
 select *
-from rbPrintTemplate where id in(3389,3391);
+from rbPrintTemplate pt
+left join ActionType at1 on at1.context = pt.context
+where pt.id in(3389,3391, 3392)
