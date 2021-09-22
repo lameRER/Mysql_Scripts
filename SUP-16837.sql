@@ -157,6 +157,47 @@ select '7'
 union
 select '8'
 union
-select '9')
+select '9');
 
 
+select *
+from ActionPropertyType where actionType_id in(
+select id
+from ActionType where id in(
+select master_id
+from ActionType_Service where service_id in (
+select id
+from rbService where Fed_code = 'A06.09.005.003')))
+;
+
+select *
+from ActionType where id in(
+    select master_id
+    from ActionType_Service where service_id in (
+        select id
+        from rbService where Fed_code = 'A06.09.005.003'));
+
+select *
+from ActionPropertyType where actionType_id in(
+    select id
+    from ActionType where id in(
+        select master_id
+        from ActionType_Service where service_id in (
+            select id
+            from rbService where Fed_code = 'A06.20.002.004')))
+;
+
+
+select *
+from ActionType where id in(
+    select master_id
+    from ActionType_Service where service_id in (
+        select id
+        from rbService where Fed_code = 'A06.20.002.004'))
+;
+
+select *
+from rbService where Fed_code = 'A06.09.005.003';
+
+select *
+from rbService where Fed_code = 'A06.20.002.004';
