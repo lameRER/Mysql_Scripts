@@ -23,11 +23,11 @@ DiagnosticType,
 
 
 
-SET @cc1 = "CONCAT('GROUP_CONCAT(IF(&p = ', &v, ', &t, NULL)) AS ', &as)";
+SET @cc1 = "CONCAT('GROUP_CONCAT(IF(&p = ', &v, ', &t, NULL) SEPARATOR ''\n'') AS ', &as)";
 -- select @cc1;
 SET @cc2 = REPLACE(@cc1, '&p', 'a.endDate');
 -- select @cc2;
-SET @cc3 = REPLACE(@cc2, '&t', 'aps.value');
+SET @cc3 = REPLACE(@cc2, '&t', 'concat_ws(" ", apt.name, aps.value)');
 -- select @cc3;
 set @qval = CONCAT("'\"', val, '\"'");
 set @qvalas = CONCAT("'\"', valas, '\"'");
