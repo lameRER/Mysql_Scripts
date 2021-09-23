@@ -371,3 +371,20 @@ SET @stmt2 = CONCAT(
 PREPARE _sql FROM @stmt2;
 EXECUTE _sql;
 DEALLOCATE PREPARE _sql;
+
+insert into rbEpicrisisTemplates(name, code, id_orgStructure, printTemplate, type, isVisible, actionType_id, editableTime, canCopyOrgStr, idx_template)
+select *
+from
+(select
+       'ВЫПИСКА ИЗ ИСТОРИИ БОЛЕЗНИ' as name,
+       '2' as code,
+       id_orgStructure,
+       printTemplate,
+       type,
+       isVisible,
+       actionType_id,
+       editableTime,
+       canCopyOrgStr,
+       idx_template
+from rbEpicrisisTemplates where id = 132) as tmp
+where not exists(select * from rbEpicrisisTemplates where tmp.name = name and code = tmp.code);
