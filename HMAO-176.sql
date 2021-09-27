@@ -1,5 +1,7 @@
 select *
-from EventType_Action;
+from ActionType where id in(
+select EventType_Action.actionType_id
+from EventType_Action, rbHurtType where EventType_Action.hurtType regexp rbHurtType.code group by EventType_Action.id);
 
 select *
 from ActionType;
@@ -13,6 +15,27 @@ from rbHurtType;
 select *
 from rbHurtFactorType;
 
+select *
+from EventType_Action, rb where hurtFactorType regexp ;
+
+
+
+# select createDatetime, createPerson_id, modifyDatetime, modifyPerson_id, code, regexp_replace(code, '(.*)', 'OLD_\\1') name
+# from
+update
+     rbHurtFactorType
+set code = regexp_replace(code, '(.*)', 'OLD_\\1');
+
+# select *
+# from
+update
+rbHurtType
+set code = regexp_replace(code, '(.*)', 'OLD_\\1');
+
+select *
+from rbHurtFactorType;
+select *
+from rbHurtType;
 
 insert into s11.rbHurtFactorType (createDatetime, createPerson_id, modifyDatetime, modifyPerson_id, code, name)
 values  (now(), NULL, now(), NULL, '0', 'Отсутствие фактора вредности');
