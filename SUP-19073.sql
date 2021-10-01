@@ -602,3 +602,42 @@ where vp.dict_OID = @dict_OID;
 
 select *
 from netricaPrehospitalTreatment;
+
+select *
+from ActionType where group_id in
+(select id
+from ActionType where group_id in
+(select id
+from ActionType where name ='региз'));
+
+insert into rbPrintTemplate(createDatetime, createPerson_id, modifyDatetime, modifyPerson_id, code, name, context, fileName, `default`, dpdAgreement, type, hideParam, banUnkeptDate, counter_id, deleted, isPatientAgreed, groupName, documentType_id, isEditableInWeb, pageOrientation, pageFormat, useToView)
+select now() createDatetime,
+       NULL createPerson_id,
+       NOW() modifyDatetime,
+       NULL modifyPerson_id,
+       'SUP-19073' code,
+       'Шаблон печати' name,
+       'SUP-19073' context,
+       fileName,
+       '' `default`,
+       dpdAgreement,
+       type,
+       hideParam,
+       banUnkeptDate,
+       counter_id,
+       0 deleted,
+       isPatientAgreed,
+       groupName,
+       documentType_id,
+       isEditableInWeb,
+       pageOrientation,
+       pageFormat,
+       useToView
+from rbPrintTemplate
+where id in
+      (select max(id)
+       from rbPrintTemplate);
+
+
+select *
+from rbPrintTemplate order by id desc ;
