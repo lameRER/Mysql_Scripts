@@ -19,6 +19,9 @@ from EventType where id in
 from EventType_Action, rbHurtType where EventType_Action.hurtType regexp rbHurtType.code group by EventType_Action.id)
 and deleted = 0;
 
+select EventType_Action.*
+from EventType_Action, rbHurtType where EventType_Action.hurtType regexp rbHurtType.code group by EventType_Action.id
+
 
 drop temporary table temp_eventType
 create temporary table temp_eventType
