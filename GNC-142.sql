@@ -1,3 +1,6 @@
+select *
+from PriceList;
+
 insert into PriceListItem(createDatetime, createPerson_id, modifyDatetime, modifyPerson_id, priceList_id, deleted,/*{{{*/
                           service_id, serviceCodeOW, serviceNameOW, begDate, endDate, price, isAccumulativePrice,
                           limitPerDay, limitPerMonth, limitPerPriceList, LCE, LCE_test)
@@ -6,14 +9,14 @@ from (select now() createDatetime,
              NULL  createPerson_id,
              now() modifyDatetime,
              NULL  modifyPerson_id,
-             120   priceList_id,
+             135   priceList_id,
              deleted,
              service_id,
              serviceCodeOW,
              serviceNameOW,
              begDate,
              endDate,
-             0.00  price,
+             price,
              isAccumulativePrice,
              limitPerDay,
              limitPerMonth,
@@ -92,6 +95,12 @@ select *
 from EventType where finance_id = 20;
 
 select *
+from EventType;
+
+select count(EventType_Action.actionType_id)
+from EventType_Action where eventType_id = 148 group by actionType_id having count(EventType_Action.actionType_id) > 1;
+
+select *
 from EventType_Action where eventType_id = 148 and actionType_id in (select id from ActionType where group_id in
                      (select id
                       from ActionType
@@ -102,7 +111,7 @@ select *
 from Contract_PriceList where contract_id = 220086;
 
 set @num = 115;
-insert into EventType_Action(eventType_id, idx, actionType_id, speciality_id, tissueType_id, sex, age, age_bu, age_bc, age_eu, age_ec, selectionGroup, actuality, expose, payable, academicDegree_id, deleted, plannedEndDateTemplate_id)
+# insert into EventType_Action(eventType_id, idx, actionType_id, speciality_id, tissueType_id, sex, age, age_bu, age_bc, age_eu, age_ec, selectionGroup, actuality, expose, payable, academicDegree_id, deleted, plannedEndDateTemplate_id)
 select *
 from (select
              eventType_id,
@@ -157,7 +166,7 @@ from (select
                  and at.id = ats.master_id
                  and s.id = ats.service_id
                  and pli.service_id = s.id
-                 and pli.priceList_id = 120
+                 and pli.priceList_id = 135
                  and pli.endDate >= curdate()
                  and at.deleted = 0
                  and pli.deleted = 0
@@ -198,7 +207,7 @@ from (select
                  and at.id = ats.master_id
                  and s.id = ats.service_id
                  and pli.service_id = s.id
-                 and pli.priceList_id = 120
+                 and pli.priceList_id = 135
                  and pli.endDate >= curdate()
                  and at.deleted = 0
                  and pli.deleted = 0
@@ -217,3 +226,10 @@ where not exists(select *
 #                and price = tmp2.price
 #                and tmp2.service_id = service_id
 #                and tmp2.deleted = deleted);/*}}}*/
+
+
+update PriceListItem
+set deleted = 1
+where priceList_id = 120 and createDatetime = '2021-09-30 11:33:06';
+
+
