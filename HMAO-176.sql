@@ -1,3 +1,298 @@
+
+insert into rbHurtType(createDatetime, createPerson_id, modifyDatetime, modifyPerson_id, code, name)
+select NOW() createDatetime, NULL createPerson_id, NOW() modifyDatetime, NULL modifyPerson_id, tht.code, tht.name
+from temp_rbHurtType tht where tht.code != '';
+
+insert into rbHurtFactorType(createDatetime, createPerson_id, modifyDatetime, modifyPerson_id, code, name)
+select now() createDatetime, NULL createPerson_id, NOW() modifyDatetime, NULL modifyPerson_id, thft.code, thft.name
+from temp_rbHurtFactorType thft;
+
+
+select *
+from ClientWork_Hurt_Factor;
+
+select *
+from rbHurtFactorType;
+
+select *
+from rbHurtType;
+
+
+select C5
+from temp_rbHurtType where C5 regexp 'аланинаминотрансферазы';
+
+
+select C5
+from temp_rbHurtFactorType where C5 regexp 'аланинаминотрансферазы';
+
+select *
+from ActionType where group_id = 85098;
+
+set @num = 0;
+insert into ActionType(createDatetime, createPerson_id, modifyDatetime, modifyPerson_id, deleted, class, group_id, code, name, title, flatCode,
+                       sex, age, office, showInForm, genTimetable, quotaType_id,
+                       context, defaultPlannedEndDate, defaultExecPerson_id, defaultSetPerson_id, defaultOrg_id, isMES, nomenclativeService_id, prescribedType_id,
+                       shedule_id, counter_id, period, singleInPeriod, lis_code, isActiveGroup, refferalType_id, EGISZ_code, EGISZ_typecons_code,
+                       SMS, SEMD, consultationTypeId, formulaAlias, instrumentalId, old_group_id, old_id, code_f30, code_f14)
+select
+       now() createDatetime,
+       NULL createPerson_id,
+       NOW() modifyDatetime,
+       NULL modifyPerson_id,
+       0 deleted,
+       class,
+       at1.id group_id,
+       concat('*02_', @num:=@num+1) code,
+       tat.name name,
+       tat.name title,
+       flatCode,
+       sex,
+       age,
+       office,
+       showInForm,
+       genTimetable,
+       quotaType_id,
+       context,
+       defaultPlannedEndDate,
+       defaultExecPerson_id,
+       defaultSetPerson_id,
+       defaultOrg_id,
+       isMES,
+       nomenclativeService_id,
+       prescribedType_id,
+       shedule_id,
+       counter_id,
+       period,
+       singleInPeriod,
+       lis_code,
+       isActiveGroup,
+       refferalType_id,
+       EGISZ_code,
+       EGISZ_typecons_code,
+       SMS,
+       SEMD,
+       consultationTypeId,
+       formulaAlias,
+       instrumentalId,
+       old_group_id,
+       old_id,
+       code_f30,
+       code_f14
+from ActionType at1, temp_at tat where at1.id = 85098;
+
+85098
+
+INSERT INTO s11.ActionType (createDatetime, createPerson_id, modifyDatetime, modifyPerson_id, deleted, class, group_id, code, name, title, needReferral, flatCode, sex, age, office, showInForm, genTimetable, quotaType_id, context, amount, amountEvaluation, defaultStatus, defaultDirectionDate, defaultPlannedEndDate, defaultEndDate, defaultExecPerson_id, defaultSetPerson_id, defaultPersonInEvent, defaultPersonInEditor, defaultMKB, defaultMorphology, isMorphologyRequired, defaultOrg_id, maxOccursInEvent, isMES, nomenclativeService_id, showTime, isPreferable, prescribedType_id, shedule_id, isRequiredCoordination, isNomenclatureExpense, hasAssistant, propertyAssignedVisible, propertyUnitVisible, propertyNormVisible, propertyEvaluationVisible, serviceType, actualAppointmentDuration, visible, isSubstituteEndDateToEvent, isPrinted, withoutAgree, defaultMES, frequencyCount, frequencyPeriod, frequencyPeriodType, isStrictFrequency, isFrequencyPeriodByCalendar, counter_id, period, singleInPeriod, checkPeriod, isCustomSum, recommendationExpirePeriod, recommendationControl, lis_code, isExecRequiredForEventExec, isActiveGroup, locked, filledLock, refferalType_id, defaultBeginDate, showAPOrg, filterPosts, filterSpecialities, isIgnoreEventExecDate, advancePaymentRequired, checkPersonSet, defaultIsUrgent, checkEnterNote, EGISZ_code, EGISZ_typecons_code, SMS, SEMD, consultationTypeId, formulaAlias, instrumentalId, old_group_id, old_id, code_f30, code_f14) VALUES ('2021-09-28 18:52:09', null, '2021-09-28 18:52:09', null, 0, 3, null, '*01_1', 'Проф.осмотры(новые)', '', 0, '', 0, '', '', 1, 0, null, '', 0, 0, 2, 1, 0, 3, null, null, 3, 0, 5, 0, 0, null, 0, 0, null, 0, 0, null, null, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, null, null, null, 0, 0, 0, 0, null, 1, 0, 0, 0, null, 0, 1, 0, 0, 0, 0, 0, 0, 0, '', null, null, null, null, null, null, null, null, '', '');
+
+Проф.осмотры(новые)
+
+
+
+create temporary table temp_at
+select *
+from
+(SELECT 'Анализ крови на HBs-Ag, анти-HBc-Ig (суммарные), анти-HCV-Ig (суммарные) определение уровня щелочной фосфатазы, билирубина, аспартатаминотрансферазы (АСТ), аланинаминотрансферазы (АЛТ)' as name union
+SELECT 'Биомикроскопия' as name union
+SELECT 'Биомикроскопия глаз' as name union
+SELECT 'Биомикроскопия глаза' as name union
+SELECT 'Биомикроскопия глаза Исследование уровня ретикулоцитов, метгемоглобина в крови' as name union
+SELECT 'Биомикроскопия глаза Рентгенография длинных трубчатых костей (фтор и его соединения) 1 раз в 2 года' as name union
+SELECT 'Биомикроскопия глаза УЗИ органов брюшной полости' as name union
+SELECT 'ВИЧ' as name union
+SELECT 'Велоэргометрия' as name union
+SELECT 'Велоэргометрия (до достижения возраста 40 лет один раз в два года, далее - ежегодно)' as name union
+SELECT 'Визометрия' as name union
+SELECT 'Визометрия Биомикроскопия глаза' as name union
+SELECT 'Для работы с препаратами крови определение в крови HBsAg, a-HBCOR, IgM, A-HCV-IgG,' as name union
+SELECT 'Измерение внутриглазного давления' as name union
+SELECT 'Исследование аккомодации' as name union
+SELECT 'Исследование барофункции уха (при предварительном медицинском осмотре и по показаниям)' as name union
+SELECT 'Исследование барофункции уха (при предварительном медицинском осмотре и по показаниям)' as name union
+SELECT 'Исследование крови на сифилис' as name union
+SELECT 'Исследование уровня аспартат-трансаминазы и аланин-трансаминазы, креатинина, мочевины в крови' as name union
+SELECT 'Исследование уровня дельта аминолевулиновой кислоты или копропорфирина в моче' as name union
+SELECT 'Исследование уровня ретикулоцитов в крови' as name union
+SELECT 'Исследование уровня ретикулоцитов, карбоксигемоглобина в крови' as name union
+SELECT 'Исследование уровня ретикулоцитов, метгемоглобина в крови' as name union
+SELECT 'Исследование уровня ретикулоцитов, тромбоцитов в крови' as name union
+SELECT 'Исследование уровня фибриногена, протромбинового индекса, триглицеридов, мочевой кислоты, общего белка, калия, натрия, железа, щелочной фосфатазы в крови' as name union
+SELECT 'Исследование уровня холестерина в крови (до достижения возраста 40 лет)' as name union
+SELECT 'Исследование функции вестибулярного анализатора' as name union
+SELECT 'Исследование функции вестибулярного аппарата' as name union
+SELECT 'Исследование функции вестибулярного аппарата (при предварительном медицинском осмотре)' as name union
+SELECT 'Исследование функции вестибулярного аппарата Тональная пороговая аудиометрия Исследование барофункции уха (при предварительном медицинском осмотре и по показаниям)' as name union
+SELECT 'Исследование цветоощущения' as name union
+SELECT 'Исследование цветоощущения по полихроматическим таблицам' as name union
+SELECT 'Исследования на гельминтозы при поступлении на работу и в дальнейшем - не реже 1 раза в год либо по эпидпоказаниям' as name union
+SELECT 'Исследования на гельминтозы при поступлении на работу и в дальнейшем - не реже 1 раза в год, либо по эпидпоказаниям' as name union
+SELECT 'Исследования на гельминтозы при поступлении на работу и в дальнейшем - по эпидпоказаниям' as name union
+SELECT 'Исследования на носительство возбудителей кишечных инфекций и серологическое обследование на брюшной тиф при поступлении на работу и в дальнейшем - по эпидпоказаниям' as name union
+SELECT 'Исследования, указанные в подпункте 19.1.' as name union
+SELECT 'Исследования, указанные в подпункте 19.2.' as name union
+SELECT 'Мазки на гонорею при поступлении на работу' as name union
+SELECT 'Мазок из зева и носа на наличие патогенного стафилококка при поступлении на работу, в дальнейшем - по медицинским и эпидпоказаниям' as name union
+SELECT 'Непрямая ларингоскопия' as name union
+SELECT 'Определение (исследование) устойчивости организма к декомпрессионному газообразованию (по показаниям)' as name union
+SELECT 'Определение (исследование) устойчивости организма к декомпрессионному газообразованию' as name union
+SELECT 'Определение (исследование) устойчивости организма к наркотическому действию азота (при предварительном медицинском осмотре для работников, работающих на глубинах более 40 м)' as name union
+SELECT 'Определение (исследование) устойчивости организма к наркотическому действию азота (при предварительном медицинском осмотре)' as name union
+SELECT 'Определение (исследование) устойчивости организма к токсическому действию кислорода (при предварительном медицинском осмотре для работников, выполняющих водолазные работы на глубинах более 40 метров или с применением для дыхания искусственных дыхательных газовых смесей).' as name union
+SELECT 'Определение (исследование) устойчивости организма к токсическому действию кислорода (при предварительном медицинском осмотре).' as name union
+SELECT 'Определение бинокулярного зрения' as name union
+SELECT 'Определение в крови HBsAg,a-HBCOR, иммуноглобулин M, A-HCV, иммуноглобулин G, ВИЧ (при согласии работника) при предварительном медицинском осмотре, в дальнейшем по медицинским показаниям.' as name union
+SELECT 'Определение группы крови и резус-фактора при предварительном осмотре' as name union
+SELECT 'Определение группы крови и резус-фактора, исследование крови на ВИЧ, сифилис, вирусные гепатиты B и C (при предварительном осмотре)' as name union
+SELECT 'Определение уровня метгемоглобина в крови' as name union
+SELECT 'Ортопантомография (1 раз в 3 года)' as name union
+SELECT 'Ортостатическая проба (при предварительном медицинском осмотре)' as name union
+SELECT 'Острота зрения' as name union
+SELECT 'Офтальмоскопия' as name union
+SELECT 'Офтальмоскопия глазного дна' as name union
+SELECT 'Паллестезиметрия' as name union
+SELECT 'Паллестезиметрия Рефрактометрия (или скиаскопия)' as name union
+SELECT 'Периметрия' as name union
+SELECT 'Поля зрения' as name union
+SELECT 'Психофизиологическое исследование' as name union
+SELECT 'Пульсоксиметрия' as name union
+SELECT 'Пульсоксиметрия Биомикроскопия глаза' as name union
+SELECT 'Реакция агглютинации Хеддельсона крови при контакте с возбудителями бруцеллеза' as name union
+SELECT 'Рентгенография длинных трубчатых костей (фтор и его соединения)' as name union
+SELECT 'Рентгенография околоносовых пазух (при предварительном медицинском осмотре и по показаниям)' as name union
+SELECT 'Рентгенография околоносовых пазух носа (при предварительном медицинском осмотре и по показаниям)' as name union
+SELECT 'Рентгенография шейно-дорсального и пояснично-крестцового отдела позвоночника (1 раз в 5 лет)' as name union
+SELECT 'Рефрактометрия' as name union
+SELECT 'Рефрактометрия (или скиаскопия)' as name union
+SELECT 'Спирометрия' as name union
+SELECT 'Тональная пороговая аудиометрия' as name union
+SELECT 'Тональная пороговая аудиометрия ' as name union
+SELECT 'Тональная пороговая аудиометрия,' as name union
+SELECT 'Тонометрия' as name union
+SELECT 'УЗИ органов брюшной полости' as name union
+SELECT 'УЗИ органов брюшной полости и щитовидной железы' as name union
+SELECT 'Ультразвуковая допплерография транскраниальная артерий методом мониторирования' as name union
+SELECT 'Ультразвуковое исследование органов брюшной полости' as name union
+SELECT 'Ультразвуковое обследование органов малого таза' as name union
+SELECT 'Ультразвуковые исследования печени, желчного пузыря, поджелудочной железы, селезенки, почек (один раз в 3 года);' as name union
+SELECT 'Ультразвуковые исследования предстательной железы (по достижении возраста 40 лет - один раз в 3 года)' as name union
+SELECT 'Эзофагогастродуоденоскопия' as name union
+SELECT 'Эзофагогастродуоденоскопия (1 раз в 3 года)' as name union
+SELECT 'Эзофагогастродуоденоскопия Ортопантомография Ректороманоскопия (1 раз в 5 лет).' as name union
+SELECT 'Электроэнцефалография' as name union
+SELECT 'Эхокардиография' as name union
+SELECT 'Эхокардиография (при предварительном медицинском осмотре и по показаниям)' as name union
+SELECT 'Эхокардиография (при предварительном медицинском осмотре и по показаниям) Велоэргометрия (до достижения возраста 40 лет один раз в два года, далее - ежегодно)' as name) as tmp
+
+
+
+select *
+from rbService order by id desc ;
+
+
+insert into ActionType_Service(master_id, idx, finance_id, service_id)
+select master_id, row_number() over ()-1 idx, finance_id, service_id
+from
+(select at1.id master_id, 0 idx, null finance_id, s.id service_id
+from ActionType at1, rbService s, ActionType_Service ats
+where at1.group_id = 85098 and s.code = at1.code
+group by at1.id, s.id) as tmp;
+
+insert into rbService(createDatetime, createPerson_id, modifyDatetime, modifyPerson_id, group_id, code, name, eisLegacy,
+                      license, infis, begDate, endDate, medicalAidProfile_id, medicalAidKind_id, medicalAidType_id,
+                      dopService_id, category_id, caseCast_id, Fed_code, type, budget_id)
+select
+       now() createDatetime,
+       null createPerson_id,
+       now() modifyDatetime,
+       null modifyPerson_id,
+       null group_id,
+       at1.code code,
+       left(at1.name, 100) name,
+       eisLegacy,
+       license,
+       '' infis,
+       begDate,
+       endDate,
+       medicalAidProfile_id,
+       medicalAidKind_id,
+       medicalAidType_id,
+       dopService_id,
+       category_id,
+       caseCast_id,
+       null Fed_code,
+       type,
+       budget_id
+from rbService s, ActionType at1
+where at1.group_id = 85098
+group by at1.id
+
+select *
+from EventType_Action where eventType_id = 140;
+
+insert into EventType_Action(eventType_id, idx, actionType_id, speciality_id, tissueType_id, sex, age, actuality, hurtType, hurtFactorType, defaultOrg_id)
+select
+       eventType_id,
+       row_number() over ()-1 idx,
+       actionType_id,
+       speciality_id,
+       tissueType_id,
+       eta.sex,
+       eta.age,
+       actuality,
+       hurtType,
+       group_concat(ifnull(tht.code, '') separator ';')hurtFactorType,
+       eta.defaultOrg_id
+from EventType_Action eta
+join ActionType at1 on eta.actionType_id = at1.id
+left join temp_rbHurtFactorType tht on tht.C5 regexp at1.name
+where eta.eventType_id = 140
+group by at1.id;
+
+insert into EventType_Action(eventType_id, idx, actionType_id, speciality_id, tissueType_id, sex, age, actuality, hurtType, hurtFactorType, defaultOrg_id)
+select
+       140 eventType_id,
+       row_number() over ()-1 idx,
+       at1.id actionType_id,
+       NULL speciality_id,
+       NULL tissueType_id,
+       0 sex,
+       '' age,
+       0 actuality,
+       group_concat(ifnull(tht.code, '') separator ';') hurtType,
+       '' hurtFactorType,
+       NULL defaultOrg_id
+from ActionType at1
+left join temp_rbHurtFactorType tht on tht.C5 regexp at1.name
+where at1.group_id = 85098
+ group by at1.id
+;
+
+# (85072, 85051, 85033, 85017, 85001, 85041, 85023, 85007, 85066, 85059, 84999, 85073, 85049, 85030, 85016, 85056, 85038, 85021, 85005, 85067, 85014, 84997, 85064, 85046, 85028, 85054, 85036, 84985, 85003, 85068, 85026, 85011, 84996, 85062, 85044, 85052, 85034, 85018, 85002, 85070, 85042, 85024, 85008, 85065, 85060, 85071, 85050, 85031, 85003, 85000, 85039, 85022, 85006, 84980, 85058, 84998, 85048, 85029, 85015, 85055, 85037, 85020, 85004, 84976, 85013, 84982, 85063, 85045, 85027, 85053, 85035, 85019, 85016, 85069, 85025, 85009, 84977, 85061, 85043)
+
+select
+       eventType_id,
+       idx,
+       actionType_id,
+       at1.name,
+       ht.C5
+       speciality_id,
+       tissueType_id,
+       eta.sex,
+       eta.age,
+       selectionGroup,
+       actuality,
+       expose,
+       payable,
+       hurtType,
+       hurtFactorType,
+       eta.defaultOrg_id,
+       isCompulsory
+from EventType_Action eta, ActionType at1, temp_rbHurtFactorType ht where eventType_id = 140
+and at1.id = eta.actionType_id and at1.deleted = 0 group by ht.code-- group by eta.id
+# and at1.name regexp ht.C5
+# and ht.C5 regexp at1.name
+;
+
+
 select *
 from rbPrintTemplate where context =
 (select context
