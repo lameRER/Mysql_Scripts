@@ -3696,7 +3696,7 @@ select
        ct.modifyPerson_id,
        ct.modifyDatetime,
        ct.caseCast_id
-from ActionType at1, rbService s, Contract_Tariff ct where at1.group_id = 84914 and s.name = at1.name and s.code = at1.code and ct.id = (select id from Contract_Tariff order by id desc limit 1)
+from ActionType at1, rbService s, Contract_Tariff ct, ActionType_Service ats where at1.group_id = 85098 and ats.master_id = at1.id and s.id = ats.service_id and ct.id = (select id from Contract_Tariff order by id desc limit 1)
 
 
 select *
