@@ -135,33 +135,38 @@ select *
 from ActionType where group_id = 87345 and deleted = 0;
 
 drop temporary table temp_apt;
+
+start transaction;
+
 create temporary table temp_apt(
-select 'Жалобы' as name union
-select 'An.morbi' as name union
-select 'An.vitae' as name union
-select 'Операции' as name union
-select 'Аллергологический анамнез' as name union
-select 'St.praesens:' as name union
-select 'Состояние' as name union
-select 'Сознание' as name union
-select 'Кожные покровы' as name union
-select 'Температура тела' as name union
-select 'Дыхание' as name union
-select 'Тоны сердца' as name union
-select 'АД' as name union
-select 'Живот' as name union
-select 'Стул' as name union
-select 'St.localis' as name union
-select 'Диагноз' as name union
-select 'Госпитализация' as name union
-select 'План лечения' as name   
+    select 'Основной' as name union
+    select 'Осложнения' as name union
+    select 'Сопутствующий' as name union
+    select 'Жалобы' as name union
+    select 'Состояние пациента' as name union
+    select 'Сознание' as name union
+    select 'Температура тела' as name union
+    select 'Кожные покровы' as name union
+    select 'Дыхание' as name union
+    select 'Тоны сердца' as name union
+    select 'пульс' as name union
+    select 'АД' as name union
+    select 'Язык' as name union
+    select 'Живот' as name union
+    select 'Симптомы раздражения брюшины' as name union
+    select 'Диурез' as name union
+    select 'Стул' as name union
+    select 'Лечение получает' as name union
+    select 'Замечаний по ведению пациента' as name union
+    select 'Наблюдение дежурного хирурга' as name union
+    select 'Рекомендовано' as name 
 );
 
 insert into ActionPropertyType(actionType_id, idx, template_id, name, shortName, descr, unit_id, typeName, valueDomain,
                                defaultValue, norm, sex, age, penaltyUserProfile, penaltyDiagnosis, test_id,
                                laboratoryCalculator, userProfile_id, ticketsNeeded, parent_id, customSelect,
                                autoFieldUserProfile, formulaAlias)
-select 87358                    actionType_id,
+select 87354                    actionType_id,
        row_number() over () - 1 idx,
        template_id,
        ta.name                  name,
@@ -198,3 +203,7 @@ from ActionType where group_id =87345 and deleted = 0;
 
 select *
 from rbPrintTemplate order by id desc;
+
+select * 
+from temp_apt;
+
