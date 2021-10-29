@@ -122,3 +122,41 @@ select *
 from rbPrintTemplate where context in 
 (select context
 from ActionType where group_id =84668);
+
+select id,
+       createDatetime,
+       createPerson_id,
+       modifyDatetime,
+       modifyPerson_id,
+       code,
+       name,
+       context,
+       fileName,
+       `default`,
+       dpdAgreement,
+       type,
+       hideParam,
+       banUnkeptDate,
+       counter_id,
+       deleted,
+       isPatientAgreed,
+       groupName,
+       documentType_id,
+       isEditableInWeb,
+       chkProfiles,
+       chkPersons,
+       pageOrientation,
+       sendMail,
+       useToView
+from rbPrintTemplate order by id desc limit 1;
+
+INSERT INTO s11.rbPrintTemplate (createDatetime, createPerson_id, modifyDatetime, modifyPerson_id, code, name, context, fileName, `default`, dpdAgreement, type, hideParam, banUnkeptDate, counter_id, deleted, isPatientAgreed, groupName, documentType_id, isEditableInWeb, chkProfiles, chkPersons, pageOrientation, sendMail, useToView)
+VALUES (now(), 1, now(), 1, '205', 'Согласие на обрабтку персональных данных', 'tokn', '', '', 0, 0, 0, 0, null, 0, 0, '', null, 0, 0, 0, 'P', 0, 0);
+
+
+select *
+from rbPrintTemplate order by id desc ;
+
+
+
+о
