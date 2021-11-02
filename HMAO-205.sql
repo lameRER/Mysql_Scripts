@@ -153,10 +153,11 @@ from rbPrintTemplate order by id desc limit 1;
 INSERT INTO s11.rbPrintTemplate (createDatetime, createPerson_id, modifyDatetime, modifyPerson_id, code, name, context, fileName, `default`, dpdAgreement, type, hideParam, banUnkeptDate, counter_id, deleted, isPatientAgreed, groupName, documentType_id, isEditableInWeb, chkProfiles, chkPersons, pageOrientation, sendMail, useToView)
 VALUES (now(), 1, now(), 1, '205', 'Согласие на обрабтку персональных данных', 'tokn', '', '', 0, 0, 0, 0, null, 0, 0, '', null, 0, 0, 0, 'P', 0, 0);
 
+select id, name, fileName from 
+-- update
+rbPrintTemplate 
+-- set fileName = '2867_Лист_оценки_риска_развития_венозных_тромбоэмболических_осложнений_\(ВТЭО\)_в_травматологии_и_ортопедии.html'
+where id = 2867;
 
-select *
-from rbPrintTemplate order by id desc ;
 
 
-
-о
