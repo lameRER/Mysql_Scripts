@@ -159,5 +159,6 @@ rbPrintTemplate
 -- set fileName = '2867_Лист_оценки_риска_развития_венозных_тромбоэмболических_осложнений_\(ВТЭО\)_в_травматологии_и_ортопедии.html'
 where id = 2867;
 
-
+select *
+from rbPrintTemplate where id = 2867;
 
