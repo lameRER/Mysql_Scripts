@@ -162,3 +162,21 @@ where id = 2867;
 select *
 from rbPrintTemplate where id = 2867;
 
+
+# select id, visibleInDR
+# from
+update
+     ActionPropertyType
+set visibleInDR = 1
+where actionType_id in
+(select id
+from ActionType where group_id = 87360);
+
+# select id, visibleInDR
+# from
+update
+     ActionPropertyType
+set visibleInDR = 1
+where actionType_id in
+(select id
+from ActionType where group_id = 84668);
