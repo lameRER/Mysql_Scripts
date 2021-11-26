@@ -1,18 +1,50 @@
 select count(rep.id) num,
--- GROUP_CONCAT(CONCAT_WS(' ', ret.id_orgStructure , ret.code, ret.name,'retres.idx:',retres.idx,'resper.idx:',resrep.idx) separator '\n') ret,
--- GROUP_CONCAT(CONCAT_WS(' ', retres.id, resrep.id, res.id, res.name, res.description)separator '\n') res,
-retres.* from rbEpicrisisTemplates ret
+GROUP_CONCAT(CONCAT_WS(' ', ret.id_orgStructure , ret.code, ret.name,'retres.idx:',retres.idx,'resper.idx:',resrep.idx) separator '\n') ret,
+GROUP_CONCAT(CONCAT_WS(' ', retres.id, resrep.id, res.id, res.name, res.description)separator '\n') res,
+rep.* from rbEpicrisisTemplates ret
 left join rbEpicrisisTemplates_rbEpicrisisSections retres on retres.id_rbEpicrisisTemplates = ret.id
 left join rbEpicrisisSections res on retres.id_rbEpicrisisSections = res.id
 left join rbEpicrisisSections_rbEpicrisisProperty resrep on resrep.id_rbEpicrisisSections = res.id and resrep.isOld = 0
 left join rbEpicrisisProperty rep on resrep.id_rbEpicrisisProperty = rep.id
-where ret.name REGEXP 'КХО 4'
+# where ret.name REGEXP 'КХО 4'
+# where rep.name = 'Органы дыхания'
 group by res.id-- , rep.id
 order by  retres.idx, resrep.idx;
 
 select * from rbEpicrisisTemplates ret where ret.name REGEXP 'Выписной';
 
 select * from rbEpicrisisTemplates_rbEpicrisisSections retres ;
+
+
+
+select count(name), rbEpicrisisProperty.*
+from rbEpicrisisProperty group by name having count(name) > 1;
+
+
+select *
+from rbEpicrisisProperty where name = 'Операции';
+
+select *
+from rbEpicrisisTemplates_rbEpicrisisSections where id_rbEpicrisisSections in
+(select id_rbEpicrisisSections
+from rbEpicrisisSections_rbEpicrisisProperty where id_rbEpicrisisProperty in(29,
+121
+))
+;
+
+select *
+from rbEpicrisisTemplates where id in (4,
+5,
+6
+);
+
+select *
+from rbEpicrisisTemplates_rbEpicrisisSections where ;
+
+
+
+select *
+from rbPrintTemplate;
 
 
 INSERT into rbEpicrisisTemplates_rbEpicrisisSections (id_rbEpicrisisTemplates, id_rbEpicrisisSections, idx)

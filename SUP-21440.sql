@@ -4,6 +4,11 @@ from ActionPropertyType where actionType_id in
 
 
 
+select *
+from s11.ActionPropertyType where id in (
+64274,64275,64276,64277,64268,64269);
+
+
 select apt.name, aps.value
 from ActionProperty ap
          left join ActionProperty_String aps using(id)
@@ -32,40 +37,43 @@ from ActionPropertyType where name = 'доставлен';
 use s13;
 set @flatCode = 'received';
 # set @flatCode = 'leaved';
-set @ActionType = (select min(id) from ActionType where flatCode = @flatCode and deleted = 0);
 
-set @ActionPropertyType = 'Состояние при поступлении';
-# set @ActionPropertyType = 'Состояние при выписке';
-set @ActionPropertyTypeNew = (select id from ActionPropertyType where name = @ActionPropertyType and actionType_id = @ActionType and deleted = 0 and typeName = 'Reference');
-# select @ActionPropertyTypeNew;
+drop temporary table if exists temp_aptId;
+create temporary table if not exists temp_aptId(
+    select apt.id from ActionPropertyType apt, ActionType at1 where apt.id in(64274,64275,64276,64277,64268,64269) and at1.id = apt.actionType_id and at1.flatCode = @flatCode
+);
+
+select *
+from temp_aptId;
 
 insert into ActionProperty(createDatetime, createPerson_id, modifyDatetime, modifyPerson_id, deleted, action_id, type_id, unit_id, norm, evaluation)
 select *
 from
-(select
-       now() createDatetime,
-       null createPerson_id,
-       now() modifyDatetime,
-       null modifyPerson_id,
-       0 deleted,
-       a.id action_id,
-       @ActionPropertyTypeNew type_id,
-       unit_id,
-       norm,
-       evaluation
-from Action a, ActionProperty ap where a.deleted = 0 and a.actionType_id = @ActionType and ap.id = (select id from ActionProperty order by id desc limit 1) limit 5) as tmp
+    (select
+         now() createDatetime,
+         null createPerson_id,
+         now() modifyDatetime,
+         null modifyPerson_id,
+         0 deleted,
+         a.id action_id,
+         tad.id type_id,
+         unit_id,
+         norm,
+         evaluation
+     from Action a, ActionProperty ap, temp_aptId tad where a.deleted = 0 and a.actionType_id in (select id from ActionType where flatCode = @flatCode and deleted = 0) and ap.id = (select id from ActionProperty order by id desc limit 1)) as tmp
 where not exists(select * from ActionProperty where tmp.deleted = 0 and deleted = 0 and tmp.action_id = action_id and tmp.type_id = type_id);
 
 insert into ActionProperty_Reference(id, `index`, value)
 select *
 from
-(select ap.id, 0 `index`, 13 value
-from ActionProperty ap
-left join ActionProperty_Reference apr using(id)
-join Action a on a.id = ap.action_id
-join ActionType at1 on at1.id = a.actionType_id and at1.deleted = 0 and at1.id = @ActionType
-join ActionPropertyType apt on apt.actionType_id = at1.id and apt.deleted = 0 and apt.id = @ActionPropertyTypeNew
-where apr.id is null) as tmp
+    (select ap.id, 0 `index`, if(apt.id in(64268,64269,64275),'13', 'не указан') value
+     from ActionProperty ap
+              left join ActionProperty_Reference apr using(id)
+              join Action a on a.id = ap.action_id
+              join ActionType at1 on at1.id = a.actionType_id and at1.deleted = 0 and at1.flatCode = @flatCode
+              join ActionPropertyType apt on apt.actionType_id = at1.id and apt.deleted = 0
+              join temp_aptId tad on tad.id = apt.id
+     where apr.id is null) as tmp
 where not exists(select * from ActionProperty_Reference where tmp.id = id and tmp.value = value);
 
 select *
