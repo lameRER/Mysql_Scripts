@@ -21,3 +21,35 @@ select owner,constraint_name,constraint_type,table_name,r_owner,r_constraint_nam
                                from all_constraints
                               where constraint_type in ('P','U')
                                 and table_name='D_PERSMEDCARD');
+
+
+use s11;
+SET foreign_key_checks = 0;
+TRUNCATE Account;
+TRUNCATE Account_Item;
+TRUNCATE Action;
+TRUNCATE ActionTemplate;
+TRUNCATE Client;
+TRUNCATE ClientAddress;
+TRUNCATE ClientAllergy;
+TRUNCATE ClientAnthropometric;
+TRUNCATE ClientAttach;
+TRUNCATE ClientCompulsoryTreatment;
+TRUNCATE ClientContact;
+TRUNCATE ClientDisability;
+TRUNCATE ClientDispanserization;
+TRUNCATE ClientDocument;
+TRUNCATE ClientPolicy;
+TRUNCATE ClientRelation;
+TRUNCATE ClientRemark;
+TRUNCATE ClientSocStatus;
+TRUNCATE ClientWork;
+TRUNCATE Diagnosis;
+TRUNCATE Diagnostic;
+TRUNCATE EQueueTicket;
+TRUNCATE Event;
+TRUNCATE Job_Ticket;
+TRUNCATE OrgStructure;
+TRUNCATE PersonAttach;
+TRUNCATE Visit;
+SET foreign_key_checks = 1;
