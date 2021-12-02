@@ -56,7 +56,7 @@ SET foreign_key_checks = 1;
 
 
 select *
-from s11.expdata1 group by PD_TYPE;
+from s11.expdata1 where SNILS regexp '452926829';
 
 
 
@@ -238,3 +238,24 @@ select createDatetime,
     dischargeDate,
     '' insuranceArea
 from temp_clientPolice_lu;
+
+
+select *
+from Client where SNILS regexp  '813050395';
+
+
+select if(length('1452926829') = 9, '0452926829', if(length('1452926829') = 10, '01452926829', ''));
+
+
+
+update Client
+set SNILS = concat('00', SNILS)
+where length(SNILS) = 9;
+
+
+update Client
+set SNILS = concat('0', SNILS)
+where length(SNILS) = 10;
+
+select *
+from Client where length(SNILS) = 9;
