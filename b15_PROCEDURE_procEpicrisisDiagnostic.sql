@@ -1,4 +1,5 @@
 drop procedure if exists procEpicrisisDiagnostic;
+
 create
 definer = dbuser@`%` procedure procEpicrisisDiagnostic(IN EventID int(10), IN GroupName varchar(100), IN DiagnosticType varchar(50))
 BEGIN
