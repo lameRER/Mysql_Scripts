@@ -348,3 +348,8 @@ from rbPrintTemplate where id = 1286;
     WHERE e.eventType_id = 129 and apd.value between STR_TO_DATE('15.11.2021', '%d.%m.%Y') and STR_TO_DATE('15.11.2021', '%d.%m.%Y')
     GROUP by a.id
     ORDER BY DateOper, nomeroperacionn, smena
+
+
+
+select *
+from rbPrintTemplate where name regexp 'опер блок план';
