@@ -1,4 +1,4 @@
-use s12;
+use s11;
 
 select *
 from rbPatientModel;
@@ -158,3 +158,18 @@ from rbPatientModel_Item where master_id = 3846;
 
 select *
 from rbCureMethod;
+
+
+select *
+from QuotaType where code regexp '08.00.12.002';
+
+select *
+from rbPatientModel where quotaType_id = 812 ;
+
+
+select *
+from rbPatientModel_Item where master_id = 4186;
+
+
+select *
+from s11.temp_vmp1 where `N группы ВМП` regexp '08.00.12.002';
