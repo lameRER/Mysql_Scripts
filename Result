@@ -1,2 +1,0 @@
-Connection: T(MYSQL)  H(neftu1)  P(53306)  S(neftu1)  D(s11)  U(dbuser)   at 11:01
-1. select * from ActionType;
