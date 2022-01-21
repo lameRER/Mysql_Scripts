@@ -160,7 +160,9 @@ insert into ptd23.ActionType(id, createDatetime, createPerson_id, modifyDatetime
                              isIgnoreEventExecDate, showAPOrg, showAPNotes, defaultIsUrgent, advancePaymentRequired,
                              checkEnterNote, formulaAlias, isAllowedAfterDeath, isAllowedDateAfterDeath, eventStatusMod,
                              withoutAgree, EGISZ_code, consultationTypeId, instrumentalId)
-select tmp.id,
+select *
+from
+(select tmp.id,
        tmp.createDatetime,
        tmp.createPerson_id,
        tmp.modifyDatetime,
@@ -259,7 +261,8 @@ from (select distinct at1.*
         and apt.deleted = 0
         and r.context = at1.context) as tmp
          left join ptd23.ActionType at2 on at2.id = tmp.id
-where at2.id is null;
+where at2.id is null) as tmp
+where not exists(select * from ptd23.ActionType where tmp.id = id);
 
 
 
@@ -292,7 +295,9 @@ where apt.id is null;
 
 
 insert into ptd23.DestinationTree_ActionType(id, master_id, actionType_id, name, popular, idx, hidden)
-select tmp.*
+select *
+from
+(select tmp.*
 from (select distinct da.*
       from s11.DestinationTree d,
            s11.DestinationTree_ActionType da,
@@ -307,7 +312,53 @@ from (select distinct da.*
         and apt.deleted = 0
         and r.context = at1.context) as tmp
 left join ptd23.DestinationTree_ActionType da1 on da1.id = tmp.id
-where da1.id is null;
+where da1.id is null) as tmp
+where not exists(select * from ptd23.DestinationTree_ActionType where tmp.actionType_id = actionType_id and tmp.master_id = master_id);
+
+
+# insert into ptd23.OrgStructure_ActionType(id, createDatetime, createPerson_id, modifyDatetime, modifyPerson_id, code, name, context, fileName, `default`, dpdAgreement, type, banUnkeptDate, counter_id, deleted, isPatientAgreed, groupName, documentType_id, hideParam, isEditableInWeb, chkProfiles, chkPersons, pageOrientation, leftMargin)
+# select *
+# from
+#     (select tmp.*
+#      from (select distinct r.*
+#            from s11.DestinationTree d,
+#                 s11.DestinationTree_ActionType da,
+#                 s11.ActionType at1,
+#                 s11.ActionPropertyType apt,
+#                 s11.rbPrintTemplate r,
+#                 s11.OrgStructure_ActionType oat
+#            where d.id in (10042, 10076)
+#              and d.id = da.master_id
+#              and da.actionType_id = at1.id
+#              and at1.deleted = 0
+#              and at1.id = apt.actionType_id
+#              and apt.deleted = 0
+#              and r.context = at1.context) as tmp
+#               left join ptd23.OrgStructure_ActionType oat1 on oat1.id = tmp.id
+#      where oat1.id is null) as tmp
+# where not exists(select * from ptd23.OrgStructure_ActionType where tmp.id = id);
+
+
+insert into ptd23.rbPrintTemplate(id, createDatetime, createPerson_id, modifyDatetime, modifyPerson_id, code, name, context, fileName, `default`, dpdAgreement, type, banUnkeptDate, counter_id, deleted, isPatientAgreed, groupName, documentType_id, hideParam, isEditableInWeb, chkProfiles, chkPersons, pageOrientation, leftMargin)
+select *
+from
+    (select tmp.*
+     from (select distinct r.*
+           from s11.DestinationTree d,
+                s11.DestinationTree_ActionType da,
+                s11.ActionType at1,
+                s11.ActionPropertyType apt,
+                s11.rbPrintTemplate r
+           where d.id in (10042, 10076)
+             and d.id = da.master_id
+             and da.actionType_id = at1.id
+             and at1.deleted = 0
+             and at1.id = apt.actionType_id
+             and apt.deleted = 0
+             and r.context = at1.context) as tmp
+              left join ptd23.rbPrintTemplate r1 on r1.id = tmp.id
+        where r1.id is null) as tmp
+where not exists(select * from ptd23.rbPrintTemplate where tmp.id = id);
 
 
 update ptd23.ActionType at23
