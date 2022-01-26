@@ -24,3 +24,10 @@ from ptd7.temp_clientPolice_lu l;
 
 select *
 from ptd7.ClientPolicy cp, ptd7.temp_clientPolice_lu l where cp.id = l.id;
+
+
+
+select *
+from s11.ActionType where name = 'кт';
+
+select * from s11.ActionType where group_id = 13702
